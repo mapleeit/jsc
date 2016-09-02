@@ -6,7 +6,7 @@ CUR_PATH=$(pwd)
 echo $CUR_DIR
 echo $CUR_PATH
 
-node "../index.js" m="$CUR_PATH/"
+node "$CUR_DIR/../index.js" m="$CUR_PATH/"
 
 
 
