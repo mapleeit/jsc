@@ -1,9 +1,10 @@
 #!/bin/sh
 
-CUR_DIR=$(readlink /usr/local/bin/jsc)
+myPATH='/usr/local/bin'
+CUR_DIR=$(readlink $myPATH/jsc)
 CUR_PATH=$(pwd)
 
-node "$CUR_DIR/../../index.js" m="$CUR_PATH/"
+node "$myPATH/$CUR_DIR/../../index.js" m="$CUR_PATH/"
 
 
 
