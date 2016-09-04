@@ -34,13 +34,8 @@ define.pack = function(){
 //helloWord/src/init.js
 //helloWord/src/helloWord.tmpl.html
 
-
-
 //js file list:
 //helloWord/src/init.js
-
-
-
 /**
  * 显示投票结果
  */
@@ -61,13 +56,8 @@ define.pack("./init",["example.v1/lib/jquery","./tmpl"],function(require,exports
 
 
 
-
-
-
 //tmpl file list:
 //helloWord/src/helloWord.tmpl.html
-
-
 define.pack("./tmpl",[],function(require, exports, module){
 var tmpl = { 
 'pageBody': function(data){
