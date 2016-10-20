@@ -1,3 +1,4 @@
+
 /**
  * jsc：把模板转换成js，合并js
  * @author youkunhuang
@@ -10,8 +11,78 @@ var logger		= require('./logger')(__filename),
 	dependent	= require('./dependent.js'),
 	fs			= require("fs"),
 	path		= require('path'),
-	cdnPathCache= {},
+	cdnPathCache	= {},
+	cdnPathIdCache	= {},
 	undefined;
+
+
+//读cdn-path文件id转换器 
+this.readCdnPathId = function(file){
+	
+	if(cdnPathIdCache[file] === undefined){
+		cdnPathIdCache[file] = this.readModule(file);
+	}
+	
+	return cdnPathIdCache[file];
+}
+
+//读模块 
+this.readModule = function(file){
+	
+	var str = null;
+	
+	try{
+		str = require(file);
+	}catch(e){
+	}
+	
+	return str;
+}
+
+//取某个文件的cdn映射路径转换器
+this.cdnPathId = function(file){
+	
+	var arr = [],
+		res	= [],
+		str,
+		isFind = false,
+		len,i,tmp,curr;
+	
+	file = path.normalize(file).replace(/\\/g,'/');
+	
+	arr = file.split('/');
+	
+	i = arr.length;
+	
+	while(i-- > 1){
+		curr = arr.slice(0,i);
+		curr.push('cdn-path-id.js');
+		tmp = curr.join('/');
+		str = this.readCdnPathId(tmp);
+		
+		if(str === ''){
+			break;
+		}
+		
+		if(str !== null){
+			isFind = true;
+			break;
+		}
+	}
+	
+	if(isFind === false){
+		return null;
+	}
+	
+	return str;
+}
+
+
+
+
+
+
+
 
 //读cdn-path文件 
 this.readCdnPath = function(file){
@@ -22,6 +93,8 @@ this.readCdnPath = function(file){
 	
 	return cdnPathCache[file];
 }
+
+
 
 //读普通文件 
 this.readFile = function(file){
@@ -35,7 +108,8 @@ this.readFile = function(file){
 	
 	if(str){
 		//去除utf-8文件头的BOM标记
-		str = str.replace(/^[\ufeff\ufffe]/,'');
+		//str = str.replace(/[\ufeff\ufffe]/g,'');
+		//str = str.replace(/\r\n|\r|\n/g,"\r\n");
 	};
 	
 	return str;
@@ -88,13 +162,22 @@ this.modify = function(file){
 	var that	= this,
 		text,
 		res,
+		cid,
 		cpath;
 	
-	setTimeout(function(){
+	(function(){
 		
 		var dependentArr = [];
+		var done = false;
 		
-		cpath = that.cdnPath(file);
+		cpath	= that.cdnPath(file);
+		
+		cid		= that.cdnPathId(file);
+		
+		if(typeof cid === 'function'){
+			cpath = cid(cpath);
+		}
+		
 		if(!cpath) return;
 		
 		text = that.readFile(file);
@@ -103,15 +186,29 @@ this.modify = function(file){
 			dependentArr = dependent.getDependent(text);
 		}
 		
-		res = text.replace(/\bdefine\((?:[^\[\]]+,)??(\[[^\[\]]*?\],)??\b/gmi,function($0,dep){
-			return 'define\x28' + JSON.stringify(cpath.replace(/\.js$/,'')) + ',' + (dep || (JSON.stringify(dependentArr) + ','));
-		});
+		if (!done) {
+			res = text.replace(/\bdefine\((?:[^\[\]]+,)??(null,)\b/gmi, function($0, dep){
+				done = true;
+				return 'define\x28' + JSON.stringify(cpath.replace(/\.js$/, '')) + ',' + ((JSON.stringify(dependentArr) + ','));
+			});
+		}
+		
+		if (!done) {
+			res = res.replace(/\bdefine\((?:[^\[\]]+,)??(\[[^\[\]]*?\],)??\b/gmi,function($0,dep){
+				done = true;
+				return 'define\x28' + JSON.stringify(cpath.replace(/\.js$/,'')) + ',' + (dep || (JSON.stringify(dependentArr) + ','));
+			});
+		}
 		
 		if(text.indexOf('define.pack(') === -1){
-			res = res.replace(/.*?\bdefine\(function\b/gmi,function($0,dep){
+			res = res.replace(/\bdefine\(.*?\bfunction\b/gmi,function($0,dep){
 				return 'define\x28' + JSON.stringify(cpath.replace(/\.js$/,'')) + ',' + ((JSON.stringify(dependentArr) + ',function') || dep);
 			});
 		}
+		
+		//去除utf-8文件头的BOM标记+windows换行
+		res = res.replace(/[\ufeff\ufffe]/g,'');
+		res = res.replace(/\r\n|\r|\n/g,"\r\n");
 		
 		if(res !== text){
 			fs.writeFileSync(file,res,'UTF-8');
@@ -119,7 +216,7 @@ this.modify = function(file){
 				file: file
 			});
 		}
-	},0);
+	})();
 }
 
 

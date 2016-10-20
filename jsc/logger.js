@@ -125,6 +125,7 @@ Logger.prototype = {
 			HH		: zeroize(now.getHours(),2),
 			mm		: zeroize(now.getMinutes(),2),
 			ss		: zeroize(now.getSeconds(),2),
+			mms		: zeroize(now.getMilliseconds(),2),
 			type	: type,
 			file	: filename,
 			txt		: merge(str,obj),

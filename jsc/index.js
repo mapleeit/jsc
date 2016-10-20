@@ -89,17 +89,20 @@ function work(args){
 				var filePath = modulePath + '/' + n,
 					fileState = fs.statSync(filePath);
 				if( fileState.isDirectory()){
-					work({
-						m: args.m + '/' + n + '/',
-						all: 'yes',
-						listen: 'no'
-					});
+					if (args.m.substr(args.m.length - 5, 5) != '/src/') {
+						work({
+							m: args.m + '/' + n + '/',
+							all: 'yes',
+							listen: 'no'
+						});
+					}
+					
 				}else if(fileState.isFile() && !/\/src\/.+/gmi.test(filePath)){
 					cdnPath.modify(filePath);
 				}
 			});
 			
-			
+			return;
 
 		})();
 	}
@@ -110,15 +113,21 @@ function work(args){
 
 	if(args.m){
 		q.queue(function(queue){
-			
-			jsc({
-				seajsRoot: seajsRoot,
-				modulePath: modulePath,
-				listen: args.listen === 'yes',
-				callback: function(){
-					queue.dequeue();
-				}
-			});
+			//jsc all无递归，先还原
+			// if (args.all !== 'yes' || (args.all === 'yes' && /src/.test(args.m))) {
+				jsc({
+					seajsRoot: seajsRoot,
+					modulePath: modulePath,
+					listen: args.listen === 'yes',
+					callback: function(){
+						queue.dequeue();
+					}
+				});
+			// 	if (args.all ==='yes') {
+			// 		process.exit(0);
+			// 	}
+			// }
+
 		});
 		
 	}else{

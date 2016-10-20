@@ -4,5 +4,5 @@
 this.logLevel	= {'debug':10,'info':20,'warn':30,'error':40,'off':50}['debug'];
 
 //日志格式
-this.logFormat	= '${yyyy}-${MM}-${dd} ${HH}:${mm}:${ss} [${type}] [${file}:${line}] ${txt}';
+this.logFormat	= '${yyyy}-${MM}-${dd} ${HH}:${mm}:${ss}:${mms} [${type}] [${file}:${line}] ${txt}';
 

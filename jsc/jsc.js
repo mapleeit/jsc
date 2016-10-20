@@ -1,3 +1,4 @@
+
 /**
  * jsc：把模板转换成js，合并js
  * @author youkunhuang
@@ -12,6 +13,7 @@ var logger		= require('./logger')(__filename),
 	Queue		= require('./queue.js'),
 	removeComments 	= require('./removeComments.js'),
 	util	 	= require('./util.js'),
+    crypto 		= require('crypto'),
 	q			= new Queue(),
 	fs			= require("fs"),
 	path		= require('path'),
@@ -33,6 +35,8 @@ module.exports = jsc;
  * @param {String} modulePath 要合并的模块目录
  */
 function jsc(opt){
+
+	//logger.info('args=' + JSON.stringify(opt));
 
 	var seajsRoot = opt.seajsRoot,
 		modulePath = opt.modulePath,
@@ -110,7 +114,6 @@ function createALL(seajsRoot,modulePath){
 		packConfig	= {},
 		outputALL	= config.outputALL,
 		createOut	= true,
-		uglify		= false,
 		packConfig = packConfig || {},
 		outputHTML	= config.outputHTML,
 		packDependent,
@@ -131,11 +134,12 @@ function createALL(seajsRoot,modulePath){
 		
 	}
 
-	uglify = !!packConfig.uglify;
-	
 	if(packConfig.tmpl){
 		outputHTML = packConfig.tmpl.name || config.outputHTML;
 		createOut = !!packConfig.tmpl.create;
+		if(!packConfig.js) {
+			createOut = false;
+		}
 	}
 	
 	if(packConfig.all){
@@ -143,18 +147,21 @@ function createALL(seajsRoot,modulePath){
 		createOut = createOut = packConfig.all.create === false ? false : true ;
 	}
 	
-	outputDir	= packConfig.dir || config.outputDir,
+	//logger.info('packConfig========> ${packConfig}',{packConfig : JSON.stringify(packConfig)});
 	
+	outputDir	= packConfig.dir || config.outputDir,
 	out = modulePath + '/' + outputDir + outputALL;
+
 	out = path.normalize(out).replace(/\\/gi,'/');
 
 	resJS = createJS(seajsRoot,modulePath,packConfig);
-	resHTML = createTMPL(seajsRoot,modulePath,packConfig);
+	resHTML = createTMPL(seajsRoot,modulePath,packConfig);	//这里是用来生成createTmpl模板的文件
+	
+	//logger.info('resJS========> ${resJS}',{resJS : JSON.stringify(resJS)});
+	
 
-	logger.info('${o}:',{
-		o: out
-	});
-
+	//logger.info('resHTML========> ${resHTML}',{resHTML : JSON.stringify(resHTML)});
+	
 	if(outputALL && (fs.existsSync || path.existsSync)(modulePath + '/src/' + outputALL)){
 		//moduleStr = '';
 		
@@ -165,7 +172,10 @@ function createALL(seajsRoot,modulePath){
 	}
 	
 	[].push.apply(js,resJS.fileList);
-	[].push.apply(js,resHTML.fileList);
+	
+	if (packConfig.js && packConfig.js.tmpl != false) {
+		[].push.apply(js,resHTML.fileList);
+	}
 	
 	res.push('\r\n//all file list:\r\n')
 	js.forEach(function(n,i){
@@ -183,7 +193,9 @@ function createALL(seajsRoot,modulePath){
 	
 
 	[].push.apply(res,resJS.res);
-	[].push.apply(res,resHTML.res);
+	if (packConfig.js && packConfig.js.tmpl != false) {
+		[].push.apply(res,resHTML.res);
+	}
 
 	packDependent = resJS.packDependent || [];
 	tmp = [];
@@ -203,21 +215,12 @@ function createALL(seajsRoot,modulePath){
 	if(beforeCode){//前置代码加到最前面
 		finalCode = beforeCode + finalCode;
 	}
-	
+
 	if(res.length){
 		if(createOut){
 			finalCode = finalCode.replace(/\r\n|\r|\n/g,"\r\n");
-			// UglifyJS
-			if(uglify) {
-				finalCode = uglifyJS(finalCode);
-			}
-			// 写入文件
-			fs.writeFileSync(
-				out,
-				finalCode,
-				'UTF-8'
-			);
-			
+           writeFile(out, finalCode, packConfig.all);
+
 			//补id补依赖
 			cdnPath.modify(out);
 		}
@@ -229,6 +232,117 @@ function createALL(seajsRoot,modulePath){
 	return res;
 }
 
+/**
+ * 输出到文件
+ */
+function writeFile(out, code, packConfig) {
+    var verOut;
+	packConfig = packConfig || {};
+    if (packConfig.uglify)
+        code = uglifyJS(code);
+
+    // 取得输出的目标目录
+    var outFileDir = path.dirname(out);
+    // 目标文件名称
+    var baseFileName = path.basename(out);
+
+    // 清理旧文件
+    var existsFiles = fs.readdirSync(outFileDir);
+    existsFiles.forEach(function (n) {
+        if (baseFileName === n || new RegExp(baseFileName.replace(/\.js/, "") + "\\.r\\d+").test(n)) {
+            fs.unlinkSync(path.resolve(outFileDir + '/' + n));
+        }
+    });
+
+    // 处理带版本号的文件名
+    if (packConfig && packConfig.versionControllKey) {
+
+        // 填充0：z('1')->'01'; z('10')->'10'; z('1', 3)->'001'
+        function z(str, len) {
+            len || (len = 2);
+            str += "";
+            var padNum = 0;
+            if (str.length < len) {
+                padNum = len - str.length;
+                while (padNum) {
+                    str = '0' + str;
+                    padNum = padNum - 1;
+                }
+            }
+            return str;
+        }
+
+        var da = new Date();
+        var d = packConfig.ver || ("" + da.getFullYear() + z(da.getMonth()) + z(da.getDate()) + z(da.getHours()) + z(da.getMinutes()) + z(da.getMilliseconds(), 3));
+        verOut = path.resolve(out.replace(/.js$/, '.r' + d + '.js'));
+        logger.info('copy output ${out}', {out: verOut});
+
+        // 输出带版本号的文件
+        fs.writeFileSync(verOut, code, 'UTF-8');
+
+        // 更新文件引用
+        packConfig.versionControll && packConfig.versionControll.forEach(function (idxfile, i) {
+            idxfile = path.resolve(outFileDir + '/' + idxfile);
+            var indexfile = fs.readFileSync(idxfile, 'utf-8');
+            var reg = new RegExp("('" + packConfig.versionControllKey + '\'\\s*:\\s*\')[^\']*(\')');
+            var handle = "$1" + baseFileName.replace(/\.js$/, '.r' + d + '.js') + "$2";
+            indexfile = indexfile.replace(reg, handle);
+            fs.writeFileSync(idxfile, indexfile, 'UTF-8');
+        });
+    }
+
+    // 没有版本控制，输出无版本号的文件
+	//输出默认文件名，方便对比
+    //if (!verOut) {
+        // 写入文件
+        fs.writeFileSync(
+            out,
+            code,
+            'UTF-8'
+        );
+    //}
+}
+/*
+function versionControll(out,packConfig) {
+    if (packConfig&& packConfig.versionControllKey) {
+        var filename = out.substr(out.lastIndexOf('/') + 1);
+        var outfiledir = path.dirname(out);
+        //清理老的版本文件
+        var dirfilelist = fs.readdirSync(outfiledir);
+       	dirfilelist.forEach(function(n,i){
+            if(new RegExp(filename.replace(/\.js/,"")+"\.md5[0-9a-z]{32}").test(n)){
+                console.log('true')
+                fs.unlinkSync(outfiledir+'/'+n);
+            }
+
+		});
+
+        //版本信息处理
+        var md5 = crypto.createHash('md5');
+        var s = fs.ReadStream(out);
+        s.on('data', function (d) {
+            md5.update(d);
+        });
+
+        s.on('end', function () {
+            var d = md5.digest('hex');
+            var vout = out.replace(/.js$/, '.md5' + d + '.js');
+            logger.info('copy output ${out}', {out: vout});
+            fs.writeFileSync(vout, fs.readFileSync(out, ''), '');
+
+            //更新文件引用
+            packConfig.versionControll&&packConfig.versionControll.forEach(function (idxfile, i) {
+                idxfile = path.normalize(outfiledir + idxfile);
+                var indexfile = fs.readFileSync(idxfile, 'utf-8');
+                var reg = new RegExp("('" + packConfig.versionControllKey + '\'\\s*:\\s*\')[^\']*(\')');
+                var handle = "$1" + filename.replace(/\.js$/, '.md5' + d + '.js') + "$2";
+                indexfile = indexfile.replace(reg, handle);
+                fs.writeFileSync(idxfile, indexfile);
+            });
+        });
+    }
+}
+*/
 /**
  *
  * 编译模板文件
@@ -254,7 +368,7 @@ function parseHTML(seajsRoot,modulePath,packConfig){
 		}
 
 	});
-	
+
 	//按文件名排序
 	js.sort(function(a,b){
 		return a >= b ? 1 : -1;
@@ -280,7 +394,7 @@ function parseHTML(seajsRoot,modulePath,packConfig){
 
 		if(res){
 			fs.writeFileSync(modulePath + '/' + mname,res.result,'UTF-8');
-			
+
 			//补id补依赖
 			cdnPath.modify(modulePath + '/' + mname);
 		}
@@ -306,7 +420,7 @@ function createTMPL(seajsRoot,modulePath,packConfig){
 		uglify		= !!packConfig.uglify,
 		out,
 		tmp,i,str,mname;
-	
+
 	if(packConfig.tmpl){
 		outputHTML = packConfig.tmpl.name || config.outputHTML;
 		createOut = !!packConfig.tmpl.create;
@@ -316,59 +430,60 @@ function createTMPL(seajsRoot,modulePath,packConfig){
 	out = path.normalize(out).replace(/\\/gi,'/');
 
 	js = util.getFileList(modulePath + '/src',/\.(?:tmpl|page).html?$/i);
-	
+
 	//按文件名排序
 	js.sort(function(a,b){
 		return a >= b ? 1 : -1;
 	});
 
-	logger.info('${o}:',{
+	logger.info('createTMPL out : ${o}:',{
 		o: out
 	});
 
 	mname = './' + outputHTML.replace(/\.js$/i,'');
 	//兼容windows版本路径
 	mname = mname.replace(/\\/g,'/');
-	
+
 	res.push('\r\n//tmpl file list:\r\n')
 	js.forEach(function(n,i){
-		
+
 		var str = modulePath + '/src/' + n;
-		
+
 		str = path.normalize(str).replace(/\\/gi,'/');
 		str = str.replace(/.*\/([^\/]+\/src\/.+)$/,'$1');
-		
+
 		res.push('//' + str + '\r\n');
 	});
 	//模板后面的2个空行，先去掉
 	//res.push('\r\n\r\n');
 
 	res.push('define.pack("', mname ,'",[],function(require, exports, module){\nvar tmpl = { ','\n');
+	res.push("'encodeHtml': function(s){return (s+'').replace(/[\\x26\\x3c\\x3e\\x27\\x22\\x60]/g,function($0){return '&#'+$0.charCodeAt(0)+';';});}",",\r\n\r\n");
 
 	js.forEach(function(n,i){
 
-		var reg = /<script([^<>]+?)type="text\/html"([\w\W\r\n]*?)>(?:\r\n|\r|\n)?([\w\W\r\n]*?)(?:\r\n|\r|\n)?<\/script>/gmi,
-			regCode = /(?:(?:\r\n|\r|\n)\s*?)?<%(=?)([\w\W\r\n]*?)%>(?:\r\n|\r|\n)?/gmi,
-			isID = /id="(.+?)"/i,
-			noWith = /nowith="yes"/i,
+		var reg = /<script([^<>]+?)type=["']text\/html["']([\w\W\r\n]*?)>(?:--+>)?(?:\r\n|\r|\n)?([\w\W\r\n]*?)(?:\r\n|\r|\n)?(?:<!--+)?<\/script>/gmi,
+			regCode = /(?:(?:\r\n|\r|\n)\s*?)?<%([=-]?)([\w\W\r\n]*?)%>(?:\r\n|\r|\n)?/gmi,
+			isID = /id=["'](.+?)["']/i,
+			usewith = /usewith=["']yes["']/i,
 			exec,jscode,eq,
 			id,tmp,code,index,len;
 
 		logger.info('    ${m}  <--  ${n}',{ n: n, m: mname});
 
 		str = fs.readFileSync(modulePath + '/src/' + n,'UTF-8');
-		
+
 		//去除utf-8文件头的BOM标记
 		str = str.replace(/[\ufeff\ufffe]/g,'');
 		str = str.replace(/\r\n|\r|\n/g,"\r\n");
-		
+
 		//处理script嵌套问题
 		(function(){
-			
+
 			var arr = [];
-			
+
 			str = str.replace(/(<script\b)|(\/script>)/gmi,function(curr,start,end){
-				
+
 				if(start){
 					if(arr.length){
 						arr.push(start);
@@ -378,7 +493,7 @@ function createTMPL(seajsRoot,modulePath,packConfig){
 						return curr;
 					}
 				}else if(end){
-					
+
 					if(arr.length === 1){
 						arr.length = arr.length - 1;
 						return curr;
@@ -389,10 +504,10 @@ function createTMPL(seajsRoot,modulePath,packConfig){
 						return curr;
 					}
 				}
-				
+
 				return curr;
 			});
-			
+
 		})();
 
 		while(exec  =  reg.exec(str)){
@@ -407,11 +522,14 @@ function createTMPL(seajsRoot,modulePath,packConfig){
 
 			code = exec[3];
 
-			res.push('\'', id , '\': function(data){\n\nvar __p=[],_p=function(s){__p.push(s)};\r\n');
+			res.push('\'', id , '\': function(data){\n\nvar __p=[],_p=function(s){__p.push(s)},out=_p;\r\n');
 
-			if(!noWith.test(tmp)){
+			if(usewith.test(tmp)){
 				res.push('with(data||{}){\r\n');
 			}
+
+			//支持${}
+			code = code.replace(/\$\{([\w\W\r\n]*?)\}/g,'<%=$1%>');
 
 			//解析模板
 			index = 0;
@@ -427,7 +545,9 @@ function createTMPL(seajsRoot,modulePath,packConfig){
 							.slice(index,exec.index)
 								.replace(/\\/gmi,"\\\\")
 								.replace(/'/gmi,"\\'")
-								.replace(/\r\n|\r|\n/g,"\\r\\n\\\r\n")
+								.replace(/[\s\t\n\r]+\/\/(?:[^\n\r]*)/gmi,"")
+								.replace(/\r\n|\r|\n/g,"\\n") //.replace(/\r\n|\r|\n/g,"\\r\\n\\\r\n")
+					//http://closure-compiler.appspot.com/home
 					);
 					res.push("');\r\n");
 				}
@@ -439,9 +559,15 @@ function createTMPL(seajsRoot,modulePath,packConfig){
 
 
 				if(eq){
-					res.push('_p(');
-					res.push(jscode);
-					res.push(');\r\n');
+					if(eq==='-'){
+						res.push('_p(tmpl.encodeHtml(');
+						res.push(jscode);
+						res.push('));\r\n');
+					}else{
+						res.push('_p(');
+						res.push(jscode);
+						res.push(');\r\n');
+					}
 				}else{
 					res.push(jscode);
 				}
@@ -454,11 +580,12 @@ function createTMPL(seajsRoot,modulePath,packConfig){
 					.slice(index)
 						.replace(/\\/gmi,"\\\\")
 						.replace(/'/gmi,"\\'")
-						.replace(/\r\n|\r|\n/g,"\\r\\n\\\r\n")
+						.replace(/[\s\t\n\r]+\/\/(?:[^\n\r]*)/gmi,"")
+						.replace(/\r\n|\r|\n/g,"\\n") //.replace(/\r\n|\r|\n/g,"\\r\\n\\\r\n")
 			);
 			res.push("');\r\n");
 
-			if(!noWith.test(tmp)){
+			if(usewith.test(tmp)){
 				res.push('\r\n}');
 			}
 
@@ -476,16 +603,14 @@ function createTMPL(seajsRoot,modulePath,packConfig){
 	res.length --;
 
 	res.push('\r\n};\nreturn tmpl;\r\n});\r\n');
-	
+
+	//logger.info('createHTML js.length=${length}; createOut: ${createOut}', {length: js.length, createOut:createOut});
+
 	if(js.length){
 		if(createOut){
 			var code = res.join('').replace('.pack("./tmpl",[],' , '(').replace(/\r\n|\r|\n/g,"\r\n");
-			// UglifyJS
-			if(uglify) {
-				code = uglifyJS(code);
-			}
-			fs.writeFileSync(out, code, 'UTF-8');
-
+				logger.info('createHTML writeFile output ${out}', {out: out});
+            writeFile(out, code, packConfig.tmpl);
 			//补id补依赖
 			cdnPath.modify(out);
 		}
@@ -523,30 +648,32 @@ function createJS(seajsRoot,modulePath,packConfig){
 		out,
 		packConfig,
 		tmp,i,str;
-	
+
+
+
 	if(packConfig.js){
 		outputJS = packConfig.js.name || config.outputJS;
 		createOut = !!packConfig.js.create;
 	}
-	
+
 	out = modulePath + '/' + outputDir + outputJS;
 	out = path.normalize(out).replace(/\\/gi,'/');
-	
+
 	if(outputJS && (fs.existsSync || path.existsSync)(modulePath + '/src/' + outputJS)){
 		//moduleStr = '';
-		
+
 		logger.warn('.......module redefine: ${file}',{
 			file: modulePath + '/src/' + outputJS
 		});
 	}
-	
+
 	js = util.getFileList(modulePath + '/src',/\.js$/i);
-	
+
 	//按文件名排序
 	js.sort(function(a,b){
 		return a >= b ? 1 : -1;
 	});
-	
+
 	//自定义排序
 	if(packConfig.js && packConfig.js.sort){
 		sortRes = packConfig.js.sort(js);
@@ -561,29 +688,29 @@ function createJS(seajsRoot,modulePath,packConfig){
 
 	res.push('\r\n//js file list:\r\n')
 	js.forEach(function(n,i){
-		
+
 		if(packConfig.before){//找到需要前置的js如seajs，移除
 			var name = packConfig.before.name;
 			if(n && name && n.indexOf(name)>-1){
 				beforeCode = fs.readFileSync(modulePath + '/src/' + n,'UTF-8').replace(/[\ufeff\ufffe]/g,'').replace(/\r\n|\r|\n/g,"\r\n");
-				js.splice(i,1);	
-			}	
+				js.splice(i,1);
+			}
 		}else{
 			var str = modulePath + '/src/' + n;
-		
+
 			str = path.normalize(str).replace(/\\/gi,'/');
 			str = str.replace(/.*\/([^\/]+\/src\/.+)$/,'$1');
-			
+
 			res.push('//' + str + '\r\n');
 		}
-		
+
 	});
-	
+
 	var beforeJS = config.beforeJS.replace(/[\ufeff\ufffe]/g,'').replace(/\r\n|\r|\n/g,"\r\n");
 	if(!!beforeJS){
-		res.push(config.beforeJS);	
+		res.push(config.beforeJS);
 	}
-	
+
 	//enclude packing module
 	js.forEach(function(n,i){
 
@@ -618,9 +745,9 @@ function createJS(seajsRoot,modulePath,packConfig){
 
 		//扫描依赖关系
 		removeComments(str).replace(/[^.]\brequire\s*\(\s*['"]?([^'")]*)/g,function($0,id){
-			
+
 			var key = id.split('?')[0];
-			
+
 			if(!dependentMap[key]){
 				dependent.push(id);
 				dependentMap[key]= true;
@@ -637,28 +764,20 @@ function createJS(seajsRoot,modulePath,packConfig){
 
 
 	});
-	
+
 	var afterJS = config.afterJS.replace(/[\ufeff\ufffe]/g,'').replace(/\r\n|\r|\n/g,"\r\n");
 	if(!!afterJS){
-		res.push(config.afterJS);	
+		res.push(config.afterJS);
 	}
-	
+
 	moduleStr = moduleStr.replace('define\x28function','define\x28' + JSON.stringify(packDependent) + ',function');
-	
+
 	var finalCode = moduleStr + res.join('');
-	
+
 	if(js.length){
 		if(createOut){
 			finalCode = finalCode.replace(/\r\n|\r|\n/g,"\r\n");
-			// UglifyJS
-			if(uglify) {
-				finalCode = uglifyJS(finalCode);
-			}
-			fs.writeFileSync(
-				out,
-				finalCode,
-				'UTF-8'
-			);
+            writeFile(out, finalCode, packConfig.js);
 			//补id补依赖
 			cdnPath.modify(out);
 		}
