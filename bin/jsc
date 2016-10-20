@@ -4,6 +4,8 @@ myPATH='/usr/local/bin'
 CUR_DIR=$(readlink $myPATH/jsc)
 CUR_PATH=$(pwd)
 
-node "$myPATH/$CUR_DIR/../../index.js" m="$CUR_PATH/" cfgkey=%1 all=yes
-node "$myPATH/$CUR_DIR/../../index.js" m="$CUR_PATH/" cfgkey=%1
-
+node "$myPATH/$CUR_DIR/../../index.js" m="$CUR_PATH/" all=yes
+echo '-----------------------'
+echo '|       have fun      |'
+echo '-----------------------'
+node "$myPATH/$CUR_DIR/../../index.js" m="$CUR_PATH/" 
