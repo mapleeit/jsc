@@ -11,7 +11,6 @@ define(function(require,exports,module){
 		len		= mods.length,
 		curr,args,
 		undefined;
-	    name = name.replace(/\.r[0-9]{15}/,"");
 	//unpack
 	for(;i<len;i++){
 		args = mods[i];

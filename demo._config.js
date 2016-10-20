@@ -4,7 +4,7 @@
 define(function(require, exports, module){
 
 	return {
-		
+        cfgKey: 'the_default_key',
 		dir: './',					//重新指定合并后文件的存放目录,
 		uglify: false,				//开启代码压缩
 		

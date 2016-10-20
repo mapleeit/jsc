@@ -48,7 +48,7 @@ q.queue(function(){
 
 
 function work(args){
-	
+
 	var modulePath	= path.resolve(seajsRoot,args.m),
 		undefined;
 	
@@ -89,20 +89,18 @@ function work(args){
 				var filePath = modulePath + '/' + n,
 					fileState = fs.statSync(filePath);
 				if( fileState.isDirectory()){
-					if (args.m.substr(args.m.length - 5, 5) != '/src/') {
-						work({
-							m: args.m + '/' + n + '/',
-							all: 'yes',
-							listen: 'no'
-						});
-					}
-					
+					work({
+						m: args.m + '/' + n + '/',
+						all: 'yes',
+						listen: 'no',
+                        cfgkey: args.cfgkey
+					});
 				}else if(fileState.isFile() && !/\/src\/.+/gmi.test(filePath)){
 					cdnPath.modify(filePath);
 				}
 			});
 			
-			return;
+			
 
 		})();
 	}
@@ -113,21 +111,16 @@ function work(args){
 
 	if(args.m){
 		q.queue(function(queue){
-			//jsc all无递归，先还原
-			// if (args.all !== 'yes' || (args.all === 'yes' && /src/.test(args.m))) {
-				jsc({
-					seajsRoot: seajsRoot,
-					modulePath: modulePath,
-					listen: args.listen === 'yes',
-					callback: function(){
-						queue.dequeue();
-					}
-				});
-			// 	if (args.all ==='yes') {
-			// 		process.exit(0);
-			// 	}
-			// }
-
+			
+			jsc({
+				seajsRoot: seajsRoot,
+				modulePath: modulePath,
+				listen: args.listen === 'yes',
+                cfgkey: args.cfgkey,
+				callback: function(){
+					queue.dequeue();
+				}
+			});
 		});
 		
 	}else{
