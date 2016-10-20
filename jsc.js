@@ -171,11 +171,8 @@ function createALL(seajsRoot,modulePath){
 		
 	}
 	
-	[].push.apply(js,resJS.fileList);
-	
-	if (packConfig.js && packConfig.js.tmpl != false) {
-		[].push.apply(js,resHTML.fileList);
-	}
+	[].push.apply(js,resJS.fileList);	
+	[].push.apply(js,resHTML.fileList);
 	
 	res.push('\r\n//all file list:\r\n')
 	js.forEach(function(n,i){
@@ -193,9 +190,7 @@ function createALL(seajsRoot,modulePath){
 	
 
 	[].push.apply(res,resJS.res);
-	if (packConfig.js && packConfig.js.tmpl != false) {
-		[].push.apply(res,resHTML.res);
-	}
+	[].push.apply(res,resHTML.res);
 
 	packDependent = resJS.packDependent || [];
 	tmp = [];
