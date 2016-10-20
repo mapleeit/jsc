@@ -1,1 +1,0 @@
-以管理员身份运行setup/install.cmd即可
