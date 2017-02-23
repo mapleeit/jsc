@@ -1,0 +1,172 @@
+<script id="iap" type="text/html" nowith="yes">
+    <%
+    const prettysize = require('weiyun/util/prettysize');
+
+    var data = data || {};
+
+    var key, item, i, len, it;
+    %>
+
+    <%=require('weiyun/util/inline').css(['app-act-buy-space'], true)%>
+    <%=require('weiyun/util/inline').css(['g-err','g-component'], true)%>
+    <div class="act-buy-space j-top-div">
+        <div class="top-bar bBor">
+            <% if (data.__isVip) {%>
+            <h4 class="text">尊贵的会员专享初始容量<%=data.VIP_INITIAL_CAPACITY%></h4>
+            <% } else { %>
+            <h4 class="text">会员专享初始容量<%=data.VIP_INITIAL_CAPACITY%></h4>
+            <% } %>
+        </div>
+        <div class="remain-wrap <%=data.__remainSpace < Math.pow(1024, 3) ? 'warning' : ''%>">
+            <h2 class="title">
+                <span>剩余</span>
+            </h2>
+            <div class="remain-num"><span><%=data.__remainSpaceText%></span></div>
+        </div>
+        <div class="space-wrap">
+            <h2 class="title">
+                <span>总容量<%=data.__totalSpaceText%></span>
+            </h2>
+            <div class="space-bar">
+                <ul>
+                    <%
+                    for (key in data.__spaceBarModel) {
+                    if (data.__spaceBarModel.hasOwnProperty(key)) {
+                        item = data.__spaceBarModel[key];
+                    %>
+                    <li class="item <%=key%>" style="<%=item%>"></li>
+                    <%
+                    }}
+                    %>
+                </ul>
+            </div>
+            <div class="space-detail">
+                <ul>
+                    <%
+                    for (key in data.__spaceDetailModel) {
+                    if (data.__spaceDetailModel.hasOwnProperty(key)) {
+                        item = data.__spaceDetailModel[key];
+                    %>
+
+
+                    <%
+                        // buy list
+                    if (Array.isArray(item)) {
+                    for (i = 0, len = item.length; i < len; i ++) {
+                        it = item[i];
+                    %>
+                    <li class="item <%=key%>"
+                            <%=it.show ? '' : 'style="display: none;"'%>
+                        data-extraid-list="<%=it.extra_id%>"
+                    >
+                        <div class="main">
+                            <i class="point"></i>
+                            <span class="space"><%=it.spaceText%></span>
+                        </div>
+                        <div class="right">
+                            <span class="sub-text"><%=it.expire%></span>
+                        </div>
+                    </li>
+                    <%
+                    }
+                    } else {%>
+                    <li class="item <%=key%>" <%=item.show ? '' : 'style="display: none;"'%>>
+                        <div class="main">
+                            <i class="point"></i>
+                            <span class="space"><%=item.spaceText%></span>
+                            <% if (key === 'old') { %>
+                            <i class="icon icon-question j-question">疑问
+                                <b class="mod-bubble-dropdown with-border top-left question-dropdown j-question-dropdown">
+                                    <b class="txt-dropdown">
+                                        <b>赠送容量在实行新的服务策略后对免费用户已取消，您是会员用户，我们将继续为您保留，感谢您对微云的支持。</b>
+                                    </b>
+                                    <b class="bubble-arrow-border"></b>
+                                    <b class="bubble-arrow"></b>
+                                </b>
+                            </i>
+                            <% } %>
+                        </div>
+                        <div class="right">
+                            <span class="sub-text"><%=item.expire%></span>
+                        </div>
+                    </li>
+                    <% } %>
+
+                    <%
+                    }}
+                    %>
+                </ul>
+            </div>
+            <ul>
+            </ul>
+        </div>
+        <div class="buy-wrap">
+            <h2 class="title">
+                <span>购买容量</span>
+            </h2>
+            <ul class="buy-list">
+                <%
+                for (key in data.__buyListModelIAP) {
+                if (data.__buyListModelIAP.hasOwnProperty(key)) {
+                    item = data.__buyListModelIAP[key];
+                %>
+                <li class="item trblBor" data-type="<%=key%>">
+                    <div class="main">
+                        <div class="space"><span><%=key%></span></div>
+                        <div class="price"><span class="num"><%=item%></span><span>元/年</span></div>
+                    </div>
+                    <div class="right">
+                        <button class="btn j-purchase-btn" data-price="<%=item%>"><span>购买</span></button>
+                    </div>
+                </li>
+                <%
+                }}
+                %>
+            </ul>
+        </div>
+    </div>
+<%=require('weiyun/util/inline').js(['seajs', 'configs_mobile'])%>
+<script type="text/javascript">
+    seajs.use(['$'], function($){
+        $('.j-purchase-btn').on('touchend', function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+
+            var $this = $(this);
+
+            // 跳转ios客户端给的支付scheme
+            location.href = 'weiyun://arouse/capacity/' + $this.closest('li').data('type').toLowerCase();
+        });
+
+        $('.j-question').on('touchend', function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+
+            var $dropdown = $(this).find('.j-question-dropdown');
+            $dropdown.toggleClass('show');
+        });
+
+        $('.j-top-div').on('touchend', function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+
+            $dropdown = $('.j-question-dropdown');
+            if ($dropdown.hasClass('show')) {
+                $dropdown.toggleClass('show');
+            }
+        });
+    });
+</script>
+<script type='text/javascript' src='//img.weiyun.com/club/weiyun/js/publics/tcss/tcss.ping.js'></script>
+<script>
+    (function() {
+        if (typeof pgvMain == 'function') {
+            pgvMain("", {
+                tagParamName: 'WYTAG',
+                virtualURL: '/h5/capacity_purchase.html?iap',
+                virtualDomain: "www.weiyun.com"
+            });
+        }
+    })();
+</script>
+</script>

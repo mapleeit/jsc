@@ -1,0 +1,58 @@
+
+<script id="station_info" type="text/html" nowith="yes">
+    <div class="info-box trans-file-info" style="">
+        <div data-id="bubbble_hint" class="content"><i class="ui-icon icon-hint"></i>中转文件信息</div>
+        </div>
+    </div>
+</script>
+
+<script id="bubbble" type="text/html" nowith="yes">
+    <!-- 气泡浮层 (如果需要更宽，请在bubble-box上赋宽度值) -->
+    <div data-id="station_bubbble" class="bubble-box trans-file-info-bubble" style="display:none;">
+        <div class="bubble-i">
+            <p>文件数：<span class="data"><%=data.file_total%>个</span></p>
+            <p>单文件大小限制：<span class="data"><%=data.max_single_file_size%></span></p>
+            <p>最大保存天数：<span class="data"><%=data.max_date%>天</span></p>
+        </div>
+        <b class="bubble-trig ui-trigbox ui-trigbox-tr">
+            <b class="ui-trig"></b>
+            <b class="ui-trig ui-trig-inner"></b>
+        </b>
+        <!-- <span class="bubble-close">×</span> -->
+    </div>
+</script>
+
+<script id="toolbar" type="text/html" nowith="yes">
+    <div id="_station_toolbar" class="toolbar-btn clear transfer-files-toolbar">
+        <!-- .inner项hover状态使用.hover样式 -->
+        <!-- .inner项不可用状态使用.disable样式 -->
+        <div class="btn-message">
+            <a data-action="download" class="g-btn g-btn-gray" href="#"><span class="btn-inner enabled"><i class="ico ico-down"></i><span class="text">下载</span></span></a>
+            <a data-action="share" class="g-btn g-btn-gray" href="#"><span class="btn-inner enabled"><i class="ico ico-share"></i><span class="text">分享</span></span></a>
+            <!--<a data-action="rename" class="g-btn g-btn-gray" href="#"><span class="btn-inner enabled"><i class="ico ico-rename"></i><span class="text">重命名</span></span></a>-->
+            <a data-action="delete" class="g-btn g-btn-gray" href="#"><span class="btn-inner enabled"><i class="ico ico-del"></i><span class="text">删除</span></span></a>
+            <a data-action="refresh" class="g-btn g-btn-gray" href="#"><span class="btn-inner enabled minpad"><i class="ico ico-ref"></i></span></a>
+        </div>
+    </div>
+</script>
+
+<script id="columns" type="text/html" nowith="yes">
+    <div class="inner" style="">
+        <div class="files-head">
+            <!-- list-hover 为ie6下hover样式 -->
+                <span class="list name"><span class="wrap"><span class="inner">
+                    文件名<label class="checkall" data-action="checkall" data-no-selection=""></label>
+                </span></span></span>
+                <span class="list private-countdown"><span class="wrap"><span class="inner">
+                    剩余时间
+                </span></span></span>
+                <span class="list private-size"><span class="wrap"><span class="inner">
+                    文件大小
+                </span></span></span>
+                <span class="list private-date"><span class="wrap"><span class="inner">
+                    中转时间
+                </span></span></span>
+            <span class="list private-qrcode"><span class="wrap"><span class="inner"></span></span></span>
+        </div>
+    </div>
+</script>

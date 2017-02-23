@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<link rel="stylesheet" href="http://imgcache.qq.com/vipstyle/nr/box/css/disk.css" media="screen" />
+<link rel="stylesheet" href="http://imgcache.qq.com/vipstyle/nr/box/css/app-turkey.css" media="screen" />
+</head>
+<body class="app-turkey">
+
+<div class="app-inner">
+
+	<div class="header">
+		<h1 class="logo" onclick="javascript:getSelectedFiles();return false;">微云，随时随地<s></s></h1>
+		
+		<div class="header-right">
+			<div class="search">
+				<span class="ui-placeholder">搜文件／照片／视频</span>
+				<input class="ui-input" type="text" name="" id=""  maxlength="26" />
+				<input id="search-button" class="ui-button" type="button" value="" title="搜索" />
+				<input id="reset-button" class="ui-button ui-reset hide" type="button" value="" title="关闭">
+			</div>
+		</div>
+		<!-- .header-right -->
+		<!-- 用户点击输入框或焦点进入 ui-input 时，请隐藏 ui-placeholder -->
+	
+	</div>
+	<!-- .header -->
+	
+	<div class="app-section">
+	
+		<div class="ui-nav">
+			<ul class="ui-nav-inner">
+				<li class="ui-item current">
+					<a href="#">
+						<i class="nav-icon icon-recent"></i>
+						<span class="ui-text">最近上传 <span id="icon-recent" class="ui-text-num"></span></span>
+					</a>
+				</li>
+				<li class="ui-item">
+					<a href="#">
+						<i class="nav-icon icon-document"></i>
+						<span class="ui-text">文档 <span id="icon-document" class="ui-text-num"></span></span>
+					</a>
+				</li>
+				<li class="ui-item">
+					<a href="#">
+						<i class="nav-icon icon-image"></i>
+						<span class="ui-text">照片 <span id="icon-picture" class="ui-text-num"></span></span>
+					</a>
+				</li>
+				<li class="ui-item">
+					<a href="#">
+						<i class="nav-icon icon-music"></i>
+						<span class="ui-text">音乐 <span id="icon-music" class="ui-text-num"></span></span>
+					</a>
+				</li>
+				<li class="ui-item">
+					<a href="#">
+						<i class="nav-icon icon-video"></i>
+						<span class="ui-text">视频 <span id="icon-video" class="ui-text-num"></span></span>
+					</a>
+				</li>
+				<li class="ui-item">
+					<a href="#">
+						<i class="nav-icon icon-other"></i>
+						<span class="ui-text">其他 <span id="icon-other" class="ui-text-num"></span></span>
+					</a>
+				</li>
+			</ul>
+			<b class="ui-nav-line"></b>
+		</div>
+		<!-- .ui-nav -->
+		
+		<div class="main">
+		
+			<!-- 最近文件视图 -->
+			<div id="view" class="ui-view ui-listview recent-view">
+			
+				<ul class="ui-listview-head">
+					<li class="filename">文件名称</li>
+					<li class="size">大小</li>
+					<li class="datetime">更新时间</li>
+				</ul>
+				<!-- .ui-listview-head -->
+
+				<div class="ui-view-inner files-view">
+					<div id="fileTitle" class="ui-title-bar">
+						<h3 class="ui-title">文件</h3>
+						<div class="ui-title-line"></div>
+					</div>
+					<!-- .ui-title-bar -->
+					<div id="recent-fileList" class="files">
+					<!--
+						<div class="ui-item"><span class="filemain"><span class="fileimg"><i class="filetype icon-html"></i></span><span class="filename"><span class="for-list">help.html</span><span class="for-thumb">help.html</span></span><span class="fileedit hide"><input class="ui-input" value="help.html" type="text"></span></span><span class="filesize">12.86K</span><span class="filetime">18:33</span></div>
+						<div class="ui-item"><span class="filemain"><span class="fileimg"><img src="http://sz.yun.ftn.qq.com:80/ftn_handler/1c4e1723b2afd99d722aa505c7e2c4663755f1414ae50fd30da242010e9985d36e5a8fd85871a2cb9abf267006366448fd5fad9f1b4eb0080a987fae7c5d6de8/?fname=banner3.jpg&amp;pictype=scaled&amp;size=64*64&amp;cv=30006&amp;cn=0"></span><span class="filename"><span class="for-list">banner3.jpg</span><span class="for-thumb">banner3.jpg</span></span><span class="fileedit hide"><input class="ui-input" value="banner3.jpg" type="text"></span></span><span class="filesize">91.84K</span><span class="filetime">08:26(周一)</span></div>
+					-->
+					</div> 
+				</div>
+				<!-- .ui-view-inner -->
+				
+				<div class="ui-listview-foot">
+				
+					<div id="recent-paging" class="ui-page">
+					</div>
+					<!-- .ui-page -->
+				</div>
+				<!-- .ui-listview-foot -->
+				
+			</div>
+			
+			<div id="picture-view" class="ui-view ui-thumbview photos-view hide">			
+				<div class="ui-view-inner files-view">		
+					<!-- .ui-title-bar -->
+					<div id="picture-fileList" class="files">
+						<!--div class="ui-item hover"><span class="fileimg"><img src="img/tmp/photo1.png"></span></div>
+						<div class="ui-item"><span class="fileimg"><img src="img/tmp/photo1.png"></span>
+						</div-->
+					</div> 
+				</div>
+				
+				<div class="ui-listview-foot">
+					<div id="picture-paging" class="ui-page">
+					</div>
+				</div>	
+			</div>
+			
+			<!-- .ui-view -->		
+			<!-- 暂无文件视图 -->
+			<div class="ui-view-empty hide">
+				<span class="icon-logo"></span>
+				<span class="ui-empty-text">暂无文件<s></s></span>
+			</div>
+			<!-- .ui-view-empty -->
+			<div id="warn_tips" class="ui-tips ui-tips-warn hide">您选择的文件个数已超过20个</div>
+		</div>
+		<!-- .main -->
+		
+	</div>
+	<!-- .app-section -->
+	
+	<!-- 搜索区域 -->
+	<div class="app-seaction searching hide">
+	
+		<!-- 正在搜索 -->
+		<!--div class="searching-tips">
+			<span class="icon-logo"></span>
+			<span class="searching-text">正在搜索“项目文档”...<s></s></span>
+		</div-->
+		
+		<!-- 搜索无结果 -->
+		<div class="searching-tips hide">
+			<span class="icon-logo"></span>
+			<p class="searching-empty"><i class="icon-searching"></i>暂未找到包含“项目文档”的文件</p>
+		</div>
+		
+		<!-- 搜索结果视图 -->
+		<div id="search-view" class="ui-view ui-listview hide">
+		
+			<ul class="ui-listview-head">
+				<li class="filename">文件名称</li>
+				<li class="size">文件大小</li>
+			</ul>	
+			<div class="ui-view-inner files-view">
+				<div id="fileTitle" class="ui-title-bar">
+					<h3 class="ui-title">文件</h3>
+					<div class="ui-title-line"></div>
+				</div>
+				<!-- .ui-title-bar -->
+				<div id="search-fileList" class="files">
+				</div> 
+			</div>
+			
+			<div class="ui-listview-foot">
+				<div id="search-paging" class="ui-page">
+				</div>
+			</div>
+			<!-- .ui-listview-foot -->
+			
+		</div>
+		<!-- .ui-view -->	
+	</div>
+	<!-- .searching -->
+	
+</div>
+
+<div id="tip_warn_4g" class="full-tip-box full-tip-warn" style="display:none">
+    <span class="full-tip"><span class="inner"><i class="ico"></i><span class="text">QQ无法发送大于4G的文件</span></span></span>
+</div>
+
+<!-- 遮罩 -->
+<div class="ui-mask hide"></div>
+<!-- 新手指引1 -->
+<div class="userguide userguide-1 hide">
+	<a class="close" href="#!/close">&times;</a>
+</div>
+<!-- 新手指引2 -->
+<div class="userguide userguide-2 hide">
+	<a class="close" href="#!/close">&times;</a>
+</div>
+<!-- .app-inner -->
+<!--[if IE 6]><script type="text/javascript">try{document.execCommand('BackgroundImageCache',false,true);}catch(e){}</script><![endif]-->
+
+<!-- 以下代码仅用于 DEMO，请正式上线时删除 -->
+<script src="http://imgcache.qq.com/club/qqdisk/web/js/jquery-1.6.4.js"></script>
+<script type="text/javascript" language="javascript" src="http://imgcache.qq.com/club/qqdisk/web/js/qqviplib_2.0.0.js"></script>
+<script type="text/javascript" src="http://imgcache.qq.com/club/qqdisk/web/js/indep_check.js?v=20130820"></script>
+<script type="text/javascript" src="http://imgcache.qq.com/club/qqdisk/web/js/qtrans/qqdisk_lib_qtrans.js?v=20161118"></script>
+<script>
+    (function ($) {
+
+        QQDISK_WEB.Utils.init();
+
+
+        $(document).bind('keydown', function (e) {
+            var
+                alt = e.altKey,
+                shift = e.shiftKey,
+                ctrl = e.ctrlKey,
+                which = e.which,
+                $el = $(e.target);
+
+            // Ctrl+N、Shift+F10、F11、F5刷新
+            if (alt && ((which === 37) || (which === 39))) {       // 屏蔽 Alt+ 方向键 ←      // 屏蔽 Alt+ 方向键 →
+                return false;
+            }
+
+            if (which === 8 && !$el.is(':input')) {
+                e.which = e.keyCode = 0;
+                return false;
+            }
+
+            // 屏蔽F11
+            if (which === 122)
+                return false;
+
+            // 屏蔽Ctrl+n
+            if (ctrl && which === 78)
+                return false;
+
+            // 屏蔽shift+F10
+            if (shift && which === 121)
+                return false;
+
+            // 屏蔽shift加鼠标左键新开一网页
+            if (shift && $el.is('A'))
+                return false;
+        });
+
+        $(function () {
+            $.getScript('http://pingjs.qq.com/tcss.ping.js', function () {
+                if (typeof pgvMain == 'function') {
+                    pgvMain("", {
+                    	tagParamName: 'WYTAG',
+                        virtualURL:'qtrans/qtrans.html',
+                        virtualDomain:"www.weiyun.com"
+                    });
+                }
+            });
+        });
+    })(jQuery);
+
+</script>
+</body>
+</html>

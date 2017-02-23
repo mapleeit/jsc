@@ -1,0 +1,83 @@
+<script id="webFileList" type="text/html" nowith="yes">
+
+    <div id="lay-main-con" class="lay-main-con">
+        <div class="inner">
+            <div id="_main_box" class="wrap">
+                <!-- 列表模式样式ui-listview -->
+                <!-- 缩略图模式样式ui-thumbview -->
+                <!-- update jin 20131014 : new style height -->
+                <div id="_disk_view" class="disk-view ui-view ui-thumbview">
+                    <!-- 文件列表 -->
+                    <!-- 目录 -->
+                    <div class="dirs-view" style="">
+
+                        <!-- 目录列表 -->
+                        <div id="_file_list" class="dirs share-file-list">
+                            <!-- 高级浏览器使用:hover选择器，ie6请使用鼠标悬停添加list-hover样式 -->
+                            <!-- 选中样式list-selected -->
+                            <!-- 拖入接收容器样式list-dropping -->
+                            <!-- 不可选样式list-unselected -->
+                            <!-- 不带复选框模式list-nocheckbox-->
+                            <!-- 当前列表，用于右键和单行菜单模式list-menu-on-->
+                            <%
+                            var htmlEscape = require('weiyun/util/htmlEscape');
+                            var prettysize = require('weiyun/util/prettysize');
+                            var fileType = require('weiyun/util/fileType');
+                            var list = data.list;
+                            var noteList = data.noteList;
+                            list.forEach(function(file){
+                                var is_dir = !!file['dir_key'];
+                                var id = is_dir ? file['dir_key'] : file['file_id'];
+                                var file_name = is_dir ? htmlEscape(file['dir_name']) : htmlEscape(file['file_name']);
+                                var file_size = is_dir ? 0 : prettysize(file['file_size']);
+                                var file_type = is_dir ? 'folder' : fileType(file_name);
+                                var thumb_url = is_dir ? '' : file['thumb_url'];
+
+                                //web分享页暂时没有sketch，后续有了再去掉
+                                if(file_type==='sketch') {
+                                    file_type = 'file';
+                                }
+                            %>
+                            <div data-action="enter" id="<%=id%>" data-list="true" data-file-id="<%=id%>" class="list-wrap share-file">
+                                <div class="list clear">
+                                    <label class="checkbox"></label>
+                                        <span class="img">
+                                            <i data-src="<%=thumb_url%>" class="filetype icon-<%=file_type%>"></i>
+                                        </span>
+                                    <span class="name"><p class="text"><em><%=file_name%></em></p></span>
+                                </div>
+                            </div>
+                            <%
+                            });
+
+                            noteList.forEach(function(note){
+                            var id = note['note_id'];
+                            var note_title = htmlEscape(note['note_title']);
+                            %>
+                            <div data-action="enter" id="<%=id%>" data-list="true" data-file-id="<%=id%>" class="list-wrap share-file">
+                                <div class="list clear">
+                                    <label class="checkbox"></label>
+                                        <span class="img">
+                                            <i class="filetype icon-note"></i>
+                                        </span>
+                                    <span class="name"><p class="text"><em><%=note_title%></em></p></span>
+                                </div>
+                            </div>
+                            <%
+                            });
+
+                            %>
+                        </div>
+                    </div>
+                    <div id="_disk_files_empty" class="g-empty sort-folder-empty">
+                        <div class="empty-box">
+                            <div class="ico"></div>
+                            <p class="" style="height: 30px;line-height: 30px;font-size: 22px;color: #AFB5BF;text-align: center;">该文件夹为空</p>
+                            <p class="content"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>

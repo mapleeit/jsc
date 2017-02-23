@@ -1,0 +1,41 @@
+<script id="more_prize" type="text/html" nowith="yes">
+    <%
+        data = data || {};
+        var __morePrizeListModel = data.__morePrizeListModel || [];
+
+        var i, j, key, len, list, item;
+    %>
+<div class="app-checkin-detail j-container" style="display: none">
+    <div class="box gift-exchange">
+        <div class="box-bd">
+            <ul class="gift-list clearfix">
+                <% for (i = 0, len = __morePrizeListModel.length; i < len; i++) {
+                    item = __morePrizeListModel[i] || {};
+                %>
+                <!-- 礼品抢光.soldout -->
+                <li class="item-gift rBor <%=item.is_empty? 'soldout' : ''%>" data-prize-id="<%=item.prizeid%>" data-rule-id="<%=item.ruleid%>" data-action="go_goods_detail">
+                    <div class="pic">
+                        <div class="info" style="background-image:url(<%=item.image_url%>)"></div>
+                        <% if (!item.time_valid) { %>
+                        <p class="tip"><%=item.limit_begin_time%>开抢</p>
+                        <% } %>
+                        <!-- 礼品抢光加上这个结构 -->
+                        <% if (item.is_empty) { %>
+                        <div class="mask"><span>已抢光</span></div>
+                        <% } %>
+                    </div>
+                    <div class="title"><span><%=item.name%></span></div>
+                    <div class="gift-num">
+                        <% if (item.pathway === 'exchange') { %>
+                        <i class="icon icon-coin"></i><span class="num"><%=item.score%></span>
+                        <% } else if (item.pathway === 'lottery') { %>
+                        <span class="lottery">抽奖获得</span>
+                        <% } %>
+                    </div>
+                </li>
+                <% } %>
+            </ul>
+        </div>
+    </div>
+</div>
+</script>

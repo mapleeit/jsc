@@ -1,0 +1,36 @@
+<script id="login" type="text/html" nowith="yes">
+    <!DOCTYPE html>
+    <!--[if lt IE 7 ]> <html class="ie6"> <![endif]-->
+    <!--[if IE 7 ]> <html class="ie7"> <![endif]-->
+    <!--[if IE 8 ]> <html class="ie8"> <![endif]-->
+    <!--[if IE 9 ]> <html class="ie9"> <![endif]-->
+    <!--[if (gt IE 9)|!(IE)]>--> <html> <!--<![endif]-->
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta charset="utf-8"/>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+        <title>微云网页版</title>
+        <meta name="Keywords" content="QQ, 腾讯,微云, 分享, 网盘, 网络硬盘, U盘, 云存储, 传输, 存储, 同步, 备份, 拍照, 上传, 下载, 中转, 文件, 照片, 相册, 离线, 传文件, wifi, cloud, 微云网页版, weiyun, weiyun web"/>
+        <meta name="Description" content="微云是腾讯公司为用户精心打造的一项智能云服务, 您可以通过微云方便地在手机和电脑之间同步文件、推送照片和传输数据。"/>
+        <%
+        var g_info = window['g_weiyun_info'];
+        var serverConfig = plug('config') || {};
+        var is_test_env = serverConfig.isTest ? true : false;
+        %>
+</head>
+<body>
+<% if(g_info.is_debug) { %>
+<script type="text/javascript" src="//img.weiyun.com/club/weiyun/js/publics/seajs/sea.js?max_age=31104000"></script>
+<% } else { %>
+<script type="text/javascript" src="//img.weiyun.com/c/=/club/weiyun/js/publics/seajs/sea.js,/club/weiyun/js/publics/seajs-plugins/seajs-combo.js?max_age=31104000"></script>
+<% } %>
+<%=require('weiyun/util/inline').js(['configs_client'])%>
+<script type="text/javascript">
+    seajs.use([ '$', 'lib', 'common', 'station'], function ($, lib, common, mod) {
+        var update_cookie = mod.get('./update_cookie');
+        update_cookie.reload();
+    });
+</script>
+</body>
+</html>
+</script>

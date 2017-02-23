@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=GB2312" />
+		<script type="text/javascript">
+		/*
+			var s=location.host.split(".");
+			if(s.length>1){
+				document.domain=s.slice(s.length-2).join(".");
+			}else{
+				document.close();
+			}
+		*/
+			document.domain="qq.com";
+			var b=false,GBEncoder;
+			var setting = parent.QZONE.XHR.instance[frameElement.id.replace("_xsend_frm_","")];
+
+			try{
+				if(window.execScript){
+					execScript("b=(Asc('啊')=-20319)","vbscript");
+				}
+			}catch(ignore){
+				b=false;
+			}
+			if(!b){
+				document.write('<script type="text/javascript" src="'+setting.GBEncoderPath+'gbencoder.js"><\/script>');
+			}else{
+				document.write('<script language="vbscript" src="'+setting.GBEncoderPath+'gbencoder.vbs"><\/script>');
+				GBEncoder=function(s){return URLEncoding(s);};
+			}
+		</script>
+	</head>
+	<body>
+		<script type="text/javascript">
+			function tryThese(){
+				var res;
+				for (var ii = 0, len = arguments.length; ii < len; ii++) {
+					try {
+						res = arguments[ii]();
+						return res;
+					} catch (ignore) {
+					}
+				}
+				return res;
+			}
+
+			function genHttpParamString(o){
+				if ((o!==null) && (typeof(o) == 'object')) {
+					var r = [];
+					try {
+						for (var i in o) {
+							r.push(i + "=" + GBEncoder(o[i]));
+						}
+					} catch (ignore) {
+						return '';
+					}
+					return r.join("&");
+					
+				}
+				else {
+					return '';
+				}
+			}
+
+			function send(){
+				var sender = tryThese(function(){
+					return new XMLHttpRequest();
+				}, function(){
+					return new ActiveXObject("Msxml2.XMLHTTP");
+				}, function(){
+					return new ActiveXObject("Microsoft.XMLHTTP");
+				}) || null;
+				if (!sender) {
+					errExit();
+					return;
+				}
+				try {
+					sender.open(setting._method, setting._uri, setting._isAsync);
+				} catch (err) {
+					frameElement.errorCallback(999);
+					return;
+				}
+				if (setting._method == 'POST' && setting._isHeaderSetted) {
+					sender.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+					setting._isHeaderSetted = true;
+				}
+				var d = genHttpParamString(setting._data);
+
+				sender.onreadystatechange = function(){
+					if (sender.readyState == 4) {
+						if (sender.status >= 200 && sender.status < 300) {
+							frameElement.callback({
+								text: sender.responseText,
+								xmlDom: sender.responseXML
+							});
+						}
+						else {
+							frameElement.errorCallback(999);
+							return;
+						}
+					}
+				}
+				sender.send(d);
+			}
+			send();
+		</script>
+	</body>
+</html>

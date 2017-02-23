@@ -1,0 +1,169 @@
+<!--
+空提示
+@author trumpli
+-->
+<script id="_wysc_enter" type="text/html" nowith="yes">
+    <!-- 微云收藏入口 -->
+    <div class="wx-guide">
+        <div class="img"></div>
+        <div class="txt">查看和管理收藏内容请访问sc.qq.com</div>
+        <a href="#" class="g-btn g-btn-blue"><span data-btn-id="go_weiyun_sc" class="btn-inner">立即查看</span></a>
+    </div>
+</script>
+
+<!--
+虚拟目录文件列表模板
+@author jameszuo
+@date 2013-6-27
+-->
+<script id="vir_dir_file_list" type="text/html" nowith="yes">
+    <%/* 虚拟目录的文件视图（如文章、文字等） */%>
+    <div data-view="special" data-no-selection class="app-inner" style="display: none;">
+        <%/* 列表模式 */%>
+        <div data-sub-view="list" class="feeds" style="display:none;">
+            <%/* 目录（预留） */%>
+            <ul data-type="dir" style="display:none;"><%/* message_item */%></ul>
+            <%/* 文件 */%>
+            <ul data-type="file" style="display:none;"><%/* message_item */%></ul>
+        </div>
+
+        <%/* 缩略图模式 */%>
+        <div data-sub-view="thumb" class="app-inner media-inner" style="display:none;">
+            <%/* 目录（预留） */%>
+            <div data-type="dir" class="dirs medias" style="display:none"></div>
+            <%/* 文件 */%>
+            <div data-type="file" class="files medias" style="display:none"></div>
+        </div>
+
+        <%/* 加载更多 */%>
+        <a data-action="more" href="#" class="load-more" style="visibility:hidden">加载更多</a>
+        <p data-action="empty-tip" style="display:none;" class="empty-text"></p>
+    </div>
+
+    <%/* 虚拟目录的经典视图（如微信、图片视频目录等） */%>
+    <div data-view="classic" data-no-selection class="dirs-view-virtual" style="display: none;">
+        <%/* 目录 */%>
+        <div data-type="dir" class="dirs" style="display:none;"></div>
+        <%/* 文件 */%>
+        <div data-type="file" class="files" style="display:none;"></div>
+
+        <%/* 加载更多 */%>
+        <a data-action="more" href="#" class="load-more" style="visibility:hidden">加载更多</a>
+        <p data-action="empty-tip" style="display:none;" class="empty-text"></p>
+    </div>
+</script>
+
+<!--
+虚拟目录下的文件列表项模板
+@author jameszuo
+@date 2013-6-28
+-->
+<script id="vir_dir_file_item" type="text/html" nowith="yes">
+    <%
+    var lib = require('lib'),
+        common = require('common'),
+
+        constants = common.get('./constants'),
+        click_tj = common.get('./configs.click_tj'),
+
+        text = lib.get('./text'),
+        date_time = lib.get('./date_time'),
+
+        view_switch = require('./view_switch.view_switch'),
+
+        ui_virtual = require('./file_list.ui_virtual'),
+
+        ui_ver = constants.UI_VER,
+
+        icon_map = data.icon_map,
+
+        // 默认图片
+        default_image = constants.RESOURCE_BASE + (view_switch.is_list_view() ? '/img/img-32.png' : '/img/img-70.png'),
+
+        text_short_len = 128, // 字节
+
+        // 日期
+        time_str_len = 'yyyy-MM-dd hh:mm'.length,
+
+        undef;
+
+    for (var i=0,l=data.files.length; i<l; i++) {
+        var file = data.files[i],
+            icon = icon_map[file.get_icon()] || file.get_icon() || '',
+            file_name = text.text(file.get_name());
+
+        /* 其他（目前目录、文件、图片和视频属于这个分类） */
+
+        var is_dir = file.is_dir(),
+            is_image = file.is_image(),
+            is_video = file.get_type() === 'mp4';
+
+        if (is_dir) {
+            var icon_cls = icon || 'icon-folder';
+        %>
+            <div id="_disk_vdir_item_<%=file.get_id()%>" data-action="enter" data-file-id="<%=file.get_id()%>" class="list-wrap">
+                <div class="list clear list-nocheckbox">
+                    <span class="img"><i data-quick-drag data-ico class="filetype <%= icon_cls %>"></i></span>
+                    <span class="name"><p class="text"><em><span data-quick-drag data-name="file_name"><%=text.text(file.get_name())%></span></em></p></span>
+                    <span class="size"><%= file.get_readability_size() %></span>
+                    <span class="time"><%= (file.get_modify_time() || file.get_create_time()).substr(0, time_str_len) %></span>
+                </div>
+            </div>
+        <% } else { %>
+            <div id="_disk_vdir_item_<%= file.get_id() %>" data-action="enter" class="ui-item" data-file-id="<%= file.get_id() %>">
+                <span class="filemain">
+                    <%/*<label class="filecheck"></label>*/%>
+                    <!-- code by fixed ie6 bug -->
+                    <span class="fileie6">
+                        <span data-tj-value="52301" data-tj-action="btn-adtag-tj" class="fileimg"><!-- 图标 -->
+                            <% if (is_image) { %>
+                                <img src="<%=default_image%>" unselectable="on" style="visibility:hidden"/>
+                            <% } else { %>
+                                <i class="filetype <%= icon %>"></i>
+                            <% } %>
+                        </span>
+
+                        <% if (!(is_image || is_video)) { /* 文件名 */ %>
+                            <span data-tj-value="52302" data-tj-action="btn-adtag-tj" title="<%= file_name %>" class="filename" data-name="file_name"><%= file_name %></span>
+                        <% } %>
+                    </span>
+
+                    <% if (!file.is_dir()) { %>
+                        <!-- 文件功能菜单 -->
+                        <span class="filemenu">
+                            <% if (file.has_newsurl()) { %>
+                                <a class="icon-goto" data-action="newsurl" title="来源" href="#" hidefocus="on"></a>
+                            <% } else { %>
+                                <a class="icon-download" data-action="download" title="下载" href="#" hidefocus="on"></a>
+                            <% } %>
+                            <a class="icon-del" data-action="remove" title="删除" href="#" hidefocus="on"></a>
+                        </span>
+                    <% } %>
+                </span>
+            </div><%
+        }
+    }
+    %>
+</script>
+
+
+
+<!--
+日期时间
+@author jameszuo
+-->
+<script id="_date_time" type="text/html" nowith="yes">
+  <%var lib = require('lib'),
+        date_time = lib.get('./date_time'),
+        time_values = date_time.readability(data);
+
+    if (time_values[0] === 'today') {
+      %><span class="feed-date"><%= time_values[1] %></span><span class="feed-time"><%= time_values[2] %></span><%
+    }
+    else if (time_values[0] === 'yesterday') {
+      %><span class="feed-date"><%= time_values[1] %></span><%
+    }
+    else {
+      %><span class="feed-day"><%= time_values[1] %></span><span class="feed-month"><%= time_values[2] %></span><%
+    }%>
+</script>

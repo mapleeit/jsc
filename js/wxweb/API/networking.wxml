@@ -1,0 +1,18 @@
+<wx-view>
+  <wx-form bindsubmit="request">
+    <wx-input placeholder="url" value="https://stream.weixin.qq.com/weapp/SendMsg" name="url"></wx-input>
+    <wx-button type="primary" formType="submit">request</wx-button>
+  </wx-form>
+
+  <wx-form bindsubmit="connectSocket">
+    <wx-input placeholder="url" value="wss://stream.weixin.qq.com/wsweapp/SendMsg" name="url"></wx-input>
+    <wx-button type="primary" formType="submit">connectSocket</wx-button>
+  </wx-form>
+
+  <wx-form bindsubmit="sendSocketMessage">
+    <wx-input placeholder="message" value="hello, world" name="message"></wx-input>
+    <wx-button type="primary" formType="submit">sendSocketMessage</wx-button>
+  </wx-form>
+
+  <wx-button type="primary" bindtap="closeSocket">closeSocket</wx-button>
+</wx-view>

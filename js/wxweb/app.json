@@ -1,0 +1,21 @@
+{
+	"pages": [
+		"page/index/index",
+		"page/share/index",
+		"page/video/index"
+	],
+	"window": {
+		"navigationBarTextStyle": "white",
+		"navigationBarTitleText": "微云",
+		"navigationBarBackgroundColor": "#00A4FF",
+		"backgroundColor": "#FFFFFF",
+		"enablePullDownRefresh": false
+	},
+	"networkTimeout": {
+		"request": 5000,
+		"connectSocket": 5000,
+		"uploadFile": 30000,
+		"downloadFile": 30000
+	},
+	"debug": true
+}

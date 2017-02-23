@@ -1,0 +1,36 @@
+<script id="bottom" type="text/html" nowith="yes">
+    <%
+    var g_info = window.g_weiyun_info;
+    var serv_taken = new Date().getTime() - g_info.server_start_time;
+    %>
+    <script type="text/javascript">
+        var g_serv_taken = <%=serv_taken%>;
+        setTimeout(function() {
+            window.g_end_time = +new Date();
+        }, 0);
+    </script>
+<% if(g_info.is_debug) { %>
+<script type="text/javascript" src="//img.weiyun.com/club/weiyun/js/publics/seajs/sea.js?max_age=31104000"></script>
+<% } else { %>
+<script type="text/javascript" src="//img.weiyun.com/c/=/club/weiyun/js/publics/seajs/sea.js,/club/weiyun/js/publics/seajs-plugins/seajs-combo.js?max_age=31104000"></script>
+<% } %>
+<%=require('weiyun/util/inline').js(['configs_client'])%>
+<script type="text/javascript">
+    var g_login_user_rsp_head = (function () { try { return {"cmd":2201,"retcode":0}; }catch(e){ } })(),
+            g_disk_root_files_rsp_body = (function () { try { return <%=JSON.stringify(data.file_list)%>; }catch(e){ }; })(),
+            g_page_time = new Date();
+    seajs.use([ '$', 'lib', 'common', 'station'], function ($, lib, common, mod) {
+        window.g_js_time = +new Date();
+        var station = mod.get('./station');
+        station.render(<%=JSON.stringify(data)%>);
+    });
+</script>
+<script>
+    (function(win, seajs) {
+        seajs.use(['p_client_delay_css', 'base_delay_css']);
+    })(window, seajs);
+</script>
+<script type="text/javascript" src="//qzonestyle.gtimg.cn/qzone/hybrid/common/security/aq.js" charset="UTF-8"></script>
+</body>
+</html>
+</script>

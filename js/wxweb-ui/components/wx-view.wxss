@@ -1,0 +1,15 @@
+.wx-view {
+	margin: 5px;
+	border: 3px solid #73AD21;
+	width: 150px;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+}
+.wx-view-inline {
+	margin: 5px;
+	border: 3px solid #73AD21;
+	width: 180px;
+	height: 30px;
+	line-height: 30px;
+}

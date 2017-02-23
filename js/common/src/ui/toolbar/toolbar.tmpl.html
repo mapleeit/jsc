@@ -1,0 +1,71 @@
+<!--
+工具条模板
+@author james
+@date 2013-07-25
+-->
+<script id="toolbar" type="text/html" nowith="yes">
+    <%
+    var Button = require('./ui.toolbar.button'),
+        ButtonGroup = require('./ui.toolbar.button_group');
+    %>
+    <div class="toolbar-btn clear">
+        <div class="btn-message">
+            <%
+            for (var i=0, l=data.btns.length; i<l; i++) {
+                var btn = data.btns[i];
+                if (ButtonGroup.is_instance(btn)) {
+                    %><%= this.toolbar_button_group(btn) %><%
+                } else if (Button.is_instance(btn)) {
+                    %><%= this.toolbar_button(btn) %><%
+                } else
+                %><span data-no-selection class="btn-gap"></span><%
+            }
+            %>
+        </div>
+    </div>
+</script>
+
+<!--
+工具条模板
+@author james
+@date 2013-07-25
+-->
+<script id="toolbar_button" type="text/html" nowith="yes">
+    <% var btn = data; %>
+    <a data-btn-id="<%= btn.get_id() %>" data-no-selection class="g-btn g-btn-gray <%= btn._o.cls %> <%= btn.update_enable && data.err_tip ? 'disable' : '' %>" style="<%= data._visible ? '' : 'display:none;' %>" href="#" tabindex="-1"><span class="btn-inner <%= !btn._o.label ? 'minpad' : ''%>"><% if (btn._o.icon) { %><i class="ico <%= btn._o.icon %>"></i><% } %><span class="text"><%= btn._o.label %></span></span></a>
+</script>
+
+<!--
+工具条分组模板
+@author james
+@date 2013-08-02
+-->
+<script id="toolbar_button_group" type="text/html" nowith="yes">
+    <% var btn = data; %>
+    <div data-btn-id="<%= btn.get_id() %>" data-no-selection class="btn <%= btn._o.cls %>">
+        <span class="btn-auxiliary">
+            <% if (btn._o.icon) { %><i class="ico <%= btn._o.icon %>"></i><% } %>
+            <span class="text"><%= btn._o.label %></span>
+            <% if (btn._o.buttons.length) { %><i class="ico ico-point"></i><% } %>
+        </span>
+        <ul class="toolbar-dropdown">
+        <%
+            var sub_btns = btn._o.buttons;
+            for (var i = 0, l = sub_btns.length; i < l; i++) {
+                var sb = sub_btns[i];
+                %><%= this.toolbar_button_group_item(sb) %><%
+            }
+        %>
+        </ul>
+    </div>
+</script>
+
+<!--
+工具条分组 Item 模板
+@author james
+@date 2013-08-05
+-->
+<script id="toolbar_button_group_item" type="text/html" nowith="yes">
+    <% var btn = data; %>
+    <li data-btn-id="<%= btn.get_id() %>" data-no-selection class="dw-gap <%= btn._o.cls %> <%= btn.update_enable && data.err_tip ? 'disable' : '' %>" style="<%= data._visible ? '' : 'display:none;' %>"><a href="#"><%= btn._o.label %></a></li>
+</script>

@@ -1,0 +1,37 @@
+<script id="history" type="text/html" nowith="yes">
+    <%
+        data = data || {};
+        var __historyModel = data.__historyModel || [];
+
+        var i, j, key, item, len;
+    %>
+    <div class="app-checkin-history j-container" style="display: none">
+        <ul class="shop-list">
+            <% for (i = 0, len = __historyModel.length; i < len; i++) {
+                item = __historyModel[i];
+            %>
+            <li class="item" <%= item.is_old ? '' : 'data-action="go_exchange_success"'%> data-prize-id="<%=item.prizeid%>" data-rule-id="<%=item.ruleid%>" data-pathway="<%=item.pathway%>">
+                <div class="pic"><img src="<%=item.img_url%>"></div>
+                <div class="main">
+                    <p class="text"><%=item.name%></p>
+                    <span class="lottery"><%=item.pathway === 'lottery' ? '抽奖获得' : '兑换获得'%></span>
+                </div>
+                <!--<div class="right">-->
+                    <!--<p class="express">顺丰速递</p>-->
+                    <!--<p class="express-num">运单号:754855823238</p>-->
+                <!--</div>-->
+            </li>
+            <% } %>
+            <!--<li class="item">-->
+                <!--<div class="pic"><img src="../img/checkin-exchange-gift/gift-s-11290.jpg"></div>-->
+                <!--<div class="main">-->
+                    <!--<p class="text">QQ猴年公仔QQ猴年公仔QQ猴年公仔</p>-->
+                    <!--<span class="lottery">抽奖获得</span>-->
+                <!--</div>-->
+                <!--<div class="right">-->
+                    <!--<p class="express">准备配送</p>-->
+                <!--</div>-->
+            <!--</li>-->
+        </ul>
+    </div>
+</script>

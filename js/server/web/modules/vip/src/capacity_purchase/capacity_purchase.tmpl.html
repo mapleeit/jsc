@@ -1,0 +1,98 @@
+<script id="capacity_purchase_body" type="text/html" nowith="yes">
+    <%
+        var prettysize = require('weiyun/util/prettysize');
+        var key, i, item, it, len;
+        var is_login = !!data.is_login;
+    %>
+    <% if (is_login) { %>
+    <!-- 剩余容量 -->
+    <div class="space">
+        <p class="txt">剩余</p>
+        <!-- [ATTENTION!!] 小于 1G，添加 .alert -->
+        <p class="num <%= data.__remainSpace <= Math.pow(1024, 3) ? 'alert' : ''%>"><%=data.__remainSpaceText%></p>
+    </div>
+    <!-- 剩余容量构成 -->
+    <div class="figure-wrapper">
+        <% if (data.__isVip) {%>
+        <p class="txt clearfix"><span class="exp">尊贵的会员专享初始容量3T <a href="javascript:void(0);" data-action="pay" class="link">续费会员</a></span>
+            总容量: <%=data.__totalSpaceText%>
+        </p>
+        <% } else { %>
+        <p class="txt clearfix"><span class="exp">会员专享初始容量3T <a href="javascript:void(0);" data-action="pay" class="link">开通会员</a></span>
+            总容量: <%=data.__totalSpaceText%>
+        </p>
+        <% } %>
+
+
+        <div class="figure" aria-hidden="true">
+            <%
+            for (key in data.__spaceBarModel) {
+                if (data.__spaceBarModel.hasOwnProperty(key)) {
+            %>
+            <div class="fig <%=key%>" style="<%=data.__spaceBarModel[key]%>"></div>
+            <% }} %>
+        </div>
+        <%
+        for (key in data.__spaceDetailModel) {
+            if (data.__spaceDetailModel.hasOwnProperty(key)) {
+                item = data.__spaceDetailModel[key];
+        %>
+            <%
+                // buy list
+            if (Array.isArray(item)) {
+            for (i = 0, len = item.length; i < len; i ++) {
+                it = item[i];
+            %>
+            <p class="txt clearfix" <%=it.show ? '' : 'style="display:none;"'%>>
+                <span class="exp"><%=it.expire%></span>
+                <i class="icon icon-tag-<%=key%>"></i><%=it.spaceText%>
+            </p>
+            <%
+                }
+            } else { %>
+            <p class="txt clearfix" <%=item.show ? '' : 'style="display:none;"'%>>
+                <span class="exp"><%=item.expire%></span>
+                <i class="icon icon-tag-<%=key%>"></i><%=item.spaceText%>
+
+                <% if (key === 'regular') { %>
+                <i class="icon icon-question">疑问
+                    <b class="mod-bubble-dropdown with-border top-left question-dropdown">
+                        <b class="txt-dropdown">
+                            <b>赠送容量在实行新的服务策略后对普通用户已取消，您是会员用户，我们将继续为您保留，感谢您对微云的支持。</b>
+                        </b>
+                        <b class="bubble-arrow-border"></b>
+                        <b class="bubble-arrow"></b>
+                    </b>
+                </i>
+                <% } %>
+            </p>
+            <% } %>
+        <% }} %>
+    </div>
+    <% } %>
+
+    <!-- 容量券购买 -->
+    <div class="ticket-wrapper">
+        <h1 class="txt">购买容量</h1>
+        <%
+        for (i = 0, len = data.__buyListModel.length; i < len; i++ ) {
+            item = data.__buyListModel[i];
+        %>
+        <ul class="list clearfix">
+            <%
+            for (key in item) {
+                if (item.hasOwnProperty(key)) {
+                    it = item[key];
+            %>
+            <li class="ticket" data-type="<%=key%>">
+                <div class="num-wrapper clearfix">
+                    <span class="num"><%=key%></span>
+                    <span class="cost"><strong><%=it%></strong>元/年</span>
+                </div>
+                <button class="btn btn-outline j-purchase-btn" data-action="<%=is_login ? 'capacity_purchase' : 'login' %>">立即购买</button>
+            </li>
+            <% }} %>
+        </ul>
+        <% } %>
+    </div>
+</script>

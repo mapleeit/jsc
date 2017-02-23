@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+<script type="text/javascript" src="//imgcache.qq.com/club/weiyun/js/lib/jquery-1.8.3.min.js?max_age=31104000"></script>
+<title>微云</title>
+<style type="text/css">
+a {
+    color: #1D719E;
+    text-decoration: none;
+}
+/* 预览 */
+.viewer{
+    position:fixed;
+    _position:absolute;
+    z-index:999;
+    font-size: 12px;
+}
+.viewer-docs,
+.viewer-mask,
+.viewer-header,
+.viewer-loading,
+.viewer-loading-text,
+.viewer-docs .ui-icon{
+    position:absolute;
+}
+.viewer-header{
+    right:0;
+    top:0;
+    z-index:1;
+}
+.viewer,
+.viewer-docs,
+.viewer-mask,
+.viewer-loading{
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;_height:500px;
+    text-align:center;
+}
+.viewer-inner,
+.viewer-cnt,
+.img-viewer{
+    width:100%;
+    height:100%;
+}
+.viewer-inner{
+    position:absolute;
+    left:0;
+    top:0;
+    bottom:0;
+    right:0;
+}
+.viewer-mask{
+    background:#000;
+    filter:alpha(opacity=80);
+    opacity:.8;
+}
+.viewer-content iframe{
+    border:none;
+}
+.viewer-content{
+    position:relative;
+    display:inline-block;
+    background:#FFF;
+    box-shadow:0px 0px 15px #000;
+    *display:inline;
+    *zoom:1;
+    padding:10px;
+}
+
+.viewer-tips{
+    position:absolute;
+    width:200px;
+    height:64px;
+    left:50%;
+    top:50%;
+    margin:-32px 0 0 -125px;
+    text-align:left;
+    border:4px solid #e8e8e8;
+    border-radius:4px;
+    background:#FFF;
+}
+.viewer-tips .ui-icon{
+    display:inline-block;
+    width:30px;
+    height:30px;
+    vertical-align:middle;
+    background:#CCC;
+}
+.viewer-tips .ui-tips{
+    position:relative;
+    margin:15px;
+    padding-left:45px;
+}
+.viewer-tips .icon-err{
+    position:absolute;
+    top:0;
+    left:5px;_left:-40px;
+    background:url(//imgcache.qq.com/vipstyle/nr/box/img/sprite-preview.png?t=130118) -144px -131px no-repeat;
+}
+/*重置iframe间距*/
+iframe{
+    margin:-4px auto;
+    padding: 0;
+    text-align: center;
+}
+
+</style>
+</head>
+<body style="text-align:center;margin:0 auto;padding:0;background:#fff;">
+<script>
+document.domain = 'weiyun.com';
+//页码
+var page = 1;
+//是否完成的标识
+var isOver = false;
+//是否正在加载的标识
+var isLoading = false;
+
+//获取url参数
+var getQueryString = function (name) {
+    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+    var r = window.location.search.substr(1).match(reg);
+    if (r!=null) return unescape(r[2]); return null;
+};
+
+var url = getQueryString('url');
+//url = url.replace('pdf_view','pdf_view_sliced');
+
+
+//iframe高度调整
+var adaptIframe = function(ifrm) {
+    try{
+        var bHeight = ifrm.contentWindow.document.body.scrollHeight;
+        var dHeight = ifrm.contentWindow.document.documentElement.scrollHeight;
+        var bWidth = ifrm.contentWindow.document.body.scrollWidth;
+        var dWidth = ifrm.contentWindow.document.documentElement.scrollWidth;
+        var height = Math.max(bHeight, dHeight);
+        var width = Math.max(bWidth, dWidth);
+
+        if(page==2) {
+            //改变页面背景是黑色
+            document.body.style.background = '#A0A0A0';
+        }
+
+        //width = width > 1000 ? 1000 : width;
+        if(height < 200) {
+            isOver = true;
+            ifrm.height = 0;
+        }
+        else{
+            ifrm.height = height;
+            ifrm.width = width - 10;
+            //计算当前窗口的视窗宽度
+            var pWidth1 = parent.document.body.scrollWidth;
+            var pWidth2 = parent.document.documentElement.scrollWidth;
+            var pWidth = Math.max(pWidth1, pWidth2);
+            //这边顺便调整自己的宽度和父级页面的宽度
+            if(width>=910){
+                var tmp = width + 20 > pWidth ? pWidth-20 : width + 20;
+                var s = parent.document.getElementById('pdf-content');
+                s.style.width = tmp + 'px';
+                //居中显示
+                s.style.left = Math.floor( (pWidth-tmp)/2 ) + 'px';
+            }
+        }
+        //ifrm.style.display = 'block';
+    }catch (ex){
+        //设置正在leading，防止继续加载
+        isLoading = true;
+        //删除原来创建的iframe
+        document.body.removeChild(ifrm);
+        if(page == 2){
+            document.getElementById('_page').style.display = 'block';
+        }
+        else{
+            //出现重试提示
+            loadingDiv.showRrtry();
+            //滚动到最后
+            try{
+                window.scroll(0,document.body.scrollHeight);
+            }
+            catch(e){
+                window.scroll(0,document.documentElement.scrollHeight);
+            }
+        }
+        
+        //回滚页码
+        page --;
+        //加入错误上报
+        //var _data = {"log_data": [{"rst": 0,"service_id": 1,"op": 9030,"subop": 0}]};
+        //parent.QQDISK_WEB.Utils.logCommit(_data);
+    }
+};
+
+var retry = function(){
+    document.getElementById('_page').style.display = 'none';
+    loadPDF();
+}
+
+//加载中的层
+var loadingDiv = {
+    _getScrollXY : function(){
+    
+        var scrollLeft = window.pageXOffset 
+        || document.documentElement.scrollLeft 
+        || document.body.scrollLeft 
+        || 0;
+        
+        var scrollTop = window.pageYOffset 
+        || document.documentElement.scrollTop 
+        || document.body.scrollTop 
+        || 0;
+
+        var resObj = new Object();
+        resObj.x = scrollLeft;
+        resObj.y = scrollTop;
+        return resObj;
+    },
+    _getClientWH : function(){
+        
+        var clientWidth = document.documentElement.clientWidth 
+        || document.body.clientWidth 
+        || 0;
+        
+        var clientHeight = document.documentElement.clientHeight 
+        || document.body.clientHeight 
+        || 0;
+
+        var resObj = new Object();
+        resObj.w = clientWidth;
+        resObj.h = clientHeight;
+        return resObj;
+    },
+    show : function(){
+        var html = '<div style="float:right;text-align:left;width:120px;font-size:12px;color:gray;line-height:25px">数据加载中...</div>';
+        html += '<div id="loading-pic" style="width:25px;height:25px"><img src="//imgcache.qq.com/vipstyle/nr/box/img/loading.gif"width="25" height="25" /></div>';
+
+        var loading_win = document.createElement('div');
+        loading_win.id = 'ajax_loading';
+        loading_win.style.padding = '20px';
+        loading_win.style.display = 'none';
+        loading_win.style.width = '160px';
+        loading_win.style.position = 'absolute';
+        loading_win.style.zIndex = '1000';
+        loading_win.innerHTML = html;
+
+        document.body.appendChild(loading_win);
+        var scrollPos = this._getScrollXY();
+        var clientSize = this._getClientWH();
+        //var top = (clientSize.h/2+scrollPos.y+355);
+        var top = (clientSize.h+scrollPos.y-20);
+        var left = (clientSize.w/2-80);
+        document.getElementById("ajax_loading").style.top = top + 'px';
+        document.getElementById("ajax_loading").style.left = left + 'px';
+        document.getElementById("ajax_loading").style.display = 'block';
+    },
+    hide : function(){
+        if(document.getElementById("ajax_loading")){
+            document.getElementById("ajax_loading").style.display = 'none';
+            document.body.removeChild(document.getElementById("ajax_loading"));
+        }
+    },
+    showRrtry : function(){
+        var html = '<div style="width:160px;font-size:12px;line-height:25px">文件预览时发生错误，请<a href="javascript:;" onclick="loadingDiv.hideRetry();loadPDF();">重试</a></div>';
+
+        var loading_win = document.createElement('div');
+        loading_win.id = 'retry';
+        loading_win.style.padding = '20px';
+        loading_win.style.display = 'none';
+        loading_win.style.width = '160px';
+        loading_win.style.position = 'absolute';
+        loading_win.style.zIndex = '1000';
+        loading_win.innerHTML = html;
+
+        document.body.appendChild(loading_win);
+        var scrollPos = this._getScrollXY();
+        var clientSize = this._getClientWH();
+        //var top = (clientSize.h/2+scrollPos.y+300);
+        var top = (clientSize.h+scrollPos.y-20);
+        var left = (clientSize.w/2-80);
+        document.getElementById("retry").style.top = top + 'px';
+        document.getElementById("retry").style.left = left + 'px';
+        document.getElementById("retry").style.display = 'block';
+    },
+    hideRetry : function(){
+        document.getElementById("retry").style.display = 'none';
+        document.body.removeChild(document.getElementById("retry"));
+    }
+}
+
+//加载PDF
+var loadPDF = function (){
+    if(isOver == true) {
+        return; //文档加载完了就不加载了
+    }
+    isLoading = true;
+    //加载第一页的时候不采用这个加载
+    if(page==1) {
+        var s = parent.document.getElementById('pdf-loading');
+        s.style.display = 'block';
+    }
+    else {
+        loadingDiv.show();
+    }
+    //滚动到最后
+    try{
+        window.scroll(0,document.body.scrollHeight);
+    }
+    catch(e){
+        window.scroll(0,document.documentElement.scrollHeight);
+    }
+    //创建iframe
+    var ifrm = document.createElement('iframe');
+    ifrm.id = "page_" + page;
+    ifrm.src = url + '&page=' + ( (page-1)*3 + 1 );
+    ifrm.frameBorder = 0;
+    ifrm.scrolling = 'no';
+    ifrm.height = 0;
+    //ifrm.style.display = 'none';
+    document.body.appendChild(ifrm);
+    //iframe加载完成后修改页面高度
+
+    $(ifrm).on('load', function () {
+        isLoading = false;
+        //第一页的时候加载了父页面的loading，这里需要消去
+        if(page==2) {
+            var s = parent.document.getElementById('pdf-loading');
+            s.style.display = 'none';
+        }
+        adaptIframe(ifrm);
+        loadingDiv.hide();
+    });
+    
+    //page值加1
+    page ++;
+}
+
+//一进入页面加载第一个3页
+window.onload = function(){
+    //为滚动条添加鼠标滚动事件
+    window.onscroll = document.body.onscroll = function(){
+        if(isLoading) {
+            return; //防止重复加载
+        }
+        var h = document.documentElement.scrollHeight || document.body.scrollHeight;
+        var t = document.documentElement.scrollTop || document.body.scrollTop;
+        var ph = document.documentElement.clientHeight || document.body.clientHeight;
+        if(h <= t+ph){
+            //加载新的数据
+            loadPDF();
+        }
+    };
+    loadPDF();
+    //增加个定时器来查询这个函数是否存在
+    setInterval(function(){
+        if(window.onscroll == undefined || window.onscroll == null){
+            window.onscroll = document.body.onscroll = function(){
+                if(isLoading) {
+                    return; //防止重复加载
+                }
+                var h = document.documentElement.scrollHeight || document.body.scrollHeight;
+                var t = document.documentElement.scrollTop || document.body.scrollTop;
+                var ph = document.documentElement.clientHeight || document.body.clientHeight;
+                if(h <= t+ph){
+                    //加载新的数据
+                    loadPDF();
+                }
+            };
+        }
+    },1500);
+};
+
+
+</script>
+<div id="_page" class="viewer" style="display:none;">
+    <div class="viewer-inner">
+        <table class="viewer-cnt">
+            <tr>
+                <td class="viewer-item">
+                    <div class="other-viewer">
+                        <div class="viewer-content">
+                            <!-- 异常 -->
+                            <div class="viewer-tips">
+                                <div class="ui-tips">
+                                    <i class="ui-icon icon-err"></i>
+
+                                    <p class="ui-text">
+                                        文件预览时发生错误，<br/>请 <a href="javascript:void(0);" onclick="retry();" id="try">重试</a>。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>

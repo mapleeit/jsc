@@ -1,0 +1,9 @@
+<!-- 目录/文件列表结构 -->
+<!-- 定义模板 -->
+<template name="filterItem">
+	<!-- [ATTENTION!!] 选中添加 .act -->
+	<view class="btn {{act}}" data-index="{{index}}" bindtap="bindFilterTap">
+    <i class="border" style="display:{{index===0?'none':'block'}}"></i>
+		{{type}}
+	</view>
+</template>

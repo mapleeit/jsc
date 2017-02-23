@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta http-equiv="Content-Language" content="zh-cn">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="author" content="Tencent-ISUX">
+    <meta name="Copyright" content="Tencent">
+    <meta name="Description" content="微云是腾讯公司为用户精心打造的一项智能云服务, 您可以通过微云方便地在手机和电脑之间,同步文件、推送照片和传输数据。">
+    <meta name="Keywords" content="微云, 微云下载, 腾讯微云, 照片备份, 手机照片备份, 通讯录备份, 文件管理, 相册管理, 云相册, 微云官网网站, 微云官网, 微云网页版, weiyun, weiyun web">
+    <title>微云，全能收藏 无处不在 - 官方网站😀</title>
+</head>
+<body>
+<div style="height: 100px; margin: 15px;">
+    <div id="data" style="height: 60px; width: 180px;"></div>
+    <button style="height: 35px;" id="start_server">获取数据</button>
+</div>
+<div style="height: 100px; margin: 15px;">
+    <div id="close_win" style="height: 60px; width: 180px;"> </div>
+    <button style="height: 35px;" id="ws_confirm">关闭窗口</button>
+</div>
+<p id="_cookie">
+
+</p>
+</body>
+<script src="//imgcache.qq.com/club/weiyun/js/publics/jquery/jquery-1.8.3.min.js??max_age=31104000"></script>
+<script type="text/javascript">
+    window.onerror = function(event) {
+        document.write('window.error' + event);
+    }
+    $('#start_server').on('click', function() {
+        if(window.external && window.external.GetFileShareParams) {
+            var share_params = window.external.GetFileShareParams();
+            $('#data').text('share_params:' + share_params);
+        } else {
+            $('#data').text('window.external:' + typeof window.external + '\nwindow.external.GetFileShareParams:' + typeof window.external.GetFileShareParams);
+        }
+    });
+    $('#ws_confirm').on('click', function() {
+        if(window.external && window.external.JSCloseWnd) {
+            window.external.JSCloseWnd();
+        } else {
+            $('#close_win').text('window.external:' + typeof window.external + '\nwindow.external.JSCloseWnd:' + typeof window.external.JSCloseWnd);
+        }
+    });
+    var arr = document.cookie.split(';');
+    $('#_cookie').text('\n登录态信息：' + arr.join('\r\n'));
+</script>
+</html>

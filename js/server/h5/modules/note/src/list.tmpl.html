@@ -1,0 +1,104 @@
+<script id="note_list" type="text/html" nowith="yes">
+    <div id="_note_body" data-label-for-aria="笔记区域" class="note-body ui-view-empty" style="height:100%">
+        <div id="_note_view_list" class="note-list" style="display:none;height:100%">
+            <!-- 文件列表 -->
+            <div id="_note_files" class="wx-note-wrapper">
+            </div>
+            <div id="_toolbar" class="wy-file-controller g-bottom-bar tBor" style="display: none;">
+                <button class="btn" data-action="share" data-id="normal" role="button">选择笔记并分享</button>
+                <button data-id="confirm" class="btn btn-cancel" data-action="cancel" role="button" style="display:none;">取消</button>
+                <button data-id="confirm" class="btn btn-certain" data-action="confirm" role="button" style="display:none;">确定<span data-id="choose_num" class="num"></span></button>
+            </div>
+        </div>
+        <div class="note-editor" id="_note_editor">
+            <!--编辑器区域-->
+        </div>
+        <!-- 一次加载20个文件，要再加载的时候显示 '加载中' -->
+        <div id="_load_more" class="wy-file-loading">
+            <i class="icons icon-load"></i>
+            <span>加载中...</span>
+        </div>
+        </section>
+    </div>
+</script>
+
+
+<script id="note_edit_frame" type="text/html" nowith="yes">
+    <%
+    var constants = require('common').get('./constants');
+
+    %>
+    <iframe frameborder="0" id="_note_edit_frame" name="_note_edit_frame" src="<%=constants.HTTP_PROTOCOL%>//www.weiyun.com/note_web/main.html" width="100%"/>
+</script>
+<script id="note_article_frame" type="text/html" nowith="yes">
+    <iframe frameborder="0" id="_note_article_frame" name="_note_article_frame" src="" width="100%" height="98%" style="display:none"/>
+</script>
+
+
+<!--
+ 单个文档文件项
+ @author: yuyanghe
+ @date: 2014-9-18
+-->
+<script id="note_item" type="text/html" nowith="yes">
+    <%
+    var lib=require('lib'),
+    date_time=lib.get('./date_time'),
+    text = lib.get('./text'),
+    records = data,
+    me = this,
+    today = date_time.today().getTime(),
+    yesterday = date_time.yesterday().getTime(),
+    last7day = date_time.add_days(-7).getTime(),
+    last_bar=5;
+    %>
+    <%
+    $.each(records || [], function(i, file) {
+    var note_name = file.get_name();
+    var thumb_url= file.get_thumb_url();
+    var has_img = thumb_url && thumb_url != "";
+    var save_status = file.get_save_status();
+    var is_selected = file.get("selected");
+    var is_new_note = file.get_id() ==="";
+    %>
+    <%
+    if( (i == 0 || last_bar < file.get_day_bar() )&& save_status == ""){
+    last_bar = file.get_day_bar();
+    %>
+    <%= me.bar(last_bar) %>
+    <%
+    }
+    %>
+    <dd data-record-id="<%=file.id%>" data-file-id data-list="file" class="<%=is_selected ? 'ui-selected':''%>">
+        <%
+        if(save_status =="note_saved"){
+        %>
+        <div class="icon-update-done"></div>
+        <%
+        }else if(save_status =="note_ing"){
+        %>
+        <div class="icon-update-ing"></div>
+        <%
+        }
+        %>
+        <div class="note-list-item <%= has_img ? 'note-list-item-has-img':''%> <%= is_new_note ? 'note-list-item-new':''%>"
+             tabindex="0"
+             style="height:50px">
+            <%
+            var note_name_len=28;
+            if(has_img){
+            note_name_len=20
+            %>
+            <img src="<%=thumb_url.replace(/^http:|^https:/, '')%>"/>
+            <%
+            }
+            %>
+            <em><%=text.text(text.smart_sub(note_name,note_name_len,"..."))%></em>
+
+            <p><%=date_time.timestamp2date_ymdhm(file.get_version())%></p>
+        </div>
+    </dd>
+    <%
+    });
+    %>
+</script>

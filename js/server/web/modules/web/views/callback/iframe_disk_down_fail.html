@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script type="text/javascript">
+        // iframe 下载的回调
+        document.domain = 'weiyun.com';
+        parent.seajs.use(['lib', 'downloader'], function (lib, downloader) {
+            var url_parser = lib.get('./url_parser'),
+                    cur_url = url_parser.parse(location.href),
+                    ret = parseInt(cur_url.get_param('ret')),
+                    msg = cur_url.get_param('msg');
+
+            if (ret === 4000) {  // james 2013-6-5：4000 和 1024 是一个意思
+                ret = 1024;
+            }
+            downloader.get('./downloader').down_fail_callback(ret, msg);
+        });
+    </script>
+</head>
+</html>

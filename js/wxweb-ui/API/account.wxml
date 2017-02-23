@@ -1,0 +1,1 @@
+<wx-button type="primary" bindtap="login">login</wx-button>

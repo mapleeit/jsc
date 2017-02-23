@@ -1,0 +1,61 @@
+<script id="webBaseHeader" type="text/html" nowith="yes">
+    <!DOCTYPE html>
+    <%
+    var serv_taken = new Date() - window.serv_start_time;
+    var APPID = require('weiyun/util/appid')();
+    var serverConfig = plug('config') || {};
+    var is_test_env = !!serverConfig.isTest;
+    %>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>QQ会员微云特权</title>
+        <meta http-equiv="Content-Language" content="zh-cn">
+        <meta name="author" content="Tencent-ISUX">
+        <meta name="Copyright" content="Tencent">
+	    <meta itemprop="name" content="腾讯微云" />
+	    <meta itemprop="description" content="微云是腾讯公司为用户精心打造的一项智能云服务, 您可以通过微云方便地在手机和电脑之间,同步文件、推送照片和传输数据。" />
+	    <meta itemprop="image" content="https://img.weiyun.com/vipstyle/nr/box/img/logo/96x96.png" />
+        <%
+            var g_info = window['g_weiyun_info'];
+        %>
+<script>var IS_TEST_ENV = <%=is_test_env%>; var IS_MOBILE = <%=g_info.is_mobile%>; window.APPID = <%=APPID%>;window.g_serv_taken = <%=serv_taken%>;window.g_start_time = +new Date();</script>
+<script>window.g_css_time = +new Date();document.domain='weiyun.com';</script>
+<link rel="shortcut icon" href="https://img.weiyun.com/vipstyle/nr/box/img/favicon.ico?max_age=31536000" type="image/x-icon" />
+</head>
+<body cz-shortcut-listen="true">
+</script>
+
+<script id="webBaseBottom" type="text/html" nowith="yes">
+<script src="//img.weiyun.com/c/=/club/weiyun/js/publics/seajs/sea.js,/club/weiyun/js/publics/seajs-plugins/seajs-combo.js?max_age=31104000"></script>
+<script src="//img.weiyun.com/club/weiyun/js/act/qqvip/config.js?v140320"></script>
+<script type="text/javascript" charset="utf-8" src="//fusion.qq.com/fusion_loader?appid=1450007296&platform=qzone"></script>
+<script type="text/javascript">
+    seajs.use(['$', 'lib','common', 'index'], function($, lib, common, index) {
+        var qqvip = index.get('./qqvip');
+        qqvip.render(<%=JSON.stringify(data)%>);
+    });
+</script>
+<script type='text/javascript' src='//img.weiyun.com/club/weiyun/js/publics/tcss/tcss.ping.js'></script>
+<script>
+    var pvClickSend = function (tag) {
+        if (typeof(pgvSendClick) == "function") {
+            pgvSendClick({
+                hottag: tag,
+                virtualDomain: 'www.weiyun.com'
+            });
+        }
+    };
+    (function() {
+        if (typeof pgvMain == 'function') {
+            pgvMain("", {
+                tagParamName: 'WYTAG',
+                virtualURL: '/web/act/qqvip.html',
+                virtualDomain: "www.weiyun.com"
+            });
+        }
+    })();
+</script>
+</body>
+</html>
+</script>

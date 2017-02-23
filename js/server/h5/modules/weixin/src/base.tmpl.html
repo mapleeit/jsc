@@ -1,0 +1,76 @@
+<script id="baseHeader" type="text/html" nowith="yes">
+    <!DOCTYPE html>
+    <%
+    var serv_taken = new Date() - window.serv_start_time;
+    var APPID = require('weiyun/util/appid')();
+    var browser = require('weiyun/util/browser')();
+    var serverConfig = plug('config') || {};
+    var is_test_env = !!serverConfig.isTest;
+    %>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>微云文件</title>
+        <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1,minimum-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="format-detection" content="telephone=no" />
+	    <meta itemprop="name" content="腾讯微云" />
+	    <meta itemprop="description" content="微云是腾讯公司为用户精心打造的一项智能云服务, 您可以通过微云方便地在手机和电脑之间,同步文件、推送照片和传输数据。" />
+	    <meta itemprop="image" content="https://img.weiyun.com/vipstyle/nr/box/img/logo/96x96.png" />
+        <style>
+            .icons-filetype {
+                display: inline-block;
+                width: 32px;
+                height: 32px;
+            }
+        </style>
+        <script>var IS_TEST_ENV = <%=is_test_env%>;window.APPID = <%=APPID%>;window.g_serv_taken = <%=serv_taken%>;window.g_start_time = +new Date();document.domain='weiyun.com';</script>
+        <%=require('weiyun/util/inline').css(['g-reset', 'g-retina-border'], true)%>
+        <%=require('weiyun/util/inline').css(['g-retina-table', 'g-filelist', 'g-bottom-bar', 'g-err'])%>
+        <script>window.g_css_time = +new Date();document.domain='weiyun.com';</script>
+        <link rel="shortcut icon" href="https://img.weiyun.com/vipstyle/nr/box/img/favicon.ico?max_age=31536000" type="image/x-icon" />
+
+    </head>
+    <body class="">
+
+</script>
+
+<script id="baseBottom" type="text/html" nowith="yes">
+    <%
+        var browser = require('weiyun/util/browser')();
+    %>
+    <script type="text/javascript">
+        setTimeout(function() {
+            window.g_end_time = +new Date();
+        }, 0);
+    </script>
+    <% if(browser.QQ) { %>
+    <script type="text/javascript" src="//pub.idqqimg.com/qqmobile/qqapi.js?_bid=152"></script>
+    <% } else if(browser.WEIXIN) { %>
+    <script type="text/javascript" src="//res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <% } %>
+    <%=require('weiyun/util/inline').js(['seajs', 'configs_mobile'])%>
+    <script type="text/javascript">
+        <% if(data) { %> //已经失败就不进行初始化了
+            window.node_sync = true;
+            seajs.use(['$', 'lib','common', 'weixin'], function($, lib, common, weixin) {
+                window.g_js_time = +new Date();
+                var weixin = weixin.get('./weixin');
+                weixin.render(<%=JSON.stringify(data)%>);
+            });
+        <% } %>
+    </script>
+    <script type='text/javascript' src='//img.weiyun.com/club/weiyun/js/publics/tcss/tcss.ping.js'></script>
+    <script>
+        (function() {
+            if (typeof pgvMain == 'function') {
+                pgvMain("", {
+                    tagParamName: 'WYTAG',
+                    virtualURL: '/weixin',
+                    virtualDomain: "h5.weiyun.com"
+                });
+            }
+        })();
+    </script>
+    </body>
+    </html>
+</script>

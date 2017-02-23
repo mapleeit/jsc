@@ -1,0 +1,23 @@
+<!--
+    单图
+-->
+<script id="outlink_singlepic" type="text/html" nowith="yes">
+    <%
+        var picUrl = data && data.thumb_url || '',
+        	name = data && data.file_name;
+        picUrl = picUrl + (name.slice(-3) === 'gif' ? '' : '&size=640*640');
+    %>
+    <div id="_outlink_body" class="share-file-list">
+    	<div class="link-pic">
+        	<table>
+        		<tbody>
+        			<tr>
+        				<td>
+            				<img class="ui-selected" data-record-id="<%=data && data.file_id%>" id="prew_img" src="<%=picUrl%>" />
+        				</td>
+    				</tr>
+				</tbody>
+			</table>
+    	</div>
+    </div>
+</script>

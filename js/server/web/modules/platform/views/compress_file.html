@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html style="height:auto">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>微云</title>
+    <meta name="Keywords"
+          content="QQ, 腾讯,微云, 分享, 网盘, 网络硬盘, U盘, 云存储, 传输, 存储, 同步, 备份, 拍照, 上传, 下载, 中转, 文件, 照片, 相册, 离线, 传文件, wifi, cloud">
+    <meta name="Description" content="微云是腾讯公司为用户精心打造的一项智能云服务, 您可以通过微云方便地在手机和电脑之间同步文件、推送照片和传输数据。">
+    <link rel="stylesheet" type="text/css" href="https://img.weiyun.com/c/=/vipstyle/nr/box/css/webbase-2.0.css,/vipstyle/nr/box/css/disk-2.0.css"/>
+</head>
+
+<body class="web-app view-zip">
+
+<script type="text/javascript">
+    window.onerror = function (msg, file, line) {
+        window.g_err = {
+            msg: msg || '',
+            file: file || '',
+            line: line || ''
+        };
+        return true;
+    };
+</script>
+
+<script type="text/javascript" src="https://img.weiyun.com/c/=/club/weiyun/js/publics/seajs/sea.js,/club/weiyun/js/publics/seajs-plugins/seajs-combo.js?max_age=31104000"></script>
+
+<script>
+
+    document.domain = 'weiyun.com';
+
+    var g_start_time = window.g_start_time || new Date();
+    // 该变量已废弃 - james
+    var IS_APPBOX = location.search.indexOf('IS_APPBOX=1') > -1;
+    var IS_QZONE = location.search.indexOf('IS_QZONE=1') > -1;
+    var IS_DEBUG = location.search.indexOf('IS_DEBUG=1') > -1;
+
+    // 微云JS模块配置
+    seajs.config(parent.WY_SEAJS_CONFIG);
+
+    //seajs.use(['webbase_css', 'disk_css']);
+
+    seajs.use(['lib', 'common', 'compress_file_preview', 'downloader'], function (lib, common, mod) {
+
+        var wy_init = common.get('./init.init');
+       // var mini_tip = common.get('./ui.mini_tip');
+        wy_init();
+        //yuyanghe   20140111注释掉该方法。   原因是因为 新common 不存在该方法。
+        //mini_tip.set_animate_type('slide');
+
+
+        mod.get('./compress_file_preview');
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1,minimum-scale=1, maximum-scale=1, user-scalable=no">
+	<meta name="description" content="微云是腾讯公司为用户精心打造的一项智能云服务, 您可以通过微云方便地在手机和电脑之间,同步文件、推送照片和传输数据。">
+	<meta name="keywords" content="微云, 微云下载, 腾讯微云, 照片备份, 手机照片备份, 通讯录备份, 文件管理, 相册管理, 云相册, 微云官网网站, 微云官网, 微云网页版, weiyun, weiyun web">
+	<style>@-moz-keyframes nodeInserted{from{opacity:0.99;}to{opacity:1;}}@-webkit-keyframes nodeInserted{from{opacity:0.99;}to{opacity:1;}}@-o-keyframes nodeInserted{from{opacity:0.99;}to{opacity:1;}}@keyframes nodeInserted{from{opacity:0.99;}to{opacity:1;}}embed,object{animation-duration:.001s;-ms-animation-duration:.001s;-moz-animation-duration:.001s;-webkit-animation-duration:.001s;-o-animation-duration:.001s;animation-name:nodeInserted;-ms-animation-name:nodeInserted;-moz-animation-name:nodeInserted;-webkit-animation-name:nodeInserted;-o-animation-name:nodeInserted;}</style>
+	<title>微云，全能收藏 无处不在</title>
+	<link charset="utf-8" rel="stylesheet" href="//imgcache.qq.com/vipstyle/nr/box/platform/mobile.css">
+</head>
+<body><!--看效果的.开发请删除样式 style="width:320px;margin:0 auto"-->
+
+	<div class="wrap">
+		<div class="head">
+			<h1 class="weiyun-title">微云新版本</h1>
+			<a href="javascript:;" class="download-btn" title="马上下载微云新版本"><span>马上下载</span></a>
+		</div>
+		<section class="section album-backup-wrap">
+			<h1 class="album-backup-title">相册备份</h1>
+			<p>WiFi环境下自动备份您手机中的照片</p>
+			<p>5000万张手机照片随心备份</p>
+			<p>备份后其他终端随时浏览、分享管理自己的照片</p>
+			<div class="img-wrap">
+				<div class="left-img album-backup-left"></div>
+				<div class="right-img album-backup-right"></div>
+			</div>
+		</section>
+		<section class="section contact-backup-wrap">
+			<h1 class="contact-backup-title">通讯录备份</h1>
+			<p>让你的联系人永不丢失，一键备份联系人</p>
+			<p>换手机、丢手机、换号码永不发愁</p>
+			<div class="img-wrap">
+				<div class="left-img contact-backup-left"></div>
+				<div class="right-img contact-backup-right"></div>
+			</div>
+		</section>
+		<section class="section file-manage-wrap">
+			<h1 class="file-manage-title">文件管理</h1>
+			<p>文件分门别类，支持全局搜索与批量操作</p>
+			<p>独有略缩图展示模式，让您随心所欲的掌控自己的文件</p>
+			<div class="img-wrap">
+				<div class="left-img file-manage-left"></div>
+				<div class="right-img file-manage-right"></div>
+			</div>
+		</section>
+		<section class="section cloudy-note-wrap">
+			<h1 class="cludy-note-title">云笔记</h1>
+			<p>收集和整理各种会议记录、日程安排、生活备忘、讲课笔记、保存的笔记可以多种设备跨平台阅读和分享</p>
+			<div class="img-wrap">
+				<div class="left-img cludy-note-left"></div>
+				<div class="right-img cludy-note-right"></div>
+			</div>
+		</section>
+		<section class="section clip-board-wrap">
+			<h1 class="clip-board-title">剪贴板</h1>
+			<p>一段文字、网址链接、电话地址，手机复制、电脑粘贴；电脑复制，手机粘贴</p>
+			<div class="img-wrap">
+				<div class="left-img clip-board-left"></div>
+				<div class="right-img clip-board-right"></div>
+			</div>
+		</section>
+		<section class="section trash-wrap">
+			<h1 class="trash-title">回收站</h1>
+			<p>您能在回收站找回过去最多45天您删除的文件，不用担心不小心误删找不回来了</p>
+			<div class="img-wrap">
+				<div class="left-img trash-left"></div>
+				<div class="right-img trash-right"></div>
+			</div>
+		</section>
+		<section class="section collect-wrap">
+			<h1 class="collect-title">收藏夹</h1>
+			<p>收藏喜欢和重要的文件</p>
+			<div class="img-wrap">
+				<div class="left-img collect-left"></div>
+				<div class="right-img collect-right"></div>
+			</div>
+		</section>
+	</div>
+	<script src="//imgcache.qq.com/club/qqdisk/web/js/lib/zepto-1.0.0.min.js?max_age=604800"></script>
+   	<script type='text/javascript' src='//pingjs.qq.com/tcss.ping.js'></script>
+	<script type="text/javascript">
+		$(window).scroll(function() {
+			var winHeigh = $(window).height();
+			var sections = document.getElementsByClassName("img-wrap");
+			for(var i=0; i<sections.length; i++){
+				var box = sections[i].getBoundingClientRect();
+				// getBoundingClientRect表示DOM元素各边与页面上边框的距离
+				if(box.top>0 && box.bottom<winHeigh){
+					// 只有图片完全暴露在窗口中才出现动画
+					$(".section").eq(i).addClass("showed");
+				}else{
+					$(".section").eq(i).removeClass("showed");
+				}
+			}
+		});
+
+		$(window).scroll();
+
+		//区分手机浏览器和手机app的场景
+		var is_browser = (function(){
+			var ua = navigator.userAgent,
+				isWX = ua.match(/MicroMessenger\/([\d\.]+)/), /*微信*/
+				isQQ = ua.match(/QQ\/([\d\.]+)/), /*手Q*/
+				isQzone = ua.match("Qzone"); /*手空*/
+
+			return !(isQQ || isQzone || isWX);
+		})();
+
+		(function() {
+			//因为直接超链接调整，页面会停留在d/index.html而导致白屏，这里改为iframe跳转
+			$('.download-btn').on('click', function() {
+				//手机浏览器打开的时候，iframe跳转有问题导致无法下载，这里仍然用原有方式
+				if(is_browser) {
+					location.href = '//www.weiyun.com/d/index.html';
+				} else {
+					var div = document.createElement('div');
+					div.style.display = 'none';
+					div.innerHTML = '<iframe id="schema" src="//www.weiyun.com/d/index.html" scrolling="no" width="0" height="0"></iframe>';
+					document.body.appendChild(div);
+					setTimeout(function () {
+						document.body.removeChild(div);
+					}, 200);
+				}
+			});
+		})();
+
+	</script>
+
+	<script type="text/javascript">
+		(function(){
+		    if (typeof pgvMain == 'function') {
+		        pgvMain("", {
+		            tagParamName: 'WYTAG',
+		            virtualURL: '/mobile/index.html',
+		            virtualDomain: "www.weiyun.com"
+		        });
+		    }
+		})();
+	</script>
+</body>
+</html>

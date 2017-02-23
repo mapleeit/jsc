@@ -1,0 +1,29 @@
+<!--
+离线文件表头
+@author hibincheng
+@date 2013-11-25
+-->
+<script id="offline_columns" type="text/html" no-width="yes">
+    <div class="offline-head" >
+        <span class="list name"><span class="list-wrap"><span class="list-inner">
+            名称
+        </span></span></span>
+        <span class="list time"><span class="list-wrap"><span class="list-inner">
+            过期时间
+        </span></span></span>
+        <span class="list source"><span class="list-wrap"><span class="list-inner">
+            来源
+        </span></span></span>
+        <span class="list size"><span class="list-wrap"><span class="list-inner">
+            大小
+        </span></span></span>
+    </div>
+</script>
+<!--
+样式需要，原先的file_path容器不适用表头项做百分比分割，所以再加一个wrap，当离开离线文件要把该标签从DOM移除
+@author hibincheng
+@date 2013-11-25
+-->
+<script id="offline_columns_wrap" type="text/html" no-width="yes">
+    <div class="diff-by-offline"></div>
+</script>

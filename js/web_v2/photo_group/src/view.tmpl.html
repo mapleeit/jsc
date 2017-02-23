@@ -1,0 +1,151 @@
+<!--
+ 列表容器模板
+ @author: cluezhang
+ @date: 2013-09-16
+-->
+<script id="group_list" type="text/html" nowith="yes">
+    <div id="_group_body" class="mod-list-group">
+        <div class="mod-pic-group" data-label-for-aria="图片文件列表内容区域">
+            <ul id="group_view_list" class="pic-group-list clearfix">
+            </ul>
+        </div>
+        <div class="mod-figure-list" data-label-for-aria="图片文件列表内容区域">
+            <ul id="photo_view_list" class="figure-list clearfix">
+            </ul>
+        </div>
+    </div>
+</script>
+<!--
+ 单项模板
+ @author: cluezhang
+ @date: 2013-09-16
+-->
+<script id="group_items" type="text/html" nowith="yes">
+    <%
+        var text = require('lib').get('./text');
+        var records = data.records;
+        var item_width = data.item_width;
+        var item_height = Math.round(item_width * 0.75);
+        var me = this;
+        if(data.module_name === 'group') {
+            return;
+        }
+    %>
+    <%=me.group_add(data)%>
+    <%
+        if(records && records.length > 0 ) {
+            $.each(records, function(index, record){
+    %>
+
+        <li data-list="true" data-name="img" data-action="enter_group" id="group_items_<%=record.id%>" data-record-id="<%=record.id%>" class="pic-group-item" style="width: <%=item_width%>px">
+            <div data-id="img" class="pic-group-item-pic" style="height: <%=item_height%>px;">
+            </div>
+            <div class="pic-group-bg"></div>
+            <div class="pic-group-item-txt">
+                <p class="tit"><span class="txt"><%=text.text(record.get('name'))%></span><span class="num">(<%=record.get('size')%>)</span></p>
+            </div>
+        </li>
+    <%
+            });
+        }
+    %>
+</script>
+
+<script id="add_photo_group" type="text/html" nowith="yes">
+    <%
+        var item_width = data.item_width;
+        var item_height = Math.round(item_width * 0.75);
+    %>
+    <li data-list="true" data-name="img" id="add_group" data-record-id="0" class="pic-group-item" style="width: <%=item_width%>px">
+        <div data-id="img" class="pic-group-item-pic" style="height: <%=item_height%>px;">
+            <i class="icon icon-l icon-pic-l"></i>
+        </div>
+        <div class="pic-group-bg"></div>
+        <div class="pic-group-item-edit">
+            <input type="text" value="">
+        </div>
+    </li>
+</script>
+
+<script id="group_add" type="text/html" nowidth="yes">
+    <!-- 添加图片组 s -->
+    <%
+        var item_width = data.item_width;
+        var item_height = Math.round(item_width * 0.75);
+    %>
+    <li data-action="create_group" class="pic-group-item" style="width: <%=item_width%>px">
+        <div class="pic-group-item-add" style="height: <%=item_height%>px;">
+            <i class="icon icon-act-add-l"></i>
+        </div>
+    </li>
+</script>
+
+<script id="new_group" type="text/html" nowith="yes">
+    <%
+    var text = require('lib').get('./text');
+    var records = data.records;
+    var item_width = data.item_width;
+    var item_height = Math.round(item_width * 0.75);
+
+    if(records && records.length > 0 ) {
+        $.each(records, function(index, record){
+    %>
+    <li data-list="true" data-name="img" data-action="enter_group" id="group_items_<%=record.id%>" data-record-id="<%=record.id%>" class="pic-group-item" style="width: <%=item_width%>px">
+        <div data-id="img" class="pic-group-item-pic" style="height: <%=item_height%>px;">
+        </div>
+        <div class="pic-group-bg"></div>
+        <div class="pic-group-item-txt">
+            <p class="tit"><span class="txt"><%=text.text(record.get('name'))%></span><span class="num">(<%=record.get('size')%>)</span></p>
+        </div>
+    </li>
+    <%
+        });
+    }
+    %>
+</script>
+
+<!--
+ 单项模板
+ @author: cluezhang
+ @date: 2013-09-16
+-->
+<script id="photo_items" type="text/html" nowith="yes">
+    <%
+    var text = require('lib').get('./text');
+    var records = data.records;
+    var item_width = data.item_width;
+    var item_height = Math.round(item_width * 0.75);
+
+    %>
+    <%
+    if(records && records.length > 0 ) {
+        $.each(records, function(index, record){
+    %>
+
+    <li data-list="true" data-name="img" id="photo_items_<%=record.id%>" data-record-id="<%=record.get_id()%>" class="figure-list-item" style="width: <%=item_width%>px">
+        <div data-id="img" class="figure-list-item-pic" style="height: <%=item_height%>px;">
+            <i class="icon icon-check-m"></i>
+        </div>
+        <div class="figure-list-item-txt">
+            <p class="tit"><i class="icon icon-s icon-pic-s"></i><span class="txt" title="<%=record.get_name()%>"><%=text.text(record.get_name())%></span></p>
+        </div>
+    </li>
+    <%
+        });
+    }
+    %>
+</script>
+
+
+<script id="view_empty" type="text/html" nowidth="yes">
+    <div id="_photo_group_view_empty" class="g-empty share-empty" aria-label="分享的链接没有内容" tabindex="0">
+        <div class="empty-box">
+            <div class="status-inner">
+                <i class="icon icon-nopicture"></i>
+                <h2 class="title">暂无图片</h2>
+                <p class="txt">请点击右上方的“添加”按钮添加</p>
+            </div>
+        </div>
+    </div>
+</script>
+

@@ -1,0 +1,245 @@
+<script id="login" type="text/html" nowith="yes">
+    <%=require('weiyun/util/inline').css(['qq-privilege'], true)%>
+    <div id="container" class="qq-privilege">
+        <div class="hd">
+            <div class="inner"></div>
+        </div>
+        <div class="bd">
+            <div class="box">
+                <div class="box-hd">
+                    <div class="inner-privilege"></div>
+                </div>
+                <div class="box-bd">
+                    <!-- 滑动到该区域时添加.show -->
+                    <ul class="privilege-list clearfix show">
+                        <li class="item speed">
+                            <div class="pic"></div>
+                            <div class="title"><span>尊享极速传输</span></div>
+                            <div class="description"><span>普通用户无加速</span></div>
+                        </li>
+                        <li class="item single">
+                            <div class="pic"></div>
+                            <div class="title"><span>单文件最大20G</span></div>
+                            <div class="description"><span>普通用户1G</span></div>
+                        </li>
+                        <li class="item capacity">
+                            <div class="pic"></div>
+                            <div class="title"><span>储存空间4T</span></div>
+                            <div class="description"><span>普通用户10G</span></div>
+                        </li>
+                        <li class="item more-privilege">
+                            <a href="javascript:void(0)" data-action="more_privilege" class="btn">更多特权</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-hd">
+                    <div class="inner-open"></div>
+                    <p class="text">首次开通1个月微云会员享受历史超低价</p>
+                </div>
+                <div class="box-bd">
+                    <ul class="price-list open clearfix">
+                        <li class="item">
+                            <div class="wrap">
+                                <h5 class="title">
+                                    <i class="icon icon-super-vip"></i>
+                                    <span class="inner">超级会员专享价</span>
+                                </h5>
+                                <div class="price price1">
+                                    <div class="now"></div>
+                                    <div class="before"></div>
+                                </div>
+                                <div data-action="pay" data-id="svip" class="btn"><i class="icon icon-wy"></i><span>现在开通</span></div>
+                            </div>
+                        </li>
+                        <li class="item">
+                            <div class="wrap">
+                                <h5 class="title">
+                                    <i class="icon icon-qq-vip"></i>
+                                    <span class="inner">QQ会员专享价</span>
+                                </h5>
+                                <div class="price price2">
+                                    <div class="now"></div>
+                                    <div class="before"></div>
+                                </div>
+                                <div data-action="pay" data-id="vip" class="btn"><i class="icon icon-wy"></i><span>现在开通</span></div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-hd">
+                    <div class="inner-renewals"></div>
+                    <p class="text">续费微云会员还可享受专属折扣</p>
+                </div>
+                <div class="box-bd">
+                    <ul class="price-list renewals clearfix">
+                        <li class="item">
+                            <div class="wrap">
+                                <h5 class="title">
+                                    <i class="icon icon-super-vip"></i>
+                                    <span class="inner">超级会员专享价</span>
+                                </h5>
+                                <div class="price price3">
+                                    <div class="now"></div>
+                                    <div class="before"></div>
+                                </div>
+                                <div data-action="pay" data-id="svip" class="btn"><i class="icon icon-wy"></i><span>续费</span></div>
+                            </div>
+                        </li>
+                        <li class="item">
+                            <div class="wrap">
+                                <h5 class="title">
+                                    <i class="icon icon-qq-vip"></i>
+                                    <span class="inner">QQ会员专享价</span>
+                                </h5>
+                                <div class="price price4">
+                                    <div class="now"></div>
+                                    <div class="before"></div>
+                                </div>
+                                <div data-action="pay" data-id="vip" class="btn"><i class="icon icon-wy"></i><span>续费</span></div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-hd">
+                    <div class="inner-rule"></div>
+                </div>
+                <div class="box-bd">
+                    <ul class="rule-list">
+                        <li class="item">
+                            <div class="wrap">
+                                <span class="num">1</span>
+                                <p class="content">本活动只针对超级会员或QQ会员。</p>
+                            </div>
+                        </li>
+                        <li class="item">
+                            <div class="wrap">
+                                <span class="num">2</span>
+                                <p class="content">首次开通1个月微云会员可享受1元或3元超低特价，续费微云会员可享受专属折扣7.5折或8.5折。</p>
+                            </div>
+                        </li>
+                        <li class="item">
+                            <div class="wrap">
+                                <span class="num">3</span>
+                                <p class="content">仅限通过本页面进行开通/续费微云会员，才享受优惠价。</p>
+                            </div>
+                        </li>
+                        <li class="item">
+                            <div class="wrap">
+                                <span class="num">4</span>
+                                <p class="content">禁止违规刷取及多次超低价开通微云会员的行为，否则将会被取消非法获得的微云会员资格。</p>
+                            </div>
+                        </li>
+                        <li class="item">
+                            <div class="wrap">
+                                <span class="num">5</span>
+                                <p class="content">优惠价开通微云会员的时长不得高于用户当前QQ会员/超级会员的有效期。</p>
+                            </div>
+                        </li>
+                        <li class="item">
+                            <div class="wrap">
+                                <span class="num">6</span>
+                                <p class="content">若用户QQ会员时长大于超级会员时长，本活动页面会只判断用户的超级会员身份，所有购买资格按超级会员身份判断。</p>
+                            </div>
+                        </li>
+                        <li class="item">
+                            <div class="wrap">
+                                <span class="num">7</span>
+                                <p class="content">手机渠道开通会员的用户不能参与此次活动。</p>
+                            </div>
+                        </li>
+                        <li class="item">
+                            <div class="wrap">
+                                <span class="num">8</span>
+                                <p class="content">开通QQ会员/超级会员：<a href="javascript:void(0)" data-action="pay_qq_vip" class="more">点击进入&gt;&gt;</a></p>
+                                <p class="content">前往微云官网：<a href="//www.weiyun.com/" class="more">点击进入&gt;&gt;</a></p>
+                            </div>
+                        </li>
+                        <li class="item">
+                            <div class="wrap">
+                                <span class="num">9</span>
+                                <p class="content">腾讯保留在法律允许的范围内对活动规则进行解释的权利。</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+        <div class="ft">
+            <p class="inner"><a href="https://www.tencent.com/" target="_blank">关于腾讯</a>|<a href="https://www.weiyun.com/xy.html" target="_blank">服务条款</a>|<a href="https://service.qq.com/" target="_blank">客服中心</a>|<a href="#">电脑版</a></p>
+            <p class="inner">Copyright © 1998-2016 Tencent. All Rights Reserved.</p>
+            <p class="inner">腾讯公司&nbsp;版权所有</p>
+        </div>
+        <div class="bg">
+        </div>
+    </div>
+    <script src="//imgcache.qq.com/c/=/club/weiyun/js/publics/jquery/jquery-1.8.3.min.js?max_age=604800"></script>
+    <script src="//img.weiyun.com/c/=/club/weiyun/js/publics/seajs/sea.js,/club/weiyun/js/publics/seajs-plugins/seajs-combo.js?max_age=31104000"></script>
+    <%=require('weiyun/util/inline').js(['configs_web'])%>
+    <script type="text/javascript">
+        seajs.use(['$', 'lib', 'common', 'qq_login', 'outlink_v2'], function ($, lib, common, qq_login_mod, outlink_v2) {
+            var cookie = lib.get('./cookie'),
+                    request = common.get('./request'),
+                    session_event = common('./global.global_event').namespace('session'),
+                    outlink = outlink_v2.get('./login'),
+                    qq_login = qq_login_mod.get('./qq_login'),
+                    query_user = common.get('./query_user');
+            var uin = cookie.get('uin'),
+                skey = cookie.get('skey'),
+                me = this;
+            //弹出登录框
+            document.domain = 'weiyun.com';
+            $('#container').on('click', '[data-action]', function(e) {
+                login();
+            });
+
+            function login() {
+                var qq_login_ui = qq_login.ui;
+
+                outlink.stopListening(qq_login)
+                        .stopListening(qq_login_ui)
+                        .listenTo(qq_login, 'qq_login_ok', function () {
+                            console.log('qq_login_ok');
+                        })
+                        .listenToOnce(qq_login_ui, 'show', function () {
+                            console.log('show');
+                        })
+                        .listenToOnce(qq_login_ui, 'hide', function () {
+                            console.log('hide');
+                            outlink.stopListening(qq_login_ui);
+                            location.href = 'https://jump.weiyun.qq.com/?from=3014';
+                        });
+
+                qq_login.show();
+            }
+        });
+    </script>
+    <script type='text/javascript' src='//img.weiyun.com/club/weiyun/js/publics/tcss/tcss.ping.js'></script>
+    <script>
+        var pvClickSend = function (tag) {
+            if (typeof(pgvSendClick) == "function") {
+                pgvSendClick({
+                    hottag: tag,
+                    virtualDomain: 'www.weiyun.com'
+                });
+            }
+        };
+        (function() {
+            if (typeof pgvMain == 'function') {
+                pgvMain("", {
+                    tagParamName: 'WYTAG',
+                    virtualURL: '/mobile/act/qqvip.html',
+                    virtualDomain: "www.weiyun.com"
+                });
+            }
+        })();
+    </script>
+</body>
+</html>
+</script>

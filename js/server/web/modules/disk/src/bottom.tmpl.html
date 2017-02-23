@@ -1,0 +1,192 @@
+<script id="bottom" type="text/html" nowith="yes">
+    <%
+        var g_info = window.g_weiyun_info;
+        var serv_taken = new Date().getTime() - g_info.server_start_time;
+    %>
+    <script type="text/javascript">
+        var g_login_user_rsp_head = (function () { try { return {"cmd":2201,"retcode":0}; }catch(e){ } })(),
+            g_login_user_rsp_body = (function () { try { return <%=JSON.stringify(data.userInfo)%>; }catch(e){ } })(),
+            g_disk_root_files_rsp_body = (function () { try { return <%=JSON.stringify(data.dirFileList)%>; }catch(e){ }; })(),
+	        g_disk_config_rsp_body = (function () { try { return <%=JSON.stringify(data.diskConfig)%>; }catch(e){ }; })();
+        var g_dom_ready_time = +new Date;
+    </script>
+    <script type="text/javascript" src="//ui.ptlogin2.qq.com/js/ptloginout.js"></script>
+    <% if(g_info.is_debug) { %>
+    <script type="text/javascript" src="//img.weiyun.com/club/weiyun/js/publics/seajs/sea.js?max_age=31104000"></script>
+    <% } else { %>
+    <script type="text/javascript" src="//img.weiyun.com/c/=/club/weiyun/js/publics/seajs/sea.js,/club/weiyun/js/publics/seajs-plugins/seajs-combo.js?max_age=31104000"></script>
+    <% } %>
+    <%=require('weiyun/util/inline').js(['configs_web_v2'])%>
+    <script type="text/javascript">
+        /*
+         * 初始化微云网盘
+         */
+
+        /**
+         * 定义 appbox 外部接口，将生成一个空方法，被调用后会保留之前的参数，等待相应模块就绪后自行处理
+         * @param {String} name
+         * @returns {Function}
+         */
+        (function () {
+            var win = window,
+                    call_history_map = window.__call_history_map = {},
+                    appbox_interface = function (name) {
+                        return win[name] = function () {
+                            var historys = call_history_map[name] || (call_history_map[name] = []);
+                            historys.push(arguments);
+                        };
+                    };
+
+            // 上传到微云
+            appbox_interface('WYCLIENT_UploadFiles');
+
+            // 检查是否可拖拽上传（disk模块中会实现该方法）
+            win.support_plugin_drag_upload = function () {
+                return 0;
+            };
+        })();
+
+        /**
+         * 初始化
+         */
+        (function (win, seajs) {
+            document.domain = 'weiyun.com';
+
+            // 初始化微云
+            var init = win.disk_init = function (opt) {
+                // 合并基础库
+                seajs.use(['$', 'lib']);
+                // 合并 main + disk + 延迟加载的样式
+                seajs.use(['lib', 'common', 'main', 'disk', 'page_home_delay_css'], function (lib, common, main_mod, disk_mod) {
+                    var console = lib.get('./console'),
+                        store = lib.get('./store'),
+                        JSON = lib.get('./json'),
+                        constants = common.get('./constants'),
+                        wy_init = common.get('./init.init'),
+                        huatuo_speed = common.get('./huatuo_speed'),
+                        query_user = common.get('./query_user'),
+                        cgi_ret_report = common.get('./cgi_ret_report'),
+                        global_event = common.get('./global.global_event'),
+                        main = main_mod.get('./main'),
+                        disk = disk_mod.get('./disk');
+
+                    // 初始化一些全局兼容性修正
+                    wy_init();
+
+                    // 延迟加载一些模块
+                    main
+                        // 默认模块
+                        .set_default_module('disk')
+                        // 模块hash参数名
+                        .set_module_hash_key('m')
+                        // 设置模块路径（供异步载入模块使用）
+                        .set_async_modules_map({
+                            disk: './disk',
+                            recycle: './recycle',
+                            recent: './recent',
+                            album: './photo_group',
+                            photo: './photo_bridge',
+                            photo_time: './photo_time',
+                            share: './share',
+                            search: './search',
+                            doc: './doc',
+                            video: './video',
+                            audio: './audio',
+                            clipboard: './clipboard',
+                            note:'./note'
+                        })
+                        //虚拟映射模块
+                        .set_virtual_modules_map({
+                            offline: {
+                                point: 'disk',
+                                after: function () {//激活后，待执行的任务
+                                    global_event.trigger('disk_open_offline');
+                                }
+                            }
+                        });
+
+                    // 处理直出数据
+                    var usr_rsp_head = win.g_login_user_rsp_head,
+                        usr_rsp_body = win.g_login_user_rsp_body,
+                        disk_files_rsp_body = win.g_disk_root_files_rsp_body,
+	                    disk_config = ((win.g_disk_config_rsp_body || {}).key_value_info || {}).items || [];
+	                for(var i=0; i<disk_config.length; i++) {
+		                usr_rsp_body[disk_config[i].key] = disk_config[i].value;
+	                }
+                    if (usr_rsp_head && usr_rsp_body) {
+                        var usr = query_user.set_init_data(usr_rsp_head, usr_rsp_body);
+                        if (usr && disk_files_rsp_body) {
+                            disk.set_init_data(usr, disk_files_rsp_body);
+                        }
+                    }
+
+                    // 初始化 main 模块
+                    main.render();
+
+                    if(opt && opt.output) {
+                        cgi_ret_report.report("http://www.weiyun.com/app.php", "out", opt.output.ret, opt.output.spend_time);
+                    }
+
+                    // 客户端接口（上传到微云等）
+                    try {
+                        var arr = store.get('WY_AIO_to_upload');
+                        if (arr) {
+                            arr = JSON.parse(arr);
+                            WYCLIENT_UploadFiles(arr.length, arr.join('*'), 'AIO');
+                        }
+                        store.remove('WY_AIO_to_upload');
+                    } catch (e) {
+                        console.error(e.stack);
+                    }
+
+                    // 测速上报
+                    $(document).ready(function () {
+                        // 测速配置
+                        var flag = window.location.protocol === 'https:' ? '21254-1-27' : '21254-1-26';
+                        //测速点上报
+                        huatuo_speed.store_point(flag, 23, win.g_dom_ready_time - (huatuo_speed.base_time || win.g_start_time)); //dom ready
+                        huatuo_speed.store_point(flag, 24, +new Date - (huatuo_speed.base_time || win.g_start_time)); //active
+                        huatuo_speed.report(flag, true);
+                    })
+                });
+            };
+        })(window, seajs);
+
+    </script>
+
+    <script type="text/javascript">
+        disk_init({
+            output: {
+                ret: 0,
+                spend_time: <%=serv_taken%>
+            }
+        });
+    </script>
+
+    <script type="text/javascript">
+        var pvClickSend;
+        setTimeout(function () {
+            seajs.use(location.protocol + '//img.weiyun.com/club/weiyun/js/publics/tcss/tcss.ping.js', function() {
+                pvClickSend = function (tag) {
+                    if (typeof(pgvSendClick) == "function") {
+                        pgvSendClick({
+                            hottag: tag,
+                            virtualDomain: 'www.weiyun.com'
+                        });
+                    }
+                };
+                if (typeof pgvMain == 'function') {
+                    pgvMain("", {
+                        tagParamName: 'WYTAG',
+                        virtualURL: window.IS_APPBOX ? 'appbox/disk/index.html': 'disk/index.html',
+                        virtualDomain: "www.weiyun.com"
+                    });
+                }
+            });
+        }, 5000);
+
+    </script>
+	<script type="text/javascript" src="//qzonestyle.gtimg.cn/qzone/hybrid/common/security/aq.js" charset="UTF-8"></script>
+    </body>
+    </html>
+</script>

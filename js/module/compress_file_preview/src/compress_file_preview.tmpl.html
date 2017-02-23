@@ -1,0 +1,165 @@
+<!--
+文件预览框
+@author svenzeng
+@date 13-3-15 上午10:28
+-->
+
+
+
+<script id="compress_file_preview_parent" type="text/html" nowith="yes">
+    <div id="_main_wrapper">
+        <div class="disk-view ui-view view-when-default ui-thumbview">
+
+        </div>
+    </div>
+</script>
+
+
+<script id="render_dirs" type="text/html" nowith="yes">
+
+    <%
+    var lib = require('lib'),
+        text = lib.get('./text');
+
+        var getWords = function(str, num) {
+            try {
+                var index = 0;
+                for (var i = 0, l = str.length; i < l; i++) {
+                    if ((/[^\x00-\xFF]/).test(str.charAt(i))) {
+                        index += 2;
+                    } else {
+                        index++;
+                    }
+                    if (index > num) {
+                        return (str.substr(0, i) + '...');
+                    }
+                }
+                return str;
+            } catch (e) {
+                return str;
+            }
+        };
+    %>
+
+
+    <div class="dir_view dirs-view disk-list clear" style="">
+        <div class="ui-title-bar" style="display: block;">
+            <h3 class="ui-title">文件夹</h3>
+            <div class="ui-title-line"></div>
+        </div>
+
+        <div class="dirs" style="display: block;">
+
+            <%
+                for ( var i=0,l=data.length; i<l; i++ ){
+                    var item = data[i];
+
+            %>  
+                    <div data-isdir-action="dir" data-encrypted="<%=item.encrypted==1%>" data-file-name="<%=text.text(item.file_name)%>" class="ui-item ui-whole-click ui-draggable ui-droppable">
+                        <span class="filemain"><!-- code by fixed ie6 bug -->
+                        <span class="fileie6"><span class="fileimg"><!-- 图标 --><i data-action="enter" class="filetype icon-folder"></i></span> <!-- 文件名 -->
+                        <span data-action="enter" data-name="file_name" class="filename" title="<%=text.text(item.file_name)%>" data-tj-action="btn-adtag-tj" data-tj-value="52302"><%=text.text(getWords(item.file_name, 16))%></span></span></span>
+                        <span class="filetime">2013-07-02 10:04</span>
+                    </div>
+            <%
+                }
+            %>
+        </div>
+
+    </div>
+
+</script>
+
+
+<script id="render_files" type="text/html" nowith="yes">
+ 
+
+     <%
+
+
+    var $ = require('$'),
+        lib = require('lib'),
+        common = require('common'),
+        constants = common.get('./constants'),
+
+        text = lib.get('./text'),
+
+        FileObject = common.get('./file.file_object'),
+
+        tj_value = constants.APPID;
+
+    var getWords = function(str, num) {
+        try {
+            var index = 0;
+            for (var i = 0, l = str.length; i < l; i++) {
+                if ((/[^\x00-\xFF]/).test(str.charAt(i))) {
+                    index += 2;
+                } else {
+                    index++;
+                }
+                if (index > num) {
+                    return (str.substr(0, i) + '...');
+                }
+            }
+            return str;
+        } catch (e) {
+            return str;
+        }
+    };
+    %>
+
+    <div class="files_view files-view disk-list clear">
+        <div class="ui-title-bar" style="display: block;">
+            <h3 class="ui-title">文件</h3>
+            <div class="ui-title-line"></div>
+        </div>
+
+        <div class="files">
+
+            <%
+                for ( var i in data ){
+                    var item = data[i],
+                        type = FileObject.get_type(item.file_name);
+            %>
+                    <div data-isfile-action="file" data-encrypted="<%=item.encrypted==1%>" data-file-icon-type="<%=type%>" data-file-size="<%=item.file_size%>" data-file-name="<%=text.text(item.file_name)%>" class="ui-item ui-whole-click">
+                            <span class="filemain"><!-- code by fixed ie6 bug -->
+                             <span class="fileie6"><span class="fileimg" data-tj-action="btn-adtag-tj" data-tj-value="<%=tj_value%>"><!-- 图标 --><i data-action="enter" class="filetype icon-<%=type||'file'%>"></i></span> <!-- 文件名 -->
+                             <span data-action="enter" data-name="file_name" class="filename" title="<%=text.text(item.file_name)%>" data-tj-action="btn-adtag-tj" data-tj-value="52306"><%=text.text(getWords(item.file_name, 16))%></span></span></span>
+                        </div>
+            <%
+                }
+            %>
+
+        </div>
+
+    </div>
+
+</script>
+
+
+<script id="dirs_empty" type="text/html" nowith="yes">
+    <div class="dirs-empty">
+        该文件夹为空。
+    </div>
+</script>
+
+
+
+<script id="err" type="text/html" nowith="yes">
+    <div data-name="error" class="viewer-tips" style="">
+        <div class="ui-tips">
+            <i class="ui-icon icon-err"></i>
+            <p class="ui-text"><span data-id="err_desc">拉取数据时发生错误</span>，请<a data-action="retry" href="#">重试</a>或直接<a data-action="down" href="#">下载</a></p>
+        </div>
+    </div>
+</script>
+
+
+<script id="err_encryption" type="text/html" nowith="yes">
+    <div data-name="error" class="viewer-tips" style="">
+        <div class="ui-tips">
+            <i class="ui-icon icon-err"></i>
+            <p class="ui-text"></p>
+        </div>
+    </div>
+</script>

@@ -1,0 +1,203 @@
+<script id="iap" type="text/html" nowith="yes">
+    <%
+    var nickname = data.nickname,
+        avatar = data.avatar,
+        isVip = data.isVip,
+        isOldVip = data.oldVip,
+        vipLevelInfo = data.vipLevelInfo || {},
+        currentLevel = parseInt(vipLevelInfo.level),
+        growthScoreList = data.growthScoreList,
+        growthRate = Math.ceil(vipLevelInfo.current_score / growthScoreList[currentLevel+1]),
+        iconClass = (isVip || isOldVip)? 'icon-level-' + currentLevel : '',
+        expireClass = (!isVip && isOldVip)? 'icon-level-gray' : '' ,
+        headURL = data.headURL && data.headURL.replace(/^http:|^https:/, ''),
+        userType = data.isWxUser? 'icon-wechat' : 'icon-qq',
+        expiresDate = data.expiresDate,
+        posText = isVip? '续费' : '开通';
+
+    var growSpeed = vipLevelInfo.grow_speed>0? '+' + vipLevelInfo.grow_speed : vipLevelInfo.grow_speed;
+    %>
+<%=require('weiyun/util/inline').css(['app-iap-privilege-v2'])%>
+<div class="app-iap-privilege">
+    <div class="user-wrap clearfix">
+        <div class="avatar-wrap">
+            <img class="avatar" src="<%=headURL%>">
+            <%
+                if(isVip || isOldVip) {
+                    var vip_logo_url = data.vipLogoURL.replace(/^http:|^https:/, '').replace('.png', 'L.png');;
+            %>
+            <i class="icon icon-vip" style="background-image: url(<%=vip_logo_url%>)"></i>
+            <% } %>
+        </div>
+        <div class="main">
+            <!-- qq为icon-qq,微信为icon-wechat -->
+            <div class="name">
+                <div class="name-info"><span><%=nickname%></span>
+                    </div>
+                <span class="icon <%=userType%>"></span>
+            </div>
+        </div>
+        <div class="right">
+                <% if(isVip) { %>
+        <span class="time"><%=expiresDate%></span>
+                    <% } else if(isOldVip){%>
+        <span class="time">会员已到期</span>
+                    <% } else {%>
+        <span class="time">未开通会员</span>
+                    <% } %>
+        </div>
+    </div>
+    <div class="grow-wrap">
+        <div class="grow tBor bBor j-grow-btn">
+            <div class="grow-infor clearfix">
+                <span class="grow-num">我的成长值<%=vipLevelInfo.current_score%>(<%=growSpeed%>点/天)</span>
+                <span class="grow-lack">升级还需<%=growthScoreList[currentLevel+1] - vipLevelInfo.current_score%></span>
+            </div>
+            <div class="grow-line">
+                <div class="inner" style="width: 0px"></div>
+                <div class="level-now">
+                    <span class="point"></span>
+                    <span class="level">LV<%=currentLevel%></span>
+                </div>
+                <div class="level-next">
+                    <span class="point"></span>
+                    <span class="level">LV<%=currentLevel + 1%></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="pay-wrap">
+        <ul class="pay-list clearfix">
+            <li data-id="12" class="pay-item trblBor j-iap-pay-btn" onclick="pvClickSend('weiyun.vip.h5-iap.paybtn12')">
+                <div class="price-wrap">
+                    <span class="price">12个月<span class="num">118</span>元</span>
+                </div>
+                <div class="right"><i class="icon icon-more"></i></div>
+            </li>
+            <li data-id="6" class="pay-item trblBor j-iap-pay-btn" onclick="pvClickSend('weiyun.vip.h5-iap.paybtn6')">
+                <div class="price-wrap">
+                    <span class="price">6个月<span class="num">60</span>元</span>
+                </div>
+                <div class="right"><i class="icon icon-more"></i></div>
+            </li>
+            <li data-id="3" class="pay-item trblBor j-iap-pay-btn" onclick="pvClickSend('weiyun.vip.h5-iap.paybtn3')">
+                <div class="price-wrap">
+                    <span class="price">3个月<span class="num">30</span>元</span>
+                </div>
+                <div class="right"><div class="icon icon-more"></div></div>
+            </li>
+            <li data-id="1" class="pay-item trblBor j-iap-pay-btn" onclick="pvClickSend('weiyun.vip.h5-iap.paybtn1')">
+                <div class="price-wrap">
+                    <span class="price">1个月<span class="num">12</span>元</span>
+                </div>
+                <div class="right"><i class="icon icon-more"></i></div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="banner-wrap j-ad-container" <%=data.isWxUser ? 'style="display:none"' : ''%>>
+        <!--ad 广告-->
+    </div>
+
+    <div class="power-wrap">
+        <div class="hd clearfix">
+            <span class="title">会员特权</span>
+            <a href="//www.weiyun.com/mobile/vip-more-privilege.html" onclick="pvClickSend('weiyun.vip.h5-iap.moreprivilege')" class="more">更多<i class="icon icon-more"></i></a>
+        </div>
+        <div class="bd">
+            <ul class="power-list clearfix">
+                <li class="power-item rBor">
+                    <div class="pic">
+                        <i class="icon icon-space"></i>
+                        <div class="animate"></div>
+                    </div>
+                    <p class="description">存储容量4T</p>
+                    <p class="note">免费用户10G</p>
+                </li>
+                <li class="power-item rBor">
+                    <div class="pic">
+                        <i class="icon icon-flow"></i>
+                        <div class="animate"></div>
+                    </div>
+                    <p class="description">单日流量35G</p>
+                    <p class="note">免费用户1G</p>
+                </li>
+                <li class="power-item rBor">
+                    <div class="pic">
+                        <i class="icon icon-share"></i>
+                        <div class="animate"></div>
+                    </div>
+                    <p class="description">分享有效期65天</p>
+                    <p class="note">免费用户7天</p>
+                </li>
+                <li class="power-item rBor">
+                    <div class="pic">
+                        <i class="icon icon-transmission"></i>
+                        <div class="animate"></div>
+                    </div>
+                    <p class="description"><span>极速传输</span></p>
+                    <p class="note">免费用户无加速</p>
+                </li>
+                <li class="power-item rBor">
+                    <div class="pic">
+                        <i class="icon icon-offline"></i>
+                        <div class="animate"></div>
+                    </div>
+                    <p class="description">离线下载55次</p>
+                    <p class="note">免费用户5次</p>
+                </li>
+                <li class="power-item rBor">
+                    <div class="pic">
+                        <i class="icon icon-term"></i>
+                        <div class="animate"></div>
+                    </div>
+                    <p class="description">回收站有效期45天</p>
+                    <p class="note">免费用户7天</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="iap-success-dialog" style="display:none">
+    <div class="box">
+        <div class="hd">
+        <div class="hd-bg"></div>
+        </div>
+        <div class="bd">
+        <div class="text">
+            <p class="title">开通成功</p>
+            <p class="description">开始畅游微云服务吧</p>
+        </div>
+        <div class="btn confirm"><span>我知道了</span>
+        </div>
+    </div>
+
+<%=require('weiyun/util/inline').js(['seajs', 'configs_mobile'])%>
+<script type="text/javascript">
+    seajs.use(['$', 'lib','common', 'vip'], function($, lib, common, vip) {
+        vip.get('./vip').iap_init();
+    });
+</script>
+
+<script type='text/javascript' src='//img.weiyun.com/club/weiyun/js/publics/tcss/tcss.ping.js'></script>
+<script>
+    var pvClickSend = function (tag) {
+        if (typeof pgvSendClick == "function") {
+            pgvSendClick({
+                hottag: tag,
+                virtualDomain: 'www.weiyun.com'
+            });
+        }
+    };
+    (function() {
+        if (typeof pgvMain == 'function') {
+            pgvMain("", {
+                tagParamName: 'WYTAG',
+                virtualURL: '/h5/vip.html?iap',
+                virtualDomain: "www.weiyun.com"
+            });
+        }
+    })();
+</script>
+
+</script>

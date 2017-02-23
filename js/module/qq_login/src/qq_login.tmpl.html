@@ -1,0 +1,50 @@
+<!--
+QQ通行证登录窗口
+@author jameszuo
+@date 13-3-26 下午2:25
+-->
+<script id="qq_login_box" type="text/html" nowith="yes">
+    <div class="wy-login-wrapper wy-share-login">
+	    <ul class="tab-wrapper">
+		    <!-- [ATTENTION!!] 分享登录，添加.wy-share-login -->
+		    <!-- [ATTENTION!!] 选定的时候，添加.checked -->
+		    <!-- [ATTENTION!!] hover 的时候，siblings()[0].removeClass('checked') -->
+		    <li data-mod="qq" class="tab choose-qq-wrap checked">QQ账号登录<i class="icon-line"></i></li>
+		    <li data-mod="weixin" class="tab choose-wx-wrap">微信帐号登录<i class="icon-line"></i></li>
+	    </ul>
+	    <div class="close-btn" data-mod="close">
+		    <i class="icon icon-dialog-close"></i>
+	    </div>
+	    <div class="login">
+		    <iframe id="_qq_login_frame" style="height:100%;width:100%;" scrolling="auto" frameborder="0" src=""></iframe>
+		    <iframe id="_wx_login_frame" style="display:none;" height="100%" scrolling="no" width="100%" frameborder="0" src=""></iframe>
+	    </div>
+		<div class="mask j-agree-mask" style="display: none;"><p>需要同意微云服务协议才能登录</p></div>
+		<!-- 服务协议 S -->
+		<div class="pact-wrapper j-agree-switch">
+			<ul>
+				<li class="item" data-id="qq">
+					<!-- [ATTENTION!!] 选定的时候，添加.act -->
+					<div class="mod-check act" data-action="agreement"><i class="icon icon-check-s icon-checkbox"></i></div>
+					<a href="//www.weiyun.com/xy.html" target="_blank">同意《微云服务协议》</a>
+				</li>
+				<li class="item" data-id="weixin" style="display:none;">
+					<!-- [ATTENTION!!] 选定的时候，添加.act -->
+					<div class="mod-check act" data-action="agreement"><i class="icon icon-check-s icon-checkbox"></i></div>
+					<a href="//www.weiyun.com/xy.html" target="_blank">同意《微云服务协议》</a>
+				</li>
+			</ul>
+		</div>
+		<!-- 服务协议 E -->
+    </div>
+</script>
+<!--
+某些qq号限制登陆微云提示,如企业号
+@author hibincheng
+@date 14-4-1 下午2:25
+-->
+<script id="limit_login_tip" type="text/html" nowidth="yes">
+    <div class="full-tip-box full-tip-warn" style="position: absolute;top: 1px;">
+        <span class="full-tip "><span class="inner"><i class="ico"></i><span class="text" data-id="label"><%=data.tip_msg%></span></span></span>
+    </div>
+</script>

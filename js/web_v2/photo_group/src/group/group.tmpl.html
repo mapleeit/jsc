@@ -1,0 +1,47 @@
+<!--
+ 分组列表容器模板
+ @author: cluezhang
+ @date: 2013-09-16
+-->
+<script id="dialog_group_list" type="text/html" nowith="yes">
+    <ul class="edit-group">
+    </ul>
+</script>
+
+<!--
+ 单项模板
+ @author: cluezhang
+ @date: 2013-09-16
+-->
+<script id="dialog_group_items" type="text/html" nowith="yes">
+    <%
+    var text = require('lib').get('./text');
+    var empty_group_img,
+        thumb_url,
+        groups = data.groups,
+        cover_id,
+        ext_info,
+        group_name,
+        records = data.records,
+        old_cover_id = records[0].get_id(),
+        empty_group_img = "//img.weiyun.com/vipstyle/nr/box/img/photo-group-empty-min.png";
+    if(groups && groups.length > 0) {
+        $.each(groups, function(index, group){
+            cover_id = group.get('cover')[0].file_id;
+            ext_info = group.get('cover')[0].ext_info;
+            group_name = group.get('name');
+            thumb_url = ext_info? ext_info.thumb_url + '?size=64*64' : empty_group_img;
+    %>
+        <li data-id="<%=index%>" class="list" data-record-id="<%=group.get('id')%>">
+            <a class="link <%=old_cover_id === cover_id? 'checked' : ''%>" href="#">
+                <img src="<%=thumb_url%>">
+                <span class="ellipsis"><%=group_name%></span>
+                <div class="mask"></div>
+                <i class="check"></i>
+            </a>
+        </li>
+    <%
+        });
+    }
+    %>
+</script>

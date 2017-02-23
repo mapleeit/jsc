@@ -1,0 +1,230 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>文档预览</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+            height: 100%;
+            background-color: #FFF;
+            font-family: '微软雅黑';
+            font-size: 12px;
+        }
+
+        iframe {
+            border: none;
+            margin: 0 auto;
+            padding: 0;
+            width: 100%;
+            display: block;
+            background: #999;
+        }
+
+        .empty_doc {
+            width: 100%;
+            height: 100%;
+            line-height: 100%;
+            background-color: #fff;
+            text-align: center;
+            color: #666;
+            position: absolute;
+            top: 50%;
+        }
+    </style>
+    <script type="text/javascript" src="//imgcache.qq.com/c/=/club/weiyun/js/publics/jquery/jquery-1.8.3.min.js,/club/weiyun/js/publics/seajs/sea.js,/club/weiyun/js/publics/seajs-plugins/seajs-combo.js?max_age=31104000"></script>
+    <script type="text/javascript" src="//www.weiyun.com/disk/js/configs_web.js"></script>
+    <script type="text/javascript">
+        document.domain = 'weiyun.com';
+		
+		var decode = decodeURIComponent;
+		function get_params(){
+			var hash = location.search.substring(1), params = {}, parts, i, part, key;
+			if(hash){
+				parts = hash.split('&');
+				for(i=0; i<parts.length; i++){
+					part = parts[i].split('=');
+					key = decode(part[0]);
+					params[key] = decode(part.slice(1).join('='));
+				}
+			}
+			return params;
+		}
+        //获取cookie
+        var _getCookie = function(name){
+            var cookieValue = '';
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = $.trim(cookies[i]);
+
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        };
+
+		var params = get_params();
+		var property_dictionary = {
+			mf : 'uin',
+			vi : 'skey',
+			sai : 'appid',
+			
+			fi : 'file_id',
+			fm : 'file_md5',
+			fn : 'file_name',
+			fsize : 'file_size',
+			pdk : 'parent_dir_key',
+			
+			fsrc : 'file_src',
+			fpath : 'compress_path',
+			fcat : 'offline_type'
+		};
+        var office_preview_types = {xls: 1, xlsx: 1, doc: 1, docx: 1, ppt: 1, pptx: 1, pdf: 1};//office预览支持的文件类型
+        var ftn_preview_types = {xls: 1, xlsx: 1, doc: 1, docx: 1, ppt: 1, pptx: 1, pdf: 1, txt: 1, rtf: 1};//ftn预览支持的文件类型
+		var key, translate_key, properties = {};
+		for(key in params){
+			if(params.hasOwnProperty(key)){
+				translate_key = property_dictionary.hasOwnProperty(key) ? property_dictionary[key] : key;
+				properties[translate_key] = params[key];
+			}
+		}
+		
+		var doc_type = (properties.file_name || '').split('.').pop(),
+		  previewer,
+		  factory;
+		
+		var ClientAPI = {
+            SetWebSize: function (w, h) {
+                if (window.external && external.SetWebSize) {
+                    external.SetWebSize(w, h);
+                } else {
+                    window.resizeTo(w, window.outerHeight);
+                }
+            },
+            NotifyComplete: function (code, msg) {
+                if (window.external && external.NotifyComplete) {
+                    external.NotifyComplete(code, msg);
+                }
+            }
+        };
+
+        var can_office_preview = function(doc_type) {
+            doc_type = doc_type.toLowerCase();
+            return doc_type in office_preview_types;
+        }
+
+        var can_ftn_preview = function(doc_type) {
+            doc_type = doc_type.toLowerCase();
+            return doc_type in ftn_preview_types;
+        }
+
+        var user_uin = (_getCookie('uin') + '').replace(/^[oO0]*/, '');//初始符为占位符o
+        var uin_suffix = ['0', '1', '2', '3', '4']; //要灰度的尾号
+        var white_list = [
+            '80000967',
+            '542245351',
+            '4281717',
+            '60008',
+            '11249874',
+            '2258619',
+            '56928460',
+            '23066699',
+            '215880685',
+            '94058156',
+            '123751109',
+            '14221337',
+            '87500758',
+            '65504380',
+            '24169433',
+            //'324449516',
+            '280906565',
+            '49195979',
+            '254033430',
+            '619229392',
+            '18570875',
+            '25500128',
+            '183852032',
+            '4421769',
+            '345680969',
+            '251993380',
+            '69054651',
+            '14916073',
+            '627578263',
+            '2943282069',
+            '80361790',
+            '657714964'];
+        var can_use_ftn = function() {
+            //return $.inArray(user_uin.split('').pop(), uin_suffix) > -1 || $.inArray(user_uin, white_list) > -1;  //灰度帐号
+            return true;
+        }
+        if(can_ftn_preview(doc_type) && can_use_ftn() || doc_type === 'txt') {
+            // 加载入口模块
+            seajs.use(['$', 'ftn_preview'], function($, previewer_mod){
+                var office_preview = previewer_mod.get('./ftn_preview');
+                office_preview.appbox_preview(properties);
+                office_preview.on('init_success', function() {
+                    ClientAPI.NotifyComplete(0, '成功');
+                    ClientAPI.SetWebSize(980, screen.height);
+                }).on('init_fail', function(msg, ret) {
+                    var code, tip, meta;
+                    switch(ret){
+                        case 1000:
+                            code = 1000;
+                            tip = '网络错误';
+                            break;
+                        case 404:
+                            code = 1001;
+                            tip = '请求超时';
+                            break;
+                        default:
+                            code = ret;
+                            tip = msg;
+                            break;
+                    }
+                    ClientAPI.NotifyComplete(code, tip);
+                });
+            });
+        } else if(can_office_preview(doc_type)) {
+            // 加载入口模块
+            seajs.use(['$', 'office_preview'], function($, previewer_mod){
+                var office_preview = previewer_mod.get('./office_preview');
+                office_preview.appbox_preview(properties);
+                office_preview.on('init_success', function() {
+                    ClientAPI.NotifyComplete(0, '成功');
+                    ClientAPI.SetWebSize($(window).width(), screen.height);
+                }).on('init_fail', function(msg, ret) {
+                    var code, tip, meta;
+                    switch(ret){
+                        case 1000:
+                            code = 1000;
+                            tip = '网络错误';
+                            break;
+                        case 404:
+                            code = 1001;
+                            tip = '请求超时';
+                            break;
+                        default:
+                            code = ret;
+                            tip = msg;
+                            break;
+                    }
+                    ClientAPI.NotifyComplete(code, tip);
+                });
+            });
+        }
+	</script>
+</head>
+<body>
+</body>
+</html>

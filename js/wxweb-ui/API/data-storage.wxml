@@ -1,0 +1,14 @@
+<wx-view>
+  <wx-form bindsubmit="getStorage">
+    <wx-input placeholder="key" name="key"></wx-input>
+    <wx-button type="primary" formType="submit">getStorage</wx-button>
+  </wx-form>
+
+  <wx-form bindsubmit="setStorage">
+    <wx-input placeholder="key" name="key"></wx-input>
+    <wx-input placeholder="data" name="data"></wx-input>
+    <wx-button type="primary" formType="submit">setStorage</wx-button>
+  </wx-form>
+
+  <wx-button type="primary" bindtap="clearStorage">clearStorage</wx-button>
+</wx-view>

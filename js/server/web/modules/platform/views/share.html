@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>链接分享</title>
+<link href="//imgcache.qq.com/vipstyle/nr/box/web/css/webbase.css" rel="stylesheet" media="screen">
+<link href="//imgcache.qq.com/vipstyle/nr/box/css/disk.css" rel="stylesheet" media="screen">
+<link href="//imgcache.qq.com/vipstyle/nr/box/css/link.css" rel="stylesheet" media="screen">
+</head>
+<body>
+
+<div id="header">
+	<i class="ui-shd"></i>
+	<div class="inner">
+
+		<h1 id="logo"><a href="//www.weiyun.com/disk/index.html" target="_blank">微云<s></s></a></h1>
+		<h2 class="title" style="display:none;"></h2>
+
+		<div id="nav">
+
+			<div class="ui-btns" style="display:none;">
+				<a href="javascript:void(0);" class="ui-btn"><span class="ui-btn-text">下载</span></a>
+				<a href="javascript:void(0);" class="ui-btn"><span class="ui-btn-text">保存到微云</span></a>
+				<a href="#" class="ui-btn ui-btn-qr"><span class="ui-btn-text">二维码</span></a>
+
+				<div class="ui-pop ui-pop-qr hide">
+					<img id="qr_code_prew" src="//www.weiyun.com/php/phpqrcode/qrcode.php?data=//url.cn/DbjbIX&level=4&size=2" alt="" width="222" height="222" />
+					<p class="ui-tips">扫描二维码，将文件下载到手机</p>
+					<i class="ui-arr"></i>
+					<i class="ui-arr ui-tarr"></i>
+				</div>
+
+			</div>
+
+			<span class="user-info" style="display:none">
+				<a class="userid" href="javascript:void(0)" id="user-name"><i class="darr"></i></a>
+				<a class="login" href="javascript:void(0)">登录</a>
+			</span>
+
+			<div class="ui-pop ui-pop-quota hide">
+
+				<div class="ui-quota">
+					<div class="ui-quota-bar" style="width:50%;"></div>
+				</div>
+
+				<p class="ui-text">
+
+					<label for="">容量:</label>
+					<span></span>
+
+					<label for="">/</label>
+					<span></span>
+
+				</p>
+
+				<ul class="ui-menu">
+					<li><a href="//www.weiyun.com/download.html" target="_blank"><i class="icon-install"></i>安装客户端</a></li>
+					<li><a href="//support.qq.com/discuss/715_1.shtml?WYTAG=weiyun.webapp.share.share.fankui" target="_blank"><i class="icon-feedback"></i>反馈</a></li>
+					<li><a href="javascript:void(0)" id="login_out" tj-action="btn-adtag-tj" tj-value="50006"><i class="icon-exit"></i>退出</a></li>
+				</ul>
+
+				<i class="ui-arr"></i>
+				<i class="ui-arr ui-tarr"></i>
+			</div>
+
+		</div>
+
+	</div>
+</div>
+
+<div class="wrapper" onclick="javascript:QQDISK_WEB_DL.Utils.hidetips();">
+
+	<!-- 文档预览 -->
+	<div class="viewer-box docs hide">
+
+		<!-- 图片 -->
+		<div class="pictrue">
+			<img id="prew_img" src="" alt="" onerror="this.src='//imgcache.qq.com/vipstyle/nr/box/img/500x500.png';" />
+		</div>
+
+		<!-- 文档 -->
+		<div class="doc hide">
+			<!--iframe src="" frameborder="0"></iframe-->
+			<!--iframe allowtransparency="true" frameborder="0" style="width: 100%; height: 305px;" src="//preview.cgi.weiyun.com/document_view.fcg?cmd=office_view&amp;mf=2457795622&amp;vt=1&amp;vi=@XeEa72qaU&amp;sai=30006&amp;fm=bc01426d3b306404dba03f45f712c8b4&amp;fn=%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E6%B5%8B%E8%AF%95.doc&amp;fi=65ad791a-4e89-4b47-917f-44e61361e892&amp;pdk=26fc7e92ccb1ac7ea13af24675532a6f&amp;bv=20130120&amp;fin=1&amp;ratio=1&amp;fsize=208384"></iframe-->
+		</div>
+
+	</div>
+
+	<!-- 不可预览文件 -->
+	<div id="cant_prew_file" class="viewer-box others clear hide">
+
+		<div class="main">
+
+			<div class="inner clear">
+
+				<div class="file-desc">
+
+					<!-- 文件类型图标 -->
+					<span id="file-icon" class="icon-file icon-doc"></span>
+
+					<h2 class="ui-title"></h2>
+					<h4 class="file-count" id="show_file_count"></h4>
+					<ul>
+						<li class="ui-text" id="show_file_size"></li>
+						<li class="ui-text" id="show_download_times"></li>
+					</ul>
+				</div>
+
+				<div class="ui-btns">
+					<a href="javascript:void(0)" class="ui-btn"><span class="ui-btn-text">下载</span></a>
+					<a href="javascript:void(0)" class="ui-btn" id="show_store_flag"><span class="ui-btn-text">保存到微云</span></a>
+				</div>
+
+			</div>
+		</div>
+		<div class="side">
+
+			<div class="inner">
+
+				<img id="outlink_qrcode" src="//www.weiyun.com/php/phpqrcode/qrcode.php?data=//url.cn/DbjbIX&level=4&size=2" width="130" height="130" />
+				<p class="ui-tips">扫描二维码，将文件下载到手机</p>
+
+			</div>
+		</div>
+	</div>
+
+	<div id="error_content" class="viewer-box others clear hide">
+		<!--p class="ui-tips ui-tips-expired">链接已经失效，您可以联系文件的所有者重新分享。</p-->
+		<p class="ui-tips ui-tips-expired">
+			<i class="icon-expired"></i>
+			链接已经失效，请联系文件所有者重新分享。
+		</p>
+	</div>
+
+</div>
+
+
+<!-- .wrapper -->
+<a class="ui-fixed-rb complain" href="javascript:void(0);" onclick="javascript:alert('举报成功！');">举报</a>
+<!-- 遮罩 -->
+
+<div class="ui-mask" id="page-mask" style="display:none"></div>
+
+<!-- 目录选择浮层 -->
+<div class="ui-xbox ui-confirm file-mv-box hide">
+    <div class="ui-shadow"></div>
+    <div class="ui-xbox-inner">
+        <div class="ui-xbox-wrap">
+            <h3 class="ui-xbox-title">选择储存位置</h3>
+            <div class="ui-xbox-cnt">
+				<div class="file-mv-cnt">
+					<div class="file-mv-desc">
+						<!-- todo -->
+						<span class="fileimg"><i class="filetype icon-ppt"></i></span>
+						<div class="fileinfo">
+							<span class="filename"></span>
+							<!--span class="filesum"></span-->
+							<span class="filesize"></span>
+						</div>
+					</div>
+					<!-- .file-mv-desc -->
+
+					<div class="ui-line"></div>
+
+					<div class="file-mv-body">
+						<h4 class="ui-title">存储到：</h4>
+
+						<ul class="ui-tree" id="show_tree">
+							<!--li>
+								<a class="expand" href="#"><i></i>根目录</a>
+								<ul class="ui-tree-sub">
+									<li class="loading">
+										<a class="selected" href="#"><i></i>微云网盘</a>
+									</li>
+									<li>
+										<a class="expand" href="#"><i></i>微云网盘</a>
+											<ul class="ui-tree-sub">
+												<li>
+													<a class="expand" href="#"><i></i>微云网盘</a>
+														<ul class="ui-tree-sub">
+															<li><a href="#"><i></i>微云网盘</a></li>
+															<li><a class="disabled" href="#"><i></i>微云网盘</a></li>
+															<li><a class="disabled" href="#"><i></i>微云网盘</a></li>
+														</ul>
+												</li>
+											</ul>
+									</li>
+								</ul>
+							</li-->
+						</ul>
+
+					</div>
+					<!-- .file-mv-body -->
+
+				</div>
+				<!-- .file-mv-cnt -->
+
+            </div>
+            <div class="ui-xbox-foot">
+
+				<!--div class="ui-tips ui-tips-err">登陆超时，请检查您的网络是否受限</div-->
+
+                <input class="ui-btn-ok" type="button" value="确定">
+                <input class="ui-btn-cancel hide" type="button" value="取消">
+            </div>
+        </div>
+        <a class="icon-close ui-xbox-close" href="#">×</a>
+    </div>
+</div>
+<!-- .file-mv-box -->
+
+
+<!-- ui-waiting -->
+<div class="ui-waiting hide">
+	<i class="icon-waiting"></i>
+	<span class="ui-text">正在删除<span>15/30</span>第张</span>
+</div>
+
+<!-- 登录 -->
+<div class="ui-login" id="login_div" style="display:none">
+	<iframe id="login_frame" name="testfresh" frameborder="0" scrolling="no" width="100%" height="100%">
+	</iframe>
+</div>
+
+<div class="ui-xbox ui-confirm hide" id="saveas">
+    <div class="ui-shadow"></div>
+    <div class="ui-xbox-inner">
+        <div class="ui-xbox-wrap">
+            <h3 class="ui-xbox-title" >提示</h3>
+            <div class="ui-xbox-cnt">
+                <div class="ui-confirm-cnt">
+                    <i class="icon-xbox icon-xbox-ok"></i><!-- 失败用这个样式 icon-xbox icon-xbox-warn -->
+                    <h4 class="ui-title" id="infoBoxTips">文件保存成功！<a href="//www.weiyun.com/disk/index.html" target="_blank">查看</a></h4>
+                    <div class="ui-text" id="infoBoxContent">微云LOGO修改版.ai</div>
+                </div>
+            </div>
+            <div class="ui-xbox-foot">
+                <!--input class="ui-btn-ok" type="button" value="确定"-->
+                <input class="ui-btn-cancel" type="button" value="关闭">
+            </div>
+        </div>
+        <!--a class="icon-close ui-xbox-close" href="javascript:void(0)">×</a-->
+    </div>
+</div>
+
+<!-- 以下 JS 仅用于 DEMO 查看 -->
+<script type="text/javascript" src="//imgcache.qq.com/club/qqdisk/web/js/jquery-1.6.4.js"></script>
+<script type="text/javascript" src="//imgcache.qq.com/club/qqdisk/web/js/lib/sea.js"></script>
+<script type="text/javascript" src="//imgcache.qq.com/ac/club/qqvip/v2.0/qqviplib_2.0.0.js"></script>
+<script type="text/javascript" src="//imgcache.qq.com/club/qqdisk/web/js/lib/core.js"></script>
+<script type="text/javascript" src="//imgcache.qq.com/club/qqdisk/web/js/appbox/qqdisk_web_wy.js?v=20130820"></script>
+<script type="text/javascript" src="//imgcache.qq.com/club/qqdisk/web/js/qqdisk_web_outlink_batch.js"></script>
+
+<script>
+////img1.gtimg.com/5/583/58313/5831385_550x550_281.jpg
+
+document.onclick=function(event){
+
+    var _evt = event || window.event;
+    var _target = _evt.target || _evt.srcElement;
+    if (jQuery(_target).is('a')||jQuery(_target).is('input:button')||jQuery(_target).is('li')||jQuery(_target).is('p')||jQuery(_target).is('span')||jQuery(_target).is('i'))
+        return;
+    else{
+        QQDISK_WEB_DL.Utils.hidetips();
+    }
+};
+
+
+function showQrCode()
+{
+	jQuery('.ui-pop-qr').removeClass('hide');
+}
+
+function closeQrCode()
+{
+	jQuery('.ui-pop-qr').addClass('hide');
+}
+
+</script>
+<script type="text/javascript">
+    document.domain = 'weiyun.com';
+
+	function ptlogin2_onClose(){
+		//弹出Iframe方式的范例
+		login_wnd = document.getElementById("login_div");
+		login_wnd.style.display="none";
+		login_wnd = document.getElementById("page-mask");
+		login_wnd.style.display="none";
+        //业务逻辑。。省略
+		is_url_store = 0;
+    }
+
+	function showsuc(rsp_head, rsp_body)
+	{
+	   if(rsp_head["ret"] == 0 || rsp_head["ret"] == 1051)
+	   {
+	        if(rsp_head["ret"] == 1051)
+			{
+				jQuery('#infoBoxTips').html('您已经保存了该文件。<a href="//www.weiyun.com/disk/index.html" target="_blank">查看</a>');
+			}else
+			{
+				jQuery('#infoBoxTips').html('文件保存成功！<a href="//www.weiyun.com/disk/index.html" target="_blank">查看</a>');
+			}
+		   	jQuery('#saveas').removeClass('hide');
+			jQuery('.ui-mask').attr("style","display:block");
+	   }else
+	   {
+	        if(rsp_head["ret"] == 1013 || rsp_head["ret"] == 1024)
+			{
+				jQuery('#infoBoxTips').text('网络问题，请稍后重试。');
+		   	}
+		   	else if( rsp_head["ret"] == 1020 )
+			{
+			    jQuery('#infoBoxTips').text('保存失败，文件已被删除或移动');
+			}
+			else if(rsp_head["ret"] == 1053)
+			{
+				jQuery('#infoBoxTips').text('您的网盘空间不足，未能保存这些文件。');
+		   	}
+		   	else if(rsp_head["ret"] == 1119)
+			{
+				jQuery('#infoBoxTips').text('您的网盘空间已满，未能保存这些文件。');
+		   	}
+			else
+			{
+				jQuery('#infoBoxTips').text('链接已失效，请重新联系分享者。');
+			}
+			jQuery('.icon-xbox-ok').removeClass('.icon-xbox-ok').addClass('icon-xbox-warn');
+		    jQuery('#saveas').removeClass('hide');
+			jQuery('.ui-mask').attr("style","display:block");
+	   }
+	 }
+
+	function iframe_callback()
+	{
+		login_wnd = document.getElementById("login_div");
+		login_wnd.style.display="none";
+		login_wnd = document.getElementById("page-mask");
+		login_wnd.style.display="none";
+		QQDISK_WEB_DL.Utils.showUserTips(0);
+	    if(is_url_store == 1)
+		{
+		//	QQDISK_WEB_DL.Utils.showUserTips(1);
+		    QQDISK_WEB_DL.Utils.storeUrlToRootDir();
+		    is_url_store = 0;
+		}
+		else if(is_url_store == 2){
+			QQDISK_WEB_DL.Utils.pitchStore();
+			is_url_store = 0;
+		}
+		else
+		{
+			QQDISK_WEB_DL.Utils.showUserTips(0);
+		}
+	}
+
+</script>
+<script type="text/javascript">
+    QQDISK_WEB_DL.Utils.init();
+</script>
+
+
+</body>
+</html>

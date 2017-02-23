@@ -1,0 +1,29 @@
+<!--
+外链失效显示界面
+@yuyanghe
+-->
+<script id="outlink_fail" type="text/html" nowith="yes">
+	<%
+		var msg = data.msg,
+            ret = data.ret;
+        var msgobj = require('./msg');
+
+        var cls = ret == 20002 ? 'time' : ret == 20003 ? 'count' : 'err';
+        var message = msgobj.get(ret);
+        var mesg = typeof message === 'string' ? message : message.msg;
+        var desc = typeof message === 'string' ? '' : message.desc;
+	%>
+    <div id="error_content" class="wrapper">
+
+        <div class="link-out-msg">
+            <div class="<%=cls%>">
+                <i class="ico"></i>
+                <h3><%=msg || mesg%></h3>
+                <h4><%=desc%></h4>
+            </div>
+        </div>
+
+    </div>
+    <div id='outlink_fail_msg' style="display:none">
+    </div>
+</script>

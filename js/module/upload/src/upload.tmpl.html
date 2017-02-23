@@ -1,0 +1,130 @@
+<!--
+上传列表模版
+@author trumpli
+@date 13-3-7
+-->
+<script id="body" type="text/html" nowith="yes">
+    <div class="box upbox upbox-speed upbox-mini" data-no-selection style="display:none;">
+        <div class="box-inner">
+            <div class="box-head">
+                <i class="icon-state"></i>
+                <div class="up-state-infor" style="display: inline-block;">
+                    <span data-upload="up_process"> </span>
+                    <span data-upload="speed"> </span>
+                    <span data-upload="left_time"> </span>
+                    <span data-upload="all_time"> </span>
+                </div>
+	            <div class="upbox-speedup" style="display: none;">
+		            <div class="novip-inner clear" style="display: none;">
+			            <div class="text"><h5><i class="icon-vip-upbox"></i><span>会员最高提速500%</span></h5></div>
+			            <div class="link"><a data-upload="speedup_vip" href="javascript: void(0);">开通会员</a></div>
+			            <div class="link" style="visibility: hidden;"><a data-upload="speedup_try" href="javascript: void(0);">试用加速</a></div>
+		            </div>
+		            <!-- 试用.try 会员.vip -->
+		            <div class="vip-inner try" style="display: none;">
+			            <div class="speedup-try-num"><span>30</span></div>
+			            <div class="pic"></div>
+			            <div class="gradient"></div>
+		            </div>
+	            </div>
+            </div>
+            <div class="head-title">
+                <ul>
+                    <li class="data-info"><span>名称</span></li>
+                    <li class="data-status" style="">状态</li>
+                    <li class="data-size">大小</li>
+                    <li class="data-dir">目的地</li>
+                    <li class="data-action">操作</li>
+                </ul>
+
+            </div>
+            <div class="box-body">
+                <div class="upbox-view" style="position:relative;">
+                    <div class="upbox-files file24"><ul data-content style="position:relative;"></ul></div>
+                    <div class="box-tips upbox-tips" style="display:none;"></div>
+                </div>
+            </div>
+            <div class="box-foot clear">
+                <div class="box-btns"><a class="g-btn upbox-btn-footer-h32-gray" tabindex="-1"><span class="btn-inner">全部取消</span></a></div>
+            </div>
+            <a class="upbox-btn-min" data-action="click_to_max" tabindex="-1"><s></s><span class="hidden-text">折叠</span></a>
+            <div class="form-mini-progress"></div>
+        </div>
+    </div>
+</script>
+<script id="instance_wrap" type="text/html" nowith="yes">
+     <div id="<%=data.id%>"></div>
+</script>
+<!--JS 只需在 ui-item 上添加当前状态的样式名，如 completed, uploading, paused, waiting, error以及设置当前正在上传的 upbox-mask 的宽度即可。 -->
+<script id="instance" type="text/html" nowith="yes">
+    <%
+        var text = require('lib').get('./text');
+    %>
+    <li class="ui-item <%=data.li_class%>" id="upload_row_<%=data.view_id%>" v_id="<%=data.view_id%>">
+        <div class="upbox-mask" style="width:<%=data.mask_width%>%;"></div>
+        <div class="data-info">
+            <i class="<%=(data.icon ? data.icon : 'icon-up')%>"></i>
+            <span class="fileie6" <%=(data.local_path ? 'title="'+text.text(data.local_path)+'"' : '')%>>
+                <span class="fileimg"><i class="filetype icon-<%=data.file_type%>"></i></span>
+                <span class="fn-inline">
+                    <span class="filename"><%=text.text(data.file_name)%></span>
+                    <span class="filetips" style="display:none;color: #E62626;"><!--错误描述--></span>
+                </span>
+            </span>
+            <span class="up4g" style="display:none;">超大文件</span>
+        </div>
+        <div class="data-status" style="">
+            <i class="icon-ok" title="完成"></i>
+            <i class="icon-err" title="<%=(data.icon_err?data.icon_err:'上传失败')%>"></i>
+            <span class="upbox-success-text" style="display:none;">极速秒传</span>
+            <span class="upbox-state-text"></span>
+        </div>
+        <div class="data-size"><%=data.file_size%></div>
+        <div class="data-dir" title="<%=(data.target_path ? data.target_path : data.file_dir)%>"><a href="javascript:void(0)" tabindex="-1"><%=data.file_dir%></a></div>
+        <div class="data-action">
+            <!--暂停图标：icon-pause，上传图标：icon-continue-->
+            <a icon_oper class="icon-pause" data-upload="click_event" href="javascript:void(0)" tabindex="-1"><span class="hidden-text">暂停</span></a>
+            <a class="icon-del" data-upload="click_event" href="javascript:void(0)" data-action="click_cancel" title="取消" tabindex="-1"><span class="hidden-text">删除</span></a>
+        </div>
+    </li>
+</script>
+
+<!--浮动消息提示层-->
+<script id="pop" type="text/html" nowith="yes">
+    <div class="ui-pop box-pop" style="right:auto;">
+        <p class="ui-pop-text"></p>
+        <span class="ui-pop-darr hide"> <i class="ui-darr"></i> <i class="ui-darr ui-darr-mask"></i> </span>
+        <span class="ui-pop-uarr hide"> <i class="ui-uarr"></i> <i class="ui-uarr ui-uarr-mask"></i> </span>
+    </div>
+</script>
+
+<!--浮动消息提示层-->
+<script id="err_pop" type="text/html" nowith="yes">
+    <div class="ui-pop box-pop upbox-err-pop" style="right:auto;">
+        <div class="ui-pop-inner"></div>
+        <span class="ui-pop-darr hide" style="left:30%;"> <i class="ui-darr"></i> <i class="ui-darr ui-darr-mask"></i> </span>
+        <span class="ui-pop-uarr hide"> <i class="ui-uarr"></i> <i class="ui-uarr ui-uarr-mask"></i> </span>
+    </div>
+</script>
+
+<!-- 文件夹上传部分失败列表（放置于TIP中） -->
+<script id="folder_errors" type="text/html" nowith="yes">
+    <%
+        var i, file;
+        var common = require('common'),
+            File = common.get('./file.file_object'),
+            lib = require('lib'),
+            text = lib.get('./text');
+    %>
+    <h3 class="ui-title">有<strong><%=data.length%></strong>个文件上传失败</h3>
+                
+                <div class="upbox-errs">
+                    <table><tbody>
+                        <% for(i=0; i<data.length; i++){ file = data[i]; error_tip = (file.error_tip|| '').replace(/<\/?[^>]*>/g,'');%>
+                        <tr>
+<td><span title="<%=text.text(file.fullname)%>"><%=text.text(file.name)%></span></td><td><%=File.get_readability_size(file.size)%></td><td><span title="<%=error_tip%>"><%=file.error_tip||file.error%></span></td>
+                        </tr>
+                        <% } %>
+                    </tbody></table>
+                </div>
+</script>

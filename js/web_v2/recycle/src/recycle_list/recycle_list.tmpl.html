@@ -1,0 +1,86 @@
+<script id="recycle_list" type="text/html" nowith="yes">
+    <ul id="_recycle_file_list" class="list-group"></ul>
+</script>
+
+<script id="recycle_list_item" type="text/html" nowith="yes">
+    <%
+        var lib = require('lib'),
+        common = require('common'),
+        $ = require('$'),
+
+        text = lib.get('./text'),
+        date_time = lib.get('./date_time'),
+
+        query_user = common.get('./query_user'),
+
+        files = data.files,
+
+        // fix 日期长度 do not know what to fix@maplemiao
+        time_str_len = 'yyyy-MM-dd hh:mm'.length,
+
+        expire = query_user.get_cached_user() && query_user.get_cached_user().is_weiyun_vip() ? 30 : 15,
+
+        undefined;
+
+        var getRemainTimeFormat = (function() {
+        var one_hour = 60*60 * 1000;
+        var one_day = 24*one_hour;
+        var cur_time = (new Date()).getTime();
+
+        return function(time) {
+            var exist_time = cur_time - time;
+            var remain_time = expire * one_day - exist_time;
+            var remain_hour = Math.ceil(remain_time/one_hour);
+            var remain_day = Math.ceil(remain_time/one_day);
+            if(remain_hour > 0 && remain_hour < 24) {
+                return '<span style="color:#ec202c">剩余'+remain_hour+'小时</span>';
+                } else if(remain_day > 1) {
+                    return '剩余'+remain_day+'天';
+                } else {
+                    return '已失效';
+                }
+            }
+        })();
+    %>
+    <%
+    $.each(files, function(i, file) {
+    var text_name = text.text(file.get_name()),
+    del_time = date_time.timestamp2date(file.get_del_time());
+    %>
+    <li id="_recycle_file_<%=file.get_id()%>" data-file-id="<%=file.get_id()%>" data-list="file" class="list-group-item">
+        <div class="item-tit">
+            <div class="label"><i class="icon icon-check-s j-icon-checkbox"></i></div>
+            <div class="thumb">
+                <i class="icon icon-m icon-<%=file.get_type()%>-m"></i>
+                <% if (file.get_thumb_url()) { %>
+                    <img style="display:none; cursor:pointer;"/>
+                <% } %>
+            </div>
+
+            <div class="info">
+                <span class="tit"><%=text_name%></span>
+            </div>
+        </div>
+        <div class="item-info">
+            <!-- 操作列表 -->
+            <span class="item-info-list">
+                    <span class="mod-act-list">
+                        <a data-action="restore" class="act-list" title="还原" aria-label="还原" href="#"><i class="icon icon-undo"></i></a>
+                        <a data-action="shred" class="act-list" title="永久删除" aria-label="永久删除" href="#"><i class="icon icon-del-pmnt"></i></a>
+                    </span>
+                </span>
+            <span class="item-info-list item-info-size">
+                    <span class="txt txt-size"><%=file.get_readability_size()%></span>
+                </span>
+            <span class="item-info-list">
+                    <span class="txt txt-time"><%=del_time.substr(0, time_str_len)%></span>
+                </span>
+            <span class="item-info-list">
+                    <span class="txt txt-time"><%=getRemainTimeFormat(file.get_del_time())%></span>
+                </span>
+        </div>
+    </li>
+    <%
+    });
+    %>
+</script>

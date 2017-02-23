@@ -1,0 +1,1173 @@
+.veStatusbarContainer {
+    position: absolute;
+    top: 0;
+    right: 0
+}
+
+.veIframeContainer {
+    border-top: 0
+}
+
+.veToolbarContainer {
+    border-bottom-color: #ddd
+}
+
+.layout {
+    height: 100%;
+    width: 100%;
+    min-width: 300px
+}
+
+.lay-aside {
+    position: absolute;
+    z-index: 8;
+    left: 0;
+    top: 0;
+    width: 160px;
+    background: #d8dce5;
+    height: 517px;
+    overflow: auto;
+    overflow-y: auto
+}
+
+#_disk_default_toolbar {
+    height: 100
+}
+
+.lay-aside .aside-box {
+    position: relative;
+    overflow: overlay
+}
+
+.lay-aside .upload-btn {
+    margin: 17px 0 10px 16px;
+    position: relative
+}
+
+.lay-aside .upload-btn .btn {
+    display: block;
+    width: 127px;
+    height: 39px;
+    background: url(../img/aside.png) no-repeat left top
+}
+
+.lay-aside .upload-btn .btn:hover {
+    background-position: left -50px
+}
+
+.lay-aside .upload-btn .btn:active {
+    background-position: left -100px
+}
+
+.lay-aside .upload-dropdown .btn {
+    background-position: left -150px
+}
+
+.lay-aside .upload-dropdown .btn:hover, .lay-aside .upload-dropdown .hover {
+    background-position: left -200px
+}
+
+.lay-aside .upload-dropdown .btn:active {
+    background-position: left -250px
+}
+
+.dropdown-menu {
+    position: absolute;
+    z-index: 10;
+    width: 124px;
+    top: 36px;
+    left: -1px;
+    border: 1px solid #7f7f7f;
+    border-radius: 2px;
+    background-color: #FFF;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .3)
+}
+
+.dropdown-menu li {
+    border-bottom: solid 1px #e6e7ec;
+    line-height: 22px
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 5px 0 5px 17px;
+    color: #666;
+    font: 14px/22px Arial
+}
+
+.dropdown-menu a * {
+    cursor: pointer
+}
+
+.dropdown-menu a em {
+    display: block;
+    color: #b2b2b2;
+    font-size: 12px
+}
+
+.dropdown-menu a i {
+    position: absolute;
+    right: 7px;
+    top: 75px;
+    width: 27px;
+    height: 15px;
+    background: url(../img/ico-new.png) no-repeat left top
+}
+
+.dropdown-menu a:hover {
+    background: #ebebeb
+}
+
+.dropdown-menu a:active {
+    position: static;
+    color: #666;
+    background-color: #EBEBEB
+}
+
+.lay-aside .nav-gap {
+    height: 20px;
+    overflow: hidden
+}
+
+.lay-aside .nav-gap .gap {
+    display: block;
+    margin: 9px 0;
+    width: 100%;
+    font-size: 0;
+    height: 0;
+    line-height: 0;
+    border-top: 1px solid #bec4cf;
+    border-bottom: 1px solid #eceef2
+}
+
+.lay-aside .nav-list {
+    height: 32px;
+    padding: 2px 0;
+    margin-bottom: 3px
+}
+
+.lay-aside .nav-list .link {
+    display: block;
+    height: 100%;
+    background: url(../img/aside.png) no-repeat 19px -310px;
+    outline: 0;
+    border-top: 1px #d8dce5 solid;
+    border-bottom: 1px #d8dce5 solid
+}
+
+.lay-aside .nav-list .link:hover {
+    background: #c8ccd5 url(../img/aside.png) no-repeat 19px -310px;
+    border-top: 1px #b3b8c2 solid;
+    border-bottom: 1px #b3b8c2 solid;
+    box-shadow: 0 1px 1px #E4E7ED
+}
+
+.lay-aside .nav-list .link:active, .lay-aside .nav-current .link:hover, .lay-aside .nav-current .link:active, .lay-aside .nav-current .link {
+    border: solid 1px #606672;
+    height: 30px;
+    background: #7d838f url(../img/aside.png) no-repeat 19px -310px;
+    box-shadow: 0 1px 1px #ECEEF2
+}
+
+.lay-aside .nav-list .ref {
+    display: none
+}
+
+.lay-aside .nav-current .ref {
+    display: block;
+    background: #7d838f url(../img/aside.png) no-repeat 3px -1497px;
+    margin: -31px 2px 0 auto;
+    width: 30px;
+    height: 30px;
+    outline: 0
+}
+
+.lay-aside .nav-current .ref:hover {
+    background-position: 3px -1547px
+}
+
+.lay-aside .nav-current .ref:active {
+    background-position: 3px -1597px;
+    cursor: pointer
+}
+
+.lay-aside .nav-list .all {
+    background-position: 16px -310px
+}
+
+.lay-aside .nav-list .old-disk {
+    background-position: 16px -1957px
+}
+
+.lay-aside .nav-list .recent {
+    background-position: 16px -360px
+}
+
+.lay-aside .nav-list .pic {
+    background-position: 16px -410px
+}
+
+.lay-aside .nav-list .old-pic {
+    background-position: 16px -1807px
+}
+
+.lay-aside .nav-list .doc {
+    background-position: 16px -459px
+}
+
+.lay-aside .nav-list .voice {
+    background-position: 16px -508px
+}
+
+.lay-aside .nav-list .video {
+    background-position: 16px -560px
+}
+
+.lay-aside .nav-list .share {
+    background-position: 16px -608px
+}
+
+.lay-aside .nav-list .recycle {
+    background-position: 16px -658px
+}
+
+.lay-aside .nav-list .offline {
+    background-position: 16px -1658px
+}
+
+.lay-aside .nav-list .all:hover {
+    background-position: 16px -710px
+}
+
+.lay-aside .nav-list .old-disk:hover {
+    background-position: 16px -2007px
+}
+
+.lay-aside .nav-list .recent:hover {
+    background-position: 16px -760px
+}
+
+.lay-aside .nav-list .pic:hover {
+    background-position: 16px -810px
+}
+
+.lay-aside .nav-list .old-pic:hover {
+    background-position: 16px -1857px
+}
+
+.lay-aside .nav-list .doc:hover {
+    background-position: 16px -859px
+}
+
+.lay-aside .nav-list .voice:hover {
+    background-position: 16px -908px
+}
+
+.lay-aside .nav-list .video:hover {
+    background-position: 16px -960px
+}
+
+.lay-aside .nav-list .share:hover {
+    background-position: 16px -1008px
+}
+
+.lay-aside .nav-list .recycle:hover {
+    background-position: 16px -1058px
+}
+
+.lay-aside .nav-list .offline:hover {
+    background-position: 16px -1708px
+}
+
+.lay-aside .nav-list .all:active, .lay-aside .nav-current .all, .lay-aside .nav-current .all:hover, .lay-aside .nav-current .all:active {
+    background-position: 16px -1110px
+}
+
+.lay-aside .nav-list .old-disk:active, .lay-aside .nav-current .old-disk, .lay-aside .nav-current .old-disk:hover, .lay-aside .nav-current .old-disk:active {
+    background-position: 16px -2057px
+}
+
+.lay-aside .nav-list .recent:active, .lay-aside .nav-current .recent, .lay-aside .nav-current .recent:hover, .lay-aside .nav-current .recent:active {
+    background-position: 16px -1160px
+}
+
+.lay-aside .nav-list .pic:active, .lay-aside .nav-current .pic, .lay-aside .nav-current .pic:hover, .lay-aside .nav-current .pic:active {
+    background-position: 16px -1210px
+}
+
+.lay-aside .nav-list .old-pic:active, .lay-aside .nav-current .old-pic, .lay-aside .nav-current .old-pic:hover, .lay-aside .nav-current .old-pic:active {
+    background-position: 16px -1907px
+}
+
+.lay-aside .nav-list .doc:active, .lay-aside .nav-current .doc, .lay-aside .nav-current .doc:hover, .lay-aside .nav-current .doc:active {
+    background-position: 16px -1259px
+}
+
+.lay-aside .nav-list .voice:active, .lay-aside .nav-current .voice, .lay-aside .nav-current .voice:hover, .lay-aside .nav-current .voice:active {
+    background-position: 16px -1308px
+}
+
+.lay-aside .nav-list .video:active, .lay-aside .nav-current .video, .lay-aside .nav-current .video:hover, .lay-aside .nav-current .video:active {
+    background-position: 16px -1360px
+}
+
+.lay-aside .nav-list .share:active, .lay-aside .nav-current .share, .lay-aside .nav-current .share:hover, .lay-aside .nav-current .share:active {
+    background-position: 16px -1409px
+}
+
+.lay-aside .nav-list .recycle:active, .lay-aside .nav-current .recycle, .lay-aside .nav-current .recycle:hover, .lay-aside .nav-current .recycle:active {
+    background-position: 16px -1458px
+}
+
+.lay-aside .nav-list .offline:active, .lay-aside .nav-current .offline, .lay-aside .nav-current .offline:hover, .lay-aside .nav-current .offline:active {
+    background-position: 16px -1758px
+}
+
+.install-download {
+    padding: 32px 0 10px 11px;
+    width: 130px
+}
+
+.install-download a {
+    display: block;
+    float: left;
+    height: 42px;
+    background: url(../img/install-download.png) no-repeat left top
+}
+
+.install-download a span {
+    display: none
+}
+
+.install-download .android {
+    width: 48px;
+    background-position: 0 0
+}
+
+.install-download .iphone {
+    width: 45px;
+    background-position: -48px 0
+}
+
+.install-download .ipad {
+    width: 32px;
+    background-position: -93px 0
+}
+
+.install-download .android:hover {
+    width: 48px;
+    background-position: 0 -42px
+}
+
+.install-download .iphone:hover {
+    width: 45px;
+    background-position: -48px -42px
+}
+
+.install-download .ipad:hover {
+    width: 32px;
+    background-position: -93px -42px
+}
+
+.lay-main-toolbar {
+    position: relative;
+    z-index: 6;
+    width: 100%;
+    padding: 13px 0
+}
+
+.lay-main-toolbar .toolbar-btn {
+    padding-left: 177px;
+    padding-right: 12px
+}
+
+.lay-main-con .inner {
+    padding-left: 0;
+    padding-right: 0;
+    height: 100%;
+    width: 100%;
+    position: absolute
+}
+
+.lay-main-con .inner .inner {
+    padding: 0
+}
+
+.lay-main-con .wrap {
+    margin-top: 0;
+    height: 100%;
+    position: relative;
+    overflow: auto;
+    background-color: #fff;
+    overflow-x: hidden
+}
+
+.lay-main-con .disk-title {
+    position: relative;
+    z-index: 1;
+    height: 30px;
+    padding-left: 18px;
+    border-top: solid 1px #D1D1D1;
+    border-bottom: solid 1px #D1D1D1;
+    margin-top: -1px;
+    overflow: hidden;
+    background: url(../img/path.png) repeat-x left top;
+    line-height: 32px
+}
+
+.module-photo_bridge .lay-main-con {
+    display: none
+}
+
+.toolbar-btn {
+    position: relative
+}
+
+.toolbar-btn .btn, .toolbar-btn .btn * {
+    cursor: pointer
+}
+
+.toolbar-btn .infor {
+    float: right;
+    line-height: 42px
+}
+
+.toolbar-btn .btn {
+    display: block;
+    height: 42px;
+    padding-left: 12px;
+    float: left;
+    color: #666;
+    background: url(../img/toolbar.png) repeat-x 0 0
+}
+
+.toolbar-btn .on, .toolbar-btn .hover, .toolbar-btn .btn:hover {
+    background: url(../img/toolbar.png) repeat-x 0 -50px
+}
+
+.toolbar-btn .active, .toolbar-btn .btn:active {
+    background: url(../img/toolbar.png) repeat-x 0 -100px
+}
+
+.toolbar-btn .disable, .toolbar-btn .disable:hover {
+    background: url(../img/toolbar.png) repeat-x 0 0
+}
+
+.toolbar-btn .btn-auxiliary {
+    display: block;
+    float: left;
+    height: 19px;
+    padding: 11px 15px 12px 0;
+    background: url(../img/toolbar.png) repeat-x 100% 0
+}
+
+.toolbar-btn .btn-notext {
+    padding-right: 10px
+}
+
+.toolbar-btn .on .btn-auxiliary, .toolbar-btn .hover .btn-auxiliary, .toolbar-btn .btn:hover .btn-auxiliary {
+    background: url(../img/toolbar.png) repeat-x 100% -50px
+}
+
+.toolbar-btn .active .btn-auxiliary, .toolbar-btn .btn:active .btn-auxiliary {
+    background: url(../img/toolbar.png) repeat-x 100% -100px
+}
+
+.toolbar-btn .disable .btn-auxiliary, .toolbar-btn .disable:hover .btn-auxiliary {
+    background: url(../img/toolbar.png) repeat-x 100% 0
+}
+
+.toolbar-btn .disable .btn-auxiliary * {
+    opacity: .5;
+    filter: alpha(opacity=50)
+}
+
+.toolbar-btn .btn-gap {
+    display: block;
+    float: left;
+    width: 10px;
+    height: 29px
+}
+
+.toolbar-btn .ico, .toolbar-btn .text {
+    display: block;
+    height: 19px;
+    line-height: 19px;
+    float: left
+}
+
+.ie7 .toolbar-btn .text, .ie8 .toolbar-btn .text, .ie9 .toolbar-btn .text {
+    line-height: 21px
+}
+
+.toolbar-btn .text {
+    margin-left: 5px
+}
+
+.toolbar-btn .ico {
+    width: 20px;
+    background-image: url(../img/toolbar.png);
+    background-repeat: no-repeat;
+    background-position: -999px -999px
+}
+
+.toolbar-btn .ico-down {
+    background-position: 0 -358px
+}
+
+.toolbar-btn .ico-share {
+    background-position: 0 -398px
+}
+
+.toolbar-btn .ico-kill-share {
+    background-position: 0 -679px
+}
+
+.toolbar-btn .ico-del {
+    background-position: 0 -479px
+}
+
+.toolbar-btn .ico-move {
+    background-position: 0 -518px
+}
+
+.toolbar-btn .ico-movegroup {
+    background-position: 0 -979px
+}
+
+.toolbar-btn .ico-rename {
+    background-position: 0 -598px
+}
+
+.toolbar-btn .ico-mkdir {
+    background-position: 0 -638px
+}
+
+.toolbar-btn .ico-point {
+    background-position: 5px -272px
+}
+
+.toolbar-btn .ico-restore {
+    background-position: 0 -558px
+}
+
+.toolbar-btn .ico-emptyrecycle {
+    background-position: 0 -439px
+}
+
+.toolbar-btn .ico-saveas {
+    background-position: 0 -935px
+}
+
+.toolbar-btn .ico-ref-alone {
+    background-position: 3px -1023px
+}
+
+.toolbar-btn .ico-ref {
+    background-position: 0 -1023px
+}
+
+.toolbar-btn .btn-ref .text {
+    margin-left: 2px
+}
+
+.toolbar-btn .btn:hover .ico-down {
+    background-position: -50px -358px
+}
+
+.toolbar-btn .btn:hover .ico-share {
+    background-position: -50px -398px
+}
+
+.toolbar-btn .btn:hover .ico-kill-share {
+    background-position: -50px -679px
+}
+
+.toolbar-btn .btn:hover .ico-del {
+    background-position: -50px -479px
+}
+
+.toolbar-btn .btn:hover .ico-move {
+    background-position: -50px -518px
+}
+
+.toolbar-btn .btn:hover .ico-movegroup {
+    background-position: -50px -979px
+}
+
+.toolbar-btn .btn:hover .ico-rename {
+    background-position: -50px -598px
+}
+
+.toolbar-btn .btn:hover .ico-mkdir {
+    background-position: -50px -638px
+}
+
+.toolbar-btn .hover .ico-point {
+    background-position: -45px -272px
+}
+
+.toolbar-btn .btn:hover .ico-restore {
+    background-position: -50px -558px
+}
+
+.toolbar-btn .btn:hover .ico-emptyrecycle {
+    background-position: -50px -439px
+}
+
+.toolbar-btn .btn:hover .ico-saveas {
+    background-position: -50px -935px
+}
+
+.toolbar-btn .btn:hover .ico-ref-alone {
+    background-position: -47px -1023px
+}
+
+.toolbar-btn .btn:hover .ico-ref {
+    background-position: -50px -1023px
+}
+
+.toolbar-btn .disable:hover .ico-down {
+    background-position: 0 -358px
+}
+
+.toolbar-btn .disable:hover .ico-share {
+    background-position: 0 -398px
+}
+
+.toolbar-btn .disable:hover .ico-kill-share {
+    background-position: 0 -679px
+}
+
+.toolbar-btn .disable:hover .ico-del {
+    background-position: 0 -477px
+}
+
+.toolbar-btn .disable:hover .ico-move {
+    background-position: 0 -518px
+}
+
+.toolbar-btn .disable:hover .ico-movegroup {
+    background-position: 0 -979px
+}
+
+.toolbar-btn .disable:hover .ico-rename {
+    background-position: 0 -598px
+}
+
+.toolbar-btn .disable:hover .ico-mkdir {
+    background-position: 0 -638px
+}
+
+.toolbar-btn .disable:hover .ico-restore {
+    background-position: 0 -558px
+}
+
+.toolbar-btn .disable:hover .ico-emptyrecycle {
+    background-position: 0 -439px
+}
+
+.toolbar-btn .disable:hover .ico-saveas {
+    background-position: 0 -935px
+}
+
+.toolbar-btn .disable:hover .ico-ref-alone {
+    background-position: 3px -1023px
+}
+
+.toolbar-btn .disable:hover .ico-ref {
+    background-position: 0 -1023px
+}
+
+.toolbar-btn .on .ico-share {
+    background-position: -50px -398px
+}
+
+.toolbar-btn .on .ico-point {
+    background-position: -45px -312px
+}
+
+.toolbar-btn .btn-share {
+    position: relative
+}
+
+.toolbar-btn .toolbar-dropdown {
+    display: none;
+    position: absolute;
+    left: 3px;
+    top: 38px;
+    border: 1px solid #9da2ac;
+    border-radius: 0 0 3px 3px;
+    background: #fff;
+    white-space: nowrap;
+    text-align: left;
+    box-shadow: 1px 1px 5px #ccc;
+    z-index: 1;
+    width: 83px
+}
+
+.toolbar-btn .on .toolbar-dropdown {
+    display: block
+}
+
+.toolbar-btn .gap {
+    height: 0;
+    line-height: 0;
+    font-size: 0;
+    border-bottom: solid 1px #e6e7ec
+}
+
+.toolbar-btn .toolbar-dropdown li a {
+    display: block;
+    padding-left: 15px;
+    height: 30px;
+    line-height: 30px;
+    color: #666
+}
+
+.toolbar-btn .toolbar-dropdown li a:hover {
+    background: #e5e5e5
+}
+
+.ui-popover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    display: none;
+    padding: 1px;
+    text-align: left;
+    background-color: #fffae2;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding;
+    background-clip: padding-box;
+    border: 1px solid #acacac;
+    border: 1px solid rgba(0, 0, 0, .2);
+    white-space: normal
+}
+
+.ui-popover.top {
+    margin-bottom: 10px
+}
+
+.ui-popover.right {
+    margin-left: 10px
+}
+
+.ui-popover.bottom {
+    margin-top: 10px
+}
+
+.ui-popover.left {
+    margin-right: 10px
+}
+
+.ui-popover-title {
+    margin: 0;
+    padding: 8px 14px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 18px;
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #ebebeb;
+    -webkit-border-radius: 5px 5px 0 0;
+    -moz-border-radius: 5px 5px 0 0;
+    border-radius: 5px 5px 0 0
+}
+
+.ui-popover-title:empty {
+    display: none
+}
+
+.ui-popover-content {
+    padding: 1px
+}
+
+.ui-popover .arrow, .ui-popover .arrow:after {
+    position: absolute;
+    display: block;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid
+}
+
+.ui-popover .arrow {
+    border-width: 6px
+}
+
+.ui-popover .arrow:after {
+    border-width: 5px;
+    content: ""
+}
+
+.ui-popover.top .arrow {
+    left: 50%;
+    margin-left: -6px;
+    border-bottom-width: 0;
+    border-top-color: #999;
+    border-top-color: rgba(0, 0, 0, .25);
+    bottom: -11px
+}
+
+.ui-popover.top .arrow:after {
+    bottom: 1px;
+    margin-left: -5px;
+    border-bottom-width: 0;
+    border-top-color: #fff
+}
+
+.ui-popover.right .arrow {
+    top: 50%;
+    left: -6px;
+    margin-top: -6px;
+    border-left-width: 0;
+    border-right-color: #999;
+    border-right-color: rgba(0, 0, 0, .25)
+}
+
+.ui-popover.right .arrow:after {
+    left: 1px;
+    bottom: -5px;
+    border-left-width: 0;
+    border-right-color: #fff
+}
+
+.ui-popover.bottom .arrow {
+    left: 50%;
+    margin-left: -6px;
+    border-top-width: 0;
+    border-bottom-color: #999;
+    border-bottom-color: rgba(0, 0, 0, .25);
+    top: -11px
+}
+
+.ui-popover.bottom .arrow:after {
+    top: 1px;
+    margin-left: -5px;
+    border-top-width: 0;
+    border-bottom-color: #fff
+}
+
+.ui-popover.left .arrow {
+    top: 50%;
+    right: -6px;
+    margin-top: -6px;
+    border-right-width: 0;
+    border-left-color: #999;
+    border-left-color: rgba(0, 0, 0, .25)
+}
+
+.ui-popover.left .arrow:after {
+    right: 1px;
+    border-right-width: 0;
+    border-left-color: #fffae2;
+    bottom: -5px
+}
+
+.ui-popover #save_tips_text {
+    float: left;
+    margin: 1px 0;
+    font-family: simsun;
+    vertical-align: middle;
+    font-size: 13px
+}
+
+div.icon-succeed {
+    float: left;
+    background-image: url(../img/success_icon.png);
+    width: 18px;
+    height: 18px;
+    vertical-align: middle
+}
+
+#save_tips {
+    max-height: 60px;
+    padding: 8px;
+    overflow: hidden;
+    float: right;
+    height: 10px;
+    position: relative;
+    margin-top: 5px
+}
+
+span.editor-ico-save {
+    display: block;
+    background-image: url(../img/button.png) !important;
+    width: 64px !important;
+    height: 24px !important;
+    outline: 0 !important;
+    background-position: 0 0
+}
+
+span.editor-ico-save:hover {
+    display: block;
+    border: 0 !important;
+    background-image: url(../img/button.png) !important;
+    width: 64px;
+    height: 24px;
+    outline: 0 !important;
+    background-position: 0 -30px;
+    box-shadow: none !important
+}
+
+span.editor-ico-save.disable {
+    pointer-events: none;
+    display: block;
+    background-image: url(../img/button.png) !important;
+    width: 64px;
+    height: 24px;
+    outline: 0 !important;
+    background-position: 0 -90px
+}
+
+span.editor-ico-checkbox {
+    display: block;
+    background-image: url(../img/text_editing.png) !important;
+    width: 24px !important;
+    height: 24px !important;
+    outline: 0 !important;
+    background-position: -360px 0
+}
+
+span.editor-ico-checkbox:hover {
+    background-position: -360px -48px
+}
+
+.editor-ico-save>p {
+    line-height: 26px;
+    text-align: center;
+    font-family: simsun;
+    font-size: 13px;
+    color: #FFF
+}
+.editor-ico-save-p {
+    line-height: 26px;
+    text-align: center;
+    font-family: simsun;
+    font-size: 13px;
+    color: #FFF
+}
+
+.editor-maximize .editor-area {
+    height: calc(100% -43px) !important
+}
+
+img.checkbox_check {
+    content: url(img/transparent.png);
+    background-image: url(img/check_on.png);
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+    background-position: -5px -5px
+}
+
+img.checkbox_uncheck {
+    content: url(img/transparent.png);
+    background-image: url(img/check_off.png);
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+    background-position: -5px -5px
+}
+
+img.checkbox_uncheck:hover {
+    background-image: url(img/check_off_hover.png)
+}
+
+.g-scrollbar {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 20px
+}
+
+.g-scrollbar .wraper {
+    position: relative;
+    width: 100%;
+    height: 100%
+}
+
+.g-scrollbar .dragger {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    cursor: pointer
+}
+
+.g-scrollbar .bar {
+    position: relative;
+    width: 8px;
+    height: 100%;
+    margin-left: 12px;
+    border-radius: 4px;
+    background-color: rgba(179, 184, 194, .5)
+}
+
+.ie6 .g-scrollbar .bar, .ie7 .g-scrollbar .bar, .ie8 .g-scrollbar .bar {
+    background-color: #c5cad3
+}
+
+.g-scrollbar .bar-hover {
+    background-color: #B3B8C2
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    .g-scrollbar {
+        display: none
+    }
+}
+
+.clear {
+    *zoom: 1
+}
+
+.clear:after {
+    content: '\20';
+    display: block;
+    clear: both;
+    height: 0
+}
+
+ul#note_list_ul>li.NoteEditing {
+    background: #4CA68C
+}
+
+#note_list {
+    display: none
+}
+
+#real_article {
+    overflow-y: auto !important;
+    *overflow-y: scroll
+}
+
+#real_article iframe {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    display: block
+}
+
+.topright_btn {
+    width: 42px;
+    height: 42px;
+    top: 1;
+    right: 1;
+    position: absolute;
+    border-radius: 50%;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-image: url(../img/add_tips.png);
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer
+}
+
+.topright_btn:link {
+    text-decoration: none;
+    background-position: -42px 0
+}
+
+.topright_btn:hover {
+    text-decoration: none;
+    background-position: 0 0
+}
+
+.topright_btn div {
+    color: #fff;
+    text-decoration: none;
+    font-size: 12px;
+    margin: 6px
+}
+
+#tips {
+    max-height: 60px;
+    padding: 8px;
+    border: 1px #d8dce5 solid;
+    overflow: hidden
+}
+
+#tips p {
+    margin: 0
+}
+
+#tips .mlOverflow_button {
+    float: right;
+    bottom: 8px
+}
+
+::-webkit-scrollbar-button:start, ::-webkit-scrollbar-button:start:hover, ::-webkit-scrollbar-button:start:active, ::-webkit-scrollbar-button:end, ::-webkit-scrollbar-button:end:hover, ::-webkit-scrollbar-button:end:active, input[type=checkbox]:checked, .vcode_close_btn, .vcode_close_btn:hover, .vcode_close_btn:active {
+    background: url(../img/bg.png) no-repeat
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px
+}
+
+::-webkit-scrollbar-button {
+    width: 0;
+    height: 0
+}
+
+::-webkit-scrollbar-button:start:increment, ::-webkit-scrollbar-button:end:decrement {
+    display: none
+}
+
+::-webkit-scrollbar-corner {
+    display: block
+}
+
+::-webkit-scrollbar-thumb {
+    background-clip: padding-box;
+    background-color: rgba(0, 0, 0, .2);
+    border-radius: 8px
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-clip: padding-box;
+    background-color: rgba(0, 0, 0, .5);
+    border-radius: 8px
+}
+
+::-webkit-scrollbar-track, ::-webkit-scrollbar-thumb {
+    border-left: 1px solid transparent;
+    border-right: 1px solid transparent
+}
+
+::-webkit-scrollbar-track:hover {
+    background-clip: padding-box;
+    background-color: rgba(0, 0, 0, .15)
+}
+
+::-webkit-scrollbar-button:start {
+    width: 10px;
+    height: 10px;
+    background-position: 0 0
+}
+
+::-webkit-scrollbar-button:start:hover {
+    background-position: -15px 0
+}
+
+::-webkit-scrollbar-button:start:active {
+    background-position: -30px 0
+}
+
+::-webkit-scrollbar-button:end {
+    width: 10px;
+    height: 10px;
+    background-position: 0 -18px
+}
+
+::-webkit-scrollbar-button:end:hover {
+    background-position: -15px -18px
+}
+
+::-webkit-scrollbar-button:end:active {
+    background-position: -30px -18px
+}

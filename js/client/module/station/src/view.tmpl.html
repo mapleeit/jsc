@@ -1,0 +1,64 @@
+8998<script id="station_list" type="text/html" nowith="yes">
+    <div id="_station_body"  class="disk-view ui-view ui-listview" data-label-for-aria="中转站内容区域">
+        <div id="_station_view_list">
+            <!-- 文件列表 -->
+            <div class="files"></div>
+        </div>
+    </div>
+</script>
+
+<script id="file_item" type="text/html" nowith="yes">
+    <%
+    var $ = require('$');
+    var lib = require('lib');
+    var common = require('common');
+    var date_time = lib.get('./date_time');
+    var records = data;
+    var id_perfix = 'station-item-';
+    var me = this;
+
+    $.each(records, function(i, file) {
+    var file_name = file.get_name();
+    var is_image = file.is_image();
+    var remain_day = file.get_remain_time();
+    var warn_class = remain_day < 2? 'state-warn' : '';
+    var icon_class = 'icon-' + (file.get_type() ? file.get_type() : 'file');
+    %>
+    <div data-file-id data-record-id="<%=file.id%>" data-list="file" class="list list-more clear" id="<%=id_perfix + file._id%>">
+        <label class="checkbox" data-action="select" tabindex="0" aria-label="<%=file_name%>"></label>
+            <span class="img">
+                <% if(is_image) { %>
+                <i data-src="<%=file.get_thumb_url(32)%>" class="filetype <%=icon_class%>"></i>
+                <% } else { %>
+                <i class="filetype <%=icon_class%>"></i>
+                <% } %>
+            </span>
+            <span class="name">
+                <p class="text"><em title="<%=file_name%>" data-name="file_name"><%=file_name%></em></p></span>
+                <span class="tool"><span class="inner">
+                    <a data-action="delete" class="link-del" title="删除" href="#"><i class="ico-del"></i></a>
+                    <!--<a data-action="rename" class="link-rename" title="重命名" href="#"><i class="ico-rename"></i></a>-->
+                    <a data-action="share" class="link-share" title="分享" href="#"><i class="ico-share"></i></a>
+                    <a data-action="download" class="link-download" title="下载" href="#"><i class="ico-download"></i></a>
+                </span></span>
+        <span class="private-item private-countdown <%=warn_class%>"><span class="inner">剩余<%=remain_day%>天</span></span>
+        <span class="private-item private-size"><span class="inner"><%=file.get_readability_size()%></span></span>
+        <span class="private-item private-date"><span class="inner"><%=date_time.timestamp2date_ymdhm(file.get_create_time() || new Date())%></span></span>
+        <span class="private-item private-qrcode"><a data-action="qrcode" class="link-dimensional" title="二维码" href="#"><i class="ico-dimensional"></i></a></span>
+    </div>
+    <% }); %>
+</script>
+
+<script id="load_more" type="text/html" nowith="yes">
+    <a href="javascript:void(0)" class="load-more" style="display:none;"><i class="icon-loading"></i>正在加载</a>
+</script>
+
+<script id="view_empty" type="text/html" nowidth="yes">
+    <div id="_station_view_empty" class="g-empty transfer-files-empty" aria-label="文件中转站没有内容" tabindex="0">
+        <div class="empty-box">
+            <p class="content">腾讯微云于2016年5月27日升级【文件中转站】，现已不再提供文件临时存储功能。欢迎继续使用微云更加稳定，安全，快速的永久云存储服务。</p>
+        </div>
+    </div>
+</script>
+
+

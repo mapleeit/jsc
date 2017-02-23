@@ -1,0 +1,37 @@
+
+/*
+*--------------------------------------------------------------------------------
+ 提示&错误
+*--------------------------------------------------------------------------------
+*/
+.tips .close{ position:relative; right:-12px; float:right}
+.tips{border:1px solid #f4e5cb; background-color:#ffffd9; padding:6px 16px 6px 10px; line-height:18px; margin-bottom:5px; 
+ text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5)
+}
+.tips b{font-weight:bold; color:#C09853;}
+.tips-danger{border:1px solid #f3cbce; background-color:#ffeae1;}
+.tips-danger b{color:#c9523b;}
+.tips-success{border:1px solid #d8e8d0; background-color:#e6ffd9;}
+.tips-success b{color:#53A52B;}
+.msgbox{position:absolute; left:0; width:100%; height:1px; text-align:center;}
+#flash_message, #flashMessage, .flash_message{display:inline; line-height:20px; padding:3px 30px; *padding-top:4px; text-align:center; 
+ font-size:12px; background:#fff9b7;
+}
+#flash_message a, #flashMessage a, .flash_message a{text-decoration:underline}
+.tips-success-icon,.tips-error-icon{border:none; background:none; padding-left:50px; position:relative; color:#999999; vertical-align:baseline}
+.tips-success-icon b,.tips-error-icon b{display:block; margin-bottom:3px; font-size:16px}
+.tips-success-icon b{color:#53A52B;}
+.tips-error-icon b{color:#c9523b;}
+.tips-success-icon i, .tips-error-icon i{position:absolute; left:0; top:4px; width:38px; height:38px;}
+.tips-success-icon i{background-position:-80px -260px}
+.tips-error-icon i{background-position:-128px -260px}
+.tips-sorrow{text-align:center;}
+.tips-sorrow-ico,.tips-sorrow-content{display:inline-block; vertical-align:top; *display:inline; *zoom:1}
+.tips-sorrow-ico{width:84px; height:105px; background:url(../img/sorrow.png) no-repeat;}
+.tips-sorrow-content{text-align:left; min-width:200px; margin-left:40px; padding:20px; font-size: 14px; -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; position:relative;}
+.tips-sorrow-content b{font: bold 16px "微软雅黑"; display:block;}
+.tips-sorrow-content a{text-decoration:underline;}
+.tips-sorrow-content b, .tips-sorrow-content p{margin-bottom: 10px;}
+.tips-sorrow-arrow{position: absolute; width:38px; height:37px; background-position:-73px -171px; left: -38px; top: 20px;}
+#preload{background:url(../img/loadingAnimation.gif) no-repeat center 12px #ffffff; padding:30px 10px 10px; text-align:center; border-bottom:none}
+.nodata{background-color: #fafafa; border:1px solid #e9e9e9; font-size: 14px; text-align:center; padding:20px; margin:15px 0; color:#999;}

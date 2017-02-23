@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>应用授权</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,minimum-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="//qzonestyle.gtimg.cn/qz-proj/wy-h5/app-share-warrant.css">
+    <link rel="stylesheet" href="//img.weiyun.com/vipstyle/nr/box/h5/css/g-component.css">
+</head>
+<body>
+<div class="app-share-warrant">
+    <div class="content">
+        <!--三种类型图标名称分别为word、ppt、excel-->
+        <div id="logo" class="pic"></div>
+        <p class="txt">Microsoft <span id="text">Word</span> 访问您的微云中的
+            文件和文件夹。<a href="//www.weiyun.com/mobile/office/agreement.html" class="more">了解更多</a></p>
+    </div>
+    <div class="foot">
+        <div id="allow" class="btn-allow"><span>允许</span></div>
+        <div class="user"><span></span></div>
+    </div>
+</div>
+<script type="text/javascript" src="//img.weiyun.com/c/=/club/weiyun/js/publics/zepto/zepto-1.1.6.min.js,/club/weiyun/js/publics/seajs/sea.js,/club/weiyun/js/publics/seajs-plugins/seajs-combo.js?max_age=31104000"></script>
+<script type="text/javascript" src="//www.weiyun.com/disk/js/configs_mobile.js"></script>
+<script type="text/javascript">
+    document.domain = 'weiyun.com';
+    //获取cookie
+    var _getCookie = function(name){
+        var cookieValue = '';
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = $.trim(cookies[i]);
+
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    };
+    var _get_gtk = function() {
+        var hash = 5381,
+            skey = _getCookie('skey') || _getCookie('access_token');
+        for(var i=0,len=skey.length;i<len;++i)
+        {
+            hash += (hash<<5) + skey.charCodeAt(i);
+        }
+        return hash & 0x7fffffff;
+    };
+
+    var browser = function() {
+        var ua = navigator.userAgent;
+        return {
+            android: function() {
+                return ua.match(/Android/i);
+            },
+            iphone: function() {
+                return ua.match(/iPhone|iPod|iPad/i);
+            },
+            ipad: function() {
+                return ua.match(/iPad/i);
+            }
+        }
+    }();
+
+    function get_params(){
+        var hash = location.search.substring(1), params = {}, parts, i, part, key;
+        if(hash){
+            parts = hash.split('&');
+            for(i=0; i<parts.length; i++){
+                part = parts[i].split('=');
+                key = decodeURIComponent(part[0]);
+                params[key] = decodeURIComponent(part.slice(1).join('='));
+            }
+        }
+        return params;
+    }
+    var server = {
+            init: function(cfg) {
+                this.file_type = cfg.file_type || '';
+                this.client_id = cfg.client_id || '';
+                this.nick_name = cfg.nick_name || '';
+
+                var file_type_map = {'word': 'word', 'excel': 'excel', 'powerpoint': 'ppt'},
+                    text_map = {'word': 'Word', 'excel': 'Excel', 'powerpoint': 'PowerPoint'},
+                    file_type = file_type_map[this.file_type.toLowerCase()]? file_type_map[this.file_type.toLowerCase()] : 'word',
+                    text = text_map[this.file_type.toLowerCase()]? text_map[this.file_type.toLowerCase()] : 'Word';
+
+                $('.user span').text(this.nick_name);
+                $('#text').text(text);
+                var logo_url = '//qzonestyle.gtimg.cn/qz-proj/wy-h5/img/share-join/' +file_type + '.png';
+                $('#logo').css('background-image','url(' + logo_url + ')');
+
+                var me = this;
+                seajs.use(['lib', 'common'], function(lib, common) {
+                    me.widgets = common.get('./ui.widgets');
+                    me.bind_events();
+                });
+            },
+            bind_events: function() {
+                var me = this;
+                $('#allow').on('click', function() {
+                    if(browser.iphone() && !window.webkit) {
+                        me.widgets.reminder.error('请在应用内授权');
+                        return;
+                    } else if(!_getCookie('skey') && !_getCookie('access_token')) {
+                        alert('获取用户信息失败');
+                        return;
+                    }
+
+                    me.widgets.reminder.loading('请求中...');
+                    var Platform = browser.iphone()? 'iOS' : 'android',
+                        data = {
+                        client_id: me.client_id || 'vrnfqves2ay9n4k',
+                        redirect_uri: 'https%3A%2F%2Foauth.office.com',
+                        response_type: 'code',
+                        scope: 'editdocs',
+                        rs: 'zh-Hans',
+                        build: '1.21.506',
+                        Platform: Platform,
+                        type: 'app'
+                    };
+
+                    $.ajax({
+                        type: 'GET',
+                        url: location.protocol + '//user.weiyun.com/wopi/oauth2/authorize?g_tk=' + _get_gtk(),
+                        data: data,
+                        requestType: 'jsonp',
+                        dataType: 'jsonp',
+                        timeout: 3000,
+                        scriptCharset: 'UTF-8',
+                        jsonpCallback:"jsonpCallback",
+                        success: function(result) {
+                            me.widgets.reminder.hide();
+                            if(browser.iphone()) {
+                                window.webkit.messageHandlers.getCode.postMessage({code: result.code || JSON.stringify(result)});
+                            } else {
+                                location.href = 'weiyun://office/token?code=' + (result.code || JSON.stringify(result));
+                            }
+                        }
+                    });
+
+                    //jsonp下无法捕获到error异常，用这种方式去捕获，传递给IOS客户端
+                    var head = document.head || $('head')[0] || document.documentElement;
+                    var script = $(head).find('script')[0];
+                    script.onerror = function(evt) {
+                        me.widgets.reminder.hide();
+                        if(browser.iphone()) {
+                            window.webkit.messageHandlers.getCode.postMessage({err: 'request error'});
+                        } else {
+                            location.href = 'weiyun://office/token?code=';
+                        }
+                    };
+                });
+            }
+        }
+    var toQueryString = function(json) {
+        var arr = [];
+        for(var o in json) {
+            arr.push(encodeURIComponent(o) + '=' + encodeURIComponent(json[o]));
+        }
+        return arr.join('&');
+    };
+    var params = get_params();
+    server.init(params);
+</script>
+</body>
+</html>

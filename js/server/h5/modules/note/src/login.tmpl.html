@@ -1,0 +1,40 @@
+<script id="indepLogin" type="text/html" nowith="yes">
+
+    <%
+    var serverConfig = plug('config') || {};
+    var wxAppid = serverConfig.isTest ? 'wxe310dc0d754093ee' : 'wxd15b727733345a40'; //测试时使用测试号的appid
+    %>
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>登录</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1,minimum-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="x5-orientation" content="portrait">
+        <%=require('weiyun/util/inline').css(['g-reset', 'g-retina-border', 'g-password'], true)%>
+    </head>
+    <body>
+
+    <script type="text/javascript" src="//imgcache.qq.com/club//weiyun/js/publics/zepto/zepto-1.1.6.min.js?max_age=604800"></script>
+    <%=require('weiyun/util/inline').js(['seajs', 'configs_mobile'])%>
+    <script type="text/javascript">
+        seajs.use(['$', 'lib','common', 'indep_login'], function($, lib, common, indep_login) {
+            var indep_login = indep_login.get('./indep_login');
+            indep_login.show();
+        });
+    </script>
+<script type='text/javascript' src='//img.weiyun.com/club/weiyun/js/publics/tcss/tcss.ping.js'></script>
+<script>
+    (function() {
+        if (typeof pgvMain == 'function') {
+            pgvMain("", {
+                tagParamName: 'WYTAG',
+                virtualURL: '/mp/login',
+                virtualDomain: "h5.weiyun.com"
+            });
+        }
+    })();
+</script>
+</body>
+</html>
+</script>

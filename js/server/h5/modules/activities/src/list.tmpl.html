@@ -1,0 +1,262 @@
+<script id="act_first" type="text/html" nowith="yes">
+    <%=require('weiyun/util/inline').css(['app-checkin-exchange', 'app-checkin-order','app-checkin-order-result'], true)%>
+    <div id="frist" class="act-wrapper">
+        <ul class="list">
+            <li id="Act_qiandao" data-action="sign_in" class="item normal" role="button" style="background-image:url(//qzonestyle.gtimg.cn/qz-proj/wy-h5/img/iap/checkin.png)">
+                <div class="text-wrapper">
+                    <p class="sub-title" id="checkret"><%=data.text%></p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</script>
+
+<script id="act_second" type="text/html" nowith="yes">
+    <%
+        var signCount = data['data']['sign_in_count'];
+    %>
+    <div id="second" style="display:none" class="app-checkin-exchange checkin">
+        <!-- 头部签到 S -->
+        <div class="main">
+            <div class="personal-center trblBor"><span>个人中心</span></div>
+            <!-- 头像 S -->
+            <div class="avatar-wrapper">
+                <p class="avatar" style="background-image: url(<%= data.userImg? data.userImg.replace(/^http:|^https:/, '') : '//qzonestyle.gtimg.cn/aoi/sola/20151130112348_mNOoJ4weaY.png'%>)"></p>
+                <p class="user-name"><%=data.nickname%></p>
+            </div>
+            <!-- 头像 E -->
+            <div class="integral-wrapper">
+                <% var points = data.totalSize.toString();%>
+                <p class="integral" id="total_point">拥有
+                    <% for(var i=0; i < points.length; i++) { %>
+                    <span class="integral-num integral-num-<%=i+1%>"><span class="num1"><%=points[i]%></span><span class="num2"><%=points[i]%></span></span>
+                    <% } %>
+                    积分
+                </p>
+            </div>
+            <!-- 签到 S -->
+            <div class="checkin-box">
+                <h2 class="box-title">已连续签到<span><%=signCount%></span>天</h2>
+                <ul class="list">
+                    <!-- 已经签到的 添加.on -->
+                    <%
+                        var itemClass = '';
+                        for(var i = 0; i < 4; i++){
+                            itemClass = (signCount>i && signCount !== 7)? 'on' : '';
+                    %>
+                    <li class="item item_<%=(i+1)%> <%=itemClass%>">
+                        <span class="item-cont"><sapn class="checkin-num"><%=5*(i+1)%></sapn><i class="icon icon-tick"></i></span>
+                        <h3 class="item-title">第<%=i+1%>天</h3>
+                    </li>
+                    <% } %>
+                </ul>
+                <ul class="list">
+                    <!-- 已经签到的 添加.on -->
+                    <%
+                        var itemClass = '';
+                        for(var i = 4; i < 7; i++){
+                            itemClass = (signCount>i && signCount !== 7)? 'on' : '';
+                    %>
+                    <li class="item item_<%=(i+1)%> <%=itemClass%>">
+                        <span class="item-cont"><sapn class="checkin-num"><%=5*(i+1)%></sapn><i class="icon icon-tick"></i></span>
+                        <h3 class="item-title">第<%=i+1%>天</h3>
+                    </li>
+                    <% } %>
+                </ul>
+            </div>
+            <!-- 签到 E -->
+        </div>
+        <!-- 头部签到 E -->
+        <!-- 积分兑换 S -->
+        <div class="act-exchange">
+            <!-- 兑换礼物 S -->
+            <div class="box">
+                <div class="hd"><h4>积分换好礼（限量）</h4></div>
+                <div class="bd">
+                    <ul class="gift-list clearfix">
+                    <%
+                        var list = data.goodsList['data']['rule'];
+                        var total_point,
+                            head_url,
+                            btn_text,
+                            is_limit,
+                            itemClass,
+                            item;
+                        for(var key in list) {
+                            item = list[key];
+                            itemClass = (item.budget.left && total_point >= item.score)? '' : 'not-enough';
+                            btn_text = item.budget.left? '兑换' : '已抢光';
+                            is_limit = item.name.indexOf('企鹅学生公仔') !== -1? 'limit' : '';
+                            head_url = '//qzonestyle.gtimg.cn/qz-proj/wy-h5/img/gift-' + item.prizeid + '.jpg';
+                            if(item.name.indexOf('京东') === -1 && item.visible) {
+                    %>
+                        <li class="item trblBor good <%=is_limit%>">
+                            <div class="pic bBor"><div class="info" style="background-image:url(<%=head_url%>)"></div></div>
+                            <div class="title"><span><%=item.name%></span></div>
+                            <div class="gift-num"><span class="num"><%=item.score%></span><span>积分</span></div>
+                            <p class="description" style="display: none"><%=item.name%></p>
+                            <!-- 积分不足加类名 not-enough -->
+                            <div class="btn <%=itemClass%>" data-id="<%=key%>" data-action="exchange" onclick="javascript:if(!$(this).hasClass('not-enough')) { pvClickSend('weiyun.act.exchange'); }"><span><%=btn_text%></span></div>
+                        </li>
+                    <%
+                            }
+                        }
+                    %>
+                    </ul>
+                </div>
+            </div>
+            <!-- 兑换礼物 E -->
+            <!-- 兑换券 S -->
+            <div class="box" style="display: none">
+                <div class="hd"><h4>积分换券（限量）</h4></div>
+                <div class="bd">
+                    <ul class="ticket-list clearfix">
+                        <%
+                            var list = data.goodsList['data']['rule'];
+                            var itemClass,
+                                btn_text,
+                                price,
+                                arr,
+                                item;
+
+                            for(var key in list) {
+                                item = list[key];
+                                itemClass = (total_point < item.score || item.has_exchange || item.budget.left === 0)? 'not-enough' : '';
+                                if(key == 2017) {
+                                    itemClass = '';
+                                }
+                                head_url = '//qzonestyle.gtimg.cn/qz-proj/wy-h5/img/gift-' + item.prizeid + '.jpg';
+                                btn_text = item.has_exchange? '已兑换' : (item.budget.left? '兑换' : '今日已兑完');
+                                if(item.name.indexOf('京东') !== -1 && item.visible) {
+                                    arr = item.name.match(/\d+/g);
+                                    price = (arr && arr.length > 1)? parseInt(arr[1]) : 0;
+
+                        %>
+                        <li class="item good jd <%=item.has_exchange? '' : 'good'%>">
+                            <div class="ticket-wrap">
+                                <div class="price-box">
+                                    <div class="price"><span><%=price%></span></div>
+                                    <div class="integral-wrap">
+                                        <p class="text">京东券</p>
+                                        <p class="integral-num"><span class="num"><%=item.score%></span><span>积分</span></p>
+                                        <p class="description" style="display: none"><%=item.name%></p>
+                                    </div>
+                                </div>
+                                <!-- 积分不足加类名 not-enough -->
+                                <div class="btn <%=itemClass%>" data-name="<%=key%>" data-action="jd_exchange" onclick="javascript:if(!$(this).hasClass('not-enough')) { pvClickSend('weiyun.act.exchange');}"><span><%=btn_text%></span></div>
+                            </div>
+                        </li>
+                        <%
+                                }
+                            }
+                        %>
+                    </ul>
+                </div>
+            </div>
+            <!-- 兑换券 E -->
+            <div class="pop checkin show" id="j-pop" style="display: none">
+                <div class="layout">
+                    <div class="confirm-box">
+                        <div class="plate-wrapper">
+                            <i class="icon icon-plate-base">
+                                <i class="icon icon-plate trblBor"></i>
+                                <i class="icon icon-wave-wrapper">
+                                    <i class="icon icon-wave-base">
+                                        <i class="icon icon-wave"></i>
+                                    </i>
+                                </i>
+                                <i class="icon icon-plate-logo"></i>
+                            </i>
+                            <i class="icon icon-light">
+                                <i class="icon icon-light-cover"></i>
+                            </i>
+                        </div>
+                        <!-- 改变 <strong> 里面 -->
+                        <p class="cont">获得了<strong id="j-add-space"></strong>积分</p>
+                        <div class="btn-group" id="j-close">
+                            <button class="btn btn-block">确定</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 积分兑换 E -->
+        <!-- 兑换京东券弹窗 S -->
+        <div id="jd-box" class="ticket-dialog" style="display:none;">
+            <div id="jd-tips" class="box rule" style="display:none;">
+                <div class="hd">
+                    <h4>京东券使用规则</h4>
+                    <div class="confetti-bg"></div>
+                    <div class="icon icon-ticket-close" data-action="jd_close"></div>
+                </div>
+                <div class="bd">
+                    <div class="content">
+                        <p class="rule-item">*兑换后，得到一个兑换码，登入京东兑换页面，输入兑换码领取优惠券</p>
+                        <p class="rule-item">*每个用户每类额度的京东券限领一次</p>
+                        <p class="rule-item">*有效期：<span data-name="deadline">2016-12-12</span></p>
+                        <p class="rule-item" data-name="msg">*全品类通用</p>
+                        <p class="rule-item">*消耗<span data-name="cost" class="important">200</span>积分</p>
+                    </div>
+                    <!--<div class="btn-wrap">-->
+                    <div class="btn-wrap" data-name="confirm" data-action="confirm">
+                        <div class="btn"><span>立即兑换</span></div>
+                    </div>
+                </div>
+            </div>
+            <div id="jd-info" class="box redemption" style="display:none;">
+                <div class="hd">
+                    <h4>恭喜获得京东券兑换码</h4>
+                    <div class="confetti-bg"></div>
+                    <div class="icon icon-ticket-close" data-action="jd_close"></div>
+                </div>
+                <div class="bd">
+                    <div data-action="touch" class="ticket-wrap">
+                        <div class="ticket">
+                            <div class="price"><span data-name="jd_price" style="user-select: none;-webkit-user-select: none;">10</span></div>
+                            <div class="redemption-code"><span data-name="cdkey" style="user-select: all; -webkit-user-select: text;">a715c04aa191615b</span></div>
+                        </div>
+                    </div>
+                    <p class="txt" style="user-select: none;-webkit-user-select: none;">长按复制兑换码，进入换券页面领券</p>
+                    <div class="btn-wrap" data-name="jd_get_coupon" data-action="get_coupon">
+                        <div class="btn disabled"><span style="user-select: none;-webkit-user-select: none;">去领券</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 兑换京东券弹窗 E -->
+        <!-- 确认消耗积分弹窗 S -->
+        <div class="num-dialog" style="display:none;">
+            <div class="box">
+                <div class="hd"><p data-name="confirm_text"></p></div>
+                <div class="bd">
+                    <div data-action="cancel" class="btn"><span>取消</span></div>
+                    <div data-name="confirm" data-action="confirm" class="btn"><span>兑换</span></div>
+                </div>
+            </div>
+        </div>
+        <!-- 确认消耗积分弹窗 E -->
+        <!-- 兑换成功弹窗 S -->
+        <div class="success-dialog" style="display:none;">
+            <div class="box">
+                <i class="icon icon-done"></i>
+                <p class="text">兑换成功</p>
+                <p class="tips">已开通1个月微云会员</p>
+                <div class="btn" data-action="confirm"><span>确定</span></div>
+            </div>
+        </div>
+    </div>
+    <div class="error-dialog" style="display:none; width: 150px;
+          height: 100px;
+          background-color: rgba(0,0,0,0.7);
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          margin: -0.5rem 0 0 -0.75rem;
+          border-radius: 5px;
+          z-index: 150;
+          color: #fff;
+          text-align: center;
+          font-size: 16px;">
+        <p class="text" style="margin-top: 30%">兑换失败</p>
+    </div>
+</script>

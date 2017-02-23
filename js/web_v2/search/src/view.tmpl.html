@@ -1,0 +1,104 @@
+<!--
+ 头部
+ @author: cluezhang
+ @date: 2013-09-16
+-->
+<script id="header" type="text/html" nowith="yes">
+    <%
+        var text = require('lib').get('./text');
+    %>
+    <div class="act-panel-inner cleafix" tabindex="0">
+        <p class="tit"><%= (data.searching && data.count==0)? '' : (data.count ? ('共'+data.count+'个结果') : '无结果') %></p>
+    </div>
+</script>
+<!--
+ 列表容器模板
+ @author: cluezhang
+ @date: 2013-09-16
+-->
+<script id="list" type="text/html" nowith="yes">
+    <div id="_search_body" class="mod-list-group mod-list-group-search" data-label-for-aria="搜索结果内容区域">
+        <div class="list-group-bd">
+            <ul data-id="_search_view_list" class="list-group files">
+            </ul>
+        </div>
+    </div>
+</script>
+<!--
+ 单项模板
+ @author: cluezhang
+ @date: 2013-09-16
+-->
+<script id="items" type="text/html" nowith="yes">
+    <%
+        var records = data.records,
+            highlight = data.highlight,
+            time_str_len = 'yyyy-MM-dd hh:mm'.length,
+            downloader = require('downloader').get('./downloader'),
+            common = require('common'),
+            click_tj = common.get('./configs.click_tj'),
+            constants = common.get('./constants'),
+            lib = require('lib'),
+            text = lib.get('./text'),
+            default_image = constants.RESOURCE_BASE + '/img/img-32.png',
+            i;
+    %>
+    <% 
+    $.each(records, function(index, file){
+        var is_dir = file.is_dir(),
+            is_broken = file.is_broken_file(),
+            is_image = file.is_image(),
+            is_removable = file.is_removable(),
+            is_movable = file.is_movable(),
+            is_downable = file.is_downable(),
+            is_whole_click = true,
+            create_time = (file.get_modify_time() || file.get_create_time()).substr(0, time_str_len),
+            name = file.get_name(),
+
+            icon_cls = 'icon-' + (file.get_type() ? file.get_type() : 'nor');
+    %>
+        <li data-list="<%=is_dir ? 'dir' : 'file'%>" data-file-id="<%=file.get_id()%>" class="list-group-item" <%=click_tj.make_tj_str('SEARCH_LIST_CLICK')%>>
+            <div class="item-tit">
+                <% if(is_image) { %>
+                <div data-action="enter" class="thumb"><i data-thumb class="icon icon-m icon-pic-m"></i></div>
+                <% } else { %>
+                <div data-action="enter" class="thumb"><i class="icon icon-m <%=icon_cls%>-m"></i></div>
+                <% } %>
+                <div data-action="enter" class="info">
+                    <span class="tit ellipsis" data-quick-drag data-name="file_name" title="<%=name%>"><s style="display:none;">文件</s><%=highlight(name)%></span>
+                </div>
+            </div>
+            <div data-action="enter" class="item-info">
+                <span class="item-info-list">
+                <span class="mod-act-list tool">
+                    <a data-action="download" data-tj-action="btn-adtag-tj" title="下载" tabindex="0" hidefocus="on" class="act-list" title="下载" href="#"><i class="icon icon-down"></i></a>
+                    <a data-action="share" hidefocus="on" tabindex="0" class="act-list" title="分享链接" href="#"><i class="icon icon-share"></i></a>
+                    <a data-action="qrcode" tabindex="0" class="act-list" title="二维码" href="#"><i class="icon icon-code"></i></a>
+                </span>
+             </span>
+                <span class="item-info-list item-info-size">
+                    <span class="txt txt-size"><%= file.get_readability_size(true) %></span>
+                </span>
+                <span class="item-info-list">
+                    <span class="txt txt-time"><%=(file.get_modify_time() || file.get_create_time()).slice(0, time_str_len) %></span>
+                </span>
+            </div>
+        </li>
+    <% }); %>
+</script>
+<!--
+ 空
+ @author: cluezhang
+ @date: 2013-09-16
+-->
+<script id="searching" type="text/html" nowidth="yes">
+    <div class="mod-status">
+        <div class="page-loading-search">
+            <!-- 页面 loading -->
+            <div class="load-more">
+                <i class="icon-page-loading-search"></i>
+                <p class="txt">正在搜索...</p>
+            </div>
+        </div>
+    </div>
+</script>

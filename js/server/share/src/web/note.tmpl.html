@@ -1,0 +1,19 @@
+<script id="webNote" type="text/html" nowith="yes">
+    <%
+        var htmlEscape = require('weiyun/util/htmlEscape'),
+            dateformat = require('weiyun/util/dateformat'),
+            text = require('weiyun/util/text'),
+            title = htmlEscape(data.title || ''),
+            time = dateformat(new Date(data.time), 'yyyy-mm-dd HH:MM:ss'),
+            content = data.content;
+
+        title = text.cut(title, 100);
+    %>
+    <div class="share-file-list files-view files-view-rich">
+        <div class="header">
+            <h1 class="headline"><%=title%></h1>
+            <div class="time" data-id="outlink_share_time"><%=time%></div>
+        </div>
+        <div class="content ui-selected"><%=content%></div>
+    </div>
+</script>

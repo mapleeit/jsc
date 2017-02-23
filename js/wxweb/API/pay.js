@@ -1,0 +1,1 @@
+"use strict";Page({requestPayment:function(){console.log("requestPayment")}});

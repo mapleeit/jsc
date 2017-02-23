@@ -1,0 +1,142 @@
+<!--
+笔记列表
+-->
+<script id="note_list" type="text/html" no-width="yes">
+    <%
+    var lib = require('lib');
+
+    var text = lib.get('./text');
+    var prettysize = lib.get('./prettysize');
+    var dateformat  = lib.get('./dateformat');
+    var list = data.list || [];
+    %>
+    <%
+    list.forEach(function(records){
+        var date_list = ['今天','昨天','最近7天','7天前'];
+        var offset_day = records[0].get_offset_day();
+        var date_str = offset_day < 3? date_list[offset_day] : date_list[3];
+    %>
+    <div class="wx-list-wrapper">
+        <time class="day"><%=date_str%></time>
+        <!-- 添加 .active 进入选择模式 -->
+        <ul class="">
+            <%
+            var count = 0;
+            records.forEach(function(file){
+                var id = file.get_id();
+                var file_name = text.text(file.get_name());
+                var mtime = file.get_mtime();
+                count++;
+                var item_class = count < records.length? 'bBor' : '';
+                var thumb_url = file.get_thumb_url();
+                %>
+                <!-- 添加 .checked，选中笔记 -->
+                <li id="item_<%=id%>" class="note <%=item_class%>" data-id="item" data-action="enter" data-file-id="<%=id%>">
+                    <i class="icon icon-select"></i>
+                    <div class="txt-wrapper">
+                        <h2 class="note-title"><%=file_name%></h2>
+                        <time class="note-time"><%=dateformat(mtime, 'mm/dd HH:MM')%></time>
+                    </div>
+                    <%
+                        if(thumb_url) {
+                    %>
+                    <p class="note-img" style="background-image: url(<%=thumb_url.replace(/^http:|^https:/, '')%>);"></p>
+                    <%
+                        }
+                    %>
+                </li>
+            <% }); %>
+        </ul>
+    </div>
+    <% }); %>
+</script>
+
+<script id="note_item" type="text/html" no-width="yes">
+    <%
+    var lib = require('lib');
+
+    var text = lib.get('./text');
+    var prettysize = lib.get('./prettysize');
+    var dateformat  = lib.get('./dateformat');
+    var list = data.list || [];
+    var count = 0;
+    list.forEach(function(file){
+    var id = file.get_id();
+    var file_name = text.text(file.get_name());
+    var mtime = file.get_mtime();
+    count++;
+    var item_class = count < list.length? 'bBor' : '';
+    var thumb_url = file.get_thumb_url();
+    %>
+    <!-- 添加 .checked，选中笔记 -->
+    <li id="item_<%=id%>" class="note <%=item_class%>" data-id="item" data-action="enter" data-file-id="<%=id%>">
+        <i class="icon icon-select"></i>
+        <div class="txt-wrapper">
+            <h2 class="note-title"><%=file_name%></h2>
+            <time class="note-time"><%=dateformat(mtime, 'mm/dd HH:MM')%></time>
+        </div>
+        <%
+        if(thumb_url) {
+        %>
+        <p class="note-img" style="background-image: url(<%=thumb_url%>);"></p>
+        <%
+        }
+        %>
+    </li>
+    <% }); %>
+</script>
+
+<script id="preview_note" type="text/html" no-width="yes">
+    <%
+        var lib = require('lib');
+        var text = lib.get('./text');
+        var prettysize = lib.get('./prettysize');
+        var dateformat  = lib.get('./dateformat');
+        var title = data.title;
+        var content = data.content;
+        var mtime = data.time;
+    %>
+    <section id="wx_note_detail" class="wx-note-cont-wrapper" style="display:none;">
+        <% if(content) { %>
+            <time class="day"><%=dateformat(mtime, 'yyyy-mm-dd HH:MM')%></time>
+            <article class="note-cont">
+                <div class="note-content"><b><%=content%></b><br></div>
+            </article>
+
+            <!-- 去微云客户端编辑，没有安装的话，弹窗提示 -->
+            <div data-action="edit" class="wy-file-controller g-bottom-bar tBor">
+                <button class="btn" id="edit" role="button">编辑</button>
+            </div>
+
+        <% } else { %>
+            <iframe frameborder="0" id="_note_article_frame" name="_note_article_frame" src="<%=data.artcile_url%>"/>
+        <% } %>
+    </section>
+
+    <section id="wx_note_confirm" class="confirm-box" style="display:none;">
+        <div class="ui-modal">
+            <div class="inner">
+                <div class="ui-modal-bd">
+                    <!-- S 带标题的modal -->
+                    <p class="tips cont">您还没安装“微云”客户端</p>
+                    <!-- E 带标题的modal -->
+                </div>
+                <div class="ui-modal-ft tBor">
+                    <button data-action="cancel" class="btn btn-cancel rBor">取消</button>
+                    <button data-action="install" class="btn btn-ok">安装</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui-mask"></div>
+    </section>
+</script>
+
+<!--
+微信公众号下分享的提示遮罩
+-->
+<script id="share_tip" type="text/html" no-width="yes">
+    <div id="_share_tip" class="share-dialog">
+        <span class="share-tips"></span>
+    </div>
+</script>

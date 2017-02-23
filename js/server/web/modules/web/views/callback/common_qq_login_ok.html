@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script type="text/javascript">
+        document.domain = 'weiyun.com';
+
+        //从URL的search串中取出callback_name子串
+        function filter(str) {
+            var params = str.replace(/^\??/, '').split('&');
+            var result = 'login_succ'; //默认值
+            if(params && params.length) {
+                for(var i=0; i<params.length; i++) {
+                    //取字符串中第一个没有=的子串
+                    if(params[i].indexOf('=') === -1) {
+                        result = params[i];
+                        break;
+                    }
+                }
+            }
+            return result;
+        }
+
+        var callback_name = filter(location.search);
+        parent[callback_name]();
+    </script>
+</head>
+</html>

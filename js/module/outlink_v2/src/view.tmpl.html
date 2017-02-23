@@ -1,0 +1,96 @@
+<!--
+转存提示
+@author hibincheng
+ @date 15-05-31
+-->
+<script id="store_dialog" type="text/html" nowith="yes">
+    <div class="popshare-box popshare-pass-manage">
+        <div class="success">
+            <div class="msg"><i class="ico"></i>保存成功！</div>
+            <p class="pass">保存目录：<%=data.path%></p>
+        </div>
+    </div>
+</script>
+<!--
+转存提示
+@author hibincheng
+@date 15-05-31
+-->
+<script id="qrcode_dialog" type="text/html" nowith="yes">
+    <div class="popshare popshare-qr-box">
+        <div class="img"><img id="out_link_qr_code_prew" src="<%=data.qrcode_src%>"></div>
+        <div class="txt">扫描二维码，将文件下载到手机</div>
+    </div>
+</script>
+
+<!--
+空目录
+@author hibincheng
+@date 15-05-31
+-->
+<script id="file_list" type="text/html" nowith="yes">
+    <!-- 高级浏览器使用:hover选择器，ie6请使用鼠标悬停添加list-hover样式 -->
+    <!-- 选中样式list-selected -->
+    <!-- 拖入接收容器样式list-dropping -->
+    <!-- 不可选样式list-unselected -->
+    <!-- 不带复选框模式list-nocheckbox-->
+    <!-- 当前列表，用于右键和单行菜单模式list-menu-on-->
+    <%
+    var lib = require('lib');
+    var common = require('common');
+    var $ = require('$');
+    var text = lib.get('./text');
+
+    var list = data;
+    $.each(list, function(i, file){
+        var is_dir = !!file.is_dir();
+        var id = file.get_id();
+        var file_name = file.get_name();
+        var file_type = file.get_type();
+        var thumb_url = is_dir ? '' : file.get_thumb_url();
+    %>
+    <div id="<%=id%>" data-list="true" data-file-id="<%=id%>" class="list-wrap share-file">
+        <div class="list clear">
+            <label class="checkbox"></label>
+            <span class="img">
+                <i data-src="<%=thumb_url%>" class="filetype icon-<%=file_type%>"></i>
+            </span>
+            <span class="name"><p class="text"><em><%=text.text(file_name)%></em></p></span>
+        </div>
+    </div>
+    <%
+    });
+    %>
+</script>
+
+<!--
+加载更多提示loading
+@author: hibincheng
+@date: 2013-09-04
+-->
+<script id="load_more" type="text/html" nowith="yes">
+    <a href="javascript:void(0)" class="load-more" style="display:none;"><i class="icon-loading"></i>正在加载</a>
+</script>
+<!--
+笔记查看
+@author: hibincheng
+-->
+<script id="note" type="text/html" nowith="yes">
+    <%
+        var lib = require('lib');
+        var date_time = lib.get('./date_time');
+        var text = lib.get('./text');
+    %>
+    <div class="share-file-list files-view files-view-rich">
+        <% if(!data.article_url) { %>
+            <div class="header">
+                <h1 class="headline"><%=text.text(data.title)%></h1>
+                <div class="time" data-id="outlink_share_time"><%=date_time.timestamp2date(data.time)%></div>
+            </div>
+            <div class="content ui-selected"><%=data.content%></div>
+        <% } else { %>
+            <iframe frameborder="0" id="_note_article_frame" name="_note_article_frame" src=""/>
+        <% } %>
+    </div>
+</script>
+

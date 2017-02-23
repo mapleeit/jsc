@@ -1,0 +1,119 @@
+<script id="fileList" type="text/html" nowith="yes">
+    <div id="container">
+        <% if(data.has_folder) { %>
+        <nav id="file_path" class="wy-share-crumbs bBor">
+            <ul class="wy-dir-crumbs">
+                <!-- 点击时添加 wy-hl-dir class -->
+                <li class="wy-dir wy-hl-dir">微云分享</li>
+                    <!-- 需要出现隐藏的目录，加上 wy-hiden-dir class -->
+                <!--</li><li class="wy-dir wy-hiden-dir">文件夹2</li>
+                <li class="wy-dir">文件夹3</li>
+                <li class="wy-dir wy-dir-current">文件夹4</li>-->
+            </ul>
+        </nav>
+        <% } %>
+        <section class="wy-share-filelist-wrapper">
+            <ul id="file_list">
+                <%
+                    var htmlEscape = require('weiyun/util/htmlEscape');
+                    var prettysize = require('weiyun/util/prettysize');
+                    var fileType = require('weiyun/util/fileType');
+                    var list = data.list || [];
+                    var noteList = data.noteList || [];
+                    var only_one = list.length + noteList.length == 1
+                    list.forEach(function(file){
+                        var is_dir = !!file['dir_key'];
+                        var id = is_dir ? file['dir_key'] : file['file_id'];
+                        var file_name = is_dir ? htmlEscape(file['dir_name']) : htmlEscape(file['file_name']);
+                        var file_size = is_dir ? 0 : prettysize(file['file_size']);
+                        var file_type = is_dir ? 'folder' : fileType(file_name);
+                        var thumb_url = file['thumb_url'] || ''
+                %>
+                        <li data-action="open" data-id="item" data-file-id="<%=id%>" id="item_<%=id%>" class="wy-file-item">
+                            <!-- icons icons-filetype是公共class，
+                                 icon-doc 文档
+                                 icon-ppt 演示文件
+                                 icon-folder 文件夹 -->
+                            <% if(thumb_url) { %>
+                            <i class="icons-filetype icon-<%=file_type%>" data-src="<%=thumb_url%>"></i>
+                            <% } else { %>
+                            <i class="icons-filetype icon-<%=file_type%>"></i>
+                            <% } %>
+                            <div class="file-describe bBor">
+                                <h3 class="file-name"><%=file_name%></h3>
+                                    <span class="file-info">
+                                        <%
+                                            if(!is_dir) {
+                                        %>
+                                                <span data-action="open" class="file-size"><%=file_size%></span>
+                                        <%
+                                            }
+                                        %>
+                                    </span>
+                            </div>
+                            <% if(is_dir) { %>
+                            <i class="icon-grey-rarr"></i>
+                            <% } %>
+                        </li>
+                <%
+                    });
+                    noteList.forEach(function(note) {
+                        var id = note.note_id;
+                        var note_title = htmlEscape(note.note_title);
+                %>
+                    <li data-action="open" data-id="item" data-file-id="<%=id%>" id="item_<%=id%>" class="wy-file-item">
+                        <!-- icons icons-filetype是公共class，
+                             icon-doc 文档
+                             icon-ppt 演示文件
+                             icon-folder 文件夹 -->
+                        <i class="icons icons-filetype icon-note"></i>
+                        <div class="file-describe bBor">
+                            <h3 class="file-name"><%=note_title%></h3>
+                        </div>
+                        <i class="icon icon-grey-rarr"></i>
+                    </li>
+                <%
+                    });
+                %>
+
+            </ul>
+        </section>
+        <section id="wx_note_confirm" class="confirm-box" style="display:none;">
+	        <div class="wy-download-dialog">
+		        <div class="box">
+			        <div class="hd">
+				        <div class="hd-bg"></div>
+				        <span data-action="cancel" class="btn-close"></span>
+			        </div>
+			        <div class="bd">
+				        <div class="text">
+					        <p class="title wx_note_title">用微云管理文件</p>
+					        <p class="description wx_note_description">文档在线预览、笔记随记随存</p>
+				        </div>
+				        <div data-action="install" class="btn"><span>立即去下载</span></div>
+			        </div>
+		        </div>
+	        </div>
+        </section>
+        <div id="_load_more" class="wy-file-loading" style="display: none;">
+            <i class="icon icon-load"></i>
+            <span>加载中...</span>
+        </div>
+        <div id="_toolbar">
+            <div data-id="normal" class="wy-file-controller g-bottom-bar">
+                <% if(!data.temporary) { %>
+	            <% if(0 && data.isQQ) { %>
+	            <button data-action="<%=only_one === 1 ? 'save_all' : 'save'%>" class="btn" role="button" style="margin-right: 10px;">保存到微云</button>
+	            <button data-action="download" class="btn" role="button">下载到手机</button>
+	            <% } else { %>
+	            <button data-action="<%=only_one === 1 ? 'save_all' : 'save'%>" class="btn" role="button">保存到微云</button>
+	            <% } %>
+                <% } %>
+            </div>
+            <div data-id="confirm" class="wy-file-controller g-bottom-bar" style="display:none;">
+                <button data-action="confirm" data-target="save" class="btn btn-certain" role="button">确定</button>
+                <button data-action="cancel" class="btn btn-cancel" role="button">取消</button>
+            </div>
+        </div>
+    </div>
+</script>

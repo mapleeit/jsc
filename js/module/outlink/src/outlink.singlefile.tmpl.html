@@ -1,0 +1,45 @@
+<!--
+外链页面多文件分享模版界面
+@yuyanghe
+@date 13-9-21
+-->
+<script id="outlink_singlefile" type="text/html" nowith="yes">
+    <!-- 不可预览文件 -->
+    <div id="cant_prew_file" class="viewer-box others clear">
+        <div class="main">
+            <div class="inner clear">
+                <div class="file-desc">
+                    <!-- 文件类型图标 -->
+                    <span id="file-icon" class="icon-normal"></span>
+                    <table>
+                        <tr>
+                            <td valign="center" height="96">
+                                <h2 class="ui-title" title='' id='outlink_share_name'></h2>
+                                <!--h4 class="file-count" id="show_file_count"></h4-->
+                                <ul>
+                                    <li class="ui-text" id="show_file_size"></li>
+                                    <li class="ui-text" id="show_download_times"></li>
+                                    <li class="ui-text" id="show_safe_type"></li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="ui-btns">
+                    <a href="javascript:void(0)" id='ui-btn-down' class="g-btn g-btn-blue" tj-action="btn-adtag-tj" tj-value="51003"><span
+                            class="btn-inner">下载</span></a>
+                    <a href="javascript:void(0)" id='ui-btn-save' class="g-btn g-btn-blue" tj-action="btn-adtag-tj" tj-value="51001"><span
+                            class="btn-inner">保存到微云</span></a>
+                </div>
+
+            </div>
+        </div>
+        <div class="side">
+            <div class="inner">
+                <img id="out_link_qr_code_prew" width="130" height="130"/>
+
+                <p class="ui-tips">扫描二维码，将文件下载到手机</p>
+            </div>
+        </div>
+    </div>
+</script>

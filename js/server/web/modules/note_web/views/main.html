@@ -1,0 +1,68 @@
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <title>NoteApp</title>
+    <link rel="stylesheet" href="//img.weiyun.com/c/=/club/weiyun/js/publics/note_web/lib/tfl-editor/css/tfl-base.css,/club/weiyun/js/publics/note_web/lib/tfl-editor/css/tfl-tab.css,/club/weiyun/js/publics/note_web/lib/tfl-editor/css/tfl-tips.css?max_age=31104000">
+    <link rel="stylesheet" href="//img.weiyun.com/club/weiyun/js/publics/note_web/lib/tfl-editor/css/tfl-editor.css?max_age=31104000">
+    <link rel="stylesheet" href="//img.weiyun.com/club/weiyun/js/publics/note_web/lib/tfl-editor/css/tfl-skin0.css?max_age=31104000">
+    <link rel="stylesheet" href="//img.weiyun.com/club/weiyun/js/publics/note_web/dist/style.css?max_age=31104000">
+</head>
+
+<body>
+<div id="note_app" class="layout">
+    <div id="note_editor" class="lay-main-con" style="height: 100%">
+        <div id="note_viewer" class="inner">
+            <textarea name="" id="tflEditor" cols="60" rows="10" style="display:none"></textarea>
+        </div>
+        <div id="article_viewer" class="inner" style="display:none">
+            <div id="article_viewer_wrap" class="wrap">
+                <a id="hyperlink_tips" class="topright_btn">
+                    <div id="tips_button">修改备注</div>
+                </a>
+
+                <div id="tips" class="mlOverflow" data-mlOverflow_more="展开备注" data-mlOverflow_less="收起备注">
+                    <p id="tips_text" class="mlOverflow_text"></p>
+                </div>
+                <div id="real_article"></div>
+                <!-- 文章 -->
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="//img.weiyun.com/club/weiyun/js/lib/jquery-1.8.3.min.js?max_age=31104000"></script>
+<script type="text/javascript" src="//img.weiyun.com/c/=/club/weiyun/js/publics/seajs/sea.js,/club/weiyun/js/publics/seajs-plugins/seajs-combo.js?max_age=31104000"></script>
+<script type="text/javascript" src="//img.weiyun.com/c/=/club/weiyun/js/publics/note_web/lib/tfl-editor/js/tfl-core.js,/club/weiyun/js/publics/note_web/lib/tfl-editor/js/tfl-editor.js,/club/weiyun/js/publics/note_web/lib/tfl-editor/js/tfl-tips.js?max_age=31104000"></script>
+<script type="text/javascript" src="//www.weiyun.com/disk/js/configs_web.js?v160219"></script>
+<script type="text/javascript">
+    document.domain="weiyun.com";
+    var g_editor = null;
+    var CallJS_ShowNote = null;         // 显示笔记
+    var CallJS_ChangeSaveState = null;  // 更新保存按钮的状态
+    var CallJS_WeiYunInsertImage = null;// 界面插入图片
+    var CallJS_UpdateImageUrl = null;   // 更新URL的函数
+    var CallJS_WeiYunHotkey = null;     // 界面快捷键
+    var CallJS_SaveFromWeiyun = null;   // 通知界面自动保存开始
+    var CallJS_SaveCacheFromWeiyun = null;  // 通知Web异步保存缓存
+    var CallJS_NoteEcho = null;         // 和笔记界面的心跳
+    var CallJS_WebWeiYunInsertImage =null; //微云Web版插入图片借口 CallJS_WebWeiYunInsertImage
+
+    seajs.use(['$', 'lib', 'common', 'noteview'], function ($, lib, common, noteview) {
+        var noteview = noteview.get('./noteview');
+        noteview.InitNoteView('tflEditor');
+        g_editor = noteview.editor;
+        CallJS_ShowNote = noteview.CallJS_ShowNote;             // 显示笔记
+        CallJS_ChangeSaveState = noteview.CallJS_ChangeSaveState;  // 更新保存按钮的状态
+        CallJS_WeiYunInsertImage = noteview.CallJS_WeiYunInsertImage;// 界面插入图片
+        CallJS_UpdateImageUrl = noteview.CallJS_UpdateImageUrl;   // 更新URL的函数
+        CallJS_NoteEcho = noteview.CallJS_NoteEcho;         // 和笔记界面的心跳
+        CallJS_SaveCacheFromWeiyun = noteview.CallJS_SaveCacheFromWeiyun;  // 通知Web异步保存缓存
+        CallJS_SaveFromWeiyun = noteview.CallJS_SaveFromWeiyun;   // 通知界面自动保存开始
+        CallJS_WebWeiYunInsertImage =noteview.CallJS_WebWeiYunInsertImage;
+        CallJS_CancelUploadPic = noteview.CallJS_CancelUploadPic; //取消图片上传
+        CallJS_ResizeExitorArea = noteview.CallJS_ResizeExitorArea; //IE8以下 解决iframe滚动窗的问题
+        CallJS_GetNoteContent = noteview.CallJS_GetNoteContent; //获取笔记内容
+    });
+</script>
+</html>

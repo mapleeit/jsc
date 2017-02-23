@@ -1,0 +1,150 @@
+<!--
+ * 离线下载
+ * @author iscowei
+ * @date 16-9-30
+-->
+<script id="offline_download" type="text/html" nowith="yes">
+	<div class="popshare-make">
+		<ul class="tab-head">
+			<li class="bt on" data-id="offline_tab" data-tab="bt"><a href="javascript:void(0);"><i class="icon"></i>BT下载</a></li>
+			<li class="link" data-id="offline_tab" data-tab="link"><a href="javascript:void(0);"><i class="icon"></i>链接下载</a></li>
+		</ul>
+		<ul class="tab-body">
+			<!-- 选择bt种子 -->
+			<li class="bt" data-id="offline_bt" style="display: block;">
+				<a class="g-btn g-btn-blue" data-action="select_torrent" href="javascript:void(0);"><span class="btn-inner">选择本地BT种子</span></a>
+			</li>
+			<!-- 输入下载链接 -->
+			<li class="link" data-id="offline_link" style="display: none;">
+				<p class="infor">请输入下载文件的链接：</p><!--magnet:?xt=urn:btih:-->
+				<textarea class="copyurl j-offline-magnet" placeholder="支持http/磁力链/电驴"></textarea>
+
+				<div class="dirbox-dir dirbox-curdir j-path-container">
+					<label>保存到：</label>
+					<span class="j-offline-dir">微云/离线下载</span>
+					<a class="dirbox-chdir" href="javascript: void(0);" data-action="change_dir">修改</a>
+				</div>
+
+				<div class="dirbox-tree j-tree-container" style="display:none"></div>
+			</li>
+		</ul>
+	</div>
+</script>
+
+<!--
+ * 选择离线文件
+ * @author iscowei
+ * @date 16-9-30
+-->
+<script id="offline_file_select" type="text/html" nowith="yes">
+	<%
+	var common = require('common'),
+		lib = require('lib'),
+		file = common.get('./file.file_object'),
+		file_type_map = common.get('./file.file_type_map'),
+		text = lib.get('./text'),
+		date = lib.get('./date_time');
+	%>
+	<div class="mod-dirbox">
+		<div class="dirbox-file">
+			<% if(data.torrent) { %>
+            <span class="fileimg">
+                <span class="imgborder"><i class="icon icon-m icon-bt-m"></i></span>
+            </span>
+			<div class="filewrap">
+				<span class="filename"><%=text.text(data.torrent.name)%></span>
+				<span class="filetxt"><%=date.timestamp2date_ymdhm(data.torrent.lastModified)%> <%=file.get_readability_size(data.torrent.size)%></span>
+			</div>
+			<% } else { %>
+			<div class="filewrap">
+				<span class="filename"><%=text.text(data.magnet)%></span>
+			</div>
+			<% } %>
+		</div>
+
+		<div class="dirbox-dirs">
+			<div class="offline-list">
+				<div class="mod-check" style="cursor: pointer" data-action="offline_select_all" data-act="1">
+					<i class="icon icon-check-s icon-checkbox"></i>
+					<span class="check-txt">全选</span>
+				</div>
+
+				<!-- [ATTENTION!!] 多选后 添加 .block-hover -->
+				<div class="mod-list-group mod-list-group-short">
+					<div class="list-group-bd">
+						<ul class="list-group">
+							<!-- [ATTENTION!!] 选中时加 .act -->
+							<%
+							var EXT_VIDEO_TYPES = { video: 1, swf: 1, dat: 1, mov: 1, mp4: 1, '3gp': 1, avi: 1, wma: 1, rmvb: 1, wmf: 1, mpg: 1, rm: 1, asf: 1, mpeg: 1, mkv: 1, wmv: 1, flv: 1, f4a: 1, webm: 1 };
+							var item, ext, can_identify, object;
+							for(var i=0, len=data.files.length; i < len; i++) {
+								item = data.files[i];
+								ext = file.get_ext(item.filename);
+								can_identify = file_type_map.can_identify_v2(ext);
+								is_video = ext in EXT_VIDEO_TYPES;
+							%>
+							<li class="list-group-item <%=is_video?'act':''%> j-offline-file" data-act="<%=is_video?'1':'0'%>" data-index="<%=item.torrent_index%>">
+								<div class="item-tit">
+									<div class="label"><i class="icon icon-check-s icon-checkbox"></i></div>
+									<div class="thumb"><i class="icon icon-m icon-<%=can_identify?file_type_map.get_type_by_ext_v2(ext):'nor'%>-m"></i></div>
+									<div class="info">
+										<span class="tit"><%=text.text(item.filename)%></span>
+										<span class="tit tit-sub"><%=file.get_readability_size(item.filesize)%></span>
+									</div>
+								</div>
+							</li>
+							<% } %>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<div class="dirbox-dir dirbox-curdir j-path-container">
+				<label>保存到：</label>
+				<span class="j-offline-dir">微云/离线下载</span>
+				<a class="dirbox-chdir" href="javascript: void(0);" data-action="change_dir">修改</a>
+			</div>
+
+			<div class="dirbox-tree j-tree-container" style="display:none"></div>
+		</div>
+	</div>
+</script>
+
+<!--
+ * 离线下载自定义对话框
+ * @author iscowei
+ * @date 16-9-30
+-->
+<script id="offline_download_dialog" type="text/html" nowith="yes">
+	<%
+	var $ = require('$'),
+	lib = require('lib'),
+	text = lib.get('./text');
+	%>
+	<div id="_offline_download_dialog" data-no-selection class="full-pop full-pop-large <%= text.text(data.config.klass) %>">
+		<h3 class="full-pop-header">
+			<div class="inner __title"><%= text.text(data.config.title) %></div>
+		</h3>
+		<div class="__content full-pop-content"></div>
+
+		<div class="full-pop-btn pop-offline-btn clearfix">
+			<div class="box-btns __buttons">
+				<span class="infor" style="display: none;" data-id="try_tips"><i class="icon icon-wy-s"></i><span data-id="use_count"></span>&nbsp;<span data-id="try_count" style="display: none;"></span><a class="link" data-action="open_vip" href="javascript: void(0);">开通会员</a></span>
+				<span class="infor" style="display: none;" data-id="vip_tips"><i class="icon icon-wy-s"></i><span data-id="use_count"></span>&nbsp;<span data-id="vip_count" style="display: none;">当前剩余次</span></span>
+				<%
+				$.each(data.buttons || [], function(i, btn) {
+					var is_ok = (btn.id === 'OK'),
+					btn_aria_label = text.text(btn.aria_label),
+					btn_text = btn_aria_label || text.text(btn.text);
+				%>
+				<div data-id="button" data-btn-id="<%= text.text(btn.id) %>" class="g-btn <%= text.text(btn.klass) %>" <%=is_ok?'tabindex="0"':'tabindex="-1"'%> <%=btn.visible?'':'style="display:none;"'%>>
+					<span class="btn-inner"><%=btn_text%></span>
+				</div>
+				<%
+				});
+				%>
+			</div>
+		</div>
+		<a data-btn-id="CANCEL" class="full-pop-close j-offline-cancel" aria-label="关闭上传窗口" tabindex="0" href="javascript: void(0);" hidefocus="on">×</a>
+	</div>
+</script>

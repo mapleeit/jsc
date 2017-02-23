@@ -1,0 +1,136 @@
+<!--
+无数据时的列表背景
+@author trumpli
+@date 13-6-14
+-->
+<script id="empty_body" type="text/html" nowith="yes">
+    <div id="_recent_files_empty" class="g-empty sort-recent-empty">
+        <div class="empty-box" tabindex="0">
+            <div class="ico"></div>
+            <p class="title">最近为空</p>
+            <p class="content">您最近还没有操作过任何文件哦~</p>
+        </div>
+    </div>
+</script>
+<!--
+列表 数据行
+@author trumpli
+@date 13-6-14
+-->
+<script id="row" type="text/html" nowith="yes">
+    <%
+    var lib = require('lib'),
+        text = lib.get('./text'),
+
+        $ = require('$'),
+
+        date_time = lib.get('./date_time'),
+        common = require('common'),
+        constants = common.get('./constants'),
+        click_tj = common.get('./configs.click_tj'),
+        scr_reader_mode = common.get('./scr_reader_mode'),
+        read_mode = scr_reader_mode.is_enable(),
+
+        files        = data.files,
+        only_content = data.only_content === true,
+        tType        = data.time,
+
+        // 默认图片
+        default_image = constants.RESOURCE_BASE + '/img/img-32.png';
+
+    $.each(files, function (i, file) {
+        var is_image = file.is_image(),
+            text_name = text.text(file.get_name());
+    %>
+        <div data-file-id="<%=file.get_id()%>"
+            <%=click_tj.make_tj_str('RECENT_CLICK_ITEM')%> 'data-whole-click' data-list="file" class="list list-nocheckbox clear">
+            <label class="checkbox"></label>
+            <span class="img" tabindex="0" aria-label="<%=text_name%>">
+                <%if (is_image) {%>
+                <!-- 缩略图 -->
+                <i data-action="enter" data-init="0" class="filetype icon-image"></i>
+                <%} else {%>
+                <!-- 图标 -->
+                <i data-action="enter" class="filetype <%= file.get_icon() || ('icon-' + (file.get_type() || 'file')) %>"></i>
+                <%}%>
+            </span>
+            <span class="name ellipsis" data-action="enter" data-name="file_name" title="<%=text.text(file.get_name())%>">
+                <p class="text"><em> <%=text_name%></em></p>
+            </span>
+            <span class="tool">
+                <a class="link-download" data-function="download" data-tj-action="btn-adtag-tj" data-tj-value="57001" title="下载" aria-label="<%=text_name%>" tabindex="0" hidefocus="on" href="#"><i class="ico-download"></i></a>
+            </span>
+            <% if (read_mode) { %>
+                <div class="size" tabindex="0"><%=read_mode?'大小：':''%><%=file.get_readability_size()%></div>
+                <div class="time" tabindex="0"><%=read_mode?'时间：':''%><%=scr_reader_mode.readable_time(file._html_time)%></div>
+            <% } else { %>
+                <span class="size"><%=file.get_readability_size()%></span>
+                <span class="time"><%=file._html_time%></span>
+            <% }%>
+            <span class="dimensional" data-action="enter">
+                <a data-function="qr_code" class="link-dimensional" title="二维码" href="javascript:void(0);"><i class="ico-dimensional"></i></a>
+           </span>
+        </div>
+    <%});%>
+</script>
+<!--
+加载提示
+@author trumpli
+@date 13-6-14
+-->
+<script id="tail_load" type="text/html" nowith="yes">
+    <%var click_tj = require('common').get('./configs.click_tj');%>
+    <a href="javascript:void(0)" class="load-more"><i class="icon-loading"></i>正在加载</a>
+</script>
+<!--
+加载完成提示
+@author trumpli
+@date 13-6-14
+-->
+<script id="tail_loaded" type="text/html" nowith="yes">
+    <%var click_tj = require('common').get('./configs.click_tj');%>
+    <a href="javascript:void(0)" class="load-more" style="cursor: default;">加载完成</a>
+</script>
+
+<!--
+列表body
+@author trumpli
+@date 13-6-14
+-->
+<script id="body" type="text/html" nowith="yes">
+    <div id="_recent_body" class="disk-view ui-view ui-listview" data-label-for-aria="最近文件列表内容区域">
+        <div data-id="file_list"></div>
+    </div>
+</script>
+
+
+<!--
+列表 菜单条
+@author trumpli
+@date 13-6-14
+-->
+<script id="bar" type="text/html" nowith="yes">
+    <h3 class="disk-title"><div tabindex="0"><%=( data.time==='T'?'今天':( data.time==='Y'?'昨天':( data.time ==='S'?'最近7天':'7天前' ) ) )%></div></h3>
+</script>
+
+<!--
+拖拽时的指针
+@author bondli
+@date 13-12-27 下午3:14
+-->
+<script id="drag_cursor" type="text/html" nowith="yes">
+    <%
+    var lib = require('lib'),
+        $ = require('$'),
+
+        length = data.files.length,
+        files = data.files.slice(0, 4);
+    %>
+    <div class="icons">
+        <% $.each(files, function (i, file) { %>
+            <i class="icon icon<%= i %> filetype icon-<%= file.get_type() %>"></i>
+        <% }); %>
+    </div>
+    <span class="sum"><%= length %></span>
+
+</script>

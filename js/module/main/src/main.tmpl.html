@@ -1,0 +1,415 @@
+<!--
+页面主体模板
+@jameszuo
+@date 13-9-11  yuyanghe 同步appbox html结构
+-->
+<script id="root" type="text/html" nowith="yes">
+    <%
+    var common = require('common'),
+    constants = common.get('./constants'),
+    aid = common.get('./configs.aid'),
+    urls = common.get('./urls');
+    %>
+    <div class="layout">
+        <div id="_main_fixed_header" class="lay-header clear">
+            <a class="logo" href="<%= urls.make_url('http://www.weiyun.com', { WYTAG: aid.APPBOX_DISK_LOGO }) %>" target="_blank" tabindex="-1"></a>
+            <%= this['ad']() %>
+            <%= this['user']() %>
+            <%= this['face_menu']() %>
+            <%= this['search']() %>
+        </div>
+
+        <%= this['nav']() %>
+        <%= this['top']() %>
+        <%= this['bar1']() %>
+        <%= this['bar2']() %>
+        <%= this['station_header']() %>
+        <%= this['share_header']() %>
+        <%= this['recycle_header']() %>
+        <div id="_main_special_header"></div>
+        <div id="_main_content" class="lay-main-con">
+            <div class="inner">
+                <div id="_main_box" class="wrap">
+                    <%/*各模块的主体放这里*/%>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<script id="top" type="text/html" nowith="yes">
+    <div id="_main_top" class="lay-share-top" style="display:none">
+        <%/*各模块的顶部放这里*/%>
+    </div>
+</script>
+<script id="share_header" type="text/html" nowith="yes">
+    <div id="_main_share_header" class="lay-share-head" style="display:none">
+        <%/*各模块的顶部放这里*/%>
+    </div>
+</script>
+<script id="recycle_header" type="text/html" nowith="yes">
+    <div id="_rec_file_header" class="lay-recycle-head" style="display:none">
+        <%/*各模块的顶部放这里*/%>
+    </div>
+</script>
+<script id="station_header" type="text/html" nowith="yes">
+    <div id="_main_station_header" class="lay-files-head" style="display:none">
+        <%/*各模块的顶部放这里*/%>
+    </div>
+</script>
+<!--
+第一个工具栏
+@jameszuo
+-->
+<script id="bar1" type="text/html" nowith="yes">
+    <div id="_main_bar1" class="lay-main-toolbar" style="display:none;">
+        <%/*各模块的工具栏放这里*/%>
+    </div>
+</script>
+
+<!--
+第二个工具栏（路径）
+@jameszuo
+-->
+<script id="bar2" type="text/html" nowith="yes">
+    <div id="_main_bar2" class="lay-main-head" style="display:none;">
+        <%/*各模块的路径（之类）放这里*/%>
+    </div>
+</script>
+
+<!--
+头像及头像下方的菜单
+@jameszuo
+-->
+<script id="face_menu" type="text/html" nowith="yes">
+    <%
+    var common = require('common'),
+    constants = common.get('./constants'),
+    aid = common.get('./configs.aid'),
+    click_tj = common.get('./configs.click_tj'),
+    urls = common.get('./urls'),
+    query_user = common.get('./query_user'),
+	loginUin = query_user.get_uin_num(),
+    main = require('./main');
+    %>
+
+    <!-- 头像下方的菜单 -->
+    <div id="_main_face_menu"  data-no-selection class="ui-pop ui-pop-user" style="display:none;">
+        <div class="ui-pop-head">
+            <span id="_main_nick_name" class="user-nick">...</span>
+            <div id="_main_space_info"></div>
+        </div>
+
+        <ul class="ui-menu">
+            <li><a id="_main_renew_qzonevip" href="javascript:void(0)" tabindex="-1">开通会员</a></li>
+            <!--@capacity_purchase-->
+            <li><a href="//www.weiyun.com/vip/capacity_purchase.html?from=web" tabindex="-1" target="_blank">购买容量</a></li>
+            <li><a id="_main_pwd_locker" href="javascript:void(0)" tabindex="-1"><i class="icon-pwd"></i>独立密码<span class="menu-text">（未开启）</span></a></li>
+            <li><a id="_main_https_config" href="javascript:void(0)" tabindex="-1" style="display: none;"><i></i>https模式<span class="menu-text">（未开启）</span></a></li>
+            <!--<li><a id="_main_client_down" href="<%=urls.make_url('http://www.weiyun.com/download.html',{WYTAG:aid.WEIYUN_APP_WEB_DISK})%>" target="_blank" tabindex="-1"><i class="icon-dwn"></i>下载客户端</a></li>-->
+            <li><a id="_main_feedback" href="#" target="_blank" tabindex="-1">反馈</a></li>
+            <% if(!constants.IS_APPBOX) { %>
+                <li><a id="_main_logout" href="#" tabindex="0"><i class="icon-exit"></i>退出</a></li>
+            <% } %>
+        </ul>
+        <i class="ui-arr"></i>
+        <i class="ui-arr ui-tarr"></i>
+    </div>
+</script>
+
+<!--
+搜索框
+-->
+<script id="search" type="text/html" nowith="yes">
+    <div class="header-search" style="display:none;">
+        <div class="beautiful-input">
+            <i class="ico"></i>
+            <label>搜索</label>
+            <input type="text" autocomplete="off" maxlength="40" aria-label="输入文件名进行搜索" tabindex="0"/>
+            <a class="close" href="#" aria-label="关闭搜索界面" tabindex="0" hidefocus="on"></a>
+        </div>
+    </div>
+</script>
+
+<!--
+模块导航栏
+@jameszuo
+-->
+<script id="nav" type="text/html" nowith="yes">
+    <%
+    var common = require('common'),
+    click_tj = common.get('./configs.click_tj'),
+    constants = common.get('./constants');
+    %>
+
+    <div id="_main_nav" style="display:none;" class="lay-aside">
+
+        <%= this['upload_btn']() %>
+        <div class="aside-box" id="_main_nav_aside_box">
+            <div class="aside-wrap"  id="_main_nav_aside_wrap">
+                <ul class="nav-box">
+                    <%
+                    var m = [
+                        { mod: 'disk', name: '目录', cls: 'all', tj_key: 'NAV_DISK' },
+                        { mod: 'recent', name: '最近', cls: 'recent', tj_key: 'NAV_RECENT' },
+                        '-',
+                        { mod: 'doc', name: '文档', cls: 'doc', tj_key: 'NAV_DOC' },
+                        { mod: 'album', name: '图片', cls: 'pic', tj_key: 'NAV_ALBUM' },
+                        { mod: 'audio', name: '音乐', cls: 'voice', tj_key: 'NAV_AUDIO'},
+                        { mod: 'video', name: '视频', cls: 'video', tj_key: 'NAV_VIDEO' },
+                        { mod: 'note', name: '笔记', cls: 'note', tj_key: 'NAV_NOTE' },
+                        '-',
+                        { mod: 'clipboard', name: '剪贴板', cls: 'clip', tj_key: 'NAV_CLIPBOARD' },
+                        '-',
+                        {mod: 'share',name: '分享的链接', cls: 'share', tj_key: 'NAV_SHARE'},
+                        { mod: 'recycle', name: '回收站', cls: 'recycle', tj_key: 'NAV_RECYCLE' }
+                    ]
+                    for (var i=0, l=m.length; i<l; i++) {
+                    var n = m[i];
+                    if (n === '-') {
+                    %><li class="nav-gap"><span class="gap"></span></li><%
+                    } else {
+                    %><li data-mod="<%=n.mod%>" class="nav-list" <%=click_tj.make_tj_str(n.tj_key)%>>
+                    <a class="link <%=n.cls%>" href="#" title="<%=n.name%>"><i></i><%=n.name%>
+                    <% if(n.news) { %>
+                        <b class="red-dot" style="display: none;"></b>
+                    <% } %>
+                    </a>
+                    <% if (n.mod ==='clipboard') { %><span data-id="clip-num" class="clip-num" style="display:none;"></span><% } %>
+                    </li><%
+                    }
+                    }
+                    %>
+                </ul>
+                <div class="nav-split-bottom" id="_main_nav_split"></div>
+            </div>
+        </div>
+        <b class="aside-beautiful"></b>
+    </div>
+</script>
+<!--
+为了支持库灰度展示，保留老的导航，当灰度完成，可去掉
+@author: hibincheng
+@date: 2013-11-18
+-->
+<script id="old_nav_box" type="text/html" no-width="yes">
+    <%
+    var common = require('common'),
+    click_tj = common.get('./configs.click_tj'),
+    constants = common.get('./constants'),
+    query_user = common.get('./query_user');
+    %>
+    <ul class="nav-box">
+        <%
+        var m = [
+            { mod: 'disk', name: '网盘', cls: 'old-disk', tj_key: 'NAV_DISK', refresh: false },
+            { mod: 'photo', name: '相册', cls: 'old-pic', tj_key: 'NAV_PHOTO', refresh: false },
+            { mod: 'recent', name: '最近', cls: 'recent', tj_key: 'NAV_RECENT', refresh: true },
+            '-',
+            {mod: 'share',name: '分享的链接', cls: 'share', tj_key: 'NAV_SHARE',refresh: false},
+            { mod: 'recycle', name: '回收站', cls: 'recycle', tj_key: 'NAV_RECYCLE', refresh: false }
+        ]
+
+        for (var i=0, l=m.length; i<l; i++) {
+        var n = m[i];
+        if (n === '-') {
+        %><li class="nav-gap"><span class="gap"></span></li><%
+        } else {
+        %><li data-mod="<%=n.mod%>" class="nav-list" <%=click_tj.make_tj_str(n.tj_key)%>>
+        <a class="link <%=n.cls%>" href="#"></a><% if (n.refresh) { %><a data-refresh="<%= n.mod %>" class="ref" href="#" tabindex="-1"></a><% } %>
+        </li><%
+        }
+        }
+        %>
+    </ul>
+</script>
+<!--
+用户头像及昵称
+-->
+<script id="user" type="text/html">
+    <%
+    constants = require('common').get('./constants');
+    %>
+    <div id="_main_face" data-no-selection style="display:none;" class="user">
+        <div class="normal">
+            <div class="inner">
+                <i data-id="qzone_vip" class="ico ico-vip" style="display:none;"></i>
+                <img src="<%=constants.HTTP_PROTOCOL%>//img.weiyun.com/ptlogin/v4/style/0/images/1.gif?max_age=31104000"/>
+                <i class="ico"></i>
+            </div>
+        </div>
+    </div>
+</script>
+
+<!--
+    上传按钮
+-->
+<script id="upload_btn" type="text/html">
+    <div data-action="upload" class="upload-btn">
+        <a id="upload-btn" class="g-btn g-btn-blue" href="#" hidefocus="on">
+            <span class="btn-inner"><i>+</i><span class="text">上传</span></span>
+        </a>
+    </div>
+</script>
+
+<!--
+web 头部链接广告
+@hibincheng
+-->
+<script id="ad" type="text/html" nowidth="yes">
+    <div id="_head_ad_left" class="app clear diff-appdown" style="">
+    </div>
+    <div id="_head_ad_right" class="ad diff-adright"  style="">
+    </div>
+</script>
+
+<script id="ad_left" type="text/html" nowidth="yes">
+    <div class="ad-wx-public">
+        免费领取3T大容量
+        <div class="qrcode">
+            <a data-id="qrcode" href="javascript:void(0);" class="qrcode-icon"></a>
+            <div class="g-bubble" style="display: none;">
+                <div class="qrcode-detail">
+                    <div class="img"><img src="//img.weiyun.com/vipstyle/nr/box/img/qrcode-wx-public.png" alt=""></div>
+                    <div class="txt">
+                        <p>扫一扫关注微云公众号</p>
+                        <p>免费领取3T大容量</p>
+                    </div>
+                </div>
+                <span class="g-arrow g-arrow-top" style=""><span class="sub"></span></span>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script id="ad_left_2" type="text/html" nowidth="yes">
+    <div class="ad-wx-public">
+        <a href="<%=data.bar_url%>" target="_blank"
+            <%
+                if(data.report_id) {
+            %>
+                onclick="javascript: pvClickSend('<%=data.report_id%>');"
+            <% } %>
+
+        ><%=data.title%></a>
+    </div>
+</script>
+
+<script id="ad_left_3" type="text/html" nowidth="yes">
+    <div class="ad-wx-public">
+        连续签到10天送10G容量
+        <div class="qrcode">
+            <a data-id="qrcode" href="javascript:void(0);" class="qrcode-icon"></a>
+            <div class="g-bubble" style="display: none;">
+                <div class="qrcode-detail">
+                    <div class="img"><img style="width: 100px" src="//img.weiyun.com/vipstyle/nr/box/img/qrcode-wy_app.png" alt=""></div>
+                    <div class="txt">
+                        <p>下载微云手机版</p>
+                        <p>持续签到10天领10G容量</p>
+                    </div>
+                </div>
+                <span class="g-arrow g-arrow-top" style=""><span class="sub"></span></span>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script id="ad_right" type="text/html" nowidth="yes">
+    <a class="download-btn" href="#"><i class="icon"></i>下载客户端</a>
+</script>
+<!--
+appbox 下载引导提示
+@trumpli
+-->
+<script id="download_guide" type="text/html" nowidth="yes">
+    <div class="add-downwin-wrap" style="width:100%;background:#f49a1a;">
+        <div style="width:800px;margin:0 auto;">
+            <div class="add-downwin">
+                <a href="#" class="add-downwin-btn">马上下载</a>
+            </div>
+        </div>
+
+                <a href="#" data-id="close" class="add-downwin-close">关闭</a>
+    </div>
+</script>
+
+<!--
+web侧 黄钻入口按钮
+@xixinhuang
+-->
+<script id="qzone_vip" type="text/html" nowidth="yes">
+    <a class="renew-btn" href="javascript:void(0);"><i class="icon" style="background-image: url(//imgcache.qq.com/vipstyle/nr/box/img/weiyun-vip/slice/ico-vip-m.png)"></i>会员中心</a>
+</script>
+<script id="qzone_vip_banner" type="text/html" nowidth="yes">
+    <div class="banner-wrapper">
+        <i class="icon icon-banner-close"></i>
+        <i class="icon icon-banner"></i>
+        <div class="txt-wrapper">
+            <p class="txt">还有<strong data-name="expires_date">32</strong>天，黄钻精灵就要离开，不能再帮主人打造微云特权了!</p>
+            <p class="txt">尊享黄钻特权：<span class="priv">所有文件无限传</span><span class="priv">分享有效期</span><span class="priv">超大相册容量</span></p>
+        </div>
+        <a href="javascript:void(0);" class="renew-btn" role="link">微云会员</a>
+    </div>
+</script>
+
+<!--
+appbox 新手引导
+@xixinhuang
+-->
+<script id="first_guide" type="text/html" nowidth="yes">
+    <div class="pop-guide-wrapper">
+        <div class="controller">
+            <i id="close_guide" class="icon icon-close"></i>
+            <div id="slide_list" class="bullet-list">
+                <!--  选中的位置，加上 .on -->
+                <i class="icon icon-bullet on"></i>
+                <i class="icon icon-bullet"></i>
+                <i class="icon icon-bullet"></i>
+            </div>
+        </div>
+        <!-- 4种情况 loc1+hor, loc2+hor, loc3+ver, lov4+ver -->
+        <div id="mask" class="mask-wrapper loc1 hor">
+            <div class="pop-unblank-small"></div>
+            <!-- .pop-left-up-mask 的 height = .pop-mid-mask 的 top -->
+            <div class="pop-blank-left"></div>
+            <!-- JS 确定 .pop-mid-mask 的位置，得到.pop-mid-mask的 top 值 -->
+            <div class="pop-mid-mask"><i class="icon icon-guide-arr"></i></div>
+            <div class="pop-blank-right"></div>
+            <!-- .pop-right-mask 的 left = .pop-mid-mask 的 width -->
+            <div class="pop-unblank-large"></div>
+        </div>
+        <!-- $('#slider').animate({ left: "-100%"}) -->
+        <ul class="slider clearfix" id="slider">
+            <li class="item loc1">
+                <div class="pop-mask-text">
+                    <i class="icon icon-guide-box"></i>
+                    <h3 class="pop-text-title">添加文件</h3>
+                    <p class="pop-text">文档、照片、音乐和视频统统上传到微云 永久存储 多终端同步</p>
+                    <input class="pop-btn" type="submit" value="继续了解">
+                </div>
+            </li>
+            <li class="item loc2">
+                <div class="pop-mask-text">
+                    <i class="icon icon-guide-box"></i>
+                    <h3 class="pop-text-title">分享</h3>
+                    <p class="pop-text">选择你想要分享的文件，可以分享到任何地方</p>
+                    <input class="pop-btn" type="submit" value="继续了解">
+                </div>
+            </li>
+            <li class="item loc3">
+                <div class="pop-mask-text">
+                    <i class="icon icon-guide-box"></i>
+                    <h3 class="pop-text-title">笔记</h3>
+                    <p class="pop-text">各种灵感和重要信息随记随存，多终端随时同步</p>
+                    <input class="pop-btn" type="submit" value="继续了解">
+                </div>
+            </li>
+        </ul>
+    </div>
+</script>
+
+<script id="ad_web" type="text/html" nowidth="yes">
+    <div class="ad-wx-public"><a data-id="ad_title" href="javascript:void(0);" class="" target="_blank"></a></div>
+</script>
+
+
+

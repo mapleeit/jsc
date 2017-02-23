@@ -1,0 +1,24 @@
+<script id="ad_qboss" type="text/html" nowidth="yes">
+    <%
+        var lib = require('lib');
+        var text = lib.get('./text');
+        var data = data || {};
+        var list = data.list;
+        var list_count = list.length;
+    %>
+    <!-- banner s -->
+        <ul class="banner-list clearfix" style="width:<%=list_count%>00%;">
+            <%
+            for (var i = 0; i < list_count; i++) {
+                var item = list[i];
+                var ext_data = item && item.extdata;
+            %>
+                <li class="item" data-id="<%=i%>" >
+                    <img src="<%=text.text(ext_data && ((ext_data.picture2 || ext_data.img)) || '').replace(/^(http:|https:)/, '')%>">
+                </li>
+            <%
+            }
+            %>
+        </ul>
+    <!-- banner e -->
+</script>

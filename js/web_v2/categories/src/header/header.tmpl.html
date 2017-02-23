@@ -1,0 +1,115 @@
+<!--
+文档模块工具样
+@autor: hibincheng
+@date: 2013-10-31
+-->
+<script id="doc_toolbar" type="text/html" nowith="yes">
+    <div class="view-item-list clearfix">
+        <div id="view-mode-sort" class="view-item clearfix item-doctype">
+            <a data-action="filter" data-filter="all" class="item-list" href="#" title="">全部</a>
+            <a data-action="filter" data-filter="word" class="item-list" href="#" title="">DOC</a>
+            <a data-action="filter" data-filter="excel" class="item-list" href="#" title="">XLS</a>
+            <a data-action="filter" data-filter="ppt" class="item-list" href="#" title="">PPT</a>
+            <a data-action="filter" data-filter="pdf" class="item-list" href="#" title="">PDF</a>
+        </div>
+    </div>
+</script>
+<!--
+文档模块编辑态
+@autor: xixinhuang
+@date: 2016-08-10
+-->
+<script id="doc_editbar" type="text/html" nowith="yes">
+    <!--<li class="edit-item"><i class="icon icon-share"></i><span class="text">分享</span></li>-->
+    <!--<li class="edit-item"><i class="icon icon-download"></i><span class="text">下载</span></li>-->
+    <li data-no-selection="" data-action="batch_delete" class="edit-item"><i class="icon icon-trash"></i><span class="text">删除</span></li>
+    <!--<li class="edit-item"><i class="icon icon-move"></i><span class="text">移动</span></li>-->
+</script>
+
+
+<!--
+视频模块工具样
+@autor: hibincheng
+@date: 2013-10-31
+-->
+<script id="video_toolbar" type="text/html" nowidth="yes">
+    <!--<div class="toolbar-btn clear sort-video-toolbar">-->
+        <!--<div class="btn-message">-->
+            <!--<a data-no-selection data-action="batch_delete" class="g-btn g-btn-gray" href="#" tabindex="-1"><span class="btn-inner"><i class="ico ico-del"></i><span class="text">删除</span></span></a>-->
+            <!--<a data-no-selection data-action="refresh" class="g-btn g-btn-gray" href="#" tabindex="-1"><span class="btn-inner minpad"><i class="ico ico-ref"></i><span class="text"></span></span></a>-->
+        <!--</div>-->
+        <!--<%= this.sort_tool()%>-->
+    <!--</div>-->
+</script>
+<!--
+视频模块编辑态
+@autor: xixinhuang
+@date: 2016-08-10
+-->
+<script id="video_editbar" type="text/html" nowith="yes">
+    <!--<li class="edit-item"><i class="icon icon-share"></i><span class="text">分享</span></li>-->
+    <!--<li class="edit-item"><i class="icon icon-download"></i><span class="text">下载</span></li>-->
+    <li data-no-selection="" data-action="batch_delete" class="edit-item"><i class="icon icon-trash"></i><span class="text">删除</span></li>
+    <!--<li class="edit-item"><i class="icon icon-move"></i><span class="text">移动</span></li>-->
+</script>
+
+
+<!--
+音频模块工具样
+@autor: hibincheng
+@date: 2013-10-31
+-->
+<script id="audio_toolbar" type="text/html" nowidth="yes">
+    <!--<div class="toolbar-btn clear sort-audio-toolbar">-->
+        <!--<div class="btn-message">-->
+            <!--<a data-no-selection data-action="batch_delete" class="g-btn g-btn-gray" href="#" tabindex="-1"><span class="btn-inner"><i class="ico ico-del"></i><span class="text">删除</span></span></a>-->
+            <!--<a data-no-selection data-action="refresh" class="g-btn g-btn-gray" href="#" tabindex="-1"><span class="btn-inner minpad"><i class="ico ico-ref"></i><span class="text"></span></span></a>-->
+        <!--</div>-->
+        <!--<%= this.sort_tool()%>-->
+    <!--</div>-->
+</script>
+<!--
+音频模块编辑态
+@autor: xixinhuang
+@date: 2016-08-10
+-->
+<script id="audio_editbar" type="text/html" nowith="yes">
+    <!--<li class="edit-item"><i class="icon icon-share"></i><span class="text">分享</span></li>-->
+    <!--<li class="edit-item"><i class="icon icon-download"></i><span class="text">下载</span></li>-->
+    <li data-no-selection="" data-action="batch_delete" class="edit-item"><i class="icon icon-trash"></i><span class="text">删除</span></li>
+    <!--<li class="edit-item"><i class="icon icon-move"></i><span class="text">移动</span></li>-->
+</script>
+
+
+
+<!--
+排序工具样
+@autor: hibincheng
+@date: 2013-10-31
+-->
+<script id="sort_tool" type="text/html" nowidth="yes">
+    <%
+        var lib = require('lib'),
+            common = require('common'),
+            click_tj = common.get('./configs.click_tj'),
+            query_user = common.get('./query_user'),
+            cur_view = 'newestlist',
+            cur_cls = 'vm-time';
+        //库3.0用户去掉排序工具
+        if(query_user.get_cached_user().is_lib3_user()) {
+            return '';
+        }
+
+    %>
+        <!--<div class="view-mode">
+            <span data-no-selection data-action="sort" data-sort="mtime"><a title="按时间排序" class="vm-l vm-time" href="javascript:void(0)"><i></i></a></span>
+            <span data-no-selection data-action="sort" data-sort="az"><a title="按A到Z顺序排序" class="vm-r vm-a-z" href="javascript:void(0)"><i></i></a></span>
+        </div>-->
+        <div data-no-selection class="view-mode-dropdown">
+            <a data-id="sort" data-link="true" class="vm-btn vm-time" href="javascript:void(0)" title="排序方式" tabindex="-1"><i class="ico"></i></a>
+            <ul data-dropdown="true" class="view-mode-dropdown-box" style="display:none;">
+                <li data-view="mtime" class="focus"><a class="vm-time" href="#"><i class="ico"></i>按时间排序</a></li>
+                <li data-view="az" class=""><a class="vm-az" href="#"><i class="ico"></i>按字母顺序</a></li>
+            </ul>
+        </div>
+</script>

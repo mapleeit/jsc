@@ -1,0 +1,281 @@
+<!--
+ 文档文件列表
+ @author: hibincheng
+ @date: 2013-10-31
+-->
+<script id="doc_list" type="text/html" nowith="yes">
+    <div id="_doc_body" class="mod-list-group" data-label-for-aria="文档列表内容区域">
+        <div class="list-group-bd">
+            <div id="_doc_view_list">
+                <!-- 文件列表 -->
+                <ul class="list-group files">
+                </ul>
+            </div>
+        </div>
+    </div>
+</script>
+
+<!--
+ 单个文档文件项
+ @author: hibincheng
+ @date: 2013-10-31
+-->
+<script id="doc_file_item" type="text/html" nowith="yes">
+    <%
+
+    var lib = require('lib'),
+        common = require('common'),
+
+        $ = require('$'),
+        text = lib.get('./text'),
+        constants = common.get('./constants'),
+        file_type_map = common.get('./file.file_type_map'),
+        FileObject = common.get('./file.file_object'),
+
+        id_perfix = data.id_perfix || 'doc-item-',
+        files = data.files,
+
+        // 日期
+        time_str_len = 'yyyy-MM-dd hh:mm'.length;
+
+        var me = this;
+
+        $.each(files, function (i, file) {
+            var is_image = file.is_image(),
+                create_time = (file.get_modify_time() || file.get_create_time()).substr(0, time_str_len),
+                can_ident = file_type_map.can_identify_v2(FileObject.get_ext(file.get_name())),
+                icon_class = 'icon-' + (file.get_type() ? file.get_type() : 'nor'),
+                _id = id_perfix + file.id,
+                text_name = text.text(file.get_name());
+    %>
+    <li id="<%=_id%>" data-file-id data-list="file" data-record-id="<%=file.id%>" class="list-group-item">
+        <div class="item-tit">
+            <div class="label checkbox" data-file-check><i class="icon j-icon-checkbox icon-check-s"></i></div>
+            <div class="thumb"><i class="icon icon-m <%=icon_class%>-m"></i></div>
+            <div class="info">
+                <span class="tit" data-quick-drag data-name="file_name" title="<%=text_name%>"><%=text.text(can_ident ? file.get_name_no_ext() : file.get_name())%></span>
+            </div>
+        </div>
+        <div class="item-info">
+            <%= me.file_tool()%>
+            <span class="item-info-list item-info-size">
+                <span class="txt txt-size"><%= file.get_readability_size(true) %></span>
+            </span>
+            <span class="item-info-list">
+                <span class="txt txt-time"><%= create_time %></span>
+            </span>
+        </div>
+    </li>
+    <%
+    });
+    %>
+</script>
+<!--
+视频文件列表
+@author: hibincheng
+@date: 2013-10-31
+-->
+<script id="video_list" type="text/html" nowith="yes">
+    <div id="_video_body" class="mod-list-group" data-label-for-aria="视频文件列表内容区域">
+        <div class="list-group-bd">
+            <div id="_video_view_list">
+                <!-- 文件列表 -->
+                <ul class="list-group files">
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</script>
+<!--
+单个视频文件项
+@author: hibincheng
+@date: 2013-10-31
+-->
+<script id="video_file_item" type="text/html" nowith="yes">
+    <%
+
+    var lib = require('lib'),
+        common = require('common'),
+
+        $ = require('$'),
+        text = lib.get('./text'),
+        date_time = lib.get('./date_time'),
+        constants = common.get('./constants'),
+        file_type_map = common.get('./file.file_type_map'),
+        FileObject = common.get('./file.file_object'),
+
+        id_perfix = data.id_perfix || 'video-item-',
+        files = data.files,
+
+        // 日期
+        time_str_len = 'yyyy-MM-dd hh:mm'.length;
+
+        var me = this;
+
+        $.each(files, function (i, file) {
+            var is_image = file.is_image(),
+            create_time = (file.get_modify_time() || file.get_create_time()).substr(0, time_str_len),
+            _id = id_perfix + file.id,
+            text_name = text.text(file.get_name());
+    %>
+    <li id="<%=_id%>" data-file-id data-list="file" data-record-id="<%=file.id%>" class="list-group-item">
+        <div class="item-tit">
+            <div class="label checkbox" data-file-check><i class="icon j-icon-checkbox icon-check-s"></i></div>
+            <div class="thumb img">
+                <span class="duration"><span class="inner"><%=date_time.timestamp2HMS(file.get_long_time())%></span></span>
+            </div>
+            <div class="info">
+                <span class="tit" data-quick-drag data-name="file_name" title="<%=text_name%>"><%=text_name%></span>
+            </div>
+        </div>
+        <div class="item-info">
+            <%= me.file_tool()%>
+            <span class="item-info-list item-info-size">
+                <span class="txt txt-size"><%= file.get_readability_size(true) %></span>
+            </span>
+            <span class="item-info-list">
+                <span class="txt txt-time"><%= create_time %></span>
+            </span>
+        </div>
+    </li>
+    <%
+    });
+    %>
+
+</script>
+<!--
+音频文件列表
+@author: hibincheng
+@date: 2013-10-31
+-->
+<script id="audio_list" type="text/html" nowith="yes">
+    <div id="_audio_body" class="mod-list-group" data-label-for-aria="音乐文件列表内容区域">
+        <div class="list-group-bd">
+            <div id="_audio_view_list">
+                <!-- 文件列表 -->
+                <ul class="list-group files">
+                </ul>
+            </div>
+        </div>
+    </div>
+</script>
+<!--
+单个音频文件项
+@author: hibincheng
+@date: 2013-10-31
+-->
+<script id="audio_file_item" type="text/html" nowith="yes">
+    <%
+
+    var lib = require('lib'),
+        common = require('common'),
+
+        $ = require('$'),
+        text = lib.get('./text'),
+        constants = common.get('./constants'),
+        file_type_map = common.get('./file.file_type_map'),
+        FileObject = common.get('./file.file_object'),
+
+        id_perfix = data.id_perfix || 'audio-item-',
+        files = data.files,
+
+        // 日期
+        time_str_len = 'yyyy-MM-dd hh:mm'.length;
+
+        var me = this;
+
+        $.each(files, function (i, file) {
+            var is_image = file.is_image(),
+            create_time = (file.get_modify_time() || file.get_create_time()).substr(0, time_str_len),
+            can_ident = file_type_map.can_identify_v2(FileObject.get_ext(file.get_name())),
+            icon_class = 'icon-' + (file.get_type() ? file.get_type() : 'nor'),
+            _id = id_perfix + file.id,
+            text_name = text.text(file.get_name());
+    %>
+    <!-- update jin 20130731 : new -->
+    <!-- 高级浏览器使用:hover选择器，ie6请使用鼠标悬停添加list-hover样式 -->
+    <!-- 选中样式list-selected -->
+    <!-- 拖入接收容器样式list-dropping -->
+    <!-- 不可选样式list-unselected -->
+    <!-- 不带复选框模式list-nocheckbox-->
+    <!-- 当前列表，用于右键和单行菜单模式list-menu-on-->
+    <li id="<%=_id%>" data-file-id data-list="file" data-record-id="<%=file.id%>" class="list-group-item">
+        <div class="item-tit">
+            <div class="label checkbox" data-file-check><i class="icon j-icon-checkbox icon-check-s"></i></div>
+            <div class="thumb"><i class="icon icon-m <%=icon_class%>-m"></i></div>
+            <div class="info">
+                <span class="tit" data-quick-drag data-name="file_name" title="<%=text_name%>"><%=text.text(can_ident ? file.get_name_no_ext() : file.get_name())%></span>
+            </div>
+        </div>
+        <div class="item-info">
+            <%= me.file_tool()%>
+            <span class="item-info-list item-info-size">
+                <span class="txt txt-size"><%= file.get_readability_size(true) %></span>
+            </span>
+            <span class="item-info-list">
+                <span class="txt txt-time"><%= create_time %></span>
+            </span>
+        </div>
+    </li>
+    <%
+    });
+    %>
+</script>
+<!--
+ 文件列表项工具栏
+ @author: hibincheng
+ @date: 2013-10-31
+-->
+<script id="file_tool" type="text/html" nowidth="yes">
+    <span class="item-info-list">
+        <span class="mod-act-list tool">
+            <a data-action="share" data-function="share" hidefocus="on" tabindex="0" class="act-list" title="分享链接" href="#"><i class="icon icon-share"></i></a>
+            <a data-action="download" data-function="download" hidefocus="on" tabindex="0" class="act-list" title="下载" href="#"><i class="icon icon-down"></i></a>
+            <!--<a data-action="move" data-function="move" hidefocus="on" tabindex="0" class="act-list" title="移动" href="#"><i class="icon icon-move"></i></a>-->
+            <a data-action="delete" data-function="delete" hidefocus="on" tabindex="0" class="act-list" title="删除" href="#"><i class="icon icon-trash"></i></a>
+            <a data-action="rename" data-function="rename" hidefocus="on" tabindex="0" class="act-list" title="重命名" href="#"><i class="icon icon-rename"></i></a>
+            <a data-action="qrcode" data-function="qrcode" hidefocus="on" tabindex="0" class="act-list" title="二维码" href="#"><i class="icon icon-code"></i></a>
+        </span>
+    </span>
+</script>
+<!--
+ 重命名文件
+ @author: hibincheng
+ @date: 2013-10-31
+-->
+<script id="rename_editor" type="text/html" nowidth="yes">
+    <span class="fileedit" style="">
+        <input class="ui-input" type="text" value="">
+    </span>
+</script>
+<!--
+加载更多提示loading
+@author: hibincheng
+@date: 2013-10-31
+-->
+<script id="load_more" type="text/html" nowith="yes">
+    <a href="javascript:void(0)" class="load-more" style="display:none;"><i class="icon-loading"></i>正在加载</a>
+</script>
+
+<!--
+拖拽时的指针
+@author bondli
+@date 13-12-27 下午3:14
+-->
+<script id="drag_cursor" type="text/html" nowith="yes">
+    <%
+    var lib = require('lib'),
+        $ = require('$'),
+
+        length = data.files.length,
+        files = data.files.slice(0, 4);
+    %>
+    <div class="icons">
+        <% $.each(files, function (i, file) { %>
+            <i class="icon icon<%= i %> filetype icon-<%= file.get_type() %>"></i>
+        <% }); %>
+    </div>
+    <span class="sum"><%= length %></span>
+
+</script>

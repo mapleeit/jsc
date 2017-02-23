@@ -1,0 +1,152 @@
+<script id="_main_bar1" type="text/html" nowith="yes">
+    <li class="edit-item" data-action="bat_cancel_share"><i class="icon icon-cancel"></i><span class="text">取消分享</span></li>
+</script>
+
+<script id="_main_bar2" type="text/html" nowith="yes">
+    <div id="_share_view_header" class="act-panel-inner cleafix">
+        <p class="tit">分享的链接</p>
+    </div>
+</script>
+
+<script id="share_list" type="text/html" nowith="yes">
+    <div id="_share_body" class="mod-list-group mod-list-group-share-links" data-label-for-aria="分享的链接内容区域">
+        <div id="_share_view_list" class="list-group-bd">
+            <ul class="list-group"></ul>
+        </div>
+        <%= this.view_empty() %>
+    </div>
+
+</script>
+
+<script id="file_item" type="text/html" nowith="yes">
+    <%
+        var lib = require('lib'),
+            common = require('common'),
+            text = lib.get('./text'),
+            Copy = common.get('./util.Copy'),
+            click_tj = common.get('./configs.click_tj'),
+            scr_reader_mode = common.get('./scr_reader_mode'),
+            date_time = lib.get('./date_time'),
+
+            read_mode = scr_reader_mode.is_enable(),
+
+            records = data;
+
+        var fixNum = function(num){
+            var n = num - 0;
+            if((n+'').length == 1){
+                return '0'+n;
+            }
+            return n;
+        };
+        var getTimeFormat = function(time){
+            time  = new Date(time * 1000); //cgi返回的是秒的单位
+            var today = date_time.today().getTime();
+            var yesterday = date_time.yesterday().getTime();
+            if(time >= today){
+                return '今天 '+fixNum(time.getHours()) + ':' + fixNum(time.getMinutes());
+            } else if(time >= yesterday){
+                return '昨天 '+fixNum(time.getHours()) + ':' + fixNum(time.getMinutes());
+            } else {
+                return time.getFullYear() + '-' + ( time.getMonth() + 1) + '-' + time.getDate() + ' ' + fixNum(time.getHours()) + ':' + fixNum(time.getMinutes());
+            }
+        };
+        var getRemainTimeFormat = (function() {
+            var one_hour = 60*60;
+            var one_day = 24*one_hour;
+            return function(time) {
+                var remain_hour = Math.ceil(time/one_hour);
+                var remain_day = Math.ceil(time/one_day);
+                if(remain_hour > 0 && remain_hour < 24) {
+                    return '<span style="color:#ec202c">剩余'+remain_hour+'小时</span>';
+                } else if(remain_day > 1) {
+                    return '剩余'+remain_day+'天';
+                } else {
+                    return '已失效';
+                }
+            }
+        })();
+        // 点击显示更多：list-more
+        $.each(records, function(i, file) {
+            var result=file.get('result');
+            var is_normal=(result==0);
+            var RET_MSG_MAP = {
+                114200: '文件已被删除',
+                114503: '非法举报',
+                20002: '链接已过期，请联系分享者重新分享。',
+                20003: '外链使用次数已用完，请联系分享者重新分享。'
+            };
+            var share_name = file.get('share_name') ? file.get('share_name') : '该文件已被删除，分享链接已失效';
+            var text_name = text.text(share_name);
+            var is_note = (file.get('share_flag') == 2);
+            %>
+        <li id="share-item-<%=file.id%>" data-record-id="<%=file.id%>" data-file-id data-list="file" class="list-group-item <%=result ? 'list-link-disabled' : ''%> <%=file.get('selected') ? 'act' : ''%>">
+            <div class="item-tit">
+                <div class="label" tabindex="0"><i class="icon icon-check-s j-icon-checkbox"></i></div>
+                <div class="thumb"><i class="icon icon-m icon-shared-link-m"></i></div>
+                <div class="info">
+                    <span data-name="file_name" class="tit" title="<%=text_name%>"><%=text_name%></span>
+                    <span class="tit tit-sub">
+                    <%if (!result) {%>链接 <a target="_blank" href="<%=file.get('raw_url')%>" class="txt txt-link" tabindex="-1"><%=file.get('raw_url')%></a>
+                    <%} else {%><%=RET_MSG_MAP[result] || '链接信息获取失败'%><%}%>
+                    </span>
+                </div>
+            </div>
+            <div class="item-info">
+                <span class="item-info-list">
+                    <span class="mod-act-list">
+                        <% if(is_normal){ %>
+                            <a data-action="view_share" tabindex="0" class="act-list" title="分享链接" aria-hidden="true" aria-label="分享链接" href="#"><i class="icon icon-share"></i></a>
+                            <% if(Copy.can_copy()) { %>
+                                <a data-clipboard-target data-action="copy_share" tabindex="-1" class="act-list" title="复制" aria-hidden="true" aria-label="复制" href="#"><i class="icon icon-copy"></i></a>
+                            <% } %>
+                            <% if(!is_note) { %>
+                                <% if(!file.get('share_pwd')) {%>
+                                    <a data-action="create_pwd" class="act-list" tabindex="-1" title="公开链接" aria-hidden="true" aria-label="公开链接" href="#"><i class="icon icon-pw"></i></a>
+                                <%} else { %>
+                                    <a data-action="manage_pwd" class="act-list has-pw" tabindex="-1" title="私密链接" aria-hidden="true" aria-label="私密链接" href="#"><i class="icon icon-pw"></i></a>
+                                <% } %>
+                            <% } %>
+                        <% } %>
+                        <a data-action="cancel_share" class="act-list" tabindex="-1" title="取消分享" aria-hidden="true" aria-label="取消分享" href="#"><i class="icon icon-share-cancel"></i></a>
+                    </span>
+                </span>
+                <span class="item-info-list">
+                    <span class="mod-status-list">
+                        <% if (!result){ %>
+                            <span class="txt txt-status" tabindex="0"><%=(is_normal ? file.get('share_pwd') ?'私密' : '公开':'已失效')%></span>
+                        <% } else { %>
+                            <span class="txt txt-status" tabindex="0">已失效</span>
+                        <% } %>
+                        <span class="txt txt-status" tabindex="0">浏览<%=file.get('view_cnt')>=0?file.get('view_cnt'):'-'%>次</span>
+                        <span class="txt txt-status" tabindex="0">下载<%=file.get('down_cnt')>=0?file.get('down_cnt'):'-'%>次</span>
+                    </span>
+                </span>
+                <span class="item-info-list">
+                    <span class="txt txt-time" tabindex="0"><%=getTimeFormat(file.get('create_time'))%> 分享</span>
+                </span>
+                <span class="item-info-list">
+                    <span class="txt txt-time" tabindex="0"><%=getRemainTimeFormat(file.get('remain_time'))%></span>
+                </span>
+            </div>
+        </li>
+    <%
+    });
+    %>
+
+</script>
+
+<script id="view_empty" type="text/html" nowidth="yes">
+    <div id="_share_view_empty" class="g-empty share-empty" aria-label="分享的链接没有内容" tabindex="0">
+        <div class="empty-box">
+            <div class="status-inner">
+                <i class="icon icon-noshare"></i>
+                <p class="txt">快把你的文件分享给好友吧！</p>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script id="load_more" type="text/html" nowith="yes">
+    <a href="javascript:void(0)" class="load-more" style="display:none;"><i class="icon-loading"></i>正在加载</a>
+</script>

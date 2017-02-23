@@ -1,0 +1,12 @@
+<view class="audio-wrapper" style="display:{{audioDisplay?'':'none'}}">
+    <view class="txt">
+    	<view class="now">正在播放</view>
+    	<text class="name">{{audioName||''}}</text>
+    </view>
+    <view class="btn" bindtap="audioStop">
+		<image class="img" background-size="cover" src="../../img/audio-stop@2x.png"></image>
+	</view>
+    <view class="btn" bindtap="audioChangeStatus">
+		<image class="img" background-size="cover" src="../../img/audio-{{audioStatus?'pause':'play'}}@2x.png"></image>
+	</view>
+</view>

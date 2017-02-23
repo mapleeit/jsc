@@ -1,0 +1,26 @@
+<script id="article" type="text/html" nowith="yes">
+    <%
+        var htmlEscape = require('weiyun/util/htmlEscape'),
+            dateformat = require('weiyun/util/dateformat'),
+            text = require('weiyun/util/text'),
+            title = htmlEscape(data.title || ''),
+            time = dateformat(new Date(data.time), 'yyyy-MM-dd HH:mm:ss'),
+            content = data.content;
+
+        title = text.cut(title, 40);
+    %>
+    <div id="container">
+        <section class="wy-notes-wrapper">
+            <header class="note-title-wrapper">
+                <h2 class="note-title"><%=title%></h2>
+                <time class="note-time"><%=time%></time>
+            </header>
+            <article data-id="content" class="note-body">
+                <div class="note-content"><%=content%></div>
+            </article>
+        </section>
+        <div class="wy-file-controller g-bottom-bar">
+            <button data-action="save_all" class="btn" role="button">保存到微云</button>
+        </div>
+    </div>
+</script>

@@ -1,0 +1,25 @@
+
+<script id="download_dialog" type="text/html" nowith="yes">
+<div id="_download_dialog" class="wy-pop-wrapper">
+    <div class="wy-mask"></div>
+
+    <!-- 下载客户端 -->
+    <div class="dw-app">
+        <!-- [ATTENTION!!] 关闭按钮 -->
+        <div id="close_dialog" class="close-wrapper">
+            <i class="icon-close"></i>
+        </div>
+        <!-- banner -->
+        <b class="banner"><i class="bgimg"></i></b>
+        <!-- text -->
+        <div class="txt-wrapper">
+            <p data-id="title" class="hl"><%=data.text%></p>
+            <p class="exp">请使用微云客户端传输</p>
+            <div class="btn-group">
+                <a id="download_client"  class="btn btn-active" href="javascript:void(0)" onclick="javascript:pvClickSend('weiyun.download.pc.package');">立即下载</a>
+                <a id="open_client" class="btn" href="javascript:void(0)" onclick="javascript:pvClickSend('weiyun.launch.pc.download');">打开客户端</a>
+            </div>
+        </div>
+    </div>
+</div>
+</script>

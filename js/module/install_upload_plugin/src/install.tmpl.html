@@ -1,0 +1,178 @@
+/**
+* Created with JetBrains WebStorm.
+* User: yuyanghe
+* Date: 13-7-26
+* Time: 下午2:36
+* To change this template use File | Settings | File Templates.
+*/
+
+//控件安装浮窗入口
+<script id="install_start" type="text/html" nowith="yes">
+    <div data-no-selection data-id="plugin_install_widget" class="full-pop full-pop-medium" style="z-index:10003">
+        <h3 class="full-pop-header"><div class="inner">安装控件提示</div></h3>
+        <div class="full-pop-content">
+            <div class="mod-plug">
+
+                <div class="header">
+                    <i class="ico"></i>
+                    <h3 class="title" id="intall_start_title">您还未安装微云极速上传控件</h3>
+                </div>
+                <div class="content">
+                    <h4>安装后您可以使用以下功能：</h4>
+                    <ul>
+                        <li>断点续传</li>
+                        <li>大文件秒传</li>
+                    </ul>
+                </div>
+                <div class="img"></div>
+
+            </div>
+        </div>
+        <div class="full-pop-btn clearfix">
+            <a class="g-btn g-btn-blue" href="http://www.weiyun.com/plugin_install.html" id="install_ui_start" target="_blank"><span class="btn-inner">安装控件</span></a>
+        </div>
+        <a data-id="close" href="#" class="full-pop-close" title="关闭">×</a>
+    </div>
+</script>
+
+
+//安装过程界面
+<script id="install_process" type="text/html" nowith="yes">
+    <div data-id="plugin_install_widget" class="full-pop full-pop-medium  plugin-box-uncheck"  style="z-index:10003" data-no-selection="">
+        <h3 class="full-pop-header"><div class="inner">安装控件提示</div></h3>
+        <div class="full-pop-content">
+            <div class="mod-plug mod-plug-start">
+
+                <div class="header">
+                    <i class="ico"></i>
+                    <h3 class="title">请在新页面完成控件安装。</h3>
+                </div>
+                <div class="content">
+                    <p></p>
+                </div>
+
+            </div>
+        </div>
+        <div class="full-pop-btn clearfix">
+            <a href="#" class="g-btn g-btn-gray" id="install_ui_process_ok"><span class="btn-inner">已安装成功</span></a>
+            <a href="http://www.weiyun.com/plugin_install.html" target="_blank" class="g-btn g-btn-blue"  id="install_ui_process_restart">
+                <span class="btn-inner">重新安装</span></a>
+        </div>
+        <a data-id="close" href="#" class="full-pop-close" title="关闭">×</a>
+    </div>
+</script>
+
+//检测是否安装成功的界面
+<script id="install_check_success" type="text/html" nowith="yes">
+    <div data-id="plugin_install_widget" class="full-pop full-pop-medium plugin-box-checking"  style="z-index:10003" data-no-selection="">
+        <h3 class="full-pop-header"><div class="inner">安装控件提示</div></h3>
+        <div class="full-pop-content">
+            <div class="mod-plug mod-plug-start mod-plug-loading">
+                <div class="header">
+                    <i class="ico"></i>
+                    <h3 class="title">正在检测控件是否安装成功．．．</h3>
+                </div>
+            </div>
+        </div>
+        <div class="full-pop-btn">
+            <a class="g-btn g-btn-gray g-btn-visibilityhide" href="#"><span class="btn-inner">确定</span></a>
+        </div>
+        <a data-id="close" href="#" class="full-pop-close" title="关闭">×</a>
+    </div>
+</script>
+
+//安装失败界面
+<script id="install_fail" type="text/html" nowith="yes">
+    <div  data-id="plugin_install_widget" class="full-pop full-pop-medium plugin-box-checked"  style="z-index:10003" data-no-selection="">
+        <h3 class="full-pop-header"><div class="inner">安装控件提示</div></h3>
+        <div class="full-pop-content">
+            <div class="mod-plug mod-plug-start mod-plug-err">
+                <div class="header">
+                    <i class="ico"></i>
+                    <h3 class="title">系统检测到您的控件尚未安装成功</h3>
+                </div>
+                <div class="content">
+                    <p>请重新安装控件，或重启浏览器。</p>
+                </div>
+
+            </div>
+        </div>
+        <div class="full-pop-btn clearfix">
+            <a href="#" class="g-btn g-btn-blue" id="install_fail_download"><span class="btn-inner">重新安装</span></a>
+        </div>
+        <a data-id="close" href="#" class="full-pop-close" title="关闭">×</a>
+    </div>
+</script>
+
+
+//安装成功界面
+<script id="install_succ" type="text/html" nowith="yes">
+    <div data-id="plugin_install_widget" class="full-pop full-pop-medium plugin-box-checked"  style="z-index:10003" data-no-selection="">
+        <h3 class="full-pop-header"><div class="inner">安装控件提示</div></h3>
+        <div class="full-pop-content">
+            <div class="mod-plug mod-plug-start mod-plug-success">
+
+                <div class="header">
+                    <i class="ico"></i>
+                    <h3 class="title">微云极速上传控件安装成功</h3>
+                </div>
+                <div class="content">
+                    <p>请刷新或重启浏览器，以享受极速上传。</p>
+                </div>
+
+            </div>
+        </div>
+        <div class="full-pop-btn clearfix">
+            <a href="#" class="g-btn g-btn-blue" id="install_success_ok"><span class="btn-inner">确定</span></a>
+        </div>
+        <a data-id="close" href="#" class="full-pop-close" title="关闭">×</a>
+    </div>
+</script>
+
+//tip安装界面
+<script id="install_tips" type="text/html" nowith="yes">
+    <div data-id="plugin_install_widget" style="left: 70px;top: 110px;z-index: 1003;position: absolute;">
+        <div class="g-bubble">
+            <div class="plug-tip">
+                <h3>安装微云极速上传控件！</h3>
+                <p>支持文件秒传以及断点续传</p>
+                <div class="btn">
+                    <a class="g-btn g-btn-blue" href="http://www.weiyun.com/plugin_install.html?from=ad" id="tips_install" target="_blank"><span class="btn-inner">安装控件</span></a>
+                </div>
+                <i class="img"></i>
+                <a id="tips_close" class="close" href="#">×</a>
+            </div>
+        </div>
+        <span class="g-arrow g-arrow-top" style="margin-left:0;left:63px;"><span class="sub"></span></span>
+    </div>
+</script>
+
+//检测安装成功界面
+<script id="install_succ_check" type="text/html" nowith="yes">
+    <div data-id="plugin_install_widget" class="full-pop full-pop-medium plugin-box-checked"  style="z-index:10003" data-no-selection="">
+        <h3 class="full-pop-header"><div class="inner">提示</div></h3>
+        <div class="full-pop-content">
+            <div class="mod-plug mod-plug-start">
+                <div class="header">
+                    <i class="ico"></i>
+                    <h3 class="title">最新版本的控件已成功安装</h3>
+                </div>
+                <div class="content">
+                    <p>请刷新本页面以启用增强的上传功能。</p>
+                </div>
+
+            </div>
+        </div>
+        <div class="full-pop-btn clearfix">
+            <a href="#" class="g-btn g-btn-blue" id="install_succ_ok"><span class="btn-inner">确定</span></a>
+        </div>
+
+        <a data-id="close" href="#" class="full-pop-close" title="关闭">×</a>
+    </div>
+</script>
+
+
+
+
+
+

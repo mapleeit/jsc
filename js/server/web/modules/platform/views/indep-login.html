@@ -1,0 +1,182 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <title>正在连接...</title>
+    <meta name="Keywords" content="QQ, 腾讯,微云, 分享, 网盘, 网络硬盘, U盘, 云存储, 传输, 存储, 同步, 备份, 拍照, 上传, 下载, 中转, 文件, 照片, 相册, 离线, 传文件, wifi, cloud" />
+    <meta name="Description" content="微云是腾讯公司为用户精心打造的一项智能云服务, 您可以通过微云方便地在手机和电脑之间,同步文件、推送照片和传输数据。" />
+    <link rel="stylesheet" href="http://imgcache.qq.com/vipstyle/nr/box/web/css/webbase.css" media="screen" />
+    <link rel="stylesheet" href="http://imgcache.qq.com/vipstyle/nr/box/web/css/to-signin.css?v20130704" media="screen" />
+    <style type="text/css">
+        .to-signin-box.error {height: 130px; margin:70px auto;}
+        .to-signin-box.error .to-signin-head h3 {line-height: 30px;}
+        .to-signin-box.error .to-signin-head h3 .warn{ display: inline-block; _display:inline; _zoom:1; width:30px; height:30px; margin-right:5px; vertical-align: -5px; background: url(http://imgcache.qq.com/vipstyle/nr/box/img/tips-icons.png) no-repeat -43px 0; }
+    </style>
+    <script>(function(m, o, d, u, l, a, r) {if(m[d]) return;function f(n, t) { return function() { r.push(n, arguments); return t } }m[d] = a = { args: (r = []), config: f(0, a), use: f(1, a) };m.define = f(2);u = o.createElement('script');u.id = d + 'node';u.src = 'http://imgcache.qq.com/club/qqdisk/web/js/lib/sea.js';l = o.getElementsByTagName('head')[0];a = o.getElementsByTagName('base')[0];a ? l.insertBefore(u, a) : l.appendChild(u);})(window, document, 'seajs');</script>
+    <script type="text/javascript">
+        seajs.config({
+            charset: 'utf-8',
+            debug: 0,
+            base: 'http://imgcache.qq.com/club/qqdisk/web/js',
+            alias: {
+                lib: 'lib/index',
+                common: 'common/index',
+                user_log: 'indep_login'
+            }
+        });
+        seajs.use(['lib', 'common', 'indep_login.js?v20130705'], function (lib, common, indep_login) {
+            common.get('./init.init');
+
+            var $             = lib.get('./jquery'),
+                url           = lib.get('./url_parser').get_cur_url(),
+                routers       = common.get('./routers'),
+                cookieIsLogin = indep_login.is_logged_in();
+            /**by trump 修复手工清除cookie信息后，获取的cookie值为 'null' 字符串的问题**/
+            if ( cookieIsLogin && 'null' !== cookieIsLogin ) {
+                $(function () {
+                    var param = url.get_param('param');
+
+                    if (param == '30207') {
+
+                        // 如果客户端尝试调用文件上传，就一定要跳转到appbox网盘页
+                        var from = routers.make_url('/appbox/disk/index.html', {
+                            param: param
+                        });
+
+                        indep_login.set_from(from);
+
+                        /**
+                         * 这里延迟200毫秒再处理，以确保客户端调用WYCLIENT_UploadFiles时能够成功
+                         */
+                        setTimeout(function () {
+                            indep_login.check();
+                        }, 200);
+                    }
+                    else {
+                        indep_login.check();
+                    }
+                });
+            } else {
+                /**by trump 修复 相册登录过期后 F5刷新跳转到老登录入口的问题**/
+                var _tmpUrl       = window.location.pathname,
+                    isNewEntrance  = 0 !== _tmpUrl.indexOf('/qplus/');//appbox/web都走新登录入口
+                if(isNewEntrance){
+                    window.location.href = 'http://www.weiyun.com/disk/index.html';
+                } else {
+                    indep_login.to_login();
+                }
+            }
+        });
+
+        /**
+         * 客户端调用文件上传
+         * @param fileNum
+         * @param filePath
+         * @param source
+         * @constructor
+         */
+        var WYCLIENT_UploadFiles = (function () {
+            var COOKIE_NAME = 'WY_AIO_to_upload';
+
+            /**
+             * 追加文件
+             * @param fileNum
+             * @param filePath
+             * @param source
+             */
+            function addFile(fileNum, filePath, source) {
+                if (!filePath)
+                    return;
+
+                getFileList(function (list) {
+                    var added = false;
+
+                    list = list || [];
+
+                    var filePaths = filePath.split('*'); // 多个文件用星号分隔
+                    for (var i = 0, l = filePaths.length; i < l; i++) {
+                        var path = filePaths[i],
+                                exists = false;
+                        // 如果已存在于队列中，则不添加
+                        for (var j = 0, k = list.length; j < k; j++) {
+                            if (path == list[j].filePath) {
+                                exists = true;
+                                break;
+                            }
+                        }
+                        // 添加到队列中
+                        if (!exists) {
+                            list.push({
+                                filePath: path,
+                                //fileNum:fileNum,
+                                source: source
+                            });
+                            added = true;
+                        }
+                    }
+
+                    if (added) {
+                        saveFileList(list);
+                    }
+                })
+            }
+
+            function getFileList(callback) {
+                try {
+                    seajs.use('lib', function (lib) {
+                        var
+                                cookie = lib.get('./cookie'),
+                                JSON = lib.get('./json'),
+                                list = cookie.get(COOKIE_NAME);
+                        list = (list ? JSON.parse(decodeURIComponent(list)) : null) || [];
+
+                        callback(list);
+                    });
+                } catch (e) {
+                    callback([]);
+                }
+            }
+
+            /**
+             * 保存上传队列到cookie
+             * @param list
+             */
+            function saveFileList(list) {
+                seajs.use(['lib', 'common'], function (lib, common) {
+                    var
+                            cookie = lib.get('./cookie'),
+                            JSON = lib.get('./json'),
+                            constants = common.get('./constants'),
+                            list_str = JSON.stringify(list);
+
+                    cookie.set(COOKIE_NAME, list_str, {
+                        domain: constants.MAIN_DOMAIN,
+                        path: '/',
+                        expires: cookie.minutes(10)
+                    });
+                });
+            }
+
+            return addFile;
+        })();
+
+        var WYCLIENT_EnterOfflineDir = function (fileId, fileName) {
+            // do nothing...
+        };
+    </script>
+</head>
+<body class="app-web"></body>
+
+<script type="text/javascript">
+    seajs.use('http://img.weiyun.com/club/weiyun/js/publics/tcss/tcss.ping.js', function() {
+        if (typeof pgvMain == 'function') {
+            pgvMain("", {
+                tagParamName: 'WYTAG',
+                virtualURL: 'indep-login.html',
+                virtualDomain: "www.weiyun.com"
+            });
+        }
+    });
+</script>
+</html>

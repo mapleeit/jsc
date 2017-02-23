@@ -1,0 +1,151 @@
+<script id="body" type="text/html" nowith="yes">
+    <%
+        var util = data.util || {};
+        var viewUserList = data.view_user_list || [];
+        var viewCount = data.view_count || 0;
+        var downloadCount = data.download_count || 0;
+        var viewFinishFlag = data.finish_flag || false;
+        var params = data.params || {};
+        var itemInfo = data.weiyun_share_list_item || {};
+
+        util.formatSource = function (source) {
+            source = JSON.parse(source || "{}").browser;
+            var map = {
+                'weixin': '来自微信',
+                'qq': '来自QQ'
+            };
+
+            return map[source] || '来自Web';
+        };
+
+        // 把fileType方法包一层，adapter
+        util.customFileType = function(ext) {
+            var result;
+            var fileType = function(name) {
+                return util.fileType(name, 'v2');
+            };
+
+            if (ext === 'package' || !ext) {
+                result = 'shared-link';
+            } else {
+                result = fileType(ext);
+            }
+            return result;
+        };
+
+        for (var j = 0, item; j < viewUserList.length; j++) {
+            item = viewUserList[j]
+
+            item.__nickname = util.htmlEscape(item.nickname) || '未知用户';
+            item.__from_source = util.formatSource(item.from_source);
+        }
+    %>
+    <%=require('weiyun/util/inline').css(['app-share-link-list'], true)%>
+    <div class="app-share-link-detail">
+        <div class="main bBor j-main-div">
+            <div class="info">
+                <i class="icon icon-l icon-<%=util.customFileType(itemInfo.share_icon)%>-l"></i>
+                <h3 class="file-name"><%=util.htmlEscape(decodeURIComponent(itemInfo.share_name))%></h3>
+                <span class="file-info">
+                    <span class="file-date"><%=util.dateformat(parseInt(itemInfo.create_time), 'yyyy-mm-dd HH:MM')%></span>
+                </span>
+            </div>
+            <div class="other-info">
+                <div class="item rBor">
+                    <i class="icon icon-password"></i>
+                    <span>密码：
+                        <span><%=util.htmlEscape(itemInfo.share_pwd) || '无'%></span>
+                    </span>
+                </div>
+                <div class="item">
+                    <i class="icon icon-term"></i>
+                    <span>有效期：
+                        <span><%if (parseInt(itemInfo.remain_time)) {%>剩<%=Math.round(parseInt(itemInfo.remain_time) / 3600 / 24)%>天<% } else {%>已失效<%}%></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="link-detail j-link-detail">
+            <div class="tab-hd bBor">
+                <ul class="wrap">
+                    <!-- active状态加.act -->
+                    <li class="item act j-view-btn">
+                        <span>浏览<%=viewCount || 0%>次</span>
+                    </li>
+                    <li class="item j-download-btn">
+                        <span>下载<%=downloadCount || 0%>次</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="tab-bd">
+                <!-- 浏览 s -->
+                <div class="wrap">
+                    <ul class="share-guest-wrap j-view-list">
+                        <% for (var i = 0, len = viewUserList.length; i < len; i++) { %>
+                        <% var item = viewUserList[i]; %>
+                        <li data-user-uin="<%= item.uin %>" class="guest-item">
+                            <div class="avatar" style="background-image:url(<%=item.head_logo_url%>)"></div>
+                            <div class="guest bBor">
+                                <h3 class="name"><%=item.__nickname%></h3>
+                                <span class="info">
+                                    <span class="from"><%=item.__from_source%></span>
+                                </span>
+                            </div>
+                            <div class="right">
+                                <span class="date"><%=util.dateformat(parseInt(item.op_time), 'mm/dd HH:MM')%></span>
+                            </div>
+                        </li>
+                        <% } %>
+                    </ul>
+                </div>
+                <!-- 浏览 e -->
+                <!-- 下载 s -->
+                <div class="wrap">
+                    <ul class="share-guest-wrap j-download-list">
+                        
+                    </ul>
+                </div>
+                <!-- 下载 e -->
+                <!-- 无记录 s -->
+                <div class="blank j-blank-div" <% if (viewUserList.length) { %>style="display:none;"<% } %>>
+                    <p class="j-blank-text">暂无浏览记录</p>
+                </div>
+                <!-- 无记录 e -->
+            </div>
+        </div>
+
+        <div class="wy-file-loading j-loading" style="display:none;">
+            <i class="icon-load"></i>
+            <span>加载中...</span>
+        </div>
+    </div>
+    <script type="text/javascript" src="//img.weiyun.com/club//weiyun/js/publics/zepto/zepto-1.1.6.min.js?max_age=604800"></script>
+    <%=require('weiyun/util/inline').js(['seajs', 'configs_mobile'])%>
+    <script type="text/javascript">
+        seajs.use(['$', 'lib','common', 'share_trace'], function($, lib, common, share_trace) {
+            var trace_detail = share_trace.get('./trace_detail');
+            trace_detail.init({
+                params: <%=JSON.stringify(params)%>,
+                viewUserList: <%=JSON.stringify(viewUserList)%>,
+                viewFinishFlag: <%=viewFinishFlag%>,
+                viewCount: <%=viewCount%>,
+                downloadCount: <%=downloadCount%>,
+                itemInfo: <%=JSON.stringify(itemInfo)%>
+            });
+        });
+    </script>
+
+    <script type='text/javascript' src='//img.weiyun.com/club/weiyun/js/publics/tcss/tcss.ping.js'></script>
+    <script>
+        (function() {
+            if (typeof pgvMain == 'function') {
+                pgvMain("", {
+                    tagParamName: 'WYTAG',
+                    virtualURL: '/h5/trace_detail.html',
+                    virtualDomain: "www.weiyun.com"
+                });
+            }
+        })();
+    </script>
+</script>

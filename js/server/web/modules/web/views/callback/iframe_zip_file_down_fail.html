@@ -1,0 +1,20 @@
+<!--压缩包中的文件下载失败 james-->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript">
+        // iframe 下载的回调
+        document.domain = 'weiyun.com';
+        parent.seajs.use(['lib', 'compress_file_preview'], function (lib, cfp) {
+            var url_parser = lib.get('./url_parser'),
+                    cur_url = url_parser.parse(location.href),
+                    ret = parseInt(cur_url.get_param('ret')),
+                    msg = cur_url.get_param('msg');
+
+            var view = cfp.get('./view');
+            view.error(ret);
+        });
+  </script>
+</head>
+</html>

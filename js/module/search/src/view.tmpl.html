@@ -1,0 +1,98 @@
+<!--
+ 头部
+ @author: cluezhang
+ @date: 2013-09-16
+-->
+<script id="header" type="text/html" nowith="yes">
+    <%
+        var text = require('lib').get('./text');
+    %>
+    <div class="lay-search-head" tabindex="0"><div class="inner"><div class="wrap">
+        <div class="infor1">搜索“<%=text.text(data.keyword)%>”:</div>
+        <div class="infor2"><%= data.searching ? '正在搜索...' : (data.count ? ('共'+data.count+'个') : '无结果') %></div>
+    </div></div></div>
+</script>
+<!--
+ 列表容器模板
+ @author: cluezhang
+ @date: 2013-09-16
+-->
+<script id="list" type="text/html" nowith="yes">
+    <div id="_search_body" class="disk-view ui-view ui-listview" data-label-for-aria="搜索结果内容区域">
+        <div data-id="_search_view_list"></div>
+    </div>
+</script>
+<!--
+ 单项模板
+ @author: cluezhang
+ @date: 2013-09-16
+-->
+<script id="items" type="text/html" nowith="yes">
+    <%
+        var records = data.records,
+            highlight = data.highlight,
+            time_str_len = 'yyyy-MM-dd hh:mm'.length,
+            downloader = require('downloader').get('./downloader'),
+            common = require('common'),
+            click_tj = common.get('./configs.click_tj'),
+            constants = common.get('./constants'),
+            lib = require('lib'),
+            text = lib.get('./text'),
+            default_image = constants.RESOURCE_BASE + '/img/img-32.png',
+            i;
+    %>
+    <% 
+    $.each(records, function(index, file){
+        var is_dir = file.is_dir(),
+            is_broken = file.is_broken_file(),
+            is_image = file.is_image(),
+            is_removable = file.is_removable(),
+            is_movable = file.is_movable(),
+            is_downable = file.is_downable(),
+            is_whole_click = true,   /*click_enter_mode || p_dir.is_vir_dir() || file.is_vir_dir(),*/
+            create_time = (file.get_modify_time() || file.get_create_time()).substr(0, time_str_len),
+            name = file.get_name(),
+
+            icon_cls = is_broken ? 'icon-filebroken' : (file.get_icon() || (is_image ? 'icon-image' : ('icon-' + (file.get_type() || 'file'))));
+    %>
+        <div data-list="<%=is_dir ? 'dir' : 'file'%>" class="list list-nocheckbox clear <%= file.get('menu_active') ? 'context-menu' : '' %> <%= file.get('menu_hover') ? 'list-menu-on' : '' %>" <%=click_tj.make_tj_str('SEARCH_LIST_CLICK')%>>
+            <label class="checkbox"></label>
+            <span class="img">
+                <% if(is_image){ %>
+                    <i data-thumb class="filetype icon-image"></i>
+                <% }else{ %>
+                    <i class="filetype <%=icon_cls%>"></i>
+                <% } %>
+            </span>
+            <span class="name ellipsis"><p class="text">
+                <em tabindex="0" hidefocus="on"><s style="display:none;">文件</s><%=highlight(name)%></em>
+            </p></span>
+            <span class="tool">
+                <a class="link-openfold" title="打开文件所在目录" href="javascript:void(0);" data-action="open_folder" <%=click_tj.make_tj_str('SEARCH_LIST_OPEN_FOLDER')%>><i class="ico-openfold"></i></a>
+                <a class="link-share share_menu" title="分享" href="javascript:void(0);" data-action="share" <%=click_tj.make_tj_str('SEARCH_LIST_SHARE')%>><i class="ico-share" ></i></a>
+                <!--<a class="link-del" title="删除" href="javascript:void(0);" data-action="delete" <%=click_tj.make_tj_str('SEARCH_LIST_DELETE')%>><i class="ico-del"></i></a>-->
+                <a class="link-download" title="下载" href="javascript:void(0);" data-action="download" <%=click_tj.make_tj_str('SEARCH_LIST_DOWNLOAD')%>><i class="ico-download"></i></a>
+            </span>
+            <span class="size"><%= file.get_readability_size() %></span>
+            <span class="time"><%=(file.get_modify_time() || file.get_create_time()).slice(0, time_str_len)%></span>
+            <%if(!is_dir){%>
+            <span class="dimensional" data-action="enter">
+                <a data-function="qr_code" class="link-dimensional" title="二维码" href="javascript:void(0);" data-action="qrcode"><i class="ico-dimensional"></i></a>
+            </span>
+            <%}%>
+        </div>
+    <% }); %>
+</script>
+<!--
+ 空
+ @author: cluezhang
+ @date: 2013-09-16
+-->
+<script id="empty" type="text/html" nowidth="yes">
+    <div class="g-empty sort-search-empty">
+        <div class="empty-box" tabindex="0">
+            <div class="ico"></div>
+            <p class="info">抱歉，未找到匹配文件</p>
+        </div>
+    </div>
+</script>

@@ -1,0 +1,97 @@
+<script id="act_personal" type="text/html" nowidth="yes">
+    <div id="personal" class="app-checkin-personal" style="display: none">
+        <div class="information-list">
+            <div class="item tBor">
+                <div class="text"><span>收货地址</span><i class="icon icon-personal-more"></i></div>
+            </div>
+            <div class="item tBor bBor">
+                <div class="text"><span>兑换记录</span><i class="icon icon-personal-more"></i></div>
+            </div>
+            <div class="item rule tBor bBor">
+                <div class="text"><span>兑换规则</span><i class="icon icon-personal-more"></i></div>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<script id="order" type="text/html" nowith="yes">
+    <div id="check_order" class="app-checkin-order" style="display: none">
+        <%
+            var good = data.good;
+            var addr = data.addr || {};
+            addr.city = addr.city==='0'? '' : addr.city;
+            var has_addr = (addr.name && addr.name != '0')? 'none' : '';
+            var head_url = '//qzonestyle.gtimg.cn/qz-proj/wy-h5/img/gift-' + good.get_prizeid() + '.jpg';
+            var cities = {'北京':1,'上海':1,'天津':1,'重庆':1};
+            var province = (addr.province && addr.province !== '0')? (cities[addr.province]? '' : addr.province + '省') : '';
+        %>
+        <ul class="shop-list tBor">
+            <li class="item bBor">
+                <div class="pic trblBor"><img src="<%=head_url%>"></div>
+                <div class="main">
+                    <p class="text"><%=good.get_name()%></p>
+                    <p class="integral-num"><span class="num"><%=good.get_score()%></span><span>积分</span></p>
+                </div>
+                <div class="right"><p class="text">X1</p></div>
+            </li>
+        </ul>
+        <div class="address-wrap tBor bBor" style="<%=(addr.name && addr.name !== '0')? '' : 'display: none'%>">
+            <div class="personal">
+                <div class="name"><span>收件人：<%=addr.name%></span></div>
+                <div class="num"><span><%=addr.phone%></span></div>
+            </div>
+            <div class="address"><span>配送地址：<%=province + addr.city + addr.addr%></span></div>
+            <div class="way"><span>配送方式：快递（暂不支持修改）</span></div>
+        </div>
+        <div id="confirm_order" data-id="<%=good.get_id()%>" class="confirm-wrap tBor" style="<%=(addr.name && addr.name !== '0')? '' : 'display: none'%>"><div class="btn"><span>提交订单</span></div></div>
+        <div class="information-list" style="<%=(addr.name && addr.name !== '0')? 'display: none' : '' %>">
+            <div class="item tBor bBor">
+                <div class="text"><span>您还没有添加地址</span><i class="icon icon-personal-more"></i></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="order_result" class="app-checkin-order-result" style="display: none">
+        <!-- 兑换成功添加类名success，失败fail-->
+        <div class="result-wrap success">
+            <div class="result"></div>
+            <p class="tip">兑换成功，我们会尽快发货</p>
+            <p class="remain">积分余额：<span id="remain_score">85</span></p>
+            <div data-action="retry" class="again-btn"><span>重新兑换</span></div>
+        </div>
+        <ul class="shop-list tBor">
+            <li class="item bBor">
+                <div class="pic trblBor"><img src="<%=head_url%>"></div>
+                <div class="main">
+                    <p class="text"><%=good.get_name()%></p>
+                    <p class="integral-num"><span class="num"><%=good.get_score()%></span><span>积分</span></p>
+                </div>
+                <div class="right"><p class="text">X1</p></div>
+            </li>
+        </ul>
+        <div class="address-wrap tBor bBor">
+            <div class="personal">
+                <div class="name"><span>收件人：<%=addr.name%></span></div>
+                <div class="num"><span><%=addr.phone%></span></div>
+            </div>
+            <div class="address"><span>配送地址：<%=province + addr.city + addr.addr%></span></div>
+            <div class="way"><span>配送方式：快递（暂不支持修改）</span></div>
+        </div>
+    </div>
+</script>
+
+
+<!--
+H5顶部广告
+-->
+<script id="ad_h5" type="text/html" nowidth="yes">
+    <%
+        var background_url,
+            list = data.list;
+        for(var i=0; i<list.length; i++) {
+            background_url = list[i].extdata['img'];
+    %>
+        <li data-id="<%=i%>" class="item normal" role="button" style="background-image: url(<%=background_url.replace(/^http:|^https:/, '')%>);"></li>
+    <% } %>
+</script>

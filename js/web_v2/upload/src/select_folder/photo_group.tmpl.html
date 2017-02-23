@@ -1,0 +1,51 @@
+<!--
+ * 图片分组
+ * @author trump
+ * @date 13-11-04
+-->
+<script id="photo_group" type="text/html" nowith="yes">
+    <div class="check-group" style="display:none;cursor: pointer;width:100px;"><i data-id="upload_group_check" class="checkbox"></i>指定分组
+    </div>
+    <%=require('./tmpl')._upload_dropdown_group()%>
+</script>
+<!--
+* 图片分组
+* @author trump
+* @date 13-11-04
+-->
+<script id="photo_group_items" type="text/html" nowith="yes">
+    <%
+    var array = data.array,
+        ret = ['<ul>'];
+    if(array && array.length){
+        for(var i = 0,j = array.length; i< j ;i++){
+            ret.push('<li><a href="javascript:;" data-group-id="'+array[i].id+'">'+array[i].name+'</a></li>');
+        }
+    } else {
+        ret.push('<li><a href="javascript:;" data-group-id="1">没有分组数据</a></li>');
+    }
+    ret.push('</ul>');
+    %>
+    <%=ret.join('')%>
+</script>
+
+<!--
+创建 : g-btn-blue-h30-disabled
+default_text: 新建分组
+-->
+<script id="_upload_dropdown_group" type="text/html" nowith="yes">
+    <%
+    var default_text = '新建分组';
+    %>
+    <div id="upload_dropdown_group" class="dropdown-group" style="display:none;width:220px;">
+        <a class="g-btn g-btn-gray" href="javascript:void(0);" id="upload_select_group"><span class="btn-inner">未分组<i></i></span></a>
+        <a id="upload_new_group_btn" href="javascript:void(0);" style="display:none;" class="create-group">+ 创建新分组</a>
+        <div id="upload_new_group_wrap" class="input-new-group" style="display:none;">
+            <input id="upload_new_group_input" type="text" value="<%=default_text%>">
+            <a class="g-btn g-btn-blue" href="javascript:void(0)">
+                <span class="btn-inner disabled" id="upload_new_btn">创建</span>
+            </a>
+        </div>
+        <div class="dropdown-box" id="upload_group_panel" style="display:none;"></div>
+    </div>
+</script>

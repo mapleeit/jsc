@@ -1,0 +1,2 @@
+<wx-button bindtap="getNetworkType" type="primary">getNetworkType</wx-button>
+<wx-button bindtap="getSystemInfo" type="primary">getSystemInfo</wx-button>

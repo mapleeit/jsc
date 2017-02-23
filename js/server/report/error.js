@@ -1,0 +1,1 @@
+module.exports = plug('util/auto-report/httpPost');

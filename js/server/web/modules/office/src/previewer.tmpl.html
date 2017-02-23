@@ -1,0 +1,65 @@
+<script id="previewer" type="text/html" nowith="yes">
+    <!DOCTYPE html>
+    <!--[if lt IE 7 ]> <html class="ie6"> <![endif]-->
+    <!--[if IE 7 ]> <html class="ie7"> <![endif]-->
+    <!--[if IE 8 ]> <html class="ie8"> <![endif]-->
+    <!--[if IE 9 ]> <html class="ie9"> <![endif]-->
+    <!--[if (gt IE 9)|!(IE)]>--> <html> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+        <title>微云-文件预览</title>
+        <meta name="Keywords" content="关键字">
+        <meta name="Description" content="说明">
+        <link charset="utf-8" rel="stylesheet" href="//img.weiyun.com/vipstyle/nr/box/css/file-preview.css?max_age=31104000">
+        <script type="text/javascript" src="//img.weiyun.com/club/weiyun/js/publics/jquery/jquery-1.8.3.min.js?max_age=31104000"></script>
+    </head>
+
+    <body class="web-app">
+    <div class="file-preview file-preview-xls">
+        <div id="header" class="file-preview-hd clearfix">
+            <div class="file-info">
+                <i class="ui-icon icon-file icon-file-xls"></i>
+                <div class="name"><%=data.name%><span class="size">(<%=data.size%>)</span></div>
+                <div class="path">文件位置 : <a href="#" class=""></a></div>
+            </div>
+            <div class="actions-wrap">
+                <a class="btn" href="#"><span class="btn-inner"><i class="ui-icon icon-down"></i><span class="text">下载</span></span></a>
+                <a class="btn" href="#"><span class="btn-inner enabled"><i class="ui-icon icon-write"></i><span class="text">编辑文章</span></span></a>
+            </div>
+            <div class="microsoft-info">
+                <span class="logo"></span>
+                <p class="links">
+                    <a href="#">帮助</a><i class="split"></i><a href="">意见反馈</a>
+                </p>
+                <p class="state">此服务使用微软Office服务预览技术</p>
+            </div>
+        </div>
+
+        <div id="iframe-ct" class="file-preview-bd">
+        </div>
+    </div>
+    <script>
+        var iframe = document.createElement('iframe');
+
+        $('#iframe-ct').append(iframe);
+
+        iframe.contentWindow.document.open('text/htmlreplace');
+        iframe.contentWindow.document.write(<%=this.iframe_content(data)%>);
+        iframe.contentWindow.document.close();
+
+
+        $(document).ready(function() {
+            var win_h = $(window).height();
+            var header_h = $('#header').outerHeight();
+            $(iframe).height(win_h - header_h - 3).width('100%');
+        });
+    </script>
+  </body>
+</html>
+</script>
+
+<script id="iframe_content" type="text/html" nowith="yes">
+'<!DOCTYPE HTML><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>文档预览</title><script type="text/javascript">window.onload = function() {var form = document.getElementById("form");form.submit();}<\/script></head><body><form id="form" method="post" action="<%=data.preview_url%>"><input id="token" type="text" name="access_token" value="<%=data.access_token%>" style="display: none;"/></form></body></html>'
+</script>

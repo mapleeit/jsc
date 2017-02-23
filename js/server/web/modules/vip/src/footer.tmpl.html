@@ -1,0 +1,48 @@
+<script id="footer" type="text/html" nowith="yes">
+<%=require('weiyun/web/modules/footer/tmpl').footer()%>
+<script type="text/javascript" charset="utf-8" src="//imgcache.qq.com/bossweb/ipay/js/api/cashier.js"></script>
+<script type="text/javascript" charset="utf-8" src="//fusion.qzone.qq.com/fusion_loader?appid=1450007296&platform=qzone"></script>
+<%=require('weiyun/util/inline').js(['seajs', 'configs_web_v2'])%>
+<script>
+    seajs.use(['$', 'lib', 'common', 'vip'], function($, lib, common, vip) {
+        var vip = vip.get('./vip');
+        vip.render(<%=JSON.stringify(data)%>);
+    });
+
+</script>
+<script type="text/javascript" src="//ui.ptlogin2.qq.com/js/ptloginout.js"></script>
+<script type='text/javascript' src='//img.weiyun.com/club/weiyun/js/publics/tcss/tcss.ping.js'></script>
+<script>
+    var pvClickSend = function (tag) {
+        if (typeof(pgvSendClick) == "function") {
+            pgvSendClick({
+                hottag: tag,
+                virtualDomain: 'www.weiyun.com'
+            });
+        }
+    };
+    (function() {
+        var virtualURL;
+        if (window.location && /^\/vip\/growth.html$/.test(location.pathname)) {
+            virtualURL = '/web/vip/growth.html';
+            window.g_which_page = 'growth';
+        } else if (window.location && /^\/vip\/privilege.html$/.test(location.pathname)) {
+            virtualURL = '/web/vip/privilege.html';
+            window.g_which_page = 'privilege';
+        } else if (window.location && /^\/vip\/announcement.html$/.test(location.pathname)) {
+            virtualURL = '/web/vip/announcement.html';
+            window.g_which_page = 'announcement';
+        } else {
+            virtualURL = '/web/vip.html';
+            window.g_which_page = 'vip';
+        }
+        if (typeof pgvMain == 'function') {
+            pgvMain("", {
+                tagParamName: 'WYTAG',
+                virtualURL: virtualURL,
+                virtualDomain: "www.weiyun.com"
+            });
+        }
+    })();
+</script>
+</script>

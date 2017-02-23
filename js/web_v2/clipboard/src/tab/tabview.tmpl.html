@@ -1,0 +1,34 @@
+<!--
+ 剪贴板tabview内容区
+ @author iscowei
+ @date 2016-07-18
+-->
+<script id="tab_view" type="text/html" no-width="yes">
+	<div class="tab-view"></div>
+</script>
+<!--
+ 剪贴板tabview bar
+ @author iscowei
+ @date 2016-07-18
+-->
+<script id="tab_bar" type="text/html" no-width="yes">
+    <%
+        var $ = require('$'),
+            common = require('common'),
+            scr_reader_mode = common.get('./scr_reader_mode'),
+            read_mode = scr_reader_mode.is_enable(),  //读屏模式
+            items = data.items;
+    %>
+    <ul class="tab-list clearfix" data-id="tab_body">
+    <%
+        $.each(items, function(i, item) {
+    %>
+        <li class="<%=item.cls%><%=item.active ? ' on': ''%>" data-bar data-index=<%=i%>>
+            <a href="javascript: void(0);" class="btn btn-s" tabindex="0" <% if(read_mode) { %>title="<%=item.title%>内容区" <% } %>><%=item.title%></a>
+            <b class="spliter"></b>
+        </li>
+    <%
+        });
+    %>
+    </ul>
+</script>

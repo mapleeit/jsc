@@ -1,0 +1,49 @@
+<script id="share_item" type="text/html" nowith="yes">
+    <% var item = data.item || {}; var util = data.util; %>
+    <%
+        // 把fileType方法包一层，adapter
+        util.customFileType = function(ext) {
+            var result;
+            var fileType = function(name) {
+                return util.fileType(name, 'v2');
+            };
+
+            if (ext === 'package' || !ext) {
+                result = 'shared-link';
+            } else {
+                result = fileType(ext);
+            }
+            return result;
+        };
+    %>
+    <li data-share-item
+        data-share-key="<%= item.share_key %>"
+        data-share-name="<%=item.share_name%>"
+        data-share-create-time="<%=item.create_time%>"
+        data-share-pwd="<%=item.share_pwd%>"
+        data-share-remain-time="<%=item.remain_time%>"
+        data-share-icon="<%=item.share_icon%>"
+        data-share-thumb-url="<%=item.thumb_url%>"
+        class="wy-file-item j-share-item <%=!item.share_name ? 'fail' : ''%> <%=item.result===20002 ? 'expired' : ''%>">
+        <i class="icon icon-m icon-<%=util.customFileType(item.share_icon || '')%>-m"
+           <%if (util.customFileType(item.share_icon || '') === 'video') {%>style="background-image:url(<%=decodeURIComponent(item.thumb_url + '/64')%>)"<%}%>
+           <%if (util.customFileType(item.share_icon || '') === 'pic') {%>style="background-image:url(<%=decodeURIComponent(item.thumb_url) + '?size=64*64'%>)"<%}%>
+        ></i>
+        <div class="file-describe bBor">
+            <h3 class="file-name"><%= util.htmlEscape(item.share_name) || '该文件已删除' %></h3>
+            <span class="file-info">
+                <span class="file-date"><%= util.dateformat(item.create_time, 'yyyy-mm-dd HH:MM') %></span>
+                <span class="file-times">浏览<%=item.view_cnt%>次</span>
+                <span class="file-times">下载<%=item.down_cnt%>次</span>
+            </span>
+        </div>
+        <div class="right">
+            <% if (!item.share_name) { %>
+            <span class="txt">已失效</span>
+            <% } else { %>
+            <i class="icon-grey-rarr"></i>
+            <%}%>
+        </div>
+    </li>
+
+</script>

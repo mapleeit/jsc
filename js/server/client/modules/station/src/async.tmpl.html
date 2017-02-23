@@ -1,0 +1,119 @@
+<script id="async" type="text/html" nowith="yes">
+    <!DOCTYPE html>
+    <!--[if lt IE 7 ]> <html class="ie6"> <![endif]-->
+    <!--[if IE 7 ]> <html class="ie7"> <![endif]-->
+    <!--[if IE 8 ]> <html class="ie8"> <![endif]-->
+    <!--[if IE 9 ]> <html class="ie9"> <![endif]-->
+    <!--[if (gt IE 9)|!(IE)]>--> <html> <!--<![endif]-->
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta charset="utf-8"/>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+        <title>微云网页版</title>
+        <meta name="Keywords" content="QQ, 腾讯,微云, 分享, 网盘, 网络硬盘, U盘, 云存储, 传输, 存储, 同步, 备份, 拍照, 上传, 下载, 中转, 文件, 照片, 相册, 离线, 传文件, wifi, cloud, 微云网页版, weiyun, weiyun web"/>
+        <meta name="Description" content="微云是腾讯公司为用户精心打造的一项智能云服务, 您可以通过微云方便地在手机和电脑之间同步文件、推送照片和传输数据。"/>
+        <%
+        var g_info = window['g_weiyun_info'];
+        var body_class = 'web-app';
+        var serverConfig = plug('config') || {};
+        var is_test_env = serverConfig.isTest ? true : false;
+        %>
+        <script type="text/javascript">
+            document.domain = 'weiyun.com';
+            var IS_TEST_ENV = <%=is_test_env%>;
+            var g_start_time = new Date(), IS_APPBOX = <%=g_info.is_appbox%>, IS_QZONE = <%=g_info.is_qzone%>, IS_PHP_OUTPUT = true, IS_DEBUG = <%=g_info.is_debug%>, g_err;
+            IS_DEBUG || (window.onerror = function (msg, file, line) { g_err={ msg:msg||'',file:file||'',line:line||'' };return true;});
+            var g_use_cgiv2 = true;
+</script>
+<%
+var configs_css = require('weiyun/conf/configs_css');
+var is_appbox = g_info.is_appbox;
+var css_list = ['base_css'];
+css_list.push('p_web_css');
+<!--css_list.push('p_web_delay_css');-->
+%>
+<%=require('weiyun/util/inline').css(css_list)%>
+<script type="text/javascript">
+    g_css_time = new Date();
+    //防止用户使用通过浏览器访问appbox
+    if(IS_APPBOX && (!window.external || !window.external.UploadFile) && !IS_DEBUG) {
+        location.href = 'http://www.weiyun.com/client/index.html?m=station';
+    }
+</script>
+
+</head>
+<body class="<%=body_class%>">
+<button id="_aria_start_trigger" style="position:absolute;top:-200px;" type="button" tabindex="0" onclick="window.open('http://support.qq.com/write.shtml?fid=811');">欢迎使用微云网盘，如果您读屏遇到问题，点击这里进行反馈。</button>
+<script type="text/javascript">document.getElementById('_aria_start_trigger').focus();</script>
+
+<div id="_main_ui_root" class="layout module-transfer" style="min-width: 790px;">
+    <div id="_main_bar1" class="lay-main-toolbar">
+        <div id="_disk_default_toolbar" class="toolbar-btn clear disk-toolbar">
+            <div class="btn-message">
+                <a data-btn-id="pack_down" data-no-selection class="g-btn g-btn-gray" href="#" style="" tabindex="-1"><span class="btn-inner "><i class="ico ico-down"></i><span class="text">下载</span></span></a>
+                <a data-btn-id="share" data-no-selection class="g-btn g-btn-gray" href="#" style="" tabindex="-1"><span class="btn-inner "><i class="ico ico-share"></i><span class="text">分享</span></span></a>
+                <a data-btn-id="move" data-no-selection class="g-btn g-btn-gray" href="#" style="" tabindex="-1"><span class="btn-inner "><i class="ico ico-move"></i><span class="text">移动到</span></span></a>
+                <a data-btn-id="rename" data-no-selection class="g-btn g-btn-gray" href="#" style="" tabindex="-1"><span class="btn-inner "><i class="ico ico-rename"></i><span class="text">重命名</span></span></a>
+                <a data-btn-id="del" data-no-selection class="g-btn g-btn-gray" href="#" style="" tabindex="-1"><span class="btn-inner "><i class="ico ico-del"></i><span class="text">删除</span></span></a>
+                <a data-btn-id="mkdir" data-no-selection class="g-btn g-btn-gray" href="#" style="" tabindex="-1"><span class="btn-inner "><i class="ico ico-mkdir"></i><span class="text">新建文件夹</span></span></a>
+                <a data-btn-id="refresh" data-no-selection class="g-btn g-btn-gray" href="#" style="" tabindex="-1"><span class="btn-inner  minpad "><i class="ico ico-ref"></i><span class="text"></span></span></a>
+                <a data-btn-id="offline_remove" data-no-selection class="g-btn g-btn-gray" href="#" style="display:none;" tabindex="-1"><span class="btn-inner "><i class="ico ico-del"></i><span class="text">删除</span></span></a>
+                <a data-btn-id="offline_save_as" data-no-selection class="g-btn g-btn-gray" href="#" style="display:none;" tabindex="-1"><span class="btn-inner "><i class="ico ico-saveas"></i><span class="text">另存为</span></span></a>
+                <a data-btn-id="offline_refresh" data-no-selection class="g-btn g-btn-gray" href="#" style="display:none;" tabindex="-1"><span class="btn-inner  minpad "><i class="ico ico-ref"></i><span class="text"></span></span></a>
+            </div>
+        </div>
+
+    </div>
+    <div id="_main_station_header" class="lay-files-head" style="display:none">
+    </div>
+    <div id="_main_share_header" class="lay-share-head" style="display:none">
+
+    </div>
+    <div id="_rec_file_header" class="lay-recycle-head" style="display:none">
+
+    </div>
+
+    <div id="_main_special_header"></div>
+
+    <div id="_main_content" class="lay-main-con" >
+        <div class="inner">
+            <div id="_main_box" class="wrap">
+            </div>
+        </div>
+    </div>
+</div>
+
+<%
+var g_info = window.g_weiyun_info;
+var serv_taken = new Date().getTime() - g_info.server_start_time;
+%>
+<script type="text/javascript">
+    var g_serv_taken = <%=serv_taken%>;
+    setTimeout(function() {
+        window.g_end_time = +new Date();
+    }, 0);
+</script>
+<% if(g_info.is_debug) { %>
+<script type="text/javascript" src="//img.weiyun.com/club/weiyun/js/publics/seajs/sea.js?max_age=31104000"></script>
+<% } else { %>
+<script type="text/javascript" src="//img.weiyun.com/c/=/club/weiyun/js/publics/seajs/sea.js,/club/weiyun/js/publics/seajs-plugins/seajs-combo.js?max_age=31104000"></script>
+<% } %>
+<%=require('weiyun/util/inline').js(['configs_client'])%>
+<script type="text/javascript">
+    var g_login_user_rsp_head = (function () { try { return {"cmd":2201,"retcode":0}; }catch(e){ } })(),
+            g_disk_root_files_rsp_body = (function () { try { return <%=JSON.stringify(data.file_list)%>; }catch(e){ }; })(),
+            g_page_time = new Date();
+    seajs.use([ '$', 'lib', 'common', 'station'], function ($, lib, common, mod) {
+        window.g_js_time = +new Date();
+        var station = mod.get('./station');
+        station.async();
+    });
+</script>
+<script>
+    (function(win, seajs) {
+        seajs.use(['p_client_delay_css', 'base_delay_css']);
+    })(window, seajs);
+</script>
+</body>
+</html>
+</script>

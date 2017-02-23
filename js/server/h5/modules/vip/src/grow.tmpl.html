@@ -1,0 +1,147 @@
+<script id="grow" type="text/html" nowith="yes">
+    <%
+    var nickname = data.nickname,
+        avatar = data.avatar,
+        isVip = data.isVip,
+        isOldVip = data.oldVip,
+        vipLevelInfo = data.vipLevelInfo,
+        currentLevel = parseInt(vipLevelInfo.level),
+        growthScoreList = data.growthScoreList,
+        growthRate = Math.ceil(vipLevelInfo.current_score / growthScoreList[currentLevel+1]),
+        iconClass = (isVip || isOldVip)? 'icon-level-' + currentLevel : '',
+        expireClass = (!isVip && isOldVip)? 'icon-level-gray' : '' ,
+        headURL = data.headURL && data.headURL.replace(/^http:|^https:/, ''),
+        userType = data.isWxUser? 'icon-wechat' : 'icon-qq',
+        expiresDate = data.expiresDate,
+        posText = isVip? '续费' : '开通';
+
+    var growSpeed = vipLevelInfo.grow_speed>0? vipLevelInfo.grow_speed : 0;
+    var scoreNextLevel = currentLevel<8? (growthScoreList[currentLevel+1] - vipLevelInfo.current_score) : '';
+    var upgradeDay = growSpeed!=0? Math.abs(Math.ceil(scoreNextLevel / growSpeed)) : 0;
+    var growText = currentLevel<8? '升级还需' + scoreNextLevel : '已达最高等级';
+    %>
+    <%=require('weiyun/util/inline').css(['app-iap-grow'])%>
+    <div class="app-iap-grow">
+        <div class="box">
+            <div class="box-hd">
+                <div class="hd-wrap">
+                    <div id="level" class="hd-bg level-<%=currentLevel%>">
+                        <div class="<%=currentLevel == 0? '' : 'point'%>"></div>
+                        <div class="path"></div>
+                    </div>
+                    <div class="hd-infor">
+                        <div class="infor">
+                            <%
+                            for(var i=1; i < growthScoreList.length; i++) {
+                                if(currentLevel!=i) {
+                            %>
+                                <div class="level-wrap">
+                                    <span class="level">LV<%=i%></span>
+                                    <span class="num"><%=growthScoreList[i]%></span>
+                                </div>
+                            <% } else { %>
+                                <div class="level-wrap level-now">
+                                    <div class="avatar-wrap">
+                                        <img class="avatar" src="<%=headURL%>">
+                                        <%
+                                            if(isVip || isOldVip) {
+                                                var vip_logo_url = data.vipLogoURL.replace('[http|https]:','').replace('.png', 'L.png');
+                                        %>
+                                        <i class="icon icon-vip" style="background-image: url(<%=vip_logo_url%>)"></i>
+                                        <% } %>
+                                    </div>
+                                    <span class="num"><%=vipLevelInfo.current_score%></span>
+                                </div>
+                            <%  }
+                            }
+                            %>
+                        </div>
+                    </div>
+                </div>
+                <div class="hd-grow">
+                    <%
+                        if(currentLevel<8 && currentLevel>0) {
+                    %>
+                    <div class="item rBor">
+                        <h4 class="title">我的成长值</h4>
+                        <span class="num"><%=vipLevelInfo.current_score%></span>
+                        <% if(growSpeed > 0) { %>
+                        <span class="tip">+<%=growSpeed%>点/天</span>
+                        <% } %>
+                    </div>
+                    <div class="item">
+                        <h4 class="title">升级还需</h4>
+                        <span class="num"><%=scoreNextLevel%></span>
+                        <% if(upgradeDay > 0) { %>
+                        <span class="tip"><%=upgradeDay%>天</span>
+                        <% } %>
+                    </div>
+                    <%
+                        } else if(currentLevel == 8){
+                    %>
+                    <div class="item rBor">
+                        <h4 class="title">我的成长值</h4>
+                        <span class="num"><%=vipLevelInfo.current_score%></span>
+                        <% if(growSpeed > 0) { %>
+                        <span class="tip">+<%=growSpeed%>点/天</span>
+                        <% } %>
+                    </div>
+                    <div class="item level-full">
+                        <h4 class="title">已达最高等级</h4>
+                    </div>
+                    <%
+                        } else {
+                    %>
+                    <div class="pay-wrap j-pay-wrap" style="display: none">
+                        <div class="btn j-pay-btn" data-id="1"><span>开通会员</span></div>
+                        <p class="tip">开通微云会员 开启等级成长之旅</p>
+                    </div>
+                    <% } %>
+                </div>
+            </div>
+            <div class="box-bd">
+                <div class="main">
+                    <h3 class="title">每日成长速度</h3>
+                    <img src="//qzonestyle.gtimg.cn/qz-proj/wy-h5/img/iap/table-speed.png">
+                    <span class="tip">注：用户会员过期后，成长值将以10点/天的速度下降</span>
+                </div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="//img.weiyun.com/club/qqdisk/web/js/lib/zepto-1.0.0.min.js?max_age=604800"></script>
+
+<%=require('weiyun/util/inline').js(['seajs', 'configs_mobile'])%>
+<script>
+    seajs.use(['$', 'lib','common', 'vip'], function($, lib, common, vip) {
+        var vip = vip.get('./vip');
+        vip.init(<%=JSON.stringify(data)%>);
+    });
+
+    // iap屏蔽入口
+    if (window.location.href.indexOf('ios') === -1) {
+        $('.j-pay-wrap').show();
+    }
+</script>
+
+<script type='text/javascript' src='//img.weiyun.com/club/weiyun/js/publics/tcss/tcss.ping.js'></script>
+<script>
+    var pvClickSend = function (tag) {
+        if (typeof(pgvSendClick) == "function") {
+            pgvSendClick({
+                hottag: tag,
+                virtualDomain: 'www.weiyun.com'
+            });
+        }
+    };
+    (function() {
+        if (typeof pgvMain == 'function') {
+            pgvMain("", {
+                tagParamName: 'WYTAG',
+                virtualURL: '/h5/vip.html',
+                virtualDomain: "www.weiyun.com"
+            });
+        }
+    })();
+</script>
+
+</script>

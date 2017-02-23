@@ -1,0 +1,6 @@
+<view hidden="{{!videoDisplay}}" class="video-wrapper">
+	<view class="mask" bindtap="bindVideoMaskTap"></view>
+    <view class="video-content">
+    	<video id="mainVideo" class="video" hidden="{{!videoDisplay}}" src="{{videoSrc}}" autoplay="{{true}}" objectFit="contain" style="height:{{videoHeight+'px'}}" binderror="bindVideoError"></video>
+    </view>
+</view>

@@ -1,0 +1,121 @@
+<!--
+ * 上传文件按钮
+ * @author bondli
+ * @date 13-7-27
+-->
+<script id="file_btn" type="text/html" nowith="yes">
+	<%
+    var lib = require('lib'),
+        common = require('common'),
+        click_tj = common.get('./configs.click_tj');
+    %>
+    <a class="g-btn g-btn-blue" href="#" hidefocus="on" tabindex="-1" <%=click_tj.make_tj_str('UPLOAD_SELECT_FILE')%>><span class="btn-inner"><i>+</i><span class="text">上传</span></span></a>
+</script>
+
+<!--
+ * appbox上传文件按钮
+ * @author bondli
+ * @date 13-9-13
+-->
+<script id="appbox_btn" type="text/html" nowith="yes">
+    <%
+    var lib = require('lib'),
+        common = require('common'),
+        click_tj = common.get('./configs.click_tj');
+    %>
+        <!--<a id="upload_dropdown_inner" class="btn" href="#" hidefocus="on" data-action="upload_files" aria-label="点击这里上传文件" <%=click_tj.make_tj_str('UPLOAD_SELECT_FILE')%>>
+        </a>-->
+    <a id="upload_dropdown_inner" data-action="upload_files" class="g-btn g-btn-blue" href="#" hidefocus="on" tabindex="-1" <%=click_tj.make_tj_str('UPLOAD_SELECT_FILE')%>><span class="btn-inner"><i>+</i><span class="text">上传</span></span></a>
+</script>
+
+<!--
+ * 上传文件夹按钮
+ * @author bondli
+ * @date 13-7-27
+-->
+<script id="folder_btn" type="text/html" nowith="yes">
+	<%
+    var lib = require('lib'),
+        common = require('common'),
+        click_tj = common.get('./configs.click_tj');
+    %>
+        <!--<a href="#" id="upload_dropdown_inner" data-action="upload_files" class="btn" hidefocus="on" title="上传文件" <%=click_tj.make_tj_str('UPLOAD_SELECT_FILE')%>>
+            <span class="ui-text"></span>
+        </a>-->
+    <a id="upload_dropdown_inner" data-action="upload_files" class="g-btn g-btn-blue" href="#" hidefocus="on" tabindex="-1" <%=click_tj.make_tj_str('UPLOAD_SELECT_FILE')%>><span class="btn-inner"><i>+</i><span class="text">上传</span></span></a>
+</script>
+
+<!--
+ * webkit控件下上传按钮
+ * @author bondli
+ * @date 13-7-27
+-->
+<script id="g4files_btn" type="text/html" nowith="yes">
+	<%
+    var lib = require('lib'),
+        common = require('common'),
+        click_tj = common.get('./configs.click_tj');
+    %>
+    <a id="upload_dropdown_inner" data-action="upload_files" class="g-btn g-btn-blue" href="#" hidefocus="on" tabindex="-1" <%=click_tj.make_tj_str('UPLOAD_SELECT_FILE')%>><span class="btn-inner"><i>+</i><span class="text">上传</span></span></a>
+</script>
+
+<script id="appbox_btn_menu" type="text/html" nowith="yes">
+    <%var click_tj = require('common').get('./configs.click_tj');%>
+    <ul id="upload_dropdown_menu" class="dropdown-menu" style="display:none;">
+        <li><a href="#" hidefocus="on" data-action="upload_files" tabindex="-1" <%=click_tj.make_tj_str('UPLOAD_UPLOAD_FILE')%>>文件</a></li>
+        <li><a href="#" hidefocus="on" data-action="upload_folder" tabindex="-1" <%=click_tj.make_tj_str('UPLOAD_UPLOAD_DIR')%>>文件夹</a></li>
+        <%if(data.is_show_temp_btn) { %>
+        <li><a href="#" hidefocus="on" data-action="upload_temporary" tabindex="-1" <%=click_tj.make_tj_str('UPLOAD_UPLOAD_TEMP')%>>文件中转站<i></i></a></li>
+        <% } %>
+        <%if(data.is_show_note_btn) { %>
+        <li><a href="#" hidefocus="on" data-action="add_note" tabindex="-1" <%=click_tj.make_tj_str('UPLOAD_NOTE')%>>笔记</a></li>
+        <% } %>
+
+    </ul>
+</script>
+
+<script id="folder_btn_menu" type="text/html" nowith="yes">
+    <%var click_tj = require('common').get('./configs.click_tj');%>
+    <ul id="upload_dropdown_menu" class="dropdown-menu" style="display:none;">
+        <li><a href="#" hidefocus="on" data-action="upload_files" tabindex="-1" <%=click_tj.make_tj_str('UPLOAD_UPLOAD_FILE')%>>文件</a></li>
+        <li><a href="#" hidefocus="on" data-action="upload_folder" tabindex="-1" <%=click_tj.make_tj_str('UPLOAD_UPLOAD_DIR')%>>文件夹</a></li>
+        <%if(data.is_show_temp_btn) { %>
+        <li><a href="#" hidefocus="on" data-action="upload_temporary" tabindex="-1" <%=click_tj.make_tj_str('UPLOAD_UPLOAD_TEMP')%>>文件中转站<i></i></a></li>
+        <% } %>
+        <%if(data.is_show_note_btn) { %>
+        <li><a href="#" hidefocus="on" data-action="add_note" tabindex="-1" <%=click_tj.make_tj_str('UPLOAD_NOTE')%>>笔记</a></li>
+        <% } %>
+    </ul>
+</script>
+
+<script id="note_btn_menu" type="text/html" nowith="yes">
+    <%
+        var $ = require('$');
+        var is_chrome = $.browser.chrome;
+        var common = require('common');
+        var click_tj = common.get('./configs.click_tj');
+    %>
+    <ul id="upload_dropdown_menu" class="dropdown-menu" style="display:none;">
+	    <% if(data.is_show_label_btn) { %>
+        <li><label for="_upload_form_input" hidefocus="on" tabindex="-1" <%=click_tj.make_tj_str('UPLOAD_UPLOAD_FILE')%>>文件</label></li>
+	    <% } else { %>
+	    <li><a href="#" hidefocus="on" data-action="upload_files" tabindex="-1" <%=click_tj.make_tj_str('UPLOAD_UPLOAD_FILE')%>>文件</a></li>
+	    <% } %>
+        <% if(data.is_show_foloder_btn) { %>
+        <li><a href="#" hidefocus="on" data-action="upload_folder_h5" tabindex="-1" <%=click_tj.make_tj_str('UPLOAD_UPLOAD_DIR')%>>文件夹</a></li>
+        <% } %>
+        <% if(data.is_show_temp_btn) { %>
+        <li><a href="#" hidefocus="on" data-action="upload_temporary" tabindex="-1" <%=click_tj.make_tj_str('UPLOAD_UPLOAD_TEMP')%>>文件中转站<i></i></a></li>
+        <% } %>
+        <%if(data.is_show_note_btn) { %>
+        <li><a href="#" hidefocus="on" data-action="add_note" tabindex="-1" <%=click_tj.make_tj_str('UPLOAD_NOTE')%>>笔记</a></li>
+        <% } %>
+    </ul>
+</script>
+
+<script id="g4files_btn_menu" type="text/html" nowith="yes">
+    <%var click_tj = require('common').get('./configs.click_tj');%>
+    <ul id="upload_dropdown_menu" class="dropdown-menu" style="display:none;">
+        <li><a href="#" hidefocus="on" data-action="upload_files" tabindex="-1" <%=click_tj.make_tj_str('UPLOAD_UPLOAD_FILE')%>>文件</a></li>
+    </ul>
+</script>

@@ -1,0 +1,67 @@
+<!--
+列表
+-->
+<script id="list" type="text/html" no-width="yes">
+    <%
+    var lib = require('lib');
+
+    var text = lib.get('./text');
+    var prettysize = lib.get('./prettysize');
+    var list = data.list || [];
+    %>
+    <%
+    list.forEach(function(file){
+        var is_dir = file.is_dir();
+        var id = file.get_id();
+        var file_name = text.text(file.get_name());
+        var file_size = prettysize(file.get_size());
+        var file_type = is_dir ? 'folder' : file.get_type();
+        var thumb_url = file.get_thumb_url();//缩略图
+        %>
+        <li id="item_<%=id%>" data-id="item" data-file-id="<%=id%>" data-action="enter" class="wy-file-item">
+                <i <% if(thumb_url) { %> data-src="<%=thumb_url%>" <% } %> class="icons-filetype icon-<%=file_type%>"></i>
+        <div class="file-describe bBor">
+                <h3 class="file-name"><%=file_name%></h3>
+        <% if(!is_dir) { %>
+        <span class="file-info">
+                    <span class="file-size"><%=file_size%></span>
+            </span>
+            <% } %>
+        </div>
+        <% if(is_dir) { %>
+        <i class="icon-grey-rarr"></i>
+            <% } %>
+        </li>
+        <% }); %>
+</script>
+
+<!--
+空白页
+-->
+<script id="empty" type="text/html" no-width="yes">
+    <div class="wy-blank-wrap">
+        <div class="wy-blank">
+            <i class="wy-gray-logo"></i>
+            <p>文件夹是空的</p>
+        </div>
+    </div>
+</script>
+
+<script id="share_tip" type="text/html" no-width="yes">
+    <div id="_share_tip" class="share-dialog">
+            <span class="share-tips"></span>
+    </div>
+</script>
+
+<script id="fail" type="text/html" no-width="yes">
+    <div id="_fail" class="wy-reload-wrap">
+        <a href="#" class="reload-btn" title="重新加载">
+            <div class="reload-btn-box">
+                <div class="reload-btn-wrap">
+                    <i class="icon icon-reload"></i>
+                    <p class="reload-txt"><%=data.msg%></p>
+                </div>
+            </div>
+        </a>
+    </div>
+</script>

@@ -1,0 +1,170 @@
+<!DOCTYPE HTML>
+<html style="overflow:auto;">
+<head>
+    <meta charset="UTF-8">
+    <title>控件安装 - 微云</title>
+    <link charset="utf-8" rel="stylesheet" href="//imgcache.qq.com/vipstyle/nr/box/css-ver/base.r140603.css">
+    <link charset="utf-8" rel="stylesheet" href="//imgcache.qq.com/vipstyle/nr/box/css-ver/base-delay.r140603.css">
+    <link charset="utf-8" rel="stylesheet" href="//imgcache.qq.com/vipstyle/nr/box/css-ver/p-web.r140603.css">
+    <link charset="utf-8" rel="stylesheet" href="//imgcache.qq.com/vipstyle/nr/box/css-ver/plugin.r140603.css">
+</head>
+<body class="app-plugin">
+
+<div class="lay-header clear">
+    <a class="logo" href="//www.weiyun.com/index.html?WYTAG=weiyun.app.web.plugin_install" target="_blank"></a>
+</div>
+<!-- .header -->
+
+<!-- 状态一 进入安装页面 -->
+<div id="install_ad" class="app-inner" style="display:none;">
+
+    <div class="plugin-installing plugin-installing-ad">
+        <h2 class="ui-title ui-title-main">
+            <span class="ui-text">安装微云极速上传控件</span>
+        </h2>
+        <!-- todo 代码调整 -->
+        <ul class="plugin-list-desc">
+            <li data-id="feature-dir"><i class="icon-up-dir"></i>上传文件夹
+            <li><i class="icon-up-resume"></i>断点续传
+            <li><i class="icon-up-second"></i>大文件秒传
+        </ul>
+
+        <p class="ui-btns">
+            <a href="#" class="box-pill"><span class="box-btn-text" data-action="start_download">开始安装</span></a>
+        </p>
+    </div>
+
+</div>
+<!-- .app-inner -->
+
+<!-- 状态二 进入 IE 安装页面 -->
+<div id="ie_install_auto" class="app-inner" style="display:none;">
+
+    <div class="plugin-installing plugin-installing-ie">
+
+        <h2 class="ui-title ui-title-main">
+			<span class="ui-title-cnt">
+				<i class="plugin-icon plugin-icon-loading"></i>
+				<span class="ui-text">正在安装最新版的极速上传控件，请稍候．．．</span>
+			</span>
+        </h2>
+
+        <ol id="auto_step_list" class="ui-list">
+            <li><p class="ui-text"><span class="num">1</span>显示“正在打开......”对话框时，单击“保存文件”：</p><img src="//imgcache.qq.com/vipstyle/nr/box/img/plugin_install/firefox_manual_step1.png" class="ui-img"></li><li><p class="ui-text"><span class="num">2</span>当浏览器右下角显示“下载完成”对话框时，单击“全部文件下载完成”：</p><img src="//imgcache.qq.com/vipstyle/nr/box/img/plugin_install/firefox_manual_step2.png" class="ui-img"></li><li><p class="ui-text"><span class="num">3</span>找到并双击刚下载的文件：</p><img src="//imgcache.qq.com/vipstyle/nr/box/img/plugin_install/firefox_manual_step3.png" class="ui-img"></li><li><p class="ui-text"><span class="num">4</span>显示“打开文件 安全警告”对话框时，单击“运行”：</p><img src="//imgcache.qq.com/vipstyle/nr/box/img/plugin_install/firefox_manual_step4.png" class="ui-img"></li>
+        </ol>
+
+        <p class="ui-tips ui-tips-line">如果您的浏览器没有出现信息框，或者无法正常在线安装，请尝试<a href="#" data-action="download">下载安装</a>。</p>
+
+    </div>
+
+</div>
+<!-- .app-inner -->
+
+<!-- 状态三 进入 IE下载 安装页面 -->
+<div id="ie_install_manual" class="app-inner" style="display:none;">
+
+    <div class="plugin-installing plugin-installing-chrome">
+        <h2 class="ui-title ui-title-main">
+            <i class="plugin-icon plugin-icon-loading"></i>
+            <span class="ui-text">正在安装最新版的极速上传控件，请稍候．．．</span>
+        </h2>
+
+        <ol id="ie_manual_step_list" class="ui-list">
+
+        </ol>
+
+        <p class="ui-tips ui-tips-line">如果您的浏览器没有出现信息框，或者无法正常下载安装，请尝试<a href="#" data-action="install_auto">重新下载</a>。</p>
+    </div>
+
+</div>
+<!-- .app-inner -->
+
+<!-- 状态三 进入 Chrome or firefox 安装页面 -->
+<div id="other_install" class="app-inner" style="display:none;">
+
+    <div class="plugin-installing plugin-installing-chrome">
+        <h2 class="ui-title ui-title-main">
+            <i class="plugin-icon plugin-icon-loading"></i>
+            <span class="ui-text">正在安装最新版的极速上传控件，请稍候．．．</span>
+        </h2>
+
+        <ol id="other_manual_step_list" class="ui-list">
+
+        </ol>
+
+        <p class="ui-tips ui-tips-line">如果您的浏览器未弹出下载管理框，请<a href="#" data-action="download">重新下载</a>。</p>
+    </div>
+
+</div>
+<!-- .app-inner -->
+
+<!-- 状态四 控件安装成功 -->
+<div id="install_success" class="app-inner" style="display:none;">
+
+    <div class="plugin-state ok">
+
+        <h2 class="ui-title ui-title-main">
+			<span class="ui-title-cnt">
+				<i class="plugin-icon plugin-icon-ok"></i>
+				<span class="ui-text">您已经成功安装最新版本的极速控件</span>
+			</span>
+        </h2>
+
+        <div class="plugin-state-cnt">
+
+            <p class="ui-text">您现在可以返回微云体验这些新功能了。</p>
+
+        </div>
+
+        <p class="ui-btns">
+            <a id="go_back" class="g-btn g-btn-blue" href="//www.weiyun.com/disk/index.html?WYTAG=weiyun.app.web.plugin_install"><span class="btn-inner w96">返回</span></a>
+        </p>
+
+    </div>
+
+</div>
+<!-- .app-inner -->
+
+<!-- 状态五 控件安装失败 -->
+<div id="install_fail" class="app-inner" style="display:none;">
+
+    <div class="plugin-state fail">
+        <h2 class="ui-title ui-title-main">
+			<span class="ui-title-cnt">
+			<i class="plugin-icon plugin-icon-warn"></i>
+			<span id="install_fail_title" class="ui-text">下载安装出现问题，您可以：</span>
+			</span>
+        </h2>
+
+        <div class="plugin-state-cnt">
+            <ul class="ui-list-dot">
+                <li class="ui-text"><i></i>尝试关闭再重新开启浏览器</li>
+                <li class="ui-text"><i></i>或者<a href="#" data-action="reinstall">重新安装</a></li>
+            </ul>
+        </div>
+
+    </div>
+
+</div>
+<div id="unsupport" class="app-inner" style="display:none">
+    <div class="plugin-state fail">
+        <h2 class="ui-title ui-title-main">
+            <span class="ui-title-cnt">
+            <i class="plugin-icon plugin-icon-warn"></i>
+            <span id="unsupport_text" class="ui-text">当前操作系统暂不支持安装控件</span>
+            </span>
+        </h2>
+    </div>
+</div>
+<div id="plugin_container" style="display:none;"></div>
+<!-- .app-inner -->
+
+
+<!-- 用于 IE6 背景图片闪动问题修复 -->
+<!--[if IE 6]><script type="text/javascript">try{document.execCommand('BackgroundImageCache',false,true);}catch(e){}</script><![endif]-->
+
+<script type="text/javascript" src="//imgcache.qq.com/c/=/club/weiyun/js/publics/seajs/sea.js,/club/weiyun/js/publics/seajs-plugins/seajs-combo.js?max_age=31104000"></script>
+<script type="text/javascript" src="//www.weiyun.com/disk/js/configs_web.js"></script>
+<script type="text/javascript" src="//imgcache.qq.com/club/weiyun/js/plugin_install/install.js"></script>
+</body>
+</html>

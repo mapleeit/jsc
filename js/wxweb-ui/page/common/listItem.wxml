@@ -1,0 +1,32 @@
+<!-- 目录/文件列表结构 -->
+<!-- 定义模板 -->
+<template name="listItem">
+	<view class="item" animation="{{opAnimationData}}">
+		<!-- 文件类型 -->
+		<view class="file-wrapper" data-key="{{dir_key||file_id}}" bindtap="bindItemTap">
+			<view class="type-wrapper">
+				<!-- 图片尺寸 40x40 -->
+				<image class="img" background-size="cover"
+					src="{{is_image?(ext_info.https_url + '&size=64*64'):((is_video && ext_info.thumb_url)?(ext_info.thumb_url + '/64'):('../../img/ico_'+icon+'_small@2x.png'))}}"
+					binderror="imageError">
+				</image>
+			</view>
+			<view class="info-wrapper bBor">
+				<!-- 文件信息，如果是目录，就加上 is-dir -->
+				<view class="file-info is-dir">
+					<!-- 文件名 -->
+					<view class="title">
+						<text style="white-space:{{'nowrap'}}">{{dir_name||filename}}</text>
+					</view>
+					<view class="sub-info">
+						<text>{{modify_time}} {{file_read_size||''}}</text>
+					</view>
+				</view>
+				<!-- 更多操作 -->
+				<view class="op" data-index="{{index}}" data-key="{{dir_key||file_id}}" catchtap="catchOpTap">
+					<image class="icon-dot" background-size="cover" src="../../img/icon-dot@2x.png"></image>
+				</view>
+			</view>
+		</view>
+	</view>
+</template>

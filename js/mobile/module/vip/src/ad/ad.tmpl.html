@@ -1,0 +1,29 @@
+<script id="ad" type="text/html" nowith="yes">
+    <%
+        var lib = require('lib');
+        var text = lib.get('./text');
+        var data = data || {};
+        var list = data.list;
+        var list_count = list.length;
+    %>
+    <ul class="banner-list clearfix j-pic-ul" style="width:<%=list_count%>00%;">
+        <%
+            for (var i = 0; i < list_count; i++) {
+                var item = list[i];
+                var ext_data = item && item.extdata;
+        %>
+            <li class="item">
+                <div class="pic" data-index="<%=i%>" data-link="<%=text.text(ext_data && (ext_data.url || ext_data.link))%>" style="background-image: url(<%=text.text(ext_data && (ext_data.picture1 || ext_data.img)).replace(/^http:|^https:/, '')%>)"></div>
+            </li>
+        <%
+            }
+        %>
+    </ul>
+    <% if (list_count > 1) {%>
+    <ul class="circle-list j-circle-ul">
+        <% for (var i = 0; i < list_count; i++) { %>
+            <li data-index="<%=i%>" class="circle <%=i == 0 ? 'act' : ''%>"></li>
+        <% } %>
+    </ul>
+    <% } %>
+</script>

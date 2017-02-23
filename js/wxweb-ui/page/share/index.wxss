@@ -1,0 +1,646 @@
+/* ============================== 
+* Copyright: Tencent ISUX 
+* Project: web+2.0 x 微云
+* Description: 微云嵌入 wx 应用号
+* Author: KiddHe 
+* Datetime: 2016-09-05
+* ============================== */
+
+@import "../../base-style/reset.import.wxss";
+/* one-px-border */
+@import "../../base-style/retina-border.import.wxss";
+/* common */
+@import "../../base-style/common.wxss";
+
+html {height: 100%;}
+body {height: 100%; background-color: #fff;}
+
+/*icon */
+.icons-filetype {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+}
+
+.share-wrapper {
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.share-wrapper .share-header {
+  background-color: #f7f6f6;
+  width: 100%;
+  height: 68px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+.share-wrapper .share-header .avator {
+  margin: 0px 14px;
+  width: 52px;
+  height: 52px;
+  border-radius: 100%;
+  background-position: 50%;
+  background-size: cover;
+  background-clip: padding-box;
+  box-sizing: border-box;
+}
+.share-wrapper .share-header .txt {
+  flex: 1;
+  color: #706f6f;
+  line-height: 24rpx;
+  font-size: 24rpx;
+}
+.share-wrapper .share-header .logo {
+  width: 54px;
+  height: 44px;
+  margin: 0px 14px;
+}
+
+
+
+.share-wrapper .share-detail .txt {
+  margin: 10px 20px 5px 20px;
+  color: #706f6f;
+  line-height: 32rpx;
+  font-size: 32rpx;
+}
+.share-wrapper .share-detail .desc {
+  margin: 5px 20px 10px 20px;
+  color: #706f6f;
+  line-height: 32rpx;
+  font-size: 32rpx;
+}
+.share-wrapper .share-detail .tips {
+  border-top: 1px dashed #CBCBCB;
+  margin: 10px 20px;
+  padding-top: 20px;
+  color: #706f6f;
+  line-height: 32rpx;
+  font-size: 32rpx;
+}
+
+/*底部操作*/
+.g-bottom-bar {
+    background: #f4f7fa;
+    vertical-align: middle;
+    overflow: hidden;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    padding: 7px 15px;
+}
+
+.g-bottom-bar .btn {
+    display: block;
+    width: 100%;
+    height: 38px;
+    line-height: 38px;
+    font-size: 16px;
+    text-align: center;
+    background: #1985f3;
+    border-radius: 5px;
+    color: #fff;
+    margin: 0 auto;
+    border: 1px solid #1985f3;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    position: relative;
+    padding: 0 5px;
+}
+
+.g-bottom-bar-txt .btn{
+  background:none;
+  color:#777;
+  border-color:transparent
+}
+
+
+/* 新增 */
+/* 分享人信息，跳转到微云 */
+.wy-sharer{
+  width: 100%;
+  padding: 7px 16px;
+  padding-left: 14px;
+  background: #f7f6f6;
+
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing   : border-box;
+  box-sizing        : border-box;
+
+  display: -webkit-box; display: -moz-box; display: -ms-flexbox; display: -webkit-flex; display: flex;
+  -webkit-box-align: center; -moz-box-align: center; -ms-flex-align: center; -webkit-align-items: center; align-items: center;
+
+  position: relative;
+}
+.wy-sharer .sharer-avator .avator{
+  border-radius: 100%;
+  position: relative;
+  height: 52px;
+  width: 52px;
+  background-size: cover;
+  background-clip: padding-box;
+
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing   : border-box;
+  box-sizing        : border-box;
+}
+
+
+.wy-sharer .share-vip .icon-share-vip{
+  width: 21px;
+  height: 15px;
+  background-image: url(img/slice/iap/vip.png);
+  position: absolute;
+  right: -4px;
+  bottom: 2px;
+}
+
+.wy-sharer .sharer-info{
+  padding-left: 11px;
+  margin-right: 10px;
+
+  display: -webkit-box; display: -moz-box; display: -ms-flexbox; display: -webkit-flex; display: flex;
+  -webkit-box-flex: 1; -moz-box-flex: 1; -webkit-flex-grow: 1; -ms-flex-grow: 1; flex-grow: 1;-webkit-flex: 1; -ms-flex: 1; flex: 1;
+  -webkit-box-orient: vertical; -moz-box-orient: vertical; -webkit-box-direction: normal; -moz-box-direction: normal; -webkit-flex-direction: column; -ms-flex-direction: column; flex-direction: column;
+  -webkit-box-pack: center; -moz-box-pack: center; -ms-flex-pack: center; -webkit-justify-content: center; justify-content: center;
+}
+.wy-sharer .sharer-name{
+  font-size: 16px;
+  line-height: 18px;
+  font-weight: bold;
+  margin-bottom: 4px;
+  max-width: 100px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space:nowrap;
+}
+
+.wy-sharer .sharer-content{
+  font-size: 12px;
+  line-height: 12px;
+  color: #706f6f;
+}
+
+.wy-sharer .link-to-wy{
+  display: block;
+  width: 86px;
+  height: 28px;
+  border: none;
+  outline: none;
+}
+.wy-sharer .link-to-wy .logo{
+  display: block;
+  width: 86px;
+  height: 28px;
+}
+
+/* 新增 */
+
+
+.wy-share-filelist-wrapper {
+  margin-bottom: 47px
+}
+
+.wy-file-item {
+  overflow: hidden;
+  padding: 10px 15px;
+  position: relative;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-direction: normal;
+  -moz-box-direction: normal;
+  -webkit-box-orient: horizontal;
+  -moz-box-orient: horizontal;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-wrap: nowrap;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+  -webkit-box-pack: start;
+  -moz-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-content: center;
+  -ms-flex-line-pack: center;
+  align-content: center;
+  -webkit-box-align: center;
+  -moz-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center
+}
+
+.wy-file-item:before {
+  -webkit-box-ordinal-group: 1;
+  -moz-box-ordinal-group: 1;
+  -webkit-order: 0;
+  -ms-flex-order: 0;
+  order: 0;
+  -webkit-box-flex: 0;
+  -moz-box-flex: 0;
+  -webkit-flex: 0 0 auto;
+  -ms-flex: 0 0 auto;
+  flex: 0 0 auto;
+  -webkit-align-self: center;
+  -ms-flex-item-align: center;
+  align-self: center
+}
+
+.wy-file-item .wy-file-item-chosen {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1
+}
+
+.wy-file-item .file-describe {
+  padding-left: 9px;
+  min-width: 0;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
+  -webkit-box-pack: center;
+  -moz-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-align-content: stretch;
+  align-content: stretch;
+  -ms-flex-line-pack: stretch;
+  -webkit-box-align: stretch;
+  -moz-box-align: stretch;
+  -webkit-align-items: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-justify-content: center;
+  justify-content: center
+}
+
+.wy-file-item .file-detail {
+  position: relative;
+  margin-top: 5px
+}
+
+.wy-file-item .file-des-wrapper {
+  padding-bottom: 15px
+}
+
+.wy-file-item .file-name {
+  font-size: 16px;
+  line-height: 18px;
+  margin-top: 4px;
+  margin-bottom: 2px;
+  color: #000;
+  font-weight: 400;
+  width: 100%;
+  padding-right: 10px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap
+}
+
+.wy-file-item .file-info {
+  font-size: 13px
+}
+
+.wy-file-item .file-size {
+  font-size: 13px;
+  line-height: 13px;
+  color: #a3a3a3
+}
+
+.wy-share-filelist-wrapper .bBor:after {
+  left: 64px
+}
+
+.wy-file-loading {
+  font-size: 14px;
+  color: #929aa9;
+  padding: 12px 0;
+  text-align: center;
+  position: fixed;
+  width: 100%;
+  bottom: 52px;
+  left: 0
+}
+
+.wy-share-filelist-wrapper {
+  padding-bottom: 47px
+}
+
+.wy-share-filelist-wrapper .wy-file-item:before {
+  margin-right: 10px;
+  display: inline-block;
+  content: "";
+  position: absolute;
+  top: 13px;
+  left: -28px;
+  width: 24px;
+  height: 24px;
+  border-radius: 100%;
+  border: 1px solid #b7bfcb;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box
+}
+
+.wy-share-filelist-wrapper .active .wy-file-item:before {
+  left: 15px
+}
+
+.wy-share-filelist-wrapper .active .wy-file-item {
+  padding-left: 52px
+}
+
+.wy-share-filelist-wrapper .active .wy-file-item .bBor:after {
+  left: 93px
+}
+
+.wy-share-filelist-wrapper .unactive .wy-file-item .bBor:after {
+  left: 57px
+}
+
+.wy-share-filelist-wrapper .active .icon-grey-rarr {
+  display: none
+}
+
+.wy-share-filelist-wrapper .unchoseable:before {
+  width: 24px;
+  height: 24px;
+  border-radius: 100%;
+  border: 1px solid rgba(183,191,203,.5);
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box
+}
+
+.wy-share-filelist-wrapper .active .checked:before {
+  width: 24px;
+  height: 24px;
+  background-image: url(//img.weiyun.com/qz-proj/wy-h5/sprite/g-filelist@2x.png);
+  background-position: 0 0;
+  background-size: 32px 24px;
+  border-color: #fff
+}
+
+/*图片列表*/
+.wy-img-list-wrapper{
+  width:100%;
+}
+.wy-img-list-wrapper .img-item {
+    width: 100%;
+    margin-bottom: 10px;
+    position: relative;
+}
+.wy-img-list-wrapper .img-item-spec{
+  margin-bottom:0;
+}
+.wy-img-list-wrapper .img-item-spec:before{
+  position:absolute;
+  content:"";
+  left:0;
+  top:0;
+  right:0;
+  bottom:0;
+  background-color:rgba(0,0,0,0.1)
+}
+
+.wy-img-list-wrapper .img-item-spec .wy-video{
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0
+}
+
+.wy-img-list-wrapper .img-item-spec .wy-video video{
+  width: 100%;
+}
+
+.wy-img-list-wrapper .icon-media-ctrl{
+  position:absolute;
+  width:36px;
+  height:36px;
+  left:50%;
+  top:50%;
+  margin:-18px 0 0 -18px;
+}
+.wy-img-list-wrapper .icon-media-ctrl .icon{
+  width:100%;
+  height:100%;
+}
+
+.wy-img-list-wrapper .img-item-attr text{
+  position:absolute;
+  left:0;
+  right:0;
+  top:50%;
+  margin-top:23px;
+  text-align:center;
+  color:#fff;
+  font-size:16px;
+  line-height:16px;
+
+}
+
+
+.wy-img-list-wrapper .img {
+  width:375px;
+  height:300px;
+}
+.wy-img-list-wrapper .img-item-spec{
+  position:relative;
+  height:0;
+  padding-top:56.25%;
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+  overflow:hidden;
+}
+.wy-img-list-wrapper .img-item-spec .img{
+  position:absolute;
+  top:0;
+}
+.wy-img-list-wrapper .img-item-info{
+  padding:0 12px;
+}
+.wy-img-list-wrapper .img-item-info-hd{
+  height:50px;
+  line-height:50px;
+  font-size:16px;
+}
+.wy-img-list-wrapper .img-item-info-hd .name{
+  display:inline-block;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.wy-img-list-wrapper .img-item-info-bd{
+  padding-top:10px;
+  font-size:12px;
+  color:#706f6f
+}
+.wy-img-list-wrapper .img-item-info-bd text{
+  margin:0 10px 0 0
+}
+
+
+
+/*line*/
+.wy-share-filelist-wrapper .bBor{
+  position:static;
+}
+.wy-share-filelist-wrapper .bBor:after {
+    left: 57px;
+}
+
+.g-bottom-bar-txt{
+  position: fixed;
+  width: 100%;
+  bottom: 52px;
+  left: 0
+}
+
+.wy-share-filelist-wrapper {
+  padding-bottom: 47px
+}
+
+.wy-share-filelist-wrapper .wy-file-item:before {
+  margin-right: 10px;
+  display: inline-block;
+  content: "";
+  position: absolute;
+  top: 13px;
+  left: -28px;
+  width: 24px;
+  height: 24px;
+  border-radius: 100%;
+  border: 1px solid #b7bfcb;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box
+}
+
+.wy-share-filelist-wrapper .active .wy-file-item:before {
+  left: 15px
+}
+
+.wy-share-filelist-wrapper .active .wy-file-item {
+  padding-left: 52px
+}
+
+.wy-share-filelist-wrapper .active .wy-file-item .bBor:after {
+  left: 93px
+}
+
+.wy-share-filelist-wrapper .unactive .wy-file-item .bBor:after {
+  left: 57px
+}
+
+.wy-share-filelist-wrapper .active .icon-grey-rarr {
+  display: none
+}
+
+.wy-share-filelist-wrapper .unchoseable:before {
+  width: 24px;
+  height: 24px;
+  border-radius: 100%;
+  border: 1px solid rgba(183,191,203,.5);
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box
+}
+
+.wy-share-filelist-wrapper .active .checked:before {
+  width: 24px;
+  height: 24px;
+  background-image: url(//img.weiyun.com/qz-proj/wy-h5/sprite/g-filelist@2x.png);
+  background-position: 0 0;
+  background-size: 32px 24px;
+  border-color: #fff
+}
+
+/*图片列表*/
+.wy-img-list-wrapper{
+  width:100%;
+}
+.wy-img-list-wrapper .img-item {
+    width: 100%;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+
+.wy-img-list-wrapper .img {
+  width:375px;
+  height:300px;
+}
+
+
+/*line*/
+.awy-share-filelist-wrapper .bBor:after {
+    left: 64px;
+}
+.abBor:after, .lBor:after, .rBor:after, .tBor:after {
+    background-color: #cacccd;
+}
+.abBor:after, .rBor:after {
+    -webkit-transform-origin: 100% 100%;
+    transform-origin: 100% 100%;
+}
+.abBor:after, .tBor:before {
+    -webkit-transform: scaleY(.5);
+    transform: scaleY(.5);
+}
+.abBor:after {
+    bottom: 0;
+}
+.abBor:after, .tBor:before {
+    position: absolute;
+    content: "";
+    height: 1px;
+    background: #a2a2a0;
+    left: 0;
+    right: 0;
+}
+
+
+
+
+
+
+
+

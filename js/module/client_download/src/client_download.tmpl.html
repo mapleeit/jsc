@@ -1,0 +1,69 @@
+<!--
+客户端下载对话框模板
+@author jameszuo
+@date 13-4-1 下午1:30
+-->
+<script id="client_download_dialog" type="text/html" nowith="yes">
+    <%
+    var lib = require('lib'),
+        common = require('common'),
+        constants = common.get('./constants'),
+        $ = require('$'),
+
+        name_map = {
+            ios: 'iPhone',
+            android: 'Android'
+        },
+
+        type = data.type;
+    %>
+    <div data-no-selection class="get_app_layer">
+        <del data-action="X"></del>
+
+        <h2>微云<%=name_map[type]%>版</h2>
+        <div class="get_url_area">
+            <div class="register_area">
+
+                <!-- 发送前 -->
+                <div data-name="before_send" class="register_form">
+                    <h3>方法一：短信获取下载地址</h3>
+                    <p class="des">请填写手机号，下载地址将发送到您的手机上。</p>
+                    <input data-action="phone_num" class="text" type="tel" placeholder="请输入手机号码">
+                    <a data-action="send" class="button" href="#">发送短信</a>
+                    <p data-action="error" style="display: none;" class="error_des"></p>
+                </div>
+
+                <!-- 发送后 -->
+                <div data-name="after_send" style="display: none;" class="register_success">
+                    <p class="des">您将收到一条包含微云下载地址的短信，点击短信中的地址即可开始下载。</p>
+                    <h3>方法一：手机短信获取</h3>
+                    <a data-action="X" class="button" href="#">完成</a>
+                    <a data-action="again" href="#" style="margin-left: 15px;">再次发送短信</a><p></p>
+                    <p data-action="error" style="display: none;" class="error_des"></p>
+                </div>
+
+                <% if (type === 'ios') { %>
+                    <div class="get_apk">
+                        <h3>方法二：前往App Store下载</h3>
+                        <p class="des"><a href="http://itunes.apple.com/cn/app/id522700349?mt=8&ls=1" target="_blank">连接到 iTunes Store</a></p>
+                    </div>
+                <% } else if (type === 'android') { %>
+                    <div class="get_apk">
+                        <h3>方法二：下载安装包</h3>
+                        <p class="des">
+                            <a href="http://www.weiyun.com/d/?d=android&s=<%=constants.IS_APPBOX ? 'appbox' : 'web' %>" target="download_android_client">点击开始下载</a>
+                            <iframe src="" name="download_android_client" style="display:none;"></iframe>
+                        </p>
+                    </div>
+                <% } %>
+
+            </div>
+        </div>
+
+        <div class="get_code_area">
+            <h3>方法三：二维码获取</h3>
+            <p class="des">使用手机上的二维码扫描软件拍摄以下二维码即可立即下载。</p>
+            <img src="http://imgcache.qq.com/vipstyle/nr/box/portal/demoImg/weiyunQR<%=constants.IS_APPBOX ? '-appbox' : '' %>.png">
+        </div>
+    </div>
+</script>

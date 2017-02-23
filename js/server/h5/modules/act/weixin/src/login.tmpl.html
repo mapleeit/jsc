@@ -1,0 +1,57 @@
+<script id="login" type="text/html" nowith="yes">
+<%
+    var serverConfig = plug('config') || {};
+    var wxAppid = serverConfig.isTest ? 'wxe310dc0d754093ee' : 'wxd15b727733345a40'; //测试时使用测试号的appid
+%>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,minimum-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="x5-orientation" content="portrait">
+    <!-- 如页面上需要使用文件类型icon，引入weiyun-filetype-icons.css -->
+    <link rel="stylesheet" href="http://imgcache.qq.com/vipstyle/nr/box/web/css/weiyun-global.css">
+    <link rel="stylesheet" href="http://imgcache.qq.com/vipstyle/nr/box/web/css/weiyun-pub-ac.css">
+</head>
+<body data-seajs="">
+<section class="wy-bg-wrapper">
+    <div class="wy-login-wrapper">
+        <p class="wy-logo"></p>
+        <div class="btn-group">
+            <!-- .btn-main 按下时 添加 btn-main-active class -->
+            <button id="qqlogin" class="btn btn-main" type="submit" role="button">QQ登录</button>
+            <!-- .btn 按下时 添加 btn-active class-->
+            <button id="wxlogin" class="btn trblBor" type="submit" role="button">微信登录</button>
+        </div>
+    </div>
+</section>
+<script type="text/javascript" src="http://imgcache.qq.com/club//weiyun/js/publics/zepto/zepto-1.1.6.min.js?max_age=604800"></script>
+<script>
+    $('#qqlogin').on('touchstart', function(e) {
+        $(e.target).addClass('btn-main-active');
+    }).on('touchend', function(e) {
+        window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=<%=wxAppid%>&redirect_uri=http%3A%2F%2Fweb2.cgi.weiyun.com%2Fweixin_oauth20.fcg%3Fg_tk%3D5381%26appid%3D<%=wxAppid%>%26action%3Dsub_act_qq_login&response_type=code&scope=snsapi_userinfo&state=sub_act_qq_login#wechat_redirect";
+    });
+
+    $('#wxlogin').on('touchstart', function(e) {
+        $(e.target).addClass('btn-active');
+    }).on('touchend', function(e) {
+        window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=<%=wxAppid%>&redirect_uri=http%3A%2F%2Fweb2.cgi.weiyun.com%2Fweixin_oauth20.fcg%3Fg_tk%3D5381%26appid%3D<%=wxAppid%>%26action%3Dsub_act_wx_login&response_type=code&scope=snsapi_userinfo&state=sub_act_wx_login#wechat_redirect";
+    });
+</script>
+<script type='text/javascript' src='http://pingjs.qq.com/tcss.ping.js'></script>
+<script>
+    (function() {
+        if (typeof pgvMain == 'function') {
+            pgvMain("", {
+                tagParamName: 'WYTAG',
+                virtualURL: '/act/weixin/login.html',
+                virtualDomain: "h5.weiyun.com"
+            });
+        }
+    })();
+</script>
+</body>
+</html>
+</script>

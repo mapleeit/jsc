@@ -1,0 +1,55 @@
+<!--
+文档预览外部框
+@author svenzeng
+@date 13-3-15 上午10:28
+-->
+<script id="compress_preview_box" type="text/html" nowith="yes">
+        <div id="_compress_preview_box" data-no-selection="" class="viewer" style="">
+        <div class="viewer-header">
+            <!-- 关闭按钮 -->
+            <a data-action="X" class="viewer-close" hidefocus="true" href="#">×</a>
+        </div>
+        <div data-action="X" class="viewer-inner">
+            <table class="viewer-cnt">
+                <tbody>
+                    <tr>
+                        <td data-name="inner" class="viewer-item">
+                            <div data-name="viewer" class="other-viewer">
+                                <div data-name="box" class="viewer-content" style="top: 50px; left: 200px; width: 915px; height: 685px; position: absolute;">
+                                    <div data-name="content" class="viewer-docs">
+                                        <!-- 双层模式 -->
+                                        <div class="view-zip-header" style="display:none" data-name="title1"><h3>
+                                            <span class="view-zip-dir-parent"></span>
+                                            <span class="view-zip-dir-current"></span>
+                                        </h3></div>
+                                        <div class="view-zip-header" data-name="title2"><h3>
+                                            <span class="view-zip-dir-only"></span>
+                                        </h3></div>
+                                        <!-- 用来预览的iframe -->
+                                        <iframe frameborder="0" src="about:blank" style="height: 635px;"></iframe>
+                                        <!-- 进度条 -->
+                                        <div data-name="loading" class="viewer-init">
+                                            <div class="ui-quota">
+                                                <div data-name="loading-bar" class="ui-quota-bar" style="width: 0%;"></div>
+                                            </div>
+                                            <p class="ui-quota-text">
+                                                <span data-name="loading-text">文档正在加载中，请稍候</span>
+                                            </p>
+                                        </div>
+                                        <!-- 错误提示 -->
+                                        <div data-name="error" class="viewer-tips" style="display:none;">
+                                            <div class="ui-tips">
+                                                <i class="ui-icon icon-err"></i>
+                                                <p class="ui-text"><span><%/* 这里放错误文本 */%></span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</script>

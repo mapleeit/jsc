@@ -1,0 +1,115 @@
+<script id="index" type="text/html" nowith="yes">
+    <%
+        data = data || {};
+        var rawData = data.rawData || {};
+        var vmData = data.vmData || {};
+        var __signInModel = vmData.__signInModel || {},
+            __giftListModel = vmData.__giftListModel || {};
+
+        var i, j, key, len, list, item;
+    %>
+    <script type="text/javascript"> console.log(<%=JSON.stringify(data)%>)</script>
+<div class="app-checkin-exchange j-index-container j-container" style="display: none">
+    <div class="hd">
+        <button class="btn btn-personal j-personal-center" data-action="go_personal_center"><i class="icon icon-personal"></i></button>
+        <div class="infor">
+            <i class="icon icon-calendar"></i>
+            <h2 class="text">今日已签到</h2>
+            <p class="sub-text j-signin-text">已连续签到<%=__signInModel.__signInCount%>天，总金币：<%=__signInModel.__totalPoint%></p>
+        </div>
+        <div class="checkin-list">
+            <ul>
+                <% for (i = 0, len = __signInModel.__signInListModel.length; i < len; i++ ) {
+                    item = __signInModel.__signInListModel[i];
+                %>
+                <li class="item-checkin <%=__signInModel.__signInCount > i + 1 ? 'on' : ''%> <%=__signInModel.__signInCount === i + 1 ? 'act' : ''%>">
+                    <div class="num"><span>+<%=item.score%></span></div>
+                    <span class="day"><%=item.text%></span>
+                </li>
+
+                <% } %>
+            </ul>
+        </div>
+    </div>
+    <div class="bd">
+        <%
+            for (key in __giftListModel) {
+                if (__giftListModel.hasOwnProperty(key)) {
+                    list = __giftListModel[key];
+        %>
+        <div class="box <%=key === '人气推荐' ? 'gift-hot' : 'gift-exchange' %>">
+            <div class="box-hd bBor"><h4><%=key%></h4></div>
+            <div class="box-bd">
+                <ul class="gift-list clearfix">
+                    <% for (i = 0, len = list.length; i < len; i++) {
+                        item = list[i];
+                    %>
+                    <li class="item-gift rBor j-item-gift <%= item.is_empty ? 'soldout' : ''%>" data-prize-id="<%=item.prizeid%>" data-rule-id="<%=item.ruleid%>" data-action="go_goods_detail" data-pathway="<%=item.pathway%>">
+                        <div class="pic">
+                            <div class="info" style="background-image:url(<%=item.image_url%>)"></div>
+                            <% if (!item.time_valid) { %>
+                            <p class="tip"><%=item.limit_begin_time%>开抢</p>
+                            <% } %>
+                            <% if (item.is_empty) { %>
+                            <div class="mask"><span>已抢光</span></div>
+                            <% } %>
+                        </div>
+                        <div class="title"><span><%=item.name%></span></div>
+                        <div class="gift-num">
+                            <% if (item.pathway === 'exchange') { %>
+                            <i class="icon icon-coin"></i><span class="num"><%=item.score%></span>
+                            <% } else if (item.pathway === 'lottery') { %>
+                            <span class="lottery">抽奖获得</span>
+                            <% } %>
+                        </div>
+                    </li>
+                    <% } %>
+                </ul>
+            </div>
+        </div>
+        <%
+                }
+            }
+        %>
+        <div class="more-bar j-more-bar" data-action="go_more_prize">
+            <span>查看更多</span>
+            <i class="icon icon-more"></i>
+        </div>
+    </div>
+</div>
+
+<script type='text/javascript' src='//img.weiyun.com/club/weiyun/js/publics/tcss/tcss.ping.js'></script>
+<script>
+    var pvClickSend = function (tag) {
+        if (typeof(pgvSendClick) == "function") {
+            pgvSendClick({
+                hottag: tag,
+                virtualDomain: 'www.weiyun.com'
+            });
+        }
+    };
+    (function() {
+        if (typeof pgvMain == 'function') {
+            pgvMain("", {
+                tagParamName: 'WYTAG',
+                virtualURL: '/mobile/sign_in#sign_in',
+                virtualDomain: "www.weiyun.com"
+            });
+        }
+    })();
+</script>
+<script type="text/javascript">
+    window.IS_TEST_ENV = <%=(plug('config') || {}).isTest%>;
+    window.IS_MOBILE = <%=window['g_weiyun_info'].is_mobile%>;
+    window.APPID = <%=require('weiyun/util/appid')()%>;
+    window.g_serv_taken = <%=new Date() - window['g_weiyun_info'].serv_start_time%>;
+    window.g_start_time = +new Date();
+</script>
+<%=require('weiyun/util/inline').js(['seajs', 'configs_mobile'])%>
+<script type="text/javascript">
+    seajs.use(['$', 'lib',  'common', 'sign_in'], function($, lib, common, index){
+        index.get('./signin').init(<%=JSON.stringify(rawData)%>);
+    });
+</script>
+
+</script>

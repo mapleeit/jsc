@@ -1,0 +1,45 @@
+
+/*
+*--------------------------------------------------------------------------------
+ 选项卡
+*--------------------------------------------------------------------------------
+*/
+.tab:after{visibility:hidden; display:block; font-size:0; content:"."; clear:both; height:0}
+.tab{zoom:1; clear:both; padding-left:10px; margin-bottom:10px}
+.tab > li{float:left; margin-right:6px}
+.tab > li > a{display:block; height:18px; line-height:18px; padding:3px 12px; text-decoration: none; vertical-align:baseline; white-space: nowrap; padding-top:4px\9; padding-bottom:2px\9;}
+.tab > li > a:hover{text-decoration:underline;}
+.tab > li.current{margin-bottom:-1px}
+.tab > li.current > a{border-width:2px 1px 0; border-style:solid; border-bottom:none; font-weight:600; padding-top:1px; padding-bottom:4px; padding-top:2px\9; padding-bottom:3px\9; outline:none}
+.tab > li.current > a:hover,.tab .dropdown-toggle:hover{text-decoration:none}
+.tab-background > li > a{padding-top:5px; padding-bottom:5px; padding-top:7px\9; padding-bottom:3px\9}
+.tab-background > li.current > a{padding-top:4px; padding-bottom:6px; padding-top:6px\9; padding-bottom:4px\9; border-width:1px 1px 0}
+.tab-toolbar > li.current{ margin-top:2px;}
+.tab-toolbar > li > a{padding-top:8px; padding-bottom:7px; padding-top:10px\9; padding-bottom:5px\9}
+.tab-toolbar > li.current > a{padding-top:5px; padding-bottom:8px; padding-top:7px\9; padding-bottom:6px\9; border-width:1px 1px 0}
+.tab-nav > li{margin-right: -1px}
+.tab-nav > li > a{font-size: 14px; zoom:1; border-width:1px 1px 0; border-style:solid; }
+.tab-nav > li > a:hover{text-decoration: none}
+.tab-nav > li.current{position: relative; z-index: 101}
+.tab-nav > li.current > a{border-top-width: 1px;}
+.tab-nav > li > a,.tab-nav > li.current > a{padding-top: 4px; padding-bottom: 6px;}
+.tab-nav > li.dropdown-open > a{text-shadow:none!important;}
+
+.tab > li.dropdown-open > a{text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.1);}
+.tab > li.current.dropdown-open > a{border-top-width:1px;}
+.tab > li > a.dropdown-toggle{line-height:16px \0;}
+.tab .dropdown-toggle .arr{margin-top:0.6em; margin-top:0.5em\0; *margin:0.3em 0 0 -2px;}
+.tab .dropdown-up .dropdown-menu{margin-bottom: 0;}
+.tab-content{min-height:80px}
+.tab-content .loading{margin-left:10px}
+
+.tab-nav .dropdown-open .arr,.tab-nav .dropdown-open:hover .arr,
+.tab-nav .dropdown-up.dropdown-open .arr,.tab-nav > li.current .arr,
+.tab-nav > li.current:hover .arr{opacity:.6 !important; filter:alpha(opacity=60) !important; border-top-color:#000!important;}
+.tab-nav > li.current .arr,.tab-nav > li.current:hover .arr{border-top-color:#fff!important;}
+.tab-nav > li.current .dropdown-toggle{color:#fff!important;}
+.tab-nav .dropdown-up.dropdown-open .arr{border-bottom-color:#000!important;}
+.tab-nav > li.current.dropdown-up .arr{border-bottom-color:#fff!important;}
+.tab-css-loaded{clear:both;}
+
+

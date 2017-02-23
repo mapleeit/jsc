@@ -1,0 +1,15 @@
+<!-- 定义模板 -->
+<template name="navItem">
+	<!-- [ATTENTION!!] 选中时添加 .act -->
+	<view class="item {{act}}">
+		<view class="btn" data-index="{{index}}" bindtap="bindNavTap">
+			<!-- .act 添加后，改变 src 的值，变成 nav-xxx-act@2x -->
+			<image class="img" src="{{img}}" background-size="cover">
+				全部文件
+			</image>
+		</view>
+		<!-- .act 添加后，显示出下划线 -->
+		<i class="border" style="display:{{border?'block':'none'}}">
+		</i>
+	</view>
+</template>

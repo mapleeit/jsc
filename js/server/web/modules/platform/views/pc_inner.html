@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<script>
+    (function() {
+//        var onmessage = function(e) {
+//        }
+//        if (typeof window.addEventListener != 'undefined') {
+//            window.addEventListener('message', onmessage, false);
+//        } else if (typeof window.attachEvent != 'undefined') {
+//            window.attachEvent('onmessage', onmessage);
+//        }
+        var message = document.cookie;
+        window.parent.postMessage(message, '*');
+    })();
+
+</script>
+</body>
+</html>

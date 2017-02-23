@@ -1,0 +1,243 @@
+<script id="web_body" type="text/html" nowith="yes">
+    <!DOCTYPE html>
+    <%
+        var server_taken = new Date() - window.serv_start_time;
+        var APPID = require('weiyun/util/appid')();
+        var server_config = plug('config') || {};
+        var is_test_env = !!server_config.isTest;
+        var AID = require('weiyun/util/payAids').get('web.mac');
+
+        var prettysize = require('weiyun/util/prettysize'),
+        dateformat = require('weiyun/util/dateformat');
+        var data = data || {};
+        var validCouponList = data.validCouponList || [];
+        var invalidCouponList = data.invalidCouponList || [];
+    %>
+
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>页面标题</title>
+        <meta name="keywords" content="QQ, 腾讯,微云, 分享, 网盘, 网络硬盘, U盘, 云存储, 传输, 存储, 同步, 备份, 拍照, 上传, 下载, 中转, 文件, 照片, 相册, 离线, 传文件, wifi, cloud, 微云网页版, weiyun, weiyun web">
+        <meta name="description" content="微云是腾讯公司为用户精心打造的一项智能云服务, 您可以通过微云方便地在手机和电脑之间同步文件、推送照片和传输数据。">
+	    <meta itemprop="name" content="腾讯微云" />
+	    <meta itemprop="description" content="微云是腾讯公司为用户精心打造的一项智能云服务, 您可以通过微云方便地在手机和电脑之间,同步文件、推送照片和传输数据。" />
+	    <meta itemprop="image" content="https://img.weiyun.com/vipstyle/nr/box/img/logo/96x96.png" />
+	    <link rel="shortcut icon" href="https://img.weiyun.com/vipstyle/nr/box/img/favicon.ico?max_age=31536000" type="image/x-icon" />
+
+    <script>
+        var IS_TEST_ENV = <%=is_test_env%>;
+        window.IS_MOBILE = <%=window['g_weiyun_info'].is_mobile%>;
+        window.APPID = <%=APPID%>;
+        window.AID = '<%=AID%>';
+        window.g_serv_taken = <%=server_taken%>;
+        window.g_start_time = +new Date();
+    </script>
+
+    <!--<%=require('weiyun/util/inline').css(['page-vip-flow'], true)%>-->
+    <link rel="stylesheet" href="//qzonestyle.gtimg.cn/qz-proj/wy-pc/css/page-vip-flow.css">
+    <script>
+        window.g_css_time = +new Date();
+        document.domain='weiyun.com';
+    </script>
+
+    </head>
+<body>
+
+<div class="wy-vip-wrapper vip-flow j-container">
+    <!-- 页面头部 s -->
+    <div class="wy-hd clearfix">
+
+        <%
+            var userInfo = data.userInfo || {},
+                weiyunVipInfo = userInfo.weiyun_vip_info || {};
+            var nickname = userInfo.nick_name,
+                isVip = weiyunVipInfo.weiyun_vip,
+                isOldVip = weiyunVipInfo.old_weiyun_vip,
+                avatar = userInfo.head_img_url,
+                vipLogoURL = weiyunVipInfo.weiyun_vip_img_url,
+                vipLevelInfo = weiyunVipInfo.weiyun_vip_level_info,
+                expiresDate = weiyunVipInfo.weiyun_end_time?
+                        weiyunVipInfo.weiyun_end_time + '到期' : (isVip? '按月支付中' : ''),
+                posText = (isVip || isOldVip)? '续费' : '开通会员',
+                iconClass = isVip? 'ico ico-vip-m' : 'ico-novip-m';
+
+            var is_login = !!userInfo.nick_name;
+        %>
+
+        <!-- 用户信息 S -->
+        <div class="wy-acct">
+            <div class="acct">
+                <% if(is_login) { %>
+                <!-- 头像 -->
+                <div class="avatar-wrapper">
+                    <img src="<%=avatar%>" alt="" class="avatar">
+                    <%
+                        if(isVip || isOldVip) {
+                            var vip_logo_url = vipLogoURL.replace(/^http:|^https:/, '').replace('.png', 'M@2x.png');
+                    %>
+                    <i class="icon icon-vip" style="background-image:url(<%=vip_logo_url%>)">LV5</i>
+                    <% } %>
+                </div>
+                <!-- 账号信息 -->
+                <div class="info-wrapper">
+                    <p class="name"><%=nickname%></p>
+                    <%if(isVip){ %>
+                    <p class="time"><%=expiresDate%></p>
+                    <% } else if(isOldVip) { %>
+                    <p class="time">会员已到期</p>
+                    <% } else { %>
+                    <p class="time">未开通会员</p>
+                    <% } %>
+                </div>
+                <!-- 退出 -->
+                <div class="logout-wrapper">
+                    <button class="btn-icon icon-logout-s" data-action="logout">退出</button>
+                </div>
+                <button class="btn btn-outline" data-action="pay" data-id="3" onclick="pvClickSend('weiyun.vip.coupon.paybtn3')"><%=posText%></button>
+                <% } else { %>
+                <button class="btn btn-fill" data-action="login">登录</button>
+                <% } %>
+            </div>
+        </div>
+        <!-- 用户信息 E -->
+
+        <div class="wy-hd-inner clearfix">
+            <div class="logo"><a href="http://www.weiyun.com/" title="微云会员">微云会员</a></div>
+            <ul class="nav">
+                <!-- [ATTENTION!!] 选中态，添加 .act -->
+                <li class="item"><a href="//www.weiyun.com/vip/weiyun_vip.html?from=<%=data.source%>">首页</a></li>
+                <li class="item"><a href="//www.weiyun.com/vip/privilege.html?from=<%=data.source%>">特权介绍</a></li>
+                <li class="item"><a href="//www.weiyun.com/vip/growth.html?from=<%=data.source%>">成长体系</a></li>
+            </ul>
+        </div>
+    </div>
+    <!-- 页面头部 e -->
+
+    <!-- 页面内容 s -->
+    <div class="wy-bd">
+        <div class="cont-hd">
+            <h1 class="title">微云流量升级啦</h1>
+        </div>
+
+        <div class="cont-bd">
+            <div class="flow-block flow-buy">
+                <div class="inner-hd">购买流量券 文件任性传</div>
+                <div class="inner-bd">
+                    <ul>
+                        <li class="item ticket-buy-100">24小时100G流量券
+                            <button class="btn btn-buy" data-action="buy_coupon" data-coupon-type="2705">10元购买</button>
+                        </li>
+                        <li class="item ticket-buy-infinite">24小时无限流量券
+                            <button class="btn btn-buy" data-action="buy_coupon" data-coupon-type="2704">30元购买</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <%if (validCouponList.length || invalidCouponList.length) {%>
+            <div class="flow-block flow-use">
+                <div class="inner-hd">我的流量券</div>
+                <div class="inner-bd">
+                    <ul>
+                    <%
+                        for (let i = 0; i < validCouponList.length; i++) {
+                            let item = validCouponList[i];
+                            let statusClass = item.flow_coupon_status == 1 ? '' : 'using';
+                    %>
+                        <!-- [ATTENTION!!] 使用中添加 .using，过期添加 .useless，不需要隐藏原有结构 -->
+                        <li class="item ticket-use-<%=item.flow_coupon_type == 0 ? '100' : 'infinite'%> <%=statusClass%>"  data-coupon-id="<%=item.flow_coupon_id%>">
+                            <% if (item.flow_coupon_status == 1) {%>
+                            <div class="exp not-used" data-action="use_coupon">
+                                <button class="btn btn-use">立即使用</button>
+                                <p class="txt">点击立即使用后</p>
+                                <p class="txt">仅24小时内有效</p>
+                            </div>
+                            <% } else { %>
+                            <div class="exp used">
+                                <p class="tag">已使用</p>
+                                <p class="txt"><strong><%=dateformat(item.use_time + item.ttl, 'mm-dd HH:MM')%></strong>前有效</p>
+                                <p class="txt">之后流量会失效</p>
+                            </div>
+                            <% } %>
+                        </li>
+                    <%
+                        }
+                        for (let i = 0; i < invalidCouponList.length; i++) {
+                            let item = invalidCouponList[i];
+                    %>
+                        <li class="item ticket-use-<%=item.flow_coupon_type == 0 ? '100' : 'infinite'%> useless" data-coupon-id="<%=item.flow_coupon_id%>">
+                            <% if (item.flow_coupon_status == 1) {%>
+                            <div class="exp not-used">
+                                <button class="btn btn-use">立即使用</button>
+                                <p class="txt">点击立即使用后</p>
+                                <p class="txt">仅24小时内有效</p>
+                            </div>
+                            <% } else { %>
+                            <div class="exp used">
+                                <p class="tag">已使用</p>
+                                <p class="txt"><strong><%=dateformat(item.use_time + item.ttl, 'mm-dd HH:MM')%></strong>前有效</p>
+                                <p class="txt">之后流量会失效</p>
+                            </div>
+                            <% } %>
+                        </li>
+                    <%
+                        }
+                    %>
+                    </ul>
+                </div>
+            </div>
+            <%
+                }
+            %>
+            <div class="flow-block flow-txt">
+                <div class="inner-hd">活动说明</div>
+                <div class="inner-bd">
+                    <ul class="list">
+                        <li class="item">24小时流量券是在当前流量的基础上叠加使用。自点击“立即使用”起24小时内有效。超过24小时，流量券自动失效。</li>
+                        <li class="item">无限量流量券可在24小时内无限上传（注：可上传流量小于等于您的微云空间总剩余容量），请根据使用情况酌情购买。</li>
+                        <li class="item">购买后未使用的流量券将在2016年12月31日后失效。</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 页面内容 e -->
+
+    <%=require('weiyun/web/modules/footer/tmpl').footer()%>
+
+</div>
+
+<script src="//img.weiyun.com/c/=/club/weiyun/js/publics/seajs/sea.js,/club/weiyun/js/publics/seajs-plugins/seajs-combo.js?max_age=31104000"></script>
+<script src="//img.weiyun.com/club/weiyun/js/act/coupon/config.js?v160822"></script>
+<script type="text/javascript" charset="utf-8" src="//fusion.qq.com/fusion_loader?appid=1450007296&platform=qzone"></script>
+
+<script type="text/javascript">
+    seajs.use(['$', 'lib', 'common', 'index'], function($, lib, common, index){
+        var coupon = index.get('./coupon');
+        coupon.render(<%=JSON.stringify(data)%>);
+    });
+</script>
+
+<script type='text/javascript' src='//img.weiyun.com/club/weiyun/js/publics/tcss/tcss.ping.js'></script>
+<script>
+    var pvClickSend = function (tag) {
+        if (typeof(pgvSendClick) == "function") {
+            pgvSendClick({
+                hottag: tag,
+                virtualDomain: 'www.weiyun.com'
+            });
+        }
+    };
+    (function() {
+        if (typeof pgvMain == 'function') {
+            pgvMain("", {
+                tagParamName: 'WYTAG',
+                virtualURL: '/mobile/act/coupon.html',
+                virtualDomain: "www.weiyun.com"
+            });
+        }
+    })();
+</script>
+</body>
+</html>
+</script>

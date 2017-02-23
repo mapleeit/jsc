@@ -1,0 +1,14 @@
+<import src="../common/navItem.wxml" />
+<!-- 定义导航栏 -->
+<view class="nav-list bBor" style="display:{{navDisplay?'':'none'}}">
+    <!-- 模板定义在 ../common/navItem.wxml -->
+    <!-- 使用 wx:for-item 可以指定数组当前元素的变量名 -->
+    <block wx:for="{{navList}}" wx:for-item="navItem" wx:for-index="index" wx:key="unique">
+        <template is="navItem" data="{{...navItem, index}}">
+        </template>
+    </block>
+
+    <!-- 分割线 -->
+    <i class="after">
+    </i>
+</view>

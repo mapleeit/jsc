@@ -1,0 +1,44 @@
+<!--
+ 列表容器模板
+ @author: cluezhang
+ @date: 2013-09-16
+-->
+<script id="group_cover_list" type="text/html" nowith="yes">
+    <ul class="edit-cover clear">
+
+    </ul>
+</script>
+<!--
+ 单项模板
+ @author: cluezhang
+ @date: 2013-09-16
+-->
+<script id="group_cover_items" type="text/html" nowith="yes">
+    <%
+        var constants = require('common').get('./constants');
+        var records = data.records;
+        var id_perfix = data.id_perfix || 'photo-item-';
+        var empty_group_img = constants.HTTP_PROTOCOL + "//img.weiyun.com/vipstyle/nr/box/img/photo-group-empty-min.png"
+    %>
+    <% 
+    $.each(records, function(index, record){
+     %>
+        <li class="list <%=record.get('selected') ? 'checked' : ''%>" id="<%=id_perfix+record.id%>" data-record-id="<%=record.id%>" >
+            <a class="link" href="#">
+                <img src="<%=empty_group_img%>">
+                <div class="mask"></div>
+                <i class="check"></i>
+            </a>
+        </li>
+    <% }); %>
+</script>
+<!--
+ 列表容器模板
+ @author: cluezhang
+ @date: 2013-09-16
+-->
+<script id="cover_empty" type="text/html" nowith="yes">
+    <div style="height: 30px;line-height: 30px;color: #adb2b9;font-size: 18px;text-align: center;">
+        此分组中无图片
+    <div>
+</script>

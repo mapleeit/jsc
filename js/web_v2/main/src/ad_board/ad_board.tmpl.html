@@ -1,0 +1,15 @@
+<script id="ad_board" type="text/html" nowith="yes">
+    <%
+        data = data || {};
+    %>
+    <% if (data.validated) { %>
+    <div class="mod-pro j-ad-board">
+        <div class="pro-hd j-ad-board-hd">
+            <a class="btn-close j-ad-board-close-btn" href="javascript:void(0)" title="关闭"></a>
+        </div>
+        <div class="pro-bd j-ad-board-bd">
+            <a class="j-ad-board-bd-a" href="<%=data.link%>" target="_blank"><img class="pro-img j-ad-board-bd-img" src="<%=data.img_url%>" alt="开通微云会员 赠送半年"></a>
+        </div>
+    </div>
+    <% } %>
+</script>

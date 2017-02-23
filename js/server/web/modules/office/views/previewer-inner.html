@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<!--[if lt IE 7 ]> <html class="ie6"> <![endif]-->
+<!--[if IE 7 ]> <html class="ie7"> <![endif]-->
+<!--[if IE 8 ]> <html class="ie8"> <![endif]-->
+<!--[if IE 9 ]> <html class="ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]>--> <html> <!--<![endif]-->
+<!--<html>-->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>文档预览</title>
+    <script type="text/javascript" src="https://img.weiyun.com/c/=/club/weiyun/js/publics/jquery/jquery-1.8.3.min.js,/club/weiyun/js/publics/seajs/sea.js,/club/weiyun/js/publics/seajs-plugins/seajs-combo.js?max_age=31104000"></script>
+    <script type="text/javascript" src="https://www.weiyun.com/disk/js/configs_web.js"></script>
+    <script type="text/javascript">
+        document.domain = 'weiyun.com';
+
+        function go_office_online(opts) {
+            $('#token').val(opts.access_token);
+            $('form').attr('action', opts.target).submit();
+        }
+    </script>
+</head>
+<body>
+<form method="post" action="">
+    <input id="token" type="text" name="access_token" style="display: none;"/>
+</form>
+</body>
+</html>

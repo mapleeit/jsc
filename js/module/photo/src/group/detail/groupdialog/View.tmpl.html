@@ -1,0 +1,34 @@
+<!--
+ 列表容器模板
+ @author: cluezhang
+ @date: 2013-09-16
+-->
+<script id="detail_group_dialog_list" type="text/html" nowith="yes">
+    <ul class="edit-group clear"></ul>
+</script>
+
+<!--
+ 单项模板
+ @author: cluezhang
+ @date: 2013-09-16
+-->
+<script id="detail_group_dialog_items" type="text/html" nowith="yes">
+    <%
+        var constants = require('common').get('./constants');
+        var default_img_url = constants.HTTP_PROTOCOL + '//img.weiyun.com/vipstyle/nr/box/img/photo-group-empty-min.png';
+        var text = require('lib').get('./text');
+        var records = data.records;
+    %>
+    <% 
+    $.each(records, function(index, record){
+     %>
+        <li class="list" data-record-id="<%=record.id%>" title="<%=text.text(record.get('name'))%>">
+            <a class="link <%= record.get('checked') ? 'checked' : '' %>" href="#">
+                    <img src="<%=default_img_url%>" />
+                    <span class="ellipsis"><%=text.text(record.get('name'))%></span>
+                    <div class="mask"></div>
+                    <i class="check"></i>
+            </a>
+        </li>
+    <% }); %>
+</script>

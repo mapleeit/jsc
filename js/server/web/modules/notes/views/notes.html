@@ -1,0 +1,265 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="Content-Language" content="zh-cn" />
+<meta http-equiv="X-UA-Compatible" content = "IE=edge,chrome=1" />
+<meta name="author" content="jinfu" />
+<meta name="Copyright" content="Tencent" />
+<title>笔记桌面软件内嵌页面</title>
+<style type="text/css">
+body{
+    margin: 0;
+    padding: 12px;
+    font-size: 14px;
+    color: #020202;
+    font-family: "Microsoft YaHei";
+}
+.notes .remark{
+    border: 1px #d8dce5 solid;
+    padding: 8px;
+}
+.notes .remark h2{
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+}
+.notes .remark .con,
+.notes .remark .j-max{
+    padding-top: 10px;
+    line-height: 1.7;
+    font-size: 12px;
+    word-break:break-all;
+    word-wrap:break-word;
+}
+.notes .remark .con .box{
+    -webkit-transition:max-height .4s;
+    transition:max-height .4s;
+    max-height: 37px;
+    _height:37px;
+    overflow: hidden;
+}
+.notes .remark .j-max .box{
+    max-height: 271px;
+    overflow: auto;
+}
+.notes .remark p{
+    margin: 0;
+    padding-bottom: 10px;
+}
+.notes .remark .toggle{
+    padding-right: 10px;
+    text-align: right;
+    color: #868686;
+    cursor: pointer;
+    padding-top: 5px;
+}
+.notes .remark .close i{
+    display: inline-block;
+    width:0;height:0;overflow:hidden;font-size:0;line-height:0;
+    border-width:4px;
+    border-color:#bababa transparent transparent transparent;
+    border-style:solid dashed dashed dashed;
+    vertical-align: bottom;
+    margin-left: 5px;
+    cursor: pointer;
+    margin-bottom: 3px;
+}
+.notes .remark .j-open i{
+    border-color:transparent transparent #bababa transparent;
+    border-style:dashed dashed solid dashed;
+    vertical-align: top;
+    margin-top: 3px;
+    _margin-top:-2px;
+    _border-width:5px;
+}
+.notes .remark .edit-remark{
+    position: absolute;
+    display: block;
+    right: 5px;
+    top: 5px;
+    width: 42px;
+    height: 42px;
+    background: url(edit-remark.png) no-repeat center center;
+    _background: none;
+    _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='edit-remark.png', sizingMethod='crop');
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 12px;
+    text-align: center;
+    line-height: 1.2;
+    cursor: pointer;
+    filter:alpha(opacity=70);
+    opacity:.70;
+}
+.notes .remark .edit-remark:hover{
+    filter:alpha(opacity=100);
+    opacity:1;
+}
+.notes .remark .edit-remark span{
+    display: inline-block;
+    padding-top: 7px;
+    cursor: pointer;
+}
+.notes .container h1{
+    margin: 15px 0 5px 0;
+    font-size: 26px;
+    font-weight: normal;
+}
+.notes .container .info{
+    color: #868686;
+    font-size: 12px;
+}
+.notes .container .info span.link{
+    display: inline-block;
+    margin-left: 10px;
+}
+.notes .container .info a.link{
+    text-decoration: none;
+    color: #1284f6; 
+}
+.notes .container .con{
+    padding-top: 15px;
+    padding-right: 10px;
+    line-height: 1.7;
+    word-break:break-all;
+    word-wrap:break-word;
+}
+.notes .container .con p{
+    margin: 0;
+    padding: 0 0 15px 0;
+}
+.notes .container .con img{
+    max-width: 100%;
+    margin: 10px 0 10px 0;
+}
+</style>
+</head>
+	<body class="notes">
+    <div id="remark-box" class="remark">
+        <h2>备注：</h2>
+        <div id="remark" class="con">
+            <div class="box" data-box-parent="true"><div data-box="true">
+                一键备份手机中的所有照片，WiFi环境下后台自动备份。可以备份5000万张手机照片，手机备份后其他终端随时浏览、分享、管理自己的照...<br>
+                1月9日，腾讯在北京召开微云2.0产品“私享会”，率先体验即将上线的微云2.0版本。腾讯云平台部副总经理纪顺友于现场进行产品新功能展示，他还公布微云用户数已成功突破了3亿大关，成为最多用户选择的个人云存储产品。 <br><br>
+
+                微云2.0对产品功能进行了全方位更新，将由单一的存储服务向全能型的聚合服务产品进化。无论是产品功能还是产品定位，微云都在延续云存储产品核心价值的基础上，朝着全能化的方向发展。微云2.0除了可以依托10TB高速云存储空间向用户提供照片、文件的存储与跨平台传输功能外，进一步拓展了云存储产品的可能性，将QQ影音内核、应用宝、写笔记、二维码扫描等功能聚合进微云。 <br>
+
+                2013年互联网巨头都在打响云端的攻坚战，百度360之间云盘的免费大战，让巨头都对云生态产生浓厚的兴趣。而移动互联网的发展让互联网企业更是看到云服务的重要性，纪顺友预计到2014年在中国市场上，个人云会发挥更大的功能，会有更多用户认知、亲身体验到云是怎么回事，会产生更大的需求，用户量也增长得更快、更迅猛。 个人云的服务必须依赖多屏时代用户需求的不断加深和发展，智能移动手机的普及是第一拨趋势，第二拨就是其他智能设备，比如穿戴设备，甚至智能汽车等，数据产生源越来越多，而这些数据产生源都是联网的，对用户来说其实都是属于一个场景或者是一个流程里面。所以，数据需要有个共同的地方去存储、同步、分享和备份，而云服务承担最适合的角色。 <br>依托于云技术向用户提供全方位的服务，将会是个人云存储产品新的发展趋势，微云2.0也将以全面变革的姿态，通过当下云存储产品所不具备的强大功能服务体系，将网络存储市场推向一个崭新的全能服务时代。 <br>
+                1月9日，腾讯在北京召开微云2.0产品“私享会”，率先体验即将上线的微云2.0版本。腾讯云平台部副总经理纪顺友于现场进行产品新功能展示，他还公布微云用户数已成功突破了3亿大关，成为最多用户选择的个人云存储产品。<br> 
+
+                
+            </div></div>
+            <div id="remark-toggle" class="toggle close"><span data-toggle="true" class="j-txt">展开</span><i></i></div>
+        </div>
+        <a id="edit-remark" href="#" class="edit-remark"><span>修改<br>备注</span></a>
+    </div>
+    <div id="container" class="container">
+        <h1>精致的美食艺术“和果子”</h1>
+        <div class="info"><span id="container-time" class="time">二月 18th,2014</span> | <span class="source">画板没事</span><span class="link"></span><a class="link" href="#">http://www.weiyun.com/index.html?WYTAG=weiyun.portal.download</a></div>
+        <div class="con">
+            <p>1月9日，腾讯在北京召开微云2.0产品“私享会”，率先体验即将上线的微云2.0版本。腾讯云平台部副总经理纪顺友于现场进行产品新功能展示，他还公布微云用户数已成功突破了3亿大关，成为最多用户选择的个人云存储产品。 </p>
+
+            <p>微云2.0对产品功能进行了全方位更新，将由单一的存储服务向全能型的聚合服务产品进化。无论是产品功能还是产品定位，微云都在延续云存储产品核心价值的基础上，朝着全能化的方向发展。微云2.0除了可以依托10TB高速云存储空间向用户提供照片、文件的存储与跨平台传输功能外，进一步拓展了云存储产品的可能性，将QQ影音内核、应用宝、写笔记、二维码扫描等功能聚合进微云。 
+                <img src="http://imgcache.qq.com/vipstyle/nr/box/home/pic/banner3.jpg" alt="微云，生活精彩">
+            </p>
+
+            <p>2013年互联网巨头都在打响云端的攻坚战，百度360之间云盘的免费大战，让巨头都对云生态产生浓厚的兴趣。而移动互联网的发展让互联网企业更是看到云服务的重要性，纪顺友预计到2014年在中国市场上，个人云会发挥更大的功能，会有更多用户认知、亲身体验到云是怎么回事，会产生更大的需求，用户量也增长得更快、更迅猛。 个人云的服务必须依赖多屏时代用户需求的不断加深和发展，智能移动手机的普及是第一拨趋势，第二拨就是其他智能设备，比如穿戴设备，甚至智能汽车等，数据产生源越来越多，而这些数据产生源都是联网的，对用户来说其实都是属于一个场景或者是一个流程里面。所以，数据需要有个共同的地方去存储、同步、分享和备份，而云服务承担最适合的角色。 依托于云技术向用户提供全方位的服务，将会是个人云存储产品新的发展趋势，微云2.0也将以全面变革的姿态，通过当下云存储产品所不具备的强大功能服务体系，将网络存储市场推向一个崭新的全能服务时代。 </p>
+        </div>
+    </div>
+    <script type="text/javascript" src="http://imgcache.qq.com/c/=/club/weiyun/js/publics/jquery/jquery-1.8.3.min.js"></script>
+    <script>
+
+    var jin={};
+    jin.wClientWidth= function(r) {
+        var d = document;
+        if (!jin._clientWidth || r) {
+            jin._clientWidth = d.documentElement.clientWidth;
+        }
+        return jin._clientWidth;
+    };
+    jin.broIe = /msie (\d+\.\d+)/i.test(navigator.userAgent) ? (document.documentMode || +RegExp['\x241']) : undefined;
+    jin.borIe6 = function(){
+        if(jin.broIe=="6"){
+            return true;
+        }else{
+            return false;
+        }
+    };
+
+    /*展开，收起*/
+    (function(){
+        var _remark=$("#remark");
+        $("#remark-toggle").on("click",function(){
+            var _this=$(this);
+            if(_remark.hasClass('j-max')){
+                _this.find("[data-toggle]").html("展开");
+                _this.removeClass('j-open');
+                _remark.removeClass('j-max');
+                if(jin.borIe6()){
+                    if(parseInt(_remark.find("[data-box]").height())>37){
+                        _remark.find("[data-box]").parent().height(37);
+                    }else{
+                        _remark.find("[data-box]").parent().height("auto");
+                    }
+                }
+            }else{
+                _this.find("[data-toggle]").html("收起");
+                _this.addClass('j-open');
+                _remark.addClass('j-max');
+                if(jin.borIe6()){
+                    if(parseInt(_remark.find("[data-box]").height())>271){
+                        _remark.find("[data-box]").parent().height(271);
+                    }else{
+                        _remark.find("[data-box]").parent().height("auto");
+                    }
+                }
+            }
+            return false;
+        });
+    })();
+
+    /*ie6不支持min-width补丁*/
+    $(window).load(function(){
+        if(jin.borIe6()){
+            $("#container").find("img").each(function(){
+                if($(this).width()>jin.wClientWidth()){
+                    $(this).width(jin.wClientWidth()-40);
+                }
+            });
+        }
+    });
+
+    /*修改备注*/
+    var editRemark=function(sessionid){
+        if(window.external.CallWeiyunClient_OnChangeTextTipsClick){
+            window.external.CallWeiyunClient_OnChangeTextTipsClick(sessionid);
+        }else{
+            alert("err:no found window.external.CallWeiyunClient_OnChangeTextTipsClick;");
+        }
+    };
+
+    /*时间*/
+    var containerTime=function(time){
+        $("#container-time").html(time);
+    };
+
+    /*备注填充*/
+    var remarkTxt=function(txt){
+        if(txt==""){
+            $("#remark-box").hide();
+        }else{
+            $("#remark-box").show();
+            txt=txt.replace(/[\r\n]+/g, '<br />');
+            $("#remark").find("[data-box]").html(txt);
+        }
+        /*高度不足，隐藏展开按钮*/
+        if($("#remark").find("[data-box]").height()>37){
+            $("#remark-toggle").show();
+        }else{
+            $("#remark-toggle").hide();
+        }
+    };
+    </script>
+    </body>
+</html>

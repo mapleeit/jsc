@@ -1,0 +1,115 @@
+<script id="chunkOne" type="text/html" nowith="yes">
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <%
+            var serverConfig = plug('config') || {};
+            var is_test_env = !!serverConfig.isTest;
+        %>
+        <meta charset="UTF-8">
+        <title>微云分享</title>
+        <meta name="format-detection" content="telephone=no" />
+        <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1,minimum-scale=1, maximum-scale=1, user-scalable=no">
+        <meta itemprop="name" content="微云分享" />
+        <meta itemprop="description" content="微云是腾讯公司为用户精心打造的一项智能云服务, 您可以通过微云方便地在手机和电脑之间,同步文件、推送照片和传输数据。" />
+	    <meta itemprop="image" content="https://img.weiyun.com/vipstyle/nr/box/img/logo/96x96.png" />
+        <style>
+            .icons-filetype {
+                display: inline-block;
+                width: 32px;
+                height: 32px;
+            }
+        </style>
+        <script>var IS_TEST_ENV = <%=is_test_env%>;window.APPID = <%=require('weiyun/util/appid')()%>;window.g_start_time = +new Date();document.domain='weiyun.com';</script>
+
+        <%=require('weiyun/util/inline').css(['g-reset', 'g-retina-border', 'wy-share', 'g-filetype-icons'], true)%>
+        <%=require('weiyun/util/inline').css(['g-retina-table','g-filelist','g-bottom-bar','g-err', 'g-component'])%>
+        <script>window.g_css_time = +new Date();document.domain='weiyun.com';</script>
+        <link rel="shortcut icon" href="https://img.weiyun.com/vipstyle/nr/box/img/favicon.ico?max_age=31536000" type="image/x-icon" />
+
+    </head>
+</script>
+
+
+<script id="baseHeader" type="text/html" nowith="yes">
+    <body class="<%=data.klass ? data.klass : ''%>">
+</script>
+
+<script id="baseBottom" type="text/html" nowith="yes">
+    <script type="text/javascript">
+        window.g_serv_taken = <%=new Date() - window.serv_start_time%>;
+        setTimeout(function() {
+            window.g_dom_ready_time = +new Date();
+        }, 0);
+    </script>
+    <%=require('weiyun/util/inline').js(['seajs', 'configs_mobile'])%>
+    <script type="text/javascript">
+
+        <% if(!data.ret) { %> //已经失败就不进行初始化了
+            seajs.use(['$', 'lib','common', 'outlink_v2'], function($, lib, common,  outlink) {
+                window.g_js_time = +new Date();
+                var outlink = outlink.get('./outlink');
+                outlink.render(<%=data.syncData%>);
+            });
+        <%} %>
+    </script>
+    <script type='text/javascript' src='//img.weiyun.com/club/weiyun/js/publics/tcss/tcss.ping.js'></script>
+    <script type='text/javascript' src='//qzonestyle.gtimg.cn/qzone/hybrid/common/security/aq.js'></script>
+    <script>
+        var pvClickSend = function (tag) {
+            if (typeof(pgvSendClick) == "function") {
+                pgvSendClick({
+                    hottag: tag,
+                    virtualDomain: 'share.weiyun.com'
+                });
+            }
+        };
+        (function() {
+            if (typeof pgvMain == 'function') {
+                pgvMain("", {
+                    tagParamName: 'WYTAG',
+                    virtualURL: '/mobile/share.html',
+                    virtualDomain: "share.weiyun.com"
+                });
+            }
+        })();
+    </script>
+    </body>
+    </html>
+</script>
+
+<script id="banner" type="text/html" nowith="yes">
+    <%
+        var htmlEscape = require('weiyun/util/htmlEscape');
+        var txt = '文件';
+
+        if(data.is_all_note) {
+            txt = '笔记';
+        } else if(data.is_all_video) {
+            txt = '视频';
+        } else if(data.is_all_image) {
+            txt = '图片';
+        }
+        var msg = '分享了' + data.share_cnt + '个' + txt;
+        var one_img = data.is_one_image;
+        if(one_img){
+            return '';
+        }
+    %>
+    <aside id="banner" class="wy-sharer">
+    <!-- 设置.sharer-avator div的background-image来更改用户头像 -->
+    <a id="_avator" class="sharer-avator share-vip" href="//h5.weiyun.com/vip?from=share" data-src="<%=data.share_head_image_url.replace(/^http:|^https:/, '')%>" style="background-image:none; display: block">
+        <% if(data.weiyun_vip) { %>
+        <i class="icon icon-share-vip"></i>
+        <% } %>
+    </a>
+    <div class="sharer-info">
+            <h2 class="sharer-name"><%=htmlEscape(data.share_nick_name)%></h2>
+    <div class="sharer-content">
+            <span class="sharer-count"><%=msg%></span>
+    </div>
+    </div>
+
+    <a href="//www.weiyun.com" class="link-to-wy"></a>
+    </aside>
+</script>

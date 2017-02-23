@@ -1,0 +1,283 @@
+<!--
+目录、文件列表模板
+@author jameszuo
+@date 13-3-4 上午9:35
+-->
+<script id="file_list" type="text/html" nowith="yes">
+
+    <!-- 空目录时的提示 -->
+    <div id="_disk_files_empty" class="g-empty sort-cloud-empty">
+        <div class="empty-box" tabindex="0">
+            <div class="ico"></div>
+            <p class="title">暂无文件</p>
+            <p class="content">请点击右上角的“添加”按钮添加</p>
+        </div>
+    </div>
+
+    <!-- 目录/文件 -->
+    <div class="files-view">
+
+        <!-- 文件列表 -->
+        <div id="_disk_files_file_list" class="files">
+            <!-- 嵌套模板 file_item -->
+        </div>
+    </div>
+</script>
+
+<script id="thumb_folder_item" type="text/html" nowith="yes">
+    <%
+    var lib = require('lib'),
+        common = require('common'),
+
+        $ = require('$'),
+        text = lib.get('./text'),
+        constants = common.get('./constants'),
+        file_type_map = common.get('./file.file_type_map'),
+        FileObject = common.get('./file.file_object'),
+
+        click_tj = common.get('./configs.click_tj'),
+        scr_reader_mode = common.get('./scr_reader_mode'),
+
+        view_switch = require('./view_switch.view_switch'),
+
+        click_enter_mode = constants.IS_APPBOX,
+
+        p_dir = data.p_dir,
+        files = data.files,
+        only_content = data.only_content === true,
+        show_thumb = data.show_thumb !== false,
+        icon_map = data.icon_map,
+        line_size = data.line_size,
+        item_width = data.item_width,
+
+        // 默认图片
+        default_image = constants.RESOURCE_BASE + (view_switch.is_list_view() ? '/img/img-32.png' : '/img/img-70.png'),
+
+        // 日期
+        time_str_len = 'yyyy-MM-dd hh:mm'.length,
+
+        files_count = files.length,
+
+        read_mode = scr_reader_mode.is_enable();
+
+        $.each(files, function (i, file) {
+            var is_dir = file.is_dir(),
+                is_tpmini = file.is_upload_by_tpmini() && !file.has_uploaded_by_tpmini(),//还在tpmini加速上传(上传失败)中的文件才需要标识出来
+                tpmini_fail = file.is_upload_by_tpmini_fail(),
+                is_broken = file.is_broken_file() && !is_tpmini,
+                is_image = file.is_image(),
+                is_removable = file.is_removable(),
+                is_movable = file.is_movable() && !is_tpmini,
+                is_downable = file.is_downable() && !is_tpmini,
+                is_renamable = file.is_renamable() && !is_tpmini,
+                is_selectable = file.is_selectable(),
+                /*is_whole_click = true,*/   /*click_enter_mode || p_dir.is_vir_dir() || file.is_vir_dir(),*/
+                is_selected = file.get_ui().is_selected(),
+                create_time = (file.get_modify_time() || file.get_create_time()).substr(0, time_str_len),
+
+                icon_cls = is_broken ? 'icon-damaged' : (icon_map[file.get_icon()] || file.get_icon() || (is_image? 'icon-pic' : 'icon-' + (file.get_type() || 'nor'))),
+                can_ident = !is_dir && file_type_map.can_identify_v2(FileObject.get_ext(file.get_name())),
+                text_name = text.text(file.get_name());
+    %>
+    <li id="thumb_disk_file_item_<%=file.get_id()%>" data-file-id="<%=file.get_id()%>" class="item" style="width: <%=item_width%>px;">
+        <div data-action="enter" class="inner">
+            <i class="icon icon-m icon-file-m"></i>
+            <span class="txt" data-name="file_name" title="<%=text_name%>"><%=text_name%></span>
+        </div>
+        <i data-file-check class="icon icon-check-m"></i>
+    </li>
+    <%
+    });
+    %>
+</script>
+
+<!--
+文件列表项
+@author jameszuo
+-->
+<script id="thumb_file_item" type="text/html" nowith="yes">
+    <%
+    var lib = require('lib'),
+        common = require('common'),
+
+        $ = require('$'),
+        text = lib.get('./text'),
+        constants = common.get('./constants'),
+        file_type_map = common.get('./file.file_type_map'),
+        FileObject = common.get('./file.file_object'),
+
+        click_tj = common.get('./configs.click_tj'),
+        scr_reader_mode = common.get('./scr_reader_mode'),
+
+        view_switch = require('./view_switch.view_switch'),
+
+        click_enter_mode = constants.IS_APPBOX,
+
+        p_dir = data.p_dir,
+        files = data.files,
+        only_content = data.only_content === true,
+        show_thumb = data.show_thumb !== false,
+        icon_map = data.icon_map,
+        line_size = data.line_size,
+
+        // 默认图片
+        default_image = constants.RESOURCE_BASE + (view_switch.is_list_view() ? '/img/img-32.png' : '/img/img-70.png'),
+
+        // 日期
+        time_str_len = 'yyyy-MM-dd hh:mm'.length,
+
+        item_width = data.item_width,
+        item_height = Math.round(item_width * 0.75),
+        files_count = files.length,
+
+        read_mode = scr_reader_mode.is_enable();
+
+    $.each(files, function (i, file) {
+        var is_dir = file.is_dir(),
+            is_tpmini = file.is_upload_by_tpmini() && !file.has_uploaded_by_tpmini(),//还在tpmini加速上传(上传失败)中的文件才需要标识出来
+            tpmini_fail = file.is_upload_by_tpmini_fail(),
+            is_broken = file.is_broken_file() && !is_tpmini,
+            is_image = file.is_image() || file.is_video(),
+            is_removable = file.is_removable(),
+            is_movable = file.is_movable() && !is_tpmini,
+            is_downable = file.is_downable() && !is_tpmini,
+            is_renamable = file.is_renamable() && !is_tpmini,
+            is_selectable = file.is_selectable(),
+            /*is_whole_click = true,*/   /*click_enter_mode || p_dir.is_vir_dir() || file.is_vir_dir(),*/
+            is_selected = file.get_ui().is_selected(),
+            create_time = (file.get_modify_time() || file.get_create_time()).substr(0, time_str_len),
+
+            icon_cls = is_broken ? 'icon-damaged' : (icon_map[file.get_icon()] || file.get_icon() || ('icon-' + (file.get_type() || 'nor'))),
+            can_ident = !is_dir && file_type_map.can_identify_v2(FileObject.get_ext(file.get_name())),
+            text_name = text.text(file.get_name());
+    %>
+    <li id="thumb_disk_file_item_<%=file.get_id()%>" data-file-id="<%=file.get_id()%>" class="figure-list-item" style="width: <%=item_width%>px;"><!--当前态添加类名act-->
+        <!-- [ATTENTION!!] 如果有文件类型，添加 .is-thumbnail -->
+        <div class="figure-list-item-pic is-thumbnail" style="height: <%=item_height%>px">
+            <% if(is_image) { %>
+            <i data-action="enter" data-ico data-quick-drag class="icon icon-l <%=icon_cls%>-l">訊息</i>
+            <% } else { %>
+            <i data-action="enter" data-quick-drag class="icon icon-l <%=icon_cls%>-l">訊息</i>
+            <% } %>
+            <i data-file-check class="icon icon-check-m"></i>
+        </div>
+        <div data-action="enter" class="figure-list-item-txt">
+            <!-- [ATTENTION!!] 縮略小圖，圖標 class 變化的是 .icon-xxx-s  -->
+            <p class="tit">
+                <i class="icon icon-s <%=icon_cls%>-s"></i>
+                <span class="txt" data-quick-drag data-name="file_name" title="<%=text_name%>">
+                    <%=text.text(can_ident ? file.get_name_no_ext() : file.get_name())%>
+                </span>
+            </p>
+        </div>
+    </li>
+    <%
+    });
+    %>
+</script>
+
+
+
+<!--
+列表视图下的文件列表项
+@author jameszuo
+-->
+<script id="list_file_item" type="text/html" nowith="yes">
+    <%
+    var lib = require('lib'),
+    common = require('common'),
+
+    $ = require('$'),
+    text = lib.get('./text'),
+    constants = common.get('./constants'),
+    file_type_map = common.get('./file.file_type_map'),
+    FileObject = common.get('./file.file_object'),
+
+    click_tj = common.get('./configs.click_tj'),
+    scr_reader_mode = common.get('./scr_reader_mode'),
+
+    view_switch = require('./view_switch.view_switch'),
+
+    click_enter_mode = constants.IS_APPBOX,
+
+    p_dir = data.p_dir,
+    files = data.files,
+    only_content = data.only_content === true,
+    show_thumb = data.show_thumb !== false,
+    icon_map = data.icon_map,
+    line_size = data.line_size,
+
+    // 默认图片
+    default_image = constants.RESOURCE_BASE + (view_switch.is_list_view() ? '/img/img-32.png' : '/img/img-70.png'),
+
+    // 日期
+    time_str_len = 'yyyy-MM-dd hh:mm'.length,
+
+    files_count = files.length,
+
+    read_mode = scr_reader_mode.is_enable();
+
+    $.each(files, function (i, file) {
+    var is_dir = file.is_dir(),
+    is_tpmini = file.is_upload_by_tpmini() && !file.has_uploaded_by_tpmini(),//还在tpmini加速上传(上传失败)中的文件才需要标识出来
+    tpmini_fail = file.is_upload_by_tpmini_fail(),
+    is_broken = file.is_broken_file() && !is_tpmini,
+    is_image = file.is_image() || file.is_video(),
+    is_removable = file.is_removable(),
+    is_movable = file.is_movable() && !is_tpmini,
+    is_downable = file.is_downable() && !is_tpmini,
+    is_renamable = file.is_renamable() && !is_tpmini,
+    is_selectable = file.is_selectable(),
+    /*is_whole_click = true,*/   /*click_enter_mode || p_dir.is_vir_dir() || file.is_vir_dir(),*/
+    is_selected = file.get_ui().is_selected(),
+    create_time = (file.get_modify_time() || file.get_create_time()).substr(0, time_str_len),
+
+    icon_cls = is_broken ? 'icon-damaged' : (icon_map[file.get_icon()] || file.get_icon() || ('icon-' + (file.get_type() || 'nor'))),
+    can_ident = !is_dir && file_type_map.can_identify_v2(FileObject.get_ext(file.get_name())),
+    text_name = text.text(file.get_name());
+    %>
+    <li id="list_disk_file_item_<%=file.get_id()%>" data-file-id="<%=file.get_id()%>" class="list-group-item">
+        <div class="item-tit">
+            <div class="label" data-file-check><i class="icon j-icon-checkbox icon-check-s"></i></div>
+            <div data-action="enter" class="thumb"><i data-quick-drag data-ico class="icon icon-m <%=icon_cls%>-m"></i></div>
+            <div data-action="enter" class="info">
+                <span class="tit" data-quick-drag data-name="file_name" title="<%=text_name%>"><%=text.text(can_ident ? file.get_name_no_ext() : file.get_name())%></span>
+            </div>
+        </div>
+        <div data-action="enter" class="item-info">
+            <span class="item-info-list">
+                <span class="mod-act-list">
+                    <a data-function="share_enter" hidefocus="on" tabindex="0" class="act-list" title="分享链接" href="#"><i class="icon icon-share"></i></a>
+                    <a data-function="download" hidefocus="on" tabindex="0" class="act-list" title="下载" href="#"><i class="icon icon-down"></i></a>
+                    <a data-function="move" hidefocus="on" tabindex="0" class="act-list" title="移动" href="#"><i class="icon icon-move"></i></a>
+                    <a data-function="remove" hidefocus="on" tabindex="0" class="act-list" title="删除" href="#"><i class="icon icon-trash"></i></a>
+                    <a data-function="rename" hidefocus="on" tabindex="0" class="act-list" title="重命名" href="#"><i class="icon icon-rename"></i></a>
+                    <% if (!is_dir && !is_broken) { %>
+                    <a data-function="qr_code" hidefocus="on" tabindex="0" class="act-list" title="二维码" href="#"><i class="icon icon-code"></i></a>
+                    <% } %>
+                </span>
+            </span>
+            <span data-action="enter" class="item-info-list item-info-size">
+                 <% if (!is_dir) { %>
+                    <span class="txt txt-size"><%= file.get_readability_size(true) %></span>
+                 <% } %>
+            </span>
+            <span data-action="enter" class="item-info-list">
+                <span class="txt txt-time"><%= create_time %></span>
+            </span>
+        </div>
+    </li>
+    <%
+    });
+    %>
+</script>
+
+<!--
+列表视图下的文件列表项
+@author jameszuo
+-->
+<script id="list_folder_item" type="text/html" nowith="yes">
+    <%= this.list_file_item(data)%>
+</script>
+
+

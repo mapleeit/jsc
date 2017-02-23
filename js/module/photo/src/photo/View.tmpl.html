@@ -1,0 +1,57 @@
+<!--
+ 头部
+ @author: cluezhang
+ @date: 2013-09-16
+-->
+<script id="group_header" type="text/html" nowith="yes">
+</script>
+<!--
+ 列表容器模板
+ @author: cluezhang
+ @date: 2013-09-16
+-->
+<script id="photo_list" type="text/html" nowith="yes">
+<div class="photo-view" data-label-for-aria="图片文件列表内容区域"></div>
+</script>
+<!--
+ 单项模板
+ @author: cluezhang
+ @date: 2013-09-16
+-->
+<script id="photo_items" type="text/html" nowith="yes">
+<%
+        var text = require('lib').get('./text');
+        var records = data.records;
+        var id_perfix = data.id_perfix || 'photo-item-';
+    
+    $.each(records, function(index, record){
+        var thumb_url = ''; // TODO 缩略图地址
+     %><div data-list="true" id="<%=id_perfix+record.id%>" data-record-id="<%=record.id%>" class="photo-view-list <%=record.get('selected') ? 'photo-view-list-selected' : ''%>">
+            <a tabindex="0" aria-label="<%=record.get_name()%>" hidefocus="on" href="#" class="photo-view-list-link photo-view-loading" unselectable="on">
+                <span class="photo-view-list-checkbox"></span>
+                <span class="photo-view-list-mask"></span>
+            </a>
+        </div><% }); %>
+</script>
+
+<!--
+拖拽时的指针
+@author bondli
+@date 13-12-27 下午3:14
+-->
+<script id="drag_cursor" type="text/html" nowith="yes">
+    <%
+    var lib = require('lib'),
+        $ = require('$'),
+
+        length = data.files.length,
+        files = data.files.slice(0, 4);
+    %>
+    <div class="icons">
+        <% $.each(files, function (i, file) { %>
+            <i class="icon icon<%= i %> filetype icon-<%= file.get_type() %>"></i>
+        <% }); %>
+    </div>
+    <span class="sum"><%= length %></span>
+
+</script>

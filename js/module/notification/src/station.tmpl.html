@@ -1,0 +1,29 @@
+<script id="station_guide"  type="text/html" nowith="yes">
+    <%
+        var query_user = require('common').get('./query_user');
+    %>
+    <div class="pop-guide-wrapper">
+        <!-- 根据 .pop-mid-mask 的定位得到上下右浮层的大小和位置 -->
+        <div class="pop-mask-wrapper <% if(query_user.get_cached_user().is_weixin_user()) { %> for-wx<% } %>">
+            <!-- .pop-left-up-mask 的 height = .pop-mid-mask 的 top -->
+            <div class="pop-left-up-mask"></div>
+            <!-- JS 确定 .pop-mid-mask 的位置，得到.pop-mid-mask的 top 值 -->
+            <div class="pop-mid-mask">
+                <i class="icon icon-guide-arr"></i>
+                <div class="pop-mask-text">
+                    <i class="icon icon-guide-box"></i>
+                    <h3 class="pop-text-title">超大文件中转站已上线</h3>
+                    <p class="pop-text">超大文件无限传 非会员用户可保存7天</p>
+                    <input data-action="enter" class="pop-btn" type="submit" value="立即上传超大文件">
+                </div>
+            </div>
+            <!-- .pop-left-down-mask 的 width = .pop-mid-mask 的 width
+                 .pop-left-down-mask 的 top = .pop-mid-mask 的 top + .pop-mid-mask 的 height
+             -->
+            <div class="pop-left-down-mask"></div>
+            <!-- .pop-right-mask 的 left = .pop-mid-mask 的 width -->
+            <div class="pop-right-mask"></div>
+        </div>
+        <i data-action="close" class="icon icon-close"></i>
+    </div>
+</script>

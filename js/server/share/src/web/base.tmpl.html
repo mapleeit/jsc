@@ -1,0 +1,169 @@
+<script id="webBaseHeader" type="text/html" nowith="yes">
+    <!DOCTYPE html>
+
+    <%
+    var configs_css = require('weiyun/conf/configs_css');
+    var css_refs = ['@base_css@', '@p_web_css@', '@base_delay_css@', '@p_web_delay_css@', '@share_css@'];
+    var css_list = [],
+    combo_css = '';
+
+    css_refs.forEach(function(ref){
+        css_list.push(configs_css[ref]);
+    });
+
+    combo_css = css_list.join(',');
+    var serv_taken = new Date() - window.serv_start_time;
+    var APPID = require('weiyun/util/appid')();
+    var serverConfig = plug('config') || {};
+    var is_test_env = !!serverConfig.isTest;
+    var host = is_test_env ? 'share.weiyun.com' : 'img.weiyun.com';
+    var new_css_host = 'qzonestyle.gtimg.cn';
+    var new_combo_css = [configs_css['@link_css@']];
+    %>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title><%=data.title%></title>
+        <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1,minimum-scale=1, maximum-scale=1, user-scalable=no">
+        <meta itemprop="name" content="微云分享" />
+        <meta itemprop="description" content="<%=data.nickname%><%=data.msg%>" />
+	    <meta itemprop="image" content="https://img.weiyun.com/vipstyle/nr/box/img/logo/96x96.png" />
+        <script>var IS_TEST_ENV = <%=is_test_env%>; window.APPID = <%=APPID%>;window.g_serv_taken = <%=serv_taken%>;window.g_start_time = +new Date();document.domain='weiyun.com';</script>
+        <link id="wy_base_css" data-name="text" rel="stylesheet" href="//<%=host%>/c/=<%=combo_css%>?max_age=31104000"/>
+		<link id="wy_new_css" data-name="text" rel="stylesheet" href="//<%=new_css_host%>/c/=<%=new_combo_css%>?max_age=31104000"/>
+        <script>window.g_css_time = +new Date();document.domain='weiyun.com';</script>
+        <link rel="shortcut icon" href="https://img.weiyun.com/vipstyle/nr/box/img/favicon.ico?max_age=31536000" type="image/x-icon" />
+    </head>
+    <body class="web-app">
+    <div class="layout module-disk module-share-new">
+        <div id="top">
+        <% if(!data.fail) { %>
+            <%=this.webHeader(data)%>
+            <%if(!data.secret) { %>
+                <%=this.webToolbar(data)%>
+                <%if(data.enablePath) { %>
+                    <%=this.webPath(data)%>
+                <% } %>
+            <% } %>
+        <% } %>
+        </div>
+</script>
+
+<script id="webBaseBottom" type="text/html" nowith="yes">
+    </div>
+    <script type="text/javascript">
+        setTimeout(function() {
+            window.g_dom_ready_time = +new Date();
+        }, 0);
+    </script>
+    <%=require('weiyun/util/inline').js(['seajs','configs_web'])%>
+    <script type="text/javascript">
+        seajs.use([ '$', 'lib', 'common', 'outlink_v2'], function ($, lib, common, outlink) {
+            window.g_js_time = +new Date();
+            var outlink_mod = outlink.get('./outlink');
+            outlink_mod.render(<%=data%>);
+        });
+    </script>
+    <script type="text/javascript" src="//ui.ptlogin2.qq.com/js/ptloginout.js"></script>
+    <script type='text/javascript' src='//img.weiyun.com/club/weiyun/js/publics/tcss/tcss.ping.js'></script>
+    <script type="text/javascript" src="//qzonestyle.gtimg.cn/qzone/hybrid/common/security/aq.js" charset="UTF-8"></script>
+
+        <script>
+        var pvClickSend = function (tag) {
+            if (typeof(pgvSendClick) == "function") {
+                pgvSendClick({
+                    hottag: tag,
+                    virtualDomain: 'share.weiyun.com'
+                });
+            }
+        };
+        (function() {
+            if (typeof pgvMain == 'function') {
+                pgvMain("", {
+                    tagParamName: 'WYTAG',
+                    virtualURL: '/web/share.html',
+                    virtualDomain: "share.weiyun.com"
+                });
+            }
+        })();
+    </script>
+    </body>
+    </html>
+</script>
+
+
+
+<script id="webHeader" type="text/html" nowith="yes">
+    <div class="lay-header clear" id="outlink_header">
+        <a class="logo" href="javascript:void(0)" target='_blank'></a>
+        <p id='outlink_title' class="title"></p>
+        <a id="outlink_login"class="login" href="javascript:void(0)" style="">登录</a>
+    </div>
+</script>
+
+<!--
+    下载栏
+@yuyanghe
+-->
+<script id="webToolbar" type="text/html" nowith="yes">
+    <div class="lay-main-toolbar" id="outlink_toolbar">
+        <!-- 分享个人信息 -->
+        <div class="user-share-info">
+	        <a href="//www.weiyun.com/vip/weiyun_vip.html?from=share" target="_blank">
+	            <span class="avatar share-vip" data-vip="<%=data.weiyun_vip?1:0%>">
+	                <img src="<%=data.avatar.replace(/http:/i, '').replace(/https:/i, '')%>">
+					<% if(data.weiyun_vip) { %>
+					<i class="ico ico-share-vip"></i>
+					<% } %>
+	            </span>
+		    </a>
+            <div class="info"><%=data.nickname%><%=data.msg%></div>
+        </div>
+        <div class="toolbar-btn clear photo-toolbar">
+            <div class="btn-message">
+                <%if(data.enableDownload) {%>
+                <a data-action="download" class="g-btn g-btn-gray download" id="ui-btn-down" href="javascript:void(0);">
+                        <span class="btn-inner ">
+                            <i class="ico ico-down"></i>
+                            <span class="text">下载</span>
+                        </span>
+                </a>
+                <%}%>
+                <%if(data.enableStore && !data.isTemporary) {%>
+                <a data-action="store" class="g-btn g-btn-gray save-to-weiyun" id="ui-btn-save" href="javascript:void(0);">
+                        <span class="btn-inner">
+                            <i class="ico ico-down-wy"></i>
+                            <span class="text">保存到微云</span>
+                        </span>
+                </a>
+                <%}%>
+                <a data-action="qrcode" class="g-btn g-btn-gray" id="ui-btn-qr" href="javascript:void(0);">
+                    <span class="btn-inner download-by-qr">
+                        <i class="ico ico-qr"></i>
+                        <span class="text">二维码</span>
+                    </span>
+                </a>
+            </div>
+        </div>
+    </div>
+</script>
+<!--
+    面包屑
+-->
+<script id="webPath" type="text/html" nowith="yes">
+    <div class="lay-main-head" id="outlink_path">
+        <div class="inner">
+            <div class="wrap">
+                <label id="outlink_checkall" class="checkall"></label>
+                <div data-inner class="main-path">
+                    <!-- 麻烦前端对面包屑的z-index进行倒序填充 -->
+                    <!-- <a style="z-index:7;" class="path more" href="#"><span>«</span></a> -->
+                    <a style="z-index:2;" class="path" href="javascript:void(0);">
+                        <span>微云分享</span>
+                    </a>
+                    <!--a style="z-index:1;" class="path current" href="#"><span>2012web</span></a-->
+                </div>
+            </div>
+        </div>
+    </div>
+</script>

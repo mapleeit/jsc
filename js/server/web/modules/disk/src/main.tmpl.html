@@ -1,0 +1,305 @@
+<script id="main" type="text/html" nowith="yes">
+    <div id="_main_ui_root" class="layout-wrapper">
+	    <div id="_main_fixed_header" class="layout-header">
+		    <div class="layout-header-inner">
+			    <!-- 顶部导航 s -->
+			    <div id="_main_top" class="mod-nav clearfix">
+				    <div class="logo">
+					    <a href="http://www.weiyun.com/?WYTAG=appbox.disk.logo" target="_blank" title="腾讯微云" tabindex="-1">腾讯微云</a>
+				    </div>
+				    <div id="_main_normal">
+				    <!-- 传输面板 s -->
+					<div class="mod-act">
+						<span class="act-link" id="_main_header_manage" href="javascript: void(0);" data-action="manage" title="文件管理" style="cursor: pointer;">
+							<i class="icon icon-act j-manage-icon"></i>
+							<span class="sync-num j-manage-num" style="display: none;"></span>
+						</span>
+					</div>
+				    <!-- 传输面板 e -->
+				    <!--搜索 s -->
+				    <div class="mod-search j-header-search"><!--获得焦点状态添加类名focus -->
+					    <i class="icon icon-search"></i>
+						<label>输入文件名</label>
+					    <input class="mod-input" type="text" autocomplete="off" maxlength="40" aria-label="输入文件名并按下回车进行搜索" tabindex="0"/>
+						<a class="close" href="javascript: void(0);" aria-label="关闭搜索界面" hidefocus="on"><i class="icon icon-close"></i></a>
+				    </div>
+				    <!--搜索 e -->
+				    <!-- 视图模式 s -->
+					<div id="_main_bar0" class="mod-view">
+					</div>
+				    <!-- 视图模式 e -->
+				    <!-- 用到的css：mod-nav.css -->
+					<!-- 添加 s -->
+					<!-- [ATTENTION!!] 切换 .on -->
+					<div data-action="upload" class="mod-upload">
+						<input id="_upload_html5_input" name="file" type="file" multiple="multiple" aria-label="上传文件，按空格选择文件。" style="display: none;" />
+						<label for="_upload_html5_input"><span class="btn btn-l btn-upload"><i class="icon icon-add"></i><span class="btn-txt">添加</span></span></label>
+						<!-- 添加内容 s -->
+						<div class="mod-bubble-dropdown with-border top-right upload-bubble-dropdown j-upload-drop">
+							<ul class="upload-dropdown clearfix">
+								<li class="upload-item" data-action="upload_files" style="display: none;">
+									<div class="inner">
+										<b class="icon icon-upload icon-upload-file"></b>
+										<p class="txt" tabindex="-1">上传文件</p>
+									</div>
+								</li>
+								<li class="upload-item" data-action="upload_folder" style="display: none;">
+									<div class="inner">
+										<b class="icon icon-upload icon-upload-dir"></b>
+										<p class="txt" tabindex="-1">上传文件夹</p>
+									</div>
+								</li>
+								<li class="upload-item" data-action="offline_download" style="display: none;">
+									<div class="inner">
+										<b class="icon icon-upload icon-offline-download"></b>
+										<p class="txt" tabindex="-1">离线下载</p>
+									</div>
+								</li>
+								<li class="upload-item" data-action="create_folder" style="display: none;">
+									<div class="inner">
+										<b class="icon icon-upload icon-create-dir"></b>
+										<p class="txt" tabindex="-1">创建文件夹</p>
+									</div>
+								</li>
+								<li class="upload-item" data-action="add_note" style="display: none;">
+									<div class="inner">
+										<b class="icon icon-upload icon-add-note"></b>
+										<p class="txt" tabindex="-1">添加笔记</p>
+									</div>
+								</li>
+							</ul>
+							<b class="bubble-arrow-border"></b>
+							<b class="bubble-arrow"></b>
+						</div>
+						<!-- 添加内容 e -->
+					</div>
+					<!-- 添加 e-->
+				</div>
+				    <!-- 工具栏 s-->
+				    <div id="_main_edit" style="display: none;">
+					    <div class="select-btn-wrap">
+						    <a href="javascript: void(0);" class="select-btn" data-action="edit_cancel_all">取消选择</a>
+					    </div>
+					    <div class="edit-select j-edit-count"><p>选择了<span class="j-edit-count-text"></span>项</p></div>
+					    <!--导航栏编辑按钮 s -->
+					    <div class="mod-edit-bar">
+						    <ul class="edit-wrap clearfix" id="_main_bar1"></ul>
+					    </div>
+					    <!--导航栏编辑按钮 e -->
+				    </div>
+				    <!-- 工具栏 e-->
+			    </div>
+			    <!-- 顶部导航 e -->
+		    </div>
+	    </div>
+	    <div class="layout-body">
+		    <div class="layout-body-inner">
+			    <!-- 左侧栏 s -->
+			    <div id="_main_nav" class="layout-aside" data-no-selection style="height: 956px;">
+				    <!-- layout-aside-hd s -->
+				    <div class="layout-aside-hd">
+					    <!-- 用到的样式：mod-user.css -->
+					    <!-- 用户头像 s -->
+					    <div class="mod-user mod-user-vip"><!-- vip用户加类名 mod-user-vip,vip过期用户加类名 mod-user-vip-expire-->
+						    <div id="_main_face" class="user-avatar">
+							    <a class="user-avatar-pic" href="javascript: void(0);" data-id="qzone_vip">
+								    <img src="//img.weiyun.com/ptlogin/v4/style/0/images/1.gif"/>
+								    <i class="icon icon-vip j-vip-icon" title="VIP会员" style="display: none;"></i>
+							    </a>
+						    </div>
+						    <!-- 用户信息 s -->
+						    <div id="_main_face_menu" class="mod-bubble-dropdown acct-bubble-dropdown" style="display: none;">
+							    <div class="acct-dropdown">
+								    <div class="acct-info">
+									    <div class="name-container clearfix">
+										    <span id="_main_nick_name" class="name"></span>
+										    <a id="_main_logout" class="btn" href="javascript: void(0);" title="退出登录"><i class="icon icon-logout"></i></a>
+									    </div>
+									    <div id="_main_space_info" class="space-container">
+											<!-- space_info 这里走异步添加 -->
+									    </div>
+								    </div>
+								    <ul class="with-border">
+									    <!-- [ATTENTIN!!] 没有会员添加 .fail -->
+									    <li class="main acct-item j-vip-state" style="visibility: hidden;">
+										    <span class="txt j-vip-date">会员2017-06-12到期</span>
+										    <!-- [ATTENTION!!] 文案：开通/续费 -->
+										    <a href="javascript: void(0);" class="btn btn-m btn-vip j-vip-btn"><span class="j-vip-txt">续费</span>会员</a>
+									    </li>
+										<!--@capacity_purchase-->
+										<li id="_main_purchase_capacity" class="acct-item main">
+											<span class="txt">购买容量</span>
+											<!-- 新增！！ -->
+											<span class="tag tag-fornew"></span>
+										</li>
+									    <li id="_main_pwd_locker" class="acct-item"><span class="txt"><span class="j-pwd-state">开启</span>独立密码</span></li>
+									    <li id="_main_feedback" class="acct-item"><span class="txt">帮助与反馈</span></li>
+										<a href="//www.weiyun.com/complaint.html" target="_blank"><li id="_main_copyright_complaint" class="acct-item"><span class="txt">投诉指引</span></li></a>
+									</ul>
+							    </div>
+						    </div>
+						    <!-- 用户信息 e -->
+					    </div>
+					    <!-- 用户头像 s -->
+				    </div>
+				    <!-- layout-aside-hd e -->
+				    <!-- layout-aside-bd s -->
+				    <div id="_main_nav_aside_box" class="layout-aside-bd" style="height: 852px;">
+					    <!-- 菜单 s -->
+					    <div id="_main_nav_aside_wrap" class="mod-menu">
+						    <div class="add-in j-vip-state" style="visibility: hidden;">
+							    <!-- 开通会员 | 续费会员 -->
+							    <a href="javascript: void(0);" class="btn btn-m btn-vip"><span class="j-vip-txt">续费</span>会员</a>
+						    </div>
+						    <!-- 最近s -->
+						    <div class="menu-item">
+							    <div class="menu-item-bd">
+								    <ul class="menu-list">
+									    <li data-mod="recent" data-op="NAV_RECENT">
+										    <a href="javascript: void(0);"><i class="icon icon-ren"></i><span class="menu-tit">最近</span></a>
+									    </li>
+								    </ul>
+							    </div>
+						    </div>
+						    <!-- 最近e -->
+						    <!-- 文件s -->
+						    <div class="menu-item">
+							    <div class="menu-item-hd">
+								    <h3 class="tit">文件</h3>
+							    </div>
+							    <div class="menu-item-bd">
+								    <ul class="menu-list">
+									    <li class="cur" data-mod="disk" data-op="NAV_DISK">
+										    <a href="page-home.html"><i class="icon icon-all"></i><span class="menu-tit">全部</span></a>
+									    </li>
+									    <li data-mod="doc" data-op="NAV_DOC">
+										    <a href="javascript: void(0);"><i class="icon icon-doc"></i><span class="menu-tit">文档</span></a>
+									    </li>
+									    <li data-mod="album" data-op="NAV_ALBUM">
+										    <a href="javascript: void(0);"><i class="icon icon-pic"></i><span class="menu-tit">图片</span></a>
+									    </li>
+									    <li data-mod="video" data-op="NAV_VIDEO">
+										    <a href="javascript: void(0);"><i class="icon icon-video"></i><span class="menu-tit">视频</span></a>
+									    </li>
+									    <li data-mod="note" data-op="NAV_NOTE">
+										    <a href="javascript: void(0);"><i class="icon icon-note"></i><span class="menu-tit">笔记</span></a>
+									    </li>
+									    <li data-mod="audio" data-op="NAV_AUDIO">
+										    <a href="javascript: void(0);"><i class="icon icon-music"></i><span class="menu-tit">音乐</span></a>
+									    </li>
+								    </ul>
+							    </div>
+						    </div>
+						    <!-- 文件e -->
+						    <!-- 照片s -->
+						    <div class="menu-item">
+							    <div class="menu-item-hd">
+								    <h3 class="tit">照片</h3>
+							    </div>
+							    <div class="menu-item-bd">
+								    <ul class="menu-list">
+									    <li data-mod="photo_time" data-op="NAV_ALBUM">
+										    <a href="javascript: void(0);"><i class="icon icon-time"></i><span class="menu-tit">时间</span></a>
+									    </li>
+									    <li style="display: none;">
+										    <a href="javascript: void(0);"><i class="icon icon-location"></i><span class="menu-tit">地点</span></a>
+									    </li>
+									    <li style="display: none;">
+										    <a href="javascript: void(0);"><i class="icon icon-tag"></i><span class="menu-tit">标签</span></a>
+									    </li>
+								    </ul>
+							    </div>
+						    </div>
+						    <!-- 照片e -->
+						    <!-- 我的s -->
+						    <div class="menu-item">
+							    <div class="menu-item-hd">
+								    <h3 class="tit">我的</h3>
+							    </div>
+							    <div class="menu-item-bd">
+								    <ul class="menu-list">
+									    <li data-mod="clipboard" data-op="NAV_CLIPBOARD">
+										    <a href="javascript: void(0);"><i class="icon icon-clip"></i><span class="menu-tit">剪贴板</span></a>
+										    <span data-id="clip-num" class="clip-num" style="display:none;"></span>
+									    </li>
+									    <li data-mod="share" data-op="NAV_SHARE">
+										    <a href="javascript: void(0);"><i class="icon icon-share"></i><span class="menu-tit">分享链接</span></a>
+									    </li>
+									    <li data-mod="recycle" data-op="NAV_RECYCLE">
+										    <a href="javascript: void(0);"><i class="icon icon-trash"></i><span class="menu-tit">回收站</span></a>
+									    </li>
+								    </ul>
+							    </div>
+						    </div>
+						    <!-- 我的e -->
+						    <div id="_main_nav_split"></div>
+					    </div>
+					    <!-- 菜单 s -->
+				    </div>
+				    <!-- layout-aside-bd e -->
+				    <!-- layout-aside-ft s -->
+				    <div class="layout-aside-ft">
+					    <!-- 帮助 s -->
+					    <!--<div class="mod-txt-list">-->
+						    <!--<ul class="txt-list clearfix">-->
+							    <!--<li class="txt-item"><a href="javascript: void(0);">版权声明</a>-->
+								    <!--&lt;!&ndash; 版权声明内容 s &ndash;&gt;-->
+								    <!--<div class="mod-bubble-dropdown with-border bottom-left copyright-bubble-dropdown">-->
+									    <!--<div class="txt-dropdown">-->
+										    <!--<p>您应尊重相关作品著作权人合法权益，未经著作权人合法授权，不能违法上传、储存、分享他人作品。</p>-->
+									    <!--</div>-->
+									    <!--<b class="bubble-arrow-border"></b>-->
+									    <!--<b class="bubble-arrow"></b>-->
+								    <!--</div>-->
+								    <!--&lt;!&ndash; 版权声明内容 e &ndash;&gt;-->
+							    <!--</li>-->
+							    <!--<li class="txt-item"><a href="http://www.weiyun.com/complaint.html" target="_blank">投诉指引</a></li>-->
+						    <!--</ul>-->
+					    <!--</div>-->
+					    <!-- 帮助 e -->
+				    </div>
+				    <!-- layout-aside-hd e -->
+			    </div>
+			    <!-- 左侧栏 e -->
+			    <!-- 主要内容 s -->
+			    <div class="layout-main">
+				    <div id="_main_hd" class="layout-main-hd">
+					    <div id="_main_bar2" class="mod-act-panel" style="display: none;">
+						    <div id="_disk_file_path" class="act-panel-inner cleafix" style="display: none;">
+							    <div class="mod-check"><i id="_disk_all_checker" data-file-check class="icon icon-checkbox icon-check-s"></i></div>
+							    <!-- 面包屑导航 s -->
+							    <!-- 面包屑导航 -->
+							    <div class="mod-breadcrumb">
+								    <ul data-inner class="breadcrumb clearfix">
+									    <li class="cur"><a href="javascript: void(0);" hidefocus="on">全部</a></li>
+								    </ul>
+							    </div>
+							    <!-- 面包屑导航 e -->
+						    </div>
+					    </div>
+				    </div>
+				    <div id="_main_content" class="layout-main-bd">
+						<div id="_main_box"  class="inner" style="height: 100%">
+                            <div id="_disk_body" class="mod-list-group" >
+                                <div class="list-group-bd">
+                                    <!-- 空目录时的提示 -->
+                                    <div id="_disk_files_empty" class="empty-box" style="display: none;">
+										<div class="status-inner">
+											<i class="icon icon-nofile"></i>
+											<h2 class="title">暂无文件</h2>
+											<p class="txt">请点击右上角的“添加”按钮添加</p>
+										</div>
+                                    </div>
+
+                                    <ul id="list_disk_files" class="list-group">
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+				    </div>
+			    </div>
+			    <!-- 主要内容 e -->
+		    </div>
+	    </div>
+    </div>
+</script>

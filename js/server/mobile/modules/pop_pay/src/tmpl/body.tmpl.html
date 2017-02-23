@@ -1,0 +1,62 @@
+<script id="body" type="text/html" nowith="yes">
+    <section class="app-pop pop-pay">
+        <section class="pop-inner">
+            <section class="hd">
+                <!-- [ATTENTION!!] 换banner的时候，换的是 style="background-image:url()"" -->
+                <b class="banner j-banner" style="background-image: url(<%=data.banner_img_url%>)">微云会员</b>
+            </section>
+
+            <section class="bd">
+                <ul class="list j-price-list">
+                    <%
+                    for (var i = 0, len = data.price_list.length; i < len; i++) {
+                        var item = data.price_list[i];
+                    %>
+                        <% if (item.month === 'other') { %>
+                        <li class="item trblBor <%=item.cur_class ? 'cur' : ''%>" data-month="<%=item.month%>" data-price="<%=item.price%>"><input class="input-txt j-other-input" type="tel" value="<%=item.text%>"></li>
+                        <% } else { %>
+                        <li class="item trblBor <%=item.cur_class ? 'cur' : ''%>" data-month="<%=item.month%>" data-price="<%=item.price%>"><%=item.text%></li>
+                        <% } %>
+                    <% } %>
+                </ul>
+                <p class="txt"><%=data.act_info.plain_text%><% if (data.act_info.need_show_link) { %><a href="<%=data.act_info.link%>" class="link"><%=data.act_info.link_text%><% } %></a></p>
+                <div class="price bBor">
+                    <p class="num"><strong class="j-price-num"><%=data.init_price%></strong>元</p>
+                    <div class="ticket">暂无抵用券</div>
+                </div>
+                <p class="user bBor"><%=data.nick_name%><% if (data.wy_uf === '0') { %>(<%=data.uin%>)<% } %></p>
+            </section>
+
+            <section class="ft">
+                <button class="btn btn-active j-pay-btn">立即开通</button>
+            </section>
+        </section>
+    </section>
+
+    <script type="text/javascript">console.log(<%=JSON.stringify(data)%>);</script>
+
+    <script type="text/javascript">
+        window.IS_TEST_ENV = <%=(plug('config') || {}).isTest%>;
+        window.APPID = <%=require('weiyun/util/appid')()%>;
+        window.g_start_time = +new Date();
+    </script>
+    <%=require('weiyun/util/inline').js(['seajs', 'configs_mobile'])%>
+    <script type="text/javascript">
+        seajs.use(['$', 'lib',  'common', 'pop_pay'], function($, lib, common, index){
+            index.get('./pop_pay').init(<%=JSON.stringify(data)%>);
+        });
+    </script>
+    <script type='text/javascript' src='//imgcache.gtimg.cn/club/platform/lib/pay/smartpay.js?_bid=193'></script>
+    <script type='text/javascript' src='//img.weiyun.com/club/weiyun/js/publics/tcss/tcss.ping.js'></script>
+    <script type='text/javascript'>
+        (function() {
+            if (typeof pgvMain == 'function') {
+                pgvMain("", {
+                    tagParamName: 'WYTAG',
+                    virtualURL: '/pop_pay',
+                    virtualDomain: "h5.weiyun.com"
+                });
+            }
+        })();
+    </script>
+</script>

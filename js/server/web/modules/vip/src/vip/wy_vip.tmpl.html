@@ -1,0 +1,206 @@
+<script id="weiyun_vip_body" type="text/html" nowith="yes">
+    <!-- 页面内容 s -->
+    <%
+    var is_login = !!data.is_login;
+    var nickname = data.nickname,
+        isVip = data.isVip,
+        __vipLevel = data.__vipLevel,
+        isOldVip = data.oldVip,
+        head_url = data.headUrl,
+        expiresDate = data.expiresDate,
+        posText = isVip ? '续费' : '开通';
+    %>
+    <% if (is_login) { %>
+    <div class="hd">
+        <div class="inner">
+            <div class="user-avatar">
+                <div class="avatar-pic"><img src="<%=head_url%>" alt="用户昵称"></div>
+                <%
+                    if(isVip || isOldVip) {
+                        var iconClass = isVip ? 'icon-vip-' + __vipLevel + '-on-l' : 'icon-vip-' + __vipLevel + '-off-l';
+                %>
+                <i class="icon icon-vip-l <%=iconClass%>" title="LV<%=__vipLevel%>"></i>
+                <% } %>
+            </div>
+            <div class="user-name">
+                <span><%=nickname%></span>
+                <i class="icon icon-logout" style="visibility: visible;" data-action="logout"></i>
+            </div>
+            <%if(isVip){ %>
+            <div class="user-info"><span><%=expiresDate%></span></div>
+            <% } else if(isOldVip) { %>
+            <div class="user-info"><span>会员已到期</span></div>
+            <% } else { %>
+            <div class="user-info"><span>未开通会员</span></div>
+            <% } %>
+        </div>
+        <div class="hd-bg"></div>
+    </div>
+    <% } else { %>
+    <div class="hd">
+        <div class="inner">
+            <div class="user-avatar logout">
+                <!-- 非登陆态默认头像 -->
+                <div class="avatar-pic">
+                    <img src="//img.weiyun.com/qz-proj/wy-pc/img/vip-v2/avatar.png" alt="用户昵称">
+                </div>
+                <button class="btn" data-action="login"><span>登录</span></button>
+            </div>
+        </div>
+        <div class="hd-bg"></div>
+    </div>
+    <% } %>
+    <div class="bd">
+        <!-- 开通支付 s -->
+        <div class="pay-wrap">
+            <ul class="pay-list clearfix">
+                <li class="item pay-item-01">
+                    <div class="inner">
+                        <div class="month"><span>12个月</span></div>
+                        <div class="price"><span class="num">120</span><span class="unit">元</span></div>
+                        <button class="btn" data-action="<%=is_login ? 'pay' : 'login'%>" data-id="12" onclick="pvClickSend('weiyun.vip.web.paybtn12')"><span><%=posText%></span></button>
+                    </div>
+                </li>
+                <li class="item pay-item-02">
+                    <div class="inner">
+                        <div class="month"><span>9个月</span></div>
+                        <div class="price"><span class="num">90</span><span class="unit">元</span></div>
+                        <button class="btn" data-action="<%=is_login ? 'pay' : 'login'%>" data-id="9" onclick="pvClickSend('weiyun.vip.web.paybtn9')"><span><%=posText%></span></button>
+                    </div>
+                </li>
+                <li class="item pay-item-03">
+                    <div class="inner">
+                        <div class="month"><span>6个月</span></div>
+                        <div class="price"><span class="num">60</span><span class="unit">元</span></div>
+                        <button class="btn" data-action="<%=is_login ? 'pay' : 'login'%>" data-id="6" onclick="pvClickSend('weiyun.vip.web.paybtn6')"><span><%=posText%></span></button>
+                    </div>
+                </li>
+                <li class="item pay-item-04">
+                    <div class="inner">
+                        <div class="month"><span>3个月</span></div>
+                        <div class="price"><span class="num">30</span><span class="unit">元</span></div>
+                        <button class="btn" data-action="<%=is_login ? 'pay' : 'login'%>" data-id="3" onclick="pvClickSend('weiyun.vip.web.paybtn3')"><span><%=posText%></span></button>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <!-- 开通支付 e -->
+        <!-- banner s -->
+        <div class="banner-wrap" style="display: none;">
+            <div id="ad_container" class="list-wrap">
+            </div>
+            <% if (!is_login) { %>
+            <span class="pre">
+                <i class="icon icon-pre"></i>
+            </span>
+            <span class="next disable"><!-- 不可点击状态加.disable -->
+                <i class="icon icon-next"></i>
+            </span>
+            <% } %>
+        </div>
+        <!-- banner e -->
+        <div class="intro-wrap">
+            <div class="intro-hd clearfix">
+                <div class="title-wrap">
+                    <h1 class="title">会员特权</h1>
+                    <h3 class="sub-title">畅享至尊“云”体验</h3>
+                </div>
+                <a href="//www.weiyun.com/vip/privilege.html" class="more" onclick="pvClickSend('weiyun.vip.web.moreprivilege')">更多&gt;</a>
+            </div>
+            <div class="intro-bd">
+                <ul class="intro-list clearfix">
+                    <li class="item">
+                        <div class="item-inner">
+                            <i class="icon icon-privilege icon-space"></i>
+                            <div class="txt-wrapper">
+                                <div class="title-wrapper">
+                                    <h2 class="title">存储容量4T</h2>
+                                    <p class="sub-title">免费用户10G</p>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="item">
+                        <div class="item-inner">
+                            <i class="icon icon-privilege icon-flow">
+                            </i>
+                            <div class="txt-wrapper">
+                                <div class="title-wrapper">
+                                    <h2 class="title">单日流量35G</h2>
+                                    <p class="sub-title">免费用户1G</p>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="item">
+                        <div class="item-inner">
+                            <i class="icon icon-privilege icon-share"></i>
+                            <div class="txt-wrapper">
+                                <div class="title-wrapper">
+                                    <h2 class="title">分享有效期65天</h2>
+                                    <p class="sub-title">免费用户7天</p>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="item">
+                        <div class="item-inner clearfix">
+                            <i class="icon icon-privilege icon-term"></i>
+                            <div class="txt-wrapper">
+                                <div class="title-wrapper">
+                                    <h2 class="title">回收站有效期45天</h2>
+                                    <p class="sub-title">免费用户7天</p>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="item">
+                        <div class="item-inner clearfix">
+                            <i class="icon icon-privilege icon-video"></i>
+                            <div class="txt-wrapper">
+                                <div class="title-wrapper">
+                                    <h2 class="title">备份原画视频</h2>
+                                    <p class="sub-title">免费用户高清</p>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="item">
+                        <div class="item-inner">
+                            <i class="icon icon-privilege icon-offline"></i>
+                            <div class="txt-wrapper">
+                                <div class="title-wrapper">
+                                    <h2 class="title">离线下载55次</h2>
+                                    <p class="sub-title">免费用户5次</p>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="item">
+                        <div class="item-inner clearfix">
+                            <i class="icon icon-privilege icon-label"></i>
+                            <div class="txt-wrapper">
+                                <div class="title-wrapper">
+                                    <h2 class="title">开放全部标签</h2>
+                                    <p class="sub-title">免费用户8个</p>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="item">
+                        <div class="item-inner">
+                            <i class="icon icon-privilege icon-transmission"></i>
+                            <div class="txt-wrapper">
+                                <div class="title-wrapper">
+                                    <h2 class="title">极速传输</h2>
+                                    <p class="sub-title">免费用户无加速</p>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- 页面内容 e -->
+</script>

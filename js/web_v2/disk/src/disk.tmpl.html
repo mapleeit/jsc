@@ -1,0 +1,33 @@
+<!--
+网盘主体模板
+@author jameszuo
+-->
+<script id="list_body" type="text/html" nowith="yes">
+    <div id="_disk_body" class="mod-list-group" data-label-for-aria="文件列表内容区域">
+        <div class="disk-view ui-view">
+
+        </div>
+        <!-- 文件列表 -->
+    </div>
+</script>
+
+<script id="thumb_body" type="text/html" nowith="yes">
+    <div id="_thumb_disk_body" data-label-for-aria="文件缩略图内容区域">
+        <div class="mod-item-list">
+            <ul id="thumb_folders_disk_files" class="item-list clearfix">
+            </ul>
+        </div>
+        <div class="mod-figure-list">
+            <ul id="thumb_disk_files" class="figure-list clearfix">
+            </ul>
+        </div>
+        <div id="_thumb_disk_files_empty" class="empty-box" style="display: none;">
+            <!-- 全部为空 -->
+            <div class="status-inner">
+                <i class="icon icon-nofile"></i>
+                <h2 class="title">暂无文件</h2>
+                <p class="txt">请点击左上角的“添加”按钮添加</p>
+            </div>
+        </div>
+    </div>
+</script>

@@ -1,0 +1,67 @@
+<!--
+回收站文件列表模板
+@author jameszuo
+@date 13-3-22 下午6:37
+-->
+<script id="recycle_list" type="text/html" nowith="yes">
+    <div class="files-view">
+        <div id="_recycle_file_list" class="files">
+        </div>
+    </div>
+</script>
+
+<!--
+回收站文件列表item模板
+@author jameszuo
+@date 13-3-22 下午6:37
+-->
+<script id="recycle_list_item" type="text/html" nowith="yes">
+    <%
+    var lib = require('lib'),
+        common = require('common'),
+
+        $ = require('$'),
+        text = lib.get('./text'),
+        date_time = lib.get('./date_time'),
+        constants = common.get('./constants'),
+        scr_reader_mode = common.get('./scr_reader_mode'),
+        read_mode = scr_reader_mode.is_enable(),
+
+        files = data.files,
+
+        // fix 日期长度
+        time_str_len = 'yyyy-MM-dd hh:mm'.length,
+
+        appbox_ui = constants.UI_VER === 'APPBOX';
+
+
+    $.each(files, function (i, file) {
+        var text_name = text.text(file.get_name()),
+            del_time = file.get_del_time();
+        del_time = date_time.timestamp2date(del_time);
+        %>
+        <div id="_rec_file_<%=file.get_id()%>" data-file-id="<%=file.get_id()%>" data-list="file" class="list clear">
+            <label class="checkbox" tabindex="0" aria-label="<%=text_name%>"></label>
+            <span class="img">
+                <i class="filetype icon-<%=file.is_broken_file() ? 'filebroken' : (file.get_type() || 'file')%>"></i>
+                <% if (file.get_thumb_url()) { %>
+                    <img style="display:none;cursor:default;"/>
+                <% } %>
+            </span>
+            <span class="name ellipsis">
+                <p class="text"><em><%=text_name%></em></p>
+            </span>
+                <span class="tool">
+                    <a class="link-restore" data-action="restore" title="还原" href="#" data-tj-value="52116"><i class="ico-restore"></i></a>
+                </span>
+            <% if (read_mode) { %>
+                <div class="size" tabindex="0"><%=file.get_readability_size()%></div>
+                <div class="time" tabindex="0"><%=scr_reader_mode.readable_time(del_time.substr(0, time_str_len))%></div>
+            <% } else { %>
+                <span class="size"><%=file.get_readability_size()%></span>
+                <span class="time"><%=del_time.substr(0, time_str_len)%></span>
+            <% }%>
+        </div><%
+    });
+    %>
+</script>

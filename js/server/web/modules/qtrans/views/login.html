@@ -1,0 +1,114 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+<title>登录-微云</title>
+<meta name="Keywords" content="QQ, 腾讯,微云, 分享, 网盘, 网络硬盘, U盘, 云存储, 传输, 存储, 同步, 备份, 拍照, 上传, 下载, 中转, 文件, 照片, 相册, 离线, 传文件, wifi, cloud" />
+<meta name="Description" content="微云是腾讯公司为用户精心打造的一项智能云服务, 您可以通过微云方便地在手机和电脑之间,同步文件、推送照片和传输数据。" />
+<link rel="stylesheet" href="http://imgcache.qq.com/vipstyle/nr/box/web/css/webbase.css" />
+<link rel="stylesheet" href="http://imgcache.qq.com/vipstyle/nr/box/css/style.css" media="screen" />
+<script type="text/javascript" language="javascript" src="http://imgcache.qq.com/club/qqdisk/web/js/wy_nav.js"></script>
+<!--[if IE 6]><script type="text/javascript">try{document.execCommand('BackgroundImageCache',false,true);}catch(e){}</script><![endif]-->
+</head>
+<body>
+<div class="header">
+    <div class="header-cnt">
+        <h1><a class="logo" href="index.html"><span></span></a></h1>
+        <div class="nav">
+            <ul>
+                <li><a href="http://www.weiyun.com" target="_blank">官网</a><span>|</span></li>
+                <li><a href="http://kf.qq.com/product/weiyun.html" target="_blank">帮助</a><span>|</span></li>
+                <li><a href="http://support.qq.com/discuss/715_1.shtml" target="_blank">反馈</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="wrapper">
+    <!-- 头部 开始
+    <div class="vip_header">
+        <div class="grid_c1">
+            <div class="logo">
+                <h1><a title="微云">微云</a></h1>
+            </div>
+            <div class="box_mod_toptools">
+				<span class="users">您还未登录</span>
+				|<a href="http://www.weiyun.com/" target="_blank">官网</a>|
+				<a href="http://kf.qq.com/product/weiyun.html" target="_blank">帮助</a>|
+				<a href="http://support.qq.com/discuss/715_1.shtml" target="_blank"> 反馈意见 </a>
+			</div>
+        </div>
+    </div>
+    头部 结束 -->
+    <div class="vip_content">
+        <div class="grid_c1">
+        	<div class="login_mod_loginbox">
+            	<div class="mod_loginbox_hd">
+                	<h3>登录微云</h3><span></span>
+                </div>
+                <div id=login_div class="mod_loginbox_bd" style="width:370px; height:180px; visibility:visiable;">
+                	<iframe id="login_frame" frameborder="0" scrolling="no" width="100%" height="100%" src="http://ui.ptlogin2.weiyun.com/cgi-bin/login?appid=527020901&s_url=http://www.weiyun.com/qtrans/qtrans.html&low_login=0&style=0&hide_title_bar=0&hide_close_icon=1&hide_uin_tip=0">
+					</iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div id="footer" class="footer"></div>
+</body>
+<script type="text/javascript" language="javascript" src="http://imgcache.qq.com/club/qqdisk/web/js/jquery-1.6.4.js"></script>
+<script type="text/javascript" language="javascript" src="http://imgcache.qq.com/club/qqdisk/web/js/jquery.cookie.js"></script>
+<script type="text/javascript" language="javascript" src="http://imgcache.qq.com/club/qqdisk/web/js/secury.js"></script>
+<script type="text/javascript">
+write_footer("footer");
+document.domain="weiyun.com";
+var gWidth=0;
+var gHeight=0;
+function ptlogin2_onResize(width, height) {
+        gWidth=width;
+		gHeight=height;
+		var login_wnd = document.getElementById("login_div");
+		if (login_wnd){
+			login_wnd.style.width = width + "px";
+			login_wnd.style.height = height + "px";
+			login_wnd.style.visibility = "hidden";
+			login_wnd.style.visibility = "visible";
+		}
+}
+function ptlogin2_onClose(){
+		var login_wnd = document.getElementById("login_div");
+		login_wnd.style.display="none";
+		login_wnd.style.visibility="hidden";
+}
+
+function f_popup(from_url){
+ 	var tab_url = "http://www.qq.com";
+	var url="http://ui.ptlogin2.weiyun.com/cgi-bin/login?appid=527020901&no_verifyimg=1&f_url=loginerroralert&hide_close_icon=1&s_url=www.weiyun.com";
+	var login_wnd = document.getElementById("login_div");
+	var login_frm = document.getElementById("login_frame");
+	if(!login_wnd || !login_frm) return false;
+	login_frm.src=url;
+	login_wnd.style.visibility = "hidden";
+	login_wnd.style.visibility = "visible";
+	login_wnd.style.display="block";
+}
+jQuery(window).load(function () {
+	var login_frm = document.getElementById("login_frame");
+    var _urlRef = location.href;
+    var _param = "web/index.html";
+    if(_urlRef.indexOf("?") != -1){
+        _param = "disk/index.html?"+_urlRef.split("?")[1];
+        _param = encodeURIComponent(_param);
+    }
+    login_frm.src="http://ui.ptlogin2.weiyun.com/cgi-bin/login?appid=527020901&s_url=http://www.weiyun.com/qtrans/qtrans.html&low_login=0&style=0&hide_title_bar=1&hide_close_icon=1&hide_uin_tip=0";
+    if (typeof pgvMain == 'function') {
+        pgvMain("", {
+            tagParamName: 'WYTAG',
+            virtualURL: 'web/login.html',
+            virtualDomain: "weiyun.com"
+        });
+    }
+})
+</script>
+</html>

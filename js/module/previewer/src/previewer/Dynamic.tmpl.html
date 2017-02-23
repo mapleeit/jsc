@@ -1,0 +1,17 @@
+<!--
+分批加载基础html
+@author cluezhang
+@date 2013-12-13
+-->
+<script id="dynamic_preview" type="text/html" nowith="yes">
+    <%
+        var constants = require('common').get('./constants');
+        var loading_src = constants.HTTP_PROTOCOL + '//img.weiyun.com/vipstyle/nr/box/img/loading.gif';
+    %>
+    <div data-name="preview-content" class="previewer-dynamic-content"></div>
+    <div data-name="preview-loadmore-container" class="previewer-dynamic-loadmore-container" style="height: 1px;">
+        <div data-name="preview-loadmore" class="previewer-dynamic-loadmore" style="background-color: #eee;height: 36px;line-height: 36px;text-align: center;width: 100%;vertical-align: middle;display:none;">
+            <img style="vertical-align: middle;background:none;border:0;padding:0;margin:0;" src="<%=loading_src%>" /> 加载中...
+        </div>
+    </div>
+</script>

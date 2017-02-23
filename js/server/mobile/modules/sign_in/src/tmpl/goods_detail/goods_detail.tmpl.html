@@ -1,0 +1,76 @@
+<script id="goods_detail" type="text/html" nowith="yes">
+    <%
+        data = data || {};
+        var __goodsDetailModel = data.__goodsDetailModel || {};
+        var goodsInfo = __goodsDetailModel.goodsInfo || {};
+        var signInInfo = __goodsDetailModel.signInInfo || {};
+
+        var i, j, key, len, list, item;
+    %>
+<div class="app-checkin-order j-container" style="display: none">
+    <div class="inner">
+        <div class="pic">
+            <div class="info" style="background-image:url(<%=goodsInfo.image_url%>)"></div>
+            <% if (!goodsInfo.time_valid) { %>
+            <p class="tip"><%=goodsInfo.limit_begin_time%>开抢</p>
+            <% } %>
+        </div>
+        <div class="infor">
+            <div class="main">
+                <p class="text"><%=goodsInfo.name%></p>
+                <div class="integral-num"><i class="icon icon-coin"></i><span class="num"><%=goodsInfo.score%></span></div>
+            </div>
+            <div class="right"><p class="text">X1</p></div>
+        </div>
+        <div class="address j-address" data-action="go_address_manage"><span>收货地址</span><i class="icon icon-more"></i></div>
+        <div class="rule">
+            <h4><%=goodsInfo.rule_title%></h4>
+            <p><%=goodsInfo.rule_text%></p>
+        </div>
+        <div class="btn-wrap tBor j-exchange-btn" data-action="popup_exchange_dialog"><button class="btn"><span><%=goodsInfo.pathway === 'lottery' ? '参与抽奖' : '兑换'%></span></button></div>
+    </div>
+
+    <!-- 弹窗浮层 -->
+    <div class="dialog j-dialog" style="display: none;">
+        <div class="box j-dialog-box">
+            <div class="hd"><button class="btn btn-close" data-action="withdraw_exchange_dialog"><i class="icon icon-close"></i></button></div>
+            <div class="bd">
+                <div class="infor">
+                    <div class="pic"><div class="info" style="background-image:url(<%=goodsInfo.image_url%>)"></div></div>
+                    <div class="main">
+                        <p class="text"><%=goodsInfo.name%></p>
+                        <div class="integral-num"><i class="icon icon-coin"></i><span class="num"><%=goodsInfo.score%></span></div>
+                    </div>
+                    <div class="right"><p class="text">X1</p></div>
+                </div>
+                <div class="pay">
+                    <h5 class="title"><%=goodsInfo.pathway === 'lottery' ? '抽奖' : '兑换'%>支付<span class="j-total-point">（你的金币剩余<%=signInInfo.total_score%>）</span></h5>
+                    <div class="price j-exchange-price-list">
+                        <!-- 选中态.act -->
+                        <span class="num act"><%=goodsInfo.score%></span>
+                    </div>
+                </div>
+                <div class="btn-wrap tBor">
+                    <!-- 不可点击.disable -->
+                    <button class="btn j-exchange-confirm <%=signInInfo.total_score < goodsInfo.score ? 'disable' : '' %>" data-action="<%=goodsInfo.pathway === 'lottery' ? 'confirm_lottery' : 'confirm_exchange'%>"><span><%=goodsInfo.pathway === 'lottery' ? '参与抽奖' : '兑换'%></span></button>
+                </div>
+            </div>
+        </div>
+        <div class="mask j-dialog-mask" data-action="withdraw_exchange_dialog"></div>
+    </div>
+
+    <!-- 抽奖未抽中弹窗 -->
+    <div class="pop j-pop" style="display: none;">
+        <div class="box">
+            <div class="bd">
+                <p class="text">好遗憾！差点就抽中了</p>
+            </div>
+            <div class="ft">
+                <button class="btn j-pop-btn"><span>继续加油</span></button>
+            </div>
+        </div>
+        <div class="mask j-pop-mask"></div>
+    </div>
+</div>
+
+</script>

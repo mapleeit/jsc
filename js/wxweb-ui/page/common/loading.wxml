@@ -1,0 +1,5 @@
+<!-- loading信息 -->
+<view class="mod-loading" wx:if="{{!!loadStatus}}"  wx:if="{{loadStatus===1}}">
+	<image class="icon icon-loading" mode="aspectFit" src="../../img/more-loading.gif"></image>
+    <text class="loading-txt">加载中...</text>
+</view>

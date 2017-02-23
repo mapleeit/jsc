@@ -1,0 +1,195 @@
+<script id="login" type="text/html" nowith="yes">
+    <!DOCTYPE html>
+    <!--[if lt IE 7 ]> <html class="ie6"> <![endif]-->
+    <!--[if IE 7 ]> <html class="ie7"> <![endif]-->
+    <!--[if IE 8 ]> <html class="ie8"> <![endif]-->
+    <!--[if IE 9 ]> <html class="ie9"> <![endif]-->
+    <!--[if (gt IE 9)|!(IE)]>--> <html> <!--<![endif]-->
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta charset="utf-8"/>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+        <title>微云网页版</title>
+        <meta name="Keywords" content="QQ, 腾讯,微云, 分享, 网盘, 网络硬盘, U盘, 云存储, 传输, 存储, 同步, 备份, 拍照, 上传, 下载, 中转, 文件, 照片, 相册, 离线, 传文件, wifi, cloud, 微云网页版, weiyun, weiyun web"/>
+        <meta name="Description" content="微云是腾讯公司为用户精心打造的一项智能云服务, 您可以通过微云方便地在手机和电脑之间同步文件、推送照片和传输数据。"/>
+        <%
+        var g_info = window['g_weiyun_info'];
+        var serverConfig = plug('config') || {};
+        var is_test_env = serverConfig.isTest ? true : false;
+        %>
+        <script type="text/javascript">
+            document.domain = 'weiyun.com';
+            var IS_TEST_ENV = <%=is_test_env%>;
+            var g_start_time = new Date(), IS_APPBOX = <%=g_info.is_appbox%>, IS_QZONE = <%=g_info.is_qzone%>, IS_PHP_OUTPUT = false, IS_DEBUG = <%=g_info.is_debug%>, g_err;
+            var g_use_cgiv2 = true;
+            IS_DEBUG || (window.onerror = function (msg, file, line) { g_err={ msg:msg||'',file:file||'',line:line||'' };return true;});
+        </script>
+        <%
+        var configs_css = require('weiyun/conf/configs_css');
+        var is_appbox = g_info.is_appbox;
+        var serv_taken = new Date() - g_info.server_start_time;
+        var body_class = is_appbox ? 'app-appbox' : 'web-app';
+
+        var css_list = ['base_css'];
+        if(is_appbox) {
+        css_list.push('p_appbox_css');
+        } else {
+        css_list.push('p_web_css');
+        }
+
+        %>
+        <%=require('weiyun/util/inline').css(css_list)%>
+        <script type="text/javascript">
+            g_css_time = new Date();
+        </script>
+        <% if(is_appbox) { %>
+        <style type="text/css">
+            #loading-text, #loading-icon {position:fixed;_position:absolute;margin:auto 0;/*left:50%;top:50%;*/z-index:100;}
+            #loading-text {width:200px;height:36px;font: 36px/1.5 arial;color: #666;font-family: Tahoma, Helvetica, Arial, sans-serif;z-index:1000;display:block;text-align:center;line-height:36px;}
+            #loading-icon {width:16px;height:16px;background: url(//img.weiyun.com/vipstyle/nr/box/web/images/loading3.gif) no-repeat 0 0;}
+        </style>
+        <% } %>
+    </head>
+    <body class="<%=body_class%>">
+    <button id="_aria_start_trigger" style="position:absolute;top:-200px;" type="button" tabindex="0" onclick="window.open('http://support.qq.com/write.shtml?fid=811');">欢迎使用微云网盘，如果您读屏遇到问题，点击这里进行反馈。</button>
+    <script type="text/javascript">document.getElementById('_aria_start_trigger').focus();</script>
+    <script type="text/javascript">
+        var g_serv_login_rsp = (function () { return <%=JSON.stringify(data)%> })();
+    </script>
+    <% if(g_info['is_debug']) {%>
+    <script type="text/javascript" src="//img.weiyun.com/club/weiyun/js/publics/seajs/sea.js?max_age=31104000"></script>
+    <% } else { %>
+    <script type="text/javascript" src="//img.weiyun.com/c/=/club/weiyun/js/publics/seajs/sea.js,/club/weiyun/js/publics/seajs-plugins/seajs-combo.js?max_age=31104000"></script>
+    <% } %>
+    <%=require('weiyun/util/inline').js(['configs_web_v2'])%>
+    <script type="text/javascript">
+        /*!
+         * 登录页初始化JS
+         */
+        (function (win) {
+            document.domain = 'weiyun.com';
+            // 基础库
+            seajs.use(['$', 'lib']);
+            // 合并 main + disk (加上base_delay_css，直出登陆失败，限制企业号提示时需要这个样式)
+            seajs.use(['lib', 'common', 'main', 'page_home_delay_css'], function (lib, common, main) {
+                var
+                        wy_init = common.get('./init.init'),
+                        query_user = common.get('./query_user'),
+                        main_mod = main.get('./main');
+
+                // 初始化一些全局兼容性修正
+                wy_init();
+
+                // 初始化 main 模块（不初始化upload和disk模块）
+                main_mod.render({
+                    exclude_mods: {
+                        upload: 1,
+                        disk: 1
+                    }
+                });
+            });
+
+            var STORE_NAME = 'WY_AIO_to_upload';
+
+            // 客户端接口 -- 调用文件上传
+            win.WYCLIENT_UploadFiles = (function () {
+                /**
+                 * 追加文件
+                 * @param file_num
+                 * @param file_path
+                 */
+                var add_file = function (file_num, file_path) {
+                    if (!file_path)
+                        return;
+
+                    get_file_list_from_temp(function (arr) {
+                        var added = false;
+
+                        var map = {};
+                        for (var i = 0, l = arr.length; i < l; i++) {
+                            map[arr[i]] = 1;
+                        }
+
+                        var paths = file_path.split('*'); // 多个文件用星号分隔
+                        for (var i = 0, l = paths.length; i < l; i++) {
+                            var path = paths[i];
+                            // 添加到队列中
+                            if (!(path in map)) {
+                                map[path] = 1;
+                                arr.push(path);
+                                added = true;
+                            }
+                        }
+
+                        if (added) {
+                            save_file_list_to_temp(arr);
+                        }
+                    })
+                };
+
+                var get_file_list_from_temp = function (callback) {
+                    try {
+                        seajs.use('lib', function (lib) {
+                            var
+                                    JSON = lib.get('./json'),
+                                    store = lib.get('./store'),
+                                    arr = store.get(STORE_NAME);
+                            arr = arr ? JSON.parse(arr) : [];
+
+                            callback(arr);
+                        });
+                    } catch (e) {
+                        callback([]);
+                    }
+                };
+
+                /**
+                 * 保存上传队列到store
+                 * @param arr
+                 */
+                var save_file_list_to_temp = function (arr) {
+                    seajs.use(['lib', 'common'], function (lib, common) {
+                        var
+                                JSON = lib.get('./json'),
+                                store = lib.get('./store'),
+                                constants = common.get('./constants'),
+
+                                list_str = JSON.stringify(arr);
+
+                        store.set(STORE_NAME, list_str);
+                        _console.debug('Upload file path saved:\n' + list_str);
+                    });
+                };
+
+                return add_file;
+            })();
+
+            win.WYCLIENT_EnterOfflineDir = function (fileId, fileName) {
+                // do nothing...
+            };
+
+            win.WYCLIENT_BeforeCloseWindow = function () {
+                var lib = seajs.require('lib');
+                var store = lib.get('./store');
+                store.remove(STORE_NAME);
+            };
+
+        })(window);
+
+    </script>
+    <script type="text/javascript">
+        setTimeout(function () {
+            seajs.use(window.location.protocol + '//img.weiyun.com/club/weiyun/js/publics/tcss/tcss.ping.js', function() {
+                if (typeof pgvMain == 'function') {
+                    pgvMain("", {
+                        tagParamName: 'WYTAG',
+                        virtualURL: 'disk/login.html',
+                        virtualDomain: "www.weiyun.com"
+                    });
+                }
+            });
+        }, 5000);
+    </script>
+</body>
+</html>
+</script>

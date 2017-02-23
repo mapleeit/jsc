@@ -1,0 +1,6 @@
+<view wx:if="{{videoDisplay}}" class="" style="display:{{videoDisplay?'':'none'}}">
+	<view class="mask" bindtap="bindVideoMaskTap"></view>
+    <view class="wy-video">
+    	<video id="mainVideo" controls="true" objectFit="contain" class="video" src="{{videoSrc}}" autoplay="{{true}}" objectFit="contain" style="height:{{videoHeight+'px'}}; width:{{videoWidth+'px'}}" binderror="bindVideoError"></video>
+    </view>
+</view>

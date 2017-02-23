@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>领取微云礼包</title>
+<meta name="viewport" content="width=320, maximum-scale=1.0">
+<link rel="stylesheet" href="//imgcache.qq.com/vipstyle/nr/box/apps/wap/css/touch.css" />
+<style>
+/* global */
+.clear{*zoom:1}
+.clear:after{content:'\20';display:block;clear:both;height:0}
+.hidden{visibility:hidden;}
+body .hide,body .none{display:none;}
+body{color:#666;background:#FFF;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;}
+a{color:#4C95D6;}
+a:hover{text-decoration:none;}
+
+body{
+	color:#999;
+}
+/*  */
+.ui-header{
+	position:relative;
+	height:20px;
+	background:#202124;
+}
+.logo,.logo-text{
+	position:absolute;
+	display:block;
+	background:url(http://imgcache.qq.com/vipstyle/nr/box/apps/wap/img/header.png) 0 0 no-repeat;
+	background-size:100px 100px;
+}
+.logo{
+	left:5px;
+	top:4px;
+	width:35px;
+	height:10px;
+}
+.logo-text{
+	right:5px;
+	top:7px;
+	width:43px;
+	height:8px;
+	background-position:0 -28px;
+}
+.app{
+	background:#FFF;
+}
+.app-inner{
+	padding:12px 25px;
+}
+.ui-btn{
+	display:inline-block;
+	font-size:15px;
+	border:2px solid;
+	border-color:#EA9539 #EEAC6F #BF7224;
+	background-color:#EB9539;
+	background-color:-webkit-gradient(linear, left top, left bottom, from(#EA9539), to(#BF711F));
+	background-color:-webkit-linear-gradient(top, #EA9539, #BF711F);
+	background-color:linear-gradient(top, #EA9539, #BF711F);
+	border-radius:4px;
+	text-shadow:-2px -2px 1px #DB801E;
+}
+.ui-btn-text{
+	display:block;
+	padding:9px 11px;
+	text-align:center;
+	background-color:#E79035;
+	background-image:-webkit-gradient(linear, left top, left bottom, from(#F2AD45), to(#E79035));
+	background-image:-webkit-linear-gradient(top, #F2AD45, #E79035);
+	background-image:linear-gradient(top, #F2AD45, #E79035);
+	border:2px solid;
+	border-color:#FBDFB5 #F5BA68 #EBA55C;
+	border-radius:4px;
+	color:#FFF;
+}
+/* 礼包 */
+.upgrade-detail{text-align:center;}
+.upgrade-detail .ui-title{
+	margin-bottom:20px;
+	font-size:16px;
+	color:#4c4c4c;
+}
+.ui-texts{
+	font-size:12px;
+	line-height:1.6;
+}
+.ui-texts .ui-title{
+	margin-bottom:3px;
+	font-size:14px;
+}
+.ui-btn-mini{
+	display:block;
+	border-radius:5px;
+}
+.ui-btn-mini .ui-btn-text{
+	padding:6px 20px;
+	box-sizing:border-box;
+	width:100%;
+	font-size:16px;
+	border-radius:5px;
+}
+
+.upgrade-img{
+	display:block;
+	margin:0 auto 15px;
+	width:141px;
+	height:48px;
+	background:url(http://imgcache.qq.com/vipstyle/nr/box/apps/wap/img/updagrade.png) 50% 50% no-repeat;
+	background-size:141px 48px;
+}
+.upgrade-text{
+	margin-bottom:12px;
+	font-size:14px;
+	color:#d6a216;
+}
+
+.upgrade{}
+.upgrade .ui-btn-mini{
+	margin-bottom:20px;
+}
+.header{
+	padding:10px 0 11px;
+}
+.ui-logo{
+	margin-left:10px;
+}
+.wy-ads-text{
+	top:20px;
+	right:18px;
+	width:128px;
+	height:25px;
+	background-size:128px 15px;
+}
+</style>
+</head>
+<body>
+<div class="app"> 
+
+	<div class="header wy-pos">
+		<img class="ui-logo" src="http://imgcache.qq.com/vipstyle/nr/box/apps/wap/img/logo_android.png" width=110>
+		<div class="wy-pos-right wy-ads-text"></div>
+	</div>
+	
+	<div class="app-inner upgrade">
+		<div class="upgrade-detail">
+			<h2 class="ui-title">欢迎体验微云剪贴板<br/>
+	现升级微云即可领取礼包</h2>
+			<span class="upgrade-img"></span>
+			<p class="ui-text upgrade-text">免费升级网盘到5G</p>
+		</div>
+		
+		<span class="ui-btn ui-btn-mini"><input type="button" class="ui-btn-text" value="升级并领取" onclick="download()" /></span>
+
+		<div class="ui-texts">
+			<h3 class="ui-title">什么是微云剪贴板？</h3>
+			<p class="ui-sub-title">通过它，您可以横跨不同设备随心粘贴。例如：</p>
+			<ol>
+				<li>- 从手机上复制网址，在电脑上打开。
+				<li>- 从电脑上复制电话号码，在手机上拨打。
+			</ol>
+		</div>
+	</div>
+</div>
+<script type='text/javascript' src='http://img.weiyun.com/club/weiyun/js/publics/tcss/tcss.ping.js'></script>
+<script>
+var download = function(){
+    if (typeof(pgvSendClick) == "function") {
+        pgvSendClick({
+            hottag: "WY_CLP_DOWNLOAD" 
+        });
+    }   
+    window.location.href="http://www.weiyun.com/d?d=android";
+};
+(function(){
+    if (typeof pgvMain == 'function') {
+        pgvMain("", {
+        	tagParamName: 'WYTAG',
+            virtualURL: 'clp.html',
+            virtualDomain: "www.weiyun.com"
+        });
+    }
+})();
+</script>
+</body>
+</html>

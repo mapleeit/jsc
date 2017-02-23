@@ -1,0 +1,25 @@
+<!--
+双屏模式树节点
+@author cluezhang
+-->
+<script id="tree_node" type="text/html" nowith="yes">
+    <%
+        var lib = require('lib'),
+            text = lib.get('./text'),
+            node = data.node,
+            text_name = text.text(node.name),
+            children = data.children,
+            expanded = node.expanded,
+            leaf = node.leaf,
+            icon = node.icon;
+    %>
+    <div data-node-id="<%=node.id%>" data-list="true" class="item <%= expanded ? 'item-open' : '' %> <%= icon %>" style="padding-left:<%=(data.level + 1)*14%>px;"><a class="link" href="#"><span class="text ellipsis" title="<%=text_name%>"><%=text_name%></span><%
+        if(!leaf){%><i data-ico="true" class="ico"></i><%}%></a></div>
+    <div class="item-box <%=expanded ? 'itembox-open' : '' %>">
+        <% if(children && children.length){ %>
+            <% for(var i=0; i<children.length; i++){ %>
+                <%= children[i] %>
+            <% } %>
+        <% } %>
+    </div>
+</script>

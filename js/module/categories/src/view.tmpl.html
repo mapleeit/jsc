@@ -1,0 +1,245 @@
+<!--
+ 文档文件列表
+ @author: hibincheng
+ @date: 2013-10-31
+-->
+<script id="doc_list" type="text/html" nowith="yes">
+    <div id="_doc_body" class="disk-view ui-view ui-listview" data-label-for-aria="文档列表内容区域">
+        <div id="_doc_view_list" >
+            <!-- 文件列表 -->
+            <div class="files"></div>
+        </div>
+    </div>
+
+</script>
+
+<!--
+ 单个文档文件项
+ @author: hibincheng
+ @date: 2013-10-31
+-->
+<script id="doc_file_item" type="text/html" nowith="yes">
+
+    <%
+        var $ = require('$');
+        var lib = require('lib');
+        var common = require('common');
+        var text = lib.get('./text');
+        var scr_reader_mode = common.get('./scr_reader_mode');
+        var File = common.get('./file.file_object');
+        var file_type_map = common.get('./file.file_type_map');
+        var records = data.files;
+        var id_perfix = data.id_perfix || 'doc-item-';
+        var me = this;
+    %>
+    <%
+        $.each(records || [], function(i, file) {
+            var file_name = file.get_name();
+            var can_ident = file_type_map.can_identify(File.get_ext(file_name));
+            var icon_class = 'icon-' + (file.get_type() ? file.get_type() : 'file');
+    %>
+            <div data-file-id data-list="file" class="list clear" data-record-id="<%=file.id%>" class="list clear" id="<%=id_perfix + file.id%>">
+                <label class="checkbox" tabindex="0" aria-label="<%=file_name%>"></label>
+                <span class="img"><i class="filetype <%=icon_class%>"></i></span>
+                <span class="name"><p class="text"><em data-name="file_name" title="<%=file_name%>"><%=text.text(can_ident ? file_name.slice(0,file_name.lastIndexOf('.')): file_name)%></em></p></span>
+                <%= me.file_tool()%>
+                <% if (scr_reader_mode.is_enable()) { %>
+                    <div class="size" tabindex="0"><%=file.get_readability_size()%></div>
+                    <div class="time" tabindex="0"><%=scr_reader_mode.readable_time(file.get_modify_time())%></div>
+                <% } else {%>
+                    <span class="size"><%=file.get_readability_size()%></span>
+                    <span class="time"><%=file.get_modify_time()%></span>
+                <% } %>
+                <span class="dimensional">
+                            <a class="link-dimensional" title="二维码" href="#"><i class="ico-dimensional"></i></a>
+                </span>
+            </div>
+    <%
+        });
+    %>
+</script>
+<!--
+视频文件列表
+@author: hibincheng
+@date: 2013-10-31
+-->
+<script id="video_list" type="text/html" nowith="yes">
+    <div id="_video_body"  class="disk-view ui-view ui-listview" data-label-for-aria="视频文件列表内容区域">
+        <div id="_video_view_list">
+            <!-- 文件列表 -->
+            <div class="files"></div>
+        </div>
+    </div>
+
+</script>
+<!--
+单个视频文件项
+@author: hibincheng
+@date: 2013-10-31
+-->
+<script id="video_file_item" type="text/html" nowith="yes">
+    <%
+        var $ = require('$');
+        var lib = require('lib');
+        var common = require('common');
+        var text = lib.get('./text');
+        var File = common.get('./file.file_object');
+        var scr_reader_mode = common.get('./scr_reader_mode');
+        var records = data.files;
+        var id_perfix = data.id_perfix || 'video-item-';
+        var me = this;
+
+        $.each(records || [], function(i, file) {
+            var file_name = file.get_name();
+    %>
+            <div data-video="true" data-file-id data-list="file" class="list clear" data-record-id="<%=file.id%>" class="list clear" id="<%=id_perfix + file.id%>">
+                <label class="checkbox" tabindex="0" aria-label="<%=file_name%>"></label>
+                <span class="img"></span>
+                <span class="name"><p class="text">
+                    <em class="v-title" data-name="file_name" title="<%=file_name%>"><%=text.text(file_name)%></em>
+                    <% if (scr_reader_mode.is_enable()) { %>
+                        <div class="v-time" tabindex="0"><%=scr_reader_mode.readable_time(file.get_modify_time())%> , <%=file.get_readability_size()%></div>
+                    <% } else {%>
+                        <em class="v-time"><%=file.get_modify_time()%> , <%=file.get_readability_size()%></em>
+                    <% } %>
+                    <a class="link-dimensional" title="二维码" href="#"><i class="ico-dimensional"></i></a>
+                </p></span>
+                <%= me.file_tool()%>
+
+            </div>
+    <%
+        });
+    %>
+</script>
+<!--
+音频文件列表
+@author: hibincheng
+@date: 2013-10-31
+-->
+<script id="audio_list" type="text/html" nowith="yes">
+    <div id="_audio_body"  class="disk-view ui-view ui-listview" data-label-for-aria="音乐文件列表内容区域">
+        <div id="_audio_view_list">
+            <!-- 文件列表 -->
+            <div class="files"></div>
+        </div>
+    </div>
+
+</script>
+<!--
+单个音频文件项
+@author: hibincheng
+@date: 2013-10-31
+-->
+<script id="audio_file_item" type="text/html" nowith="yes">
+    <%
+        var $ = require('$');
+        var lib = require('lib');
+        var common = require('common');
+        var text = lib.get('./text');
+        var File = common.get('./file.file_object');
+        var scr_reader_mode = common.get('./scr_reader_mode');
+        var file_type_map = common.get('./file.file_type_map');
+        var records = data.files;
+        var id_perfix = data.id_perfix || 'audio-item-';
+        var me = this;
+    %>
+    <!-- update jin 20130731 : new -->
+    <!-- 高级浏览器使用:hover选择器，ie6请使用鼠标悬停添加list-hover样式 -->
+    <!-- 选中样式list-selected -->
+    <!-- 拖入接收容器样式list-dropping -->
+    <!-- 不可选样式list-unselected -->
+    <!-- 不带复选框模式list-nocheckbox-->
+    <!-- 当前列表，用于右键和单行菜单模式list-menu-on-->
+    <%
+        $.each(records || [], function(i, file) {
+            var file_name = file.get_name();
+            var can_ident = file_type_map.can_identify(File.get_ext(file_name));
+            var icon_class = 'icon-' + (file.get_type() ? file.get_type() : 'file');
+    %>
+            <div data-file-id data-list="file" data-record-id="<%=file.id%>" class="list clear" id="<%=id_perfix + file.id%>">
+                <label class="checkbox" tabindex="0" aria-label="<%=file_name%>"></label>
+                <span class="img"><i class="filetype <%=icon_class%>"></i></span>
+                <span class="name"><p class="text"><em data-name="file_name" title="<%=file_name%>"><%=text.text(can_ident ? file_name.slice(0,file_name.lastIndexOf('.')): file_name)%></em></p></span>
+                <%= me.file_tool()%>
+                <% if (scr_reader_mode.is_enable()) { %>
+                    <div class="size" tabindex="0"><%=file.get_readability_size()%></div>
+                    <div class="time" tabindex="0"><%=scr_reader_mode.readable_time(file.get_modify_time())%>%></div>
+                <% } else {%>
+                    <span class="size"><%=file.get_readability_size()%></span>
+                    <span class="time"><%=file.get_modify_time()%></span>
+                <% } %>
+                <span class="dimensional">
+                            <a class="link-dimensional" title="二维码" href="#"><i class="ico-dimensional"></i></a>
+                        </span>
+            </div>
+    <%
+        });
+    %>
+</script>
+<!--
+ 文件列表项工具栏
+ @author: hibincheng
+ @date: 2013-10-31
+-->
+<script id="file_tool" type="text/html" nowidth="yes">
+    <span class="tool">
+        <a data-action="delete" class="link-del" title="删除" href="#" tabindex="0" hidefocus="on"><i class="ico-del"></i></a>
+        <a data-action="rename" class="link-rename" title="重命名" href="#" tabindex="0" hidefocus="on"><i class="ico-rename"></i></a>
+        <a data-action="share" class="link-share" title="分享" href="#" tabindex="0" hidefocus="on"><i class="ico-share"></i></a>
+        <a data-action="download" class="link-download" title="下载" href="#" tabindex="0" hidefocus="on"><i class="ico-download"></i></a>
+    </span>
+</script>
+<!--
+ 重命名文件
+ @author: hibincheng
+ @date: 2013-10-31
+-->
+<script id="rename_editor" type="text/html" nowidth="yes">
+    <span class="fileedit" style="">
+        <input class="ui-input" type="text" value="">
+    </span>
+</script>
+<!--
+ 无数据时的运营广告
+ @author: hibincheng
+ @date: 2013-10-31
+-->
+<script id="view_empty" type="text/html" nowidth="yes">
+    <div class="g-empty">
+        <div class="empty-box" tabindex="0">
+            <div class="ico"></div>
+            <p data-id="title" class="title"></p>
+            <p data-id="content" class="content"></p>
+        </div>
+    </div>
+</script>
+<!--
+加载更多提示loading
+@author: hibincheng
+@date: 2013-10-31
+-->
+<script id="load_more" type="text/html" nowith="yes">
+    <a href="javascript:void(0)" class="load-more" style="display:none;"><i class="icon-loading"></i>正在加载</a>
+</script>
+
+<!--
+拖拽时的指针
+@author bondli
+@date 13-12-27 下午3:14
+-->
+<script id="drag_cursor" type="text/html" nowith="yes">
+    <%
+    var lib = require('lib'),
+        $ = require('$'),
+
+        length = data.files.length,
+        files = data.files.slice(0, 4);
+    %>
+    <div class="icons">
+        <% $.each(files, function (i, file) { %>
+            <i class="icon icon<%= i %> filetype icon-<%= file.get_type() %>"></i>
+        <% }); %>
+    </div>
+    <span class="sum"><%= length %></span>
+
+</script>

@@ -1,0 +1,61 @@
+<script id="bind" type="text/html" nowith="yes">
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>账号</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1,minimum-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="x5-orientation" content="portrait">
+        <!-- 如页面上需要使用文件类型icon，引入weiyun-filetype-icons.css -->
+        <link rel="stylesheet" href="//imgcache.qq.com/vipstyle/nr/box/web/css/weiyun-global.css">
+        <link rel="stylesheet" href="//imgcache.qq.com/vipstyle/nr/box/web/css/weiyun-weixin-bind.css">
+    </head>
+    <body data-seajs="">
+    <!-- 微云在微信里的文件夹空白页 -->
+    <div class="wy-wx-bind-wrap">
+        <div class="wy-wx-bind-author">
+            <div class="img-box">
+                <img src="<%=data.avatar || '//img.weiyun.com/ptlogin/v4/style/0/images/1.gif' %>">
+            </div>
+            <div class="wy-wx-name">
+                <span class="wy-wx-bind-name"><%=data.nick_name%></span>
+            </div>
+        </div>
+        <div class="wy-wx-bind-btn-wrap">
+            <a href="//h5.weiyun.com/weixin/" class="wy-wx-bind-check-file" title="查看我的微云文件">查看我的微云文件</a>
+            <a id="unbind" href="//web2.cgi.weiyun.com/wx_oa_web.fcg?cmd=unbind_qq" class="wy-wx-unbind-btn" title="解绑账号">解绑账号</a>
+        </div>
+    </div>
+    <script type="text/javascript" src="//imgcache.qq.com/club//weiyun/js/publics/zepto/zepto-1.1.6.min.js?max_age=604800"></script>
+    <%=require('weiyun/util/inline').js(['seajs', 'configs_mobile'])%>
+    <script>
+        seajs.use(['$', 'lib','common'], function($, lib, common) {
+            var cookie = lib.get('./cookie');
+            var constants = common.get('./constants');
+            $('#unbind').on('click', function(e) {
+                var cookie_options = {
+                    domain: constants.DOMAIN_NAME,
+                    path: '/'
+                };
+                $.each(['indep', 'uin'], function (i, key) {
+                    cookie.unset(key, cookie_options);
+                });
+            });
+        });
+
+    </script>
+    <script type='text/javascript' src='//img.weiyun.com/club/weiyun/js/publics/tcss/tcss.ping.js'></script>
+    <script>
+        (function() {
+            if (typeof pgvMain == 'function') {
+                pgvMain("", {
+                    tagParamName: 'WYTAG',
+                    virtualURL: '/mp/bind',
+                    virtualDomain: "h5.weiyun.com"
+                });
+            }
+        })();
+    </script>
+    </body>
+    </html>
+</script>

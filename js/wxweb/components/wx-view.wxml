@@ -1,0 +1,13 @@
+<wx-view class="wx-view">
+	<wx-text>wx-view</wx-text>
+</wx-view>
+<wx-view class="wx-view">
+	<wx-text>wx-view</wx-text>
+</wx-view>
+
+<wx-view inline class="wx-view-inline">
+	<wx-text>wx-view with inline</wx-text>
+</wx-view>
+<wx-view inline class="wx-view-inline">
+	<wx-text>wx-view with inline</wx-text>
+</wx-view>

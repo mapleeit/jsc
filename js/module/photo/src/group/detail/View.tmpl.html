@@ -1,0 +1,39 @@
+<!--
+ 列表容器模板
+ @author: cluezhang
+ @date: 2013-09-16
+ TODO photo-view-group-tmp样式用于临时屏蔽左边栏
+-->
+<script id="group_detail_list" type="text/html" nowith="yes">
+    <div class="clear"></div>
+</script>
+
+<!--
+ 拖动图片时显示的摘要图层
+ @author: cluezhang
+ @date: 2013-11-23
+-->
+<script id="group_photo_drag_helper" type="text/html" nowith="yes">
+    <div class="photo-list-thedrag">
+    </div>
+</script>
+
+<!--
+ 拖动图片时显示的摘要图层内容
+ @author: cluezhang
+ @date: 2013-11-23
+-->
+<script id="group_photo_drag_helper_content" type="text/html" nowith="yes">
+    <%
+        var constants = require('common').get('./constants');
+        var default_img_url = constants.HTTP_PROTOCOL + '//img.weiyun.com/vipstyle/nr/box/img/photo-empty.png',
+            count = data.records.length, i,
+            max_thumb = Math.min(count, 3);
+    %>
+    <div class="ico-box">
+        <% for(i=0; i<max_thumb; i++){ %>
+            <img class="<%='img'+(i+1)%>" src="<%=default_img_url%>">
+        <% } %>
+    </div>
+    <div class="count"><%=count%></div>
+</script>

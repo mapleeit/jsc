@@ -1,0 +1,91 @@
+<!--
+office预览模板
+@author hibincheng
+@date 2014-05-04
+-->
+<script id="preview" type="text/html" no-width="yes">
+    <%
+        var lib = require('lib'),
+            text = lib.get('./text');
+    %>
+    <div data-no-selection class="mod-office office-<%=data.file_type%>" style="display: none;" data-label-for-aria="文件预览内容区域">
+        <div data-id="header" class="header">
+            <h2 data-id="title" title="<%=text.text(data.title)%>"><%=text.text(data.title)%></h2>
+            <a data-action="close" href="#" class="close" title="关闭" tabindex="0"><span>x</span></a>
+            <a data-action="download" href="#" class="download" title="下载" tabindex="0">下载</a>
+        </div>
+        <div data-id="content" class="main"></div>
+    </div>
+</script>
+<!--
+office预览模板 (appbox下全屏 )
+@author hibincheng
+@date 2014-05-04
+-->
+<script id="full_preview" type="text/html" no-width="yes">
+    <div data-no-selection class="mod-office office-<%=data.file_type%>" style="display: none;">
+        <div data-id="content" class="main" style="top:0"></div>
+    </div>
+</script>
+
+
+
+<!--
+    PC端压缩包预览
+    @author xixinhuang 15-09-14
+-->
+<script id="compress_preview" type="text/html" nowith="yes">
+    <div data-no-selection class="full-pop" style="border:solid 1px #9198a6; box-shadow: 1px 1px 6px rgba(0,0,0,0.3);z-index: 1000; position: fixed; left: 50%; top: 50%">
+        <a data-btn-id="CANCEL" href="javascript:void(0)" class="full-pop-close" title="关闭">×</a>
+    </div>
+</script>
+
+
+<!--
+    PC端压缩包预览错误提示
+    @author xixinhuang 15-09-18
+-->
+<script id="compress_error_tips" type="text/html" nowith="yes">
+    <%
+        if(!data.IS_OLD) {
+            return this.new_compress_error_tips(data);
+        }
+    %>
+    <div style="height: 48px;line-height: 48px; border-bottom: solid 1px #d8dce5;">
+        <ul >
+            <li style="z-index: 1100;font-size: 18px; float: left;z-index: 1100;padding: 0 18px 0 25px;height: 100%;background: url(/vipstyle/nr/box/img/pop-path.png) no-repeat right -1px;">
+                <%= data.title %>
+            </li>
+        </ul>
+    </div>
+    <div style="z-index: 1000; width:100%; height: 860px">
+        <div style="position: absolute;margin: auto;top: 45%;left: 0;right: 0;width: 250px;border: 4px solid #e8e8e8;padding: 15px 0;">
+            <i style="width: 30px;height: 30px;background-image: url(http://img.weiyun.com/vipstyle/nr/box/img/pop-err.png);float: left;margin: 0 10px 0 20px;display: inline-block;"></i>
+            <p style="font-size: 13px;color: #666666;line-height: 16px;margin-right: 20px;"> <%=data.tips %>，请直接
+                <a style="color: #3091f2;text-decoration: none;outline: none;" href="#" download="compress">下载</a>
+            </p>
+        </div>
+    </div>
+</script>
+
+<!--
+    新版PC端压缩包预览错误提示
+    @author xixinhuang 16-09-22
+-->
+<script id="new_compress_error_tips" type="text/html" nowith="yes">
+    <div class="pop-zip-preview-wrapper">
+        <div class="full-pop-header">
+            <ul class="nav">
+                <li style="z-index:1" class="item current"><%= data.title %></li>
+            </ul>
+            <a data-btn-id="CANCEL" href="javascript:void(0)" class="full-pop-close" title="关闭">×</a>
+        </div>
+        <div class="body">
+            <!-- 错误：压缩包超过30M -->
+            <div class="err-oversize clearfix">
+                <i class="icon icon-err"></i>
+                <p class="err-text"><%=data.tips %>，请直接<a class="link" href="#" download="compress">下载</a></p>
+            </div>
+        </div>
+    </div>
+</script>

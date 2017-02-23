@@ -1,0 +1,117 @@
+<script id="imgList" type="text/html" nowith="yes">
+    <div id="container">
+        <section id="photo_list" class="wy-image-wall-wrapper">
+            <%
+            var imgList = data['file_list'] || [];
+            var classList = ['image-item-bg1','image-item-bg2','image-item-bg3','image-item-bg4','image-item-bg4','image-item-bg3','image-item-bg2','image-item-bg1'];
+            imgList.forEach(function(file, i){
+                var imgSrc = file['thumb_url'];
+                var cls = classList[i % 8];
+            %>
+            <p id="<%=file['file_id']%>" data-id="img" class="image-item <%=cls%>" data-src="<%=imgSrc%>" style=""></p>
+            <%
+            })
+            %>
+        </section>
+        <div data-id="bbar_normal" class="wy-file-controller g-bottom-bar">
+            <% if(!data.temporary) { %>
+            <button data-action="save" class="btn" role="button">保存到微云</button>
+            <% } %>
+        </div>
+        <div data-id="bbar_confirm" class="wy-file-controller g-bottom-bar" style="display:none;">
+            <button data-id="confirm" class="btn btn-certain" role="button">确定</button>
+            <button data-action="cancel" class="btn btn-cancel" role="button">取消</button>
+        </div>
+    </div>
+</script>
+
+<script id="bigImgList" type="text/html" nowith="yes">
+    <div id="container">
+        <aside id="choose_bar" class="wy-choose-controller">
+            <!-- 加上/除去.cancel，控制"全选"或者"取消全选"-->
+            <p data-id="choose" class="select" role="button"></p>
+        </aside>
+        <ul id="photo_list" class="wy-img-list-wrapper">
+            <!-- 图片被选中时，添加.choosen -->
+            <!-- 图片路径放在 li 的 background-image -->
+            <%
+            var imgList = data['file_list'] || [];
+            imgList.forEach(function(file, i){
+                var imgSrc = file['thumb_url'] || file['video_thumb'] + '/1024';
+                if(file['thumb_url']) {
+            %>
+            <li id="<%=file['file_id']%>" data-id="img" data-action="preview" class="img-item">
+                <img data-src="<%=imgSrc%>" class="img">
+                <i class="icon-grey-check"></i>
+            <% } else { %>
+            <li id="<%=file['file_id']%>" data-id="img" class="img-item video" style="background-image: url(<%=imgSrc.replace(/^http:|^https:/, '')%>)">
+                <!--<img data-src="<%=imgSrc%>" class="img">-->
+                <i class="icon-grey-check"></i>
+                <i class="icon-media-ctrl" data-id="img" data-action="open" data-file-id="<%=file['file_id']%>"></i>
+            <% } %>
+            </li>
+            <%
+            })
+            %>
+        </ul>
+        <section id="wx_note_confirm" class="confirm-box" style="display:none;">
+	        <div class="wy-download-dialog">
+		        <div class="box">
+			        <div class="hd">
+				        <div class="hd-bg"></div>
+				        <span data-action="cancel" class="btn-close"></span>
+			        </div>
+			        <div class="bd">
+				        <div class="text">
+					        <p class="title wx_note_title">用微云管理文件</p>
+					        <p class="description wx_note_description">文档在线预览、笔记随记随存</p>
+				        </div>
+				        <div data-action="install" class="btn"><span>立即去下载</span></div>
+			        </div>
+		        </div>
+	        </div>
+        </section>
+        <div data-id="bbar_normal" class="wy-file-controller g-bottom-bar">
+            <% if(!data.temporary) { %>
+	        <% if(0 && data.isQQ) { %>
+	        <button data-action="save" class="btn" role="button" style="margin-right: 10px;">保存到微云</button>
+            <button data-action="download" class="btn" role="button">下载到手机</button>
+	        <% } else { %>
+	        <button data-action="save" class="btn" role="button">保存到微云</button>
+	        <% } %>
+            <% } %>
+        </div>
+        <div data-id="bbar_confirm" class="wy-file-controller g-bottom-bar" style="display:none;">
+            <button data-id="confirm" class="btn btn-certain" role="button">确定</button>
+            <button data-action="cancel" class="btn btn-cancel" role="button">取消</button>
+        </div>
+    </div>
+</script>
+
+<script id="oneImg" type="text/html" nowith="yes">
+    <%
+        var browser = require('weiyun/util/browser')();
+        var prettysize = require('weiyun/util/prettysize');
+    %>
+    <div id="container">
+        <div class="wy-img-previewer-wrapper" style="">
+            <div class="wy-hor-img-bg">
+                <ul data-id="img_list" class="wy-img-preview-list">
+                    <li id="<%=data.file_id%>" data-id="img" class="wy-img-item">
+                        <i id="loading" class="icons icons-reminder icon-reminder-loading" style="display: none"></i>
+                    </li>
+                </ul>
+            </div>
+            <footer class="wy-preview-controller verticle-wy-preview-controller">
+                <%
+                var action_name = browser.QQ ? 'mobile_save' : 'view_raw',
+                action_text = browser.QQ ? '保存到手机' : '查看原图';
+                %>
+                <button data-action="<%=action_name%>" class="btn-item" role="button"><%=action_text%><span data-id="file_size" class="file-size">(<%=prettysize(data.file_size)%>)</span></button>
+                <% if(!data.temporary) { %>
+                <button data-action="save_all" class="btn-item" role="button">保存到微云</button>
+                <% } %>
+            </footer>
+        </div>
+    </div>
+</script>

@@ -1,0 +1,12 @@
+<script id="view_switch" type="text/html" nowidth="yes">
+    <div class="view-item-list clearfix">
+        <%
+            var whole_class = data.is_whole_mode? 'cur' : '';
+            var group_class = data.is_whole_mode? '' : 'cur';
+        %>
+        <div data-id="group_switch" class="view-item clearfix item-picture">
+            <a class="item-list <%=whole_class%>" data-action="whole" href="javascript: void(0);" title="全部">全部</a>
+            <a class="item-list <%=group_class%>" data-action="group" href="javascript: void(0);" title="分组">分组</a>
+        </div>
+    </div>
+</script>

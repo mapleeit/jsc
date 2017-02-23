@@ -1,0 +1,12 @@
+<script id="progress" type="text/html" nowith="yes">
+    <%
+        var constants = require('common').get('./constants');
+        var img_url = constants.HTTP_PROTOCOL + '//img.weiyun.com/vipstyle/nr/box/img/loading-tip.gif';
+    %>
+    <div class="full-msg" style="display:none;">
+        <span class="msg-inner">
+            <img src="<%=img_url%>">
+            <span data-id="label"></span>
+        </span>
+    </div>
+</script>

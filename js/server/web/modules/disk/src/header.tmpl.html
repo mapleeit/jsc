@@ -1,0 +1,40 @@
+<script id="header" type="text/html" nowith="yes">
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html class="ie6"> <![endif]-->
+<!--[if IE 7 ]> <html class="ie7"> <![endif]-->
+<!--[if IE 8 ]> <html class="ie8"> <![endif]-->
+<!--[if IE 9 ]> <html class="ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]>--> <html> <!--<![endif]-->
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <title>微云网页版</title>
+    <meta name="Keywords" content="QQ, 腾讯,微云, 分享, 网盘, 网络硬盘, U盘, 云存储, 传输, 存储, 同步, 备份, 拍照, 上传, 下载, 中转, 文件, 照片, 相册, 离线, 传文件, wifi, cloud, 微云网页版, weiyun, weiyun web"/>
+    <meta name="Description" content="微云是腾讯公司为用户精心打造的一项智能云服务, 您可以通过微云方便地在手机和电脑之间同步文件、推送照片和传输数据。"/>
+    <%
+    var g_info = window['g_weiyun_info'];
+    var body_class = g_info.is_appbox ? 'app-appbox' : 'web-app';
+    var serverConfig = plug('config') || {};
+    var is_test_env = !!serverConfig.isTest;
+    %>
+    <script type="text/javascript">
+        document.domain = 'weiyun.com';
+        var IS_TEST_ENV = <%=is_test_env%>;
+        var g_start_time = new Date(), IS_APPBOX = <%=g_info.is_appbox%>, IS_QZONE = <%=g_info.is_qzone%>, IS_PHP_OUTPUT = true, IS_DEBUG = <%=g_info.is_debug%>, g_err;
+        IS_DEBUG || (window.onerror = function (msg, file, line) { g_err={ msg:msg||'',file:file||'',line:line||'' };return true;});
+        var g_use_cgiv2 = true;
+    </script>
+    <%
+    var configs_css = require('weiyun/conf/configs_css');
+    var css_list = ['page_home_css'];
+    %>
+    <%=require('weiyun/util/inline').css(css_list, true)%>
+    <script type="text/javascript">
+        var g_css_time = new Date();
+    </script>
+</head>
+<body class="<%=body_class%>">
+<button id="_aria_start_trigger" style="position:absolute;top:-200px;" type="button" tabindex="0" onclick="window.open('http://support.qq.com/write.shtml?fid=811');">欢迎使用微云网盘，如果您读屏遇到问题，点击这里进行反馈。</button>
+<script type="text/javascript">document.getElementById('_aria_start_trigger').focus();</script>
+</script>

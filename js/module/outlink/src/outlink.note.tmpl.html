@@ -1,0 +1,64 @@
+<!--
+外链页面笔记外链分享模版界面
+@bondli
+@date 13-11-12
+-->
+<script id="outlink_note" type="text/html" nowith="yes">
+    <div class="share-file-list files-view files-view-rich">
+        <div class="header">
+            <h1 class="headline"></h1>
+            <div class="time" data-id="outlink_share_time"></div>
+        </div>
+        <div class="content ui-selected" data-record-id="<%=data && data.noteId%>">
+        </div>
+    </div>
+</script>
+<script id="outlink_note_site" type="text/html" nowith="yes">
+    <div class="bookmark" data-id="outlink_share_bookmark">
+    <i class="ico"></i>
+    <h1 class="tit">备注:</h1>
+    <div data-id="outlink_share_site_note"></div>
+</div>
+<div class="time" style="padding-top:10px; padding: 0 5px;overflow:hidden; text-overflow:ellipsis;">源网页:<a href="http://www.51buy.com" class="link" data-id="outlink_share_site_url" target="_blank" style="display:none">查看原文</a>
+</div>
+<div class="bod" data-id="outlink_share_site_cnt" style="padding-top:40px">
+</div>
+</script>
+
+<script id="outlink_note_files" type="text/html" nowith="yes">
+<%
+    var lib = require('lib'),
+        common = require('common'),
+
+        $ = require('$'),
+        text = lib.get('./text'),
+        constants = common.get('./constants'),
+        file_type_map = common.get('./file.file_type_map'),
+        FileObject = common.get('./file.file_object'),
+
+        files = data.files;
+
+        $.each(files, function (i, file) {
+            var name = file.name,
+                size = file.size,
+                ico = FileObject.get_ext(name);
+
+            if(ico === null){
+                ico = 'image';
+            }
+%>
+                <li>
+                    <div class="fujian-li">
+                        <i class="ico-pin"></i>
+                        <div class="img"><i class="filetype icon-<%=ico%>"></i></div>
+                        <div class="fujian-info">
+                            <p class="fujian-name"><%=name%></p>
+                            <p class="fujian-size"><%=size%></p>
+                        </div>
+                    </div>
+                </li>
+
+<%
+        });
+%>
+</script>

@@ -1,0 +1,24 @@
+<script id="view_switch" type="text/html" nowidth="yes">
+    <%
+        var view_class = data.cur_view;
+        var rank_class = data.cur_rank;
+    %>
+    <div class="view-item-list clearfix">
+        <div data-id="view_switch" class="view-item clearfix">
+            <a data-action="list" data-name="list" class="item-list <%=view_class === 'list'? 'cur' : ''%>" href="javascript: void(0);" title="列表视图">
+                <i class="icon icon-list"></i>
+            </a>
+            <a data-action="thumb" data-name="thumb" class="item-list <%=view_class === 'thumb'? 'cur' : ''%>" href="javascript: void(0);" title="缩略图视图">
+                <i class="icon icon-thum"></i>
+            </a>
+        </div>
+        <div data-id="rank_switch" class="view-item clearfix">
+            <a data-action="time" data-name="time" class="item-list <%=rank_class === 'time'? 'cur' : ''%>" href="javascript: void(0);" title="按时间排序">
+                <i class="icon icon-ren"></i>
+            </a>
+            <a data-action="letter" data-name="letter" class="item-list <%=rank_class === 'letter'? 'cur' : ''%>" href="javascript: void(0);" title="按字母排序">
+                <i class="icon icon-letter"></i>
+            </a>
+        </div>
+    </div>
+</script>

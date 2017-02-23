@@ -1,0 +1,23 @@
+<!--
+切换视图模板
+@author jameszuo
+@date 13-3-6 下午6:07
+-->
+<script id="view_switch" type="text/html" nowith="yes">
+    <%
+    var lib = require('lib'),
+        common = require('common'),
+        click_tj = common.get('./configs.click_tj');
+        cur_view = data.cur_view,
+        cur_cls = data.cur_cls;
+    %>
+<div data-no-selection class="view-mode-dropdown">
+    <a data-action="base_btn" data-link="true" class="vm-btn <%=cur_cls%>" href="#" title="排序方式" tabindex="-1"><i class="ico"></i></a>
+    <a data-action="sidebar" class="dbview-btn <%=data.is_sidebar_view ? 'dbview-focus' : ''%>" title="<%= data.is_sidebar_view ? '隐藏目录树' : '查看目录树'%>" href="#" tabindex="-1"></a>
+    <ul data-dropdown="true" class="view-mode-dropdown-box" style="display:none;">
+        <li data-view="newestlist" class="<%=cur_view === 'newestlist' ? 'focus' : ''%>" <%=click_tj.make_tj_str('SWITCH_NEWESTLIST_MODE')%>><a class="vm-time" href="#"><i class="ico"></i>按时间排序</a></li>
+        <li data-view="azlist" class="<%=cur_view === 'azlist' ? 'focus' : ''%>" <%=click_tj.make_tj_str('SWITCH_AZLIST_MODE')%>><a class="vm-az" href="#"><i class="ico"></i>按字母顺序</a></li>
+        <li data-view="grid" class="<%=cur_view === 'grid' ? 'focus' : ''%>" <%=click_tj.make_tj_str('SWITCH_NEWTHUMB_MODE')%>><a class="vm-thum" href="#" tabindex="-1"><i class="ico"></i>显示缩略图</a></li>
+    </ul>
+</div>
+</script>

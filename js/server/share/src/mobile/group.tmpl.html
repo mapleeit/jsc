@@ -1,0 +1,56 @@
+<script id="group" type="text/html" nowith="yes">
+    <%=require('weiyun/util/inline').css(['app-share-join-v2'], true)%>
+    <body>
+    <div id="container" class="app-share-join">
+        <%
+            var htmlEscape = require('weiyun/util/htmlEscape');
+            var prettysize = require('weiyun/util/prettysize');
+            var fileType = require('weiyun/util/fileType');
+            var dir_list = (data.dir_list && data.dir_list.length>0)? data.dir_list[0] : [];
+            var nick_name_list = dir_list['share_album_nick_name_list']? dir_list['share_album_nick_name_list'].join(',') : '';
+            var count = dir_list['share_album_nick_name_list']? dir_list['share_album_nick_name_list'].length : 0;
+            var file_list = dir_list.file_list || [];
+            var vip_class = data.weiyun_vip_flag? 'icon-share-vip' : '';
+        %>
+        <!-- 头部 S -->
+        <div id="banner">
+            <!-- 运营广告需要靠#banner来定位位置 -->
+        </div>
+        <!-- 头部 E -->
+
+        <div class="share-bd">
+            <!-- banner S -->
+            <div class="photo-banner">
+                <div class="banner">
+                </div>
+            </div>
+            <!-- banner E -->
+            <div class="content">
+                <div id="_avator" class="img" data-src="<%=data.share_head_image_url%>" style="background-image: url(<%=data.share_head_image_url%>)">
+                    <i class="icon <%=vip_class%>"></i>
+                </div>
+                <div class="title"><span class="user-name"><%=data.share_nick_name%></span>邀请您加入</div>
+                <div class="text"><span class="doc-name"><span class="quo">“</span><span class="name"><%=dir_list.dir_name%></span><span class="quo">”</span></span>的共享组</div>
+            </div>
+            <!-- 已经下载.join，未下载.download -->
+            <div class="add-btn join" data-action="join"><i class="icon"></i><span>加入</span></div>
+        </div>
+        <div class="share-ft">
+            <div class="logo"></div>
+        </div>
+        <!-- 弹窗 S -->
+        <div data-id="tips" class="dialog" style="display:none;">
+            <div class="box">
+                <div class="hd">
+                    <p class='txt'>您已加入此共享组</p>
+                    <p class="tip">安装微云客户端立即查看共享内容</p>
+                </div>
+                <div class="bd">
+                    <div class="btn" data-action="cancel"><span>取消</span></div>
+                    <div class="btn" data-action="confirm"><span>安装</span></div>
+                </div>
+            </div>
+        </div>
+        <!-- 弹窗 E -->
+    </div>
+</script>

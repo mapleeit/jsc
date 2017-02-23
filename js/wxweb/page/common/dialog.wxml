@@ -1,0 +1,11 @@
+<!-- 定义dialog -->
+<view class="dialog-wrapper" style="display:{{dialogDisplay?'':'none'}}">
+	<view class="mask"></view>
+	<view class="dialog-content">
+		<view class="txt">{{dialogText}}</view>
+		<view class="btn-wrapper">
+			<view class="btn" style="display: {{dialogButtonComfirm?'':'none'}}" bindtap="bindDialogConfirmTap">{{dialogButtonComfirm}}</view>
+			<view class="btn" style="display: {{dialogButtonCancel?'':'none'}}" bindtap="bindDialogCancelTap">{{dialogButtonCancel}}</view>
+		</view>
+    </view>
+</view>

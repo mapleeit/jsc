@@ -1,0 +1,85 @@
+<!--
+ 工具条模板
+ @author: cluezhang
+ @date: 2013-11-05
+-->
+<script id="toolbar" type="text/html" nowith="yes">
+    <div class="toolbar-btn clear photo-toolbar"><div class="inner"></div></div>
+</script>
+<!--
+ 模式切换模板
+ @author: cluezhang
+ @date: 2013-11-05
+-->
+<script id="view_switch" type="text/html" nowith="yes">
+    <% var cur = data.mode; %>
+    <div class="view-mode-sort">
+        <span data-vm="time" <%=cur==='time' ? 'class="on"' : ''%>><a title="拍摄时间" aria-label="按拍摄时间排序" class="vm-l" href="#" tabindex="-1" hidefocus="on"><em>拍摄时间</em></a></span>
+        <span data-vm="group" <%=cur==='group' ? 'class="on"' : ''%>><a title="分组" class="vm-m" href="#" tabindex="-1" hidefocus="on"><em>分组</em></a></span>
+        <span data-vm="all" <%=cur==='all' ? 'class="on"' : ''%>><a title="全部" aria-label="默认排序" class="vm-r" href="#" tabindex="-1" hidefocus="on"><em>全部</em></a></span>
+    </div>
+</script>
+<!--
+ 模式切换模板
+ 分组列表为空 class： sort-folder-empty
+ 其他 class： sort-pic-empty
+ @author: cluezhang
+ @date: 2013-11-05
+-->
+<script id="empty" type="text/html" nowith="yes">
+    <div class="ui-view ui-view-empty">
+        <div class="g-empty <%=(data==='folder' ? 'sort-folder-empty' : 'sort-pic-empty')%>">
+            <div class="empty-box" tabindex="0">
+                <div class="ico"></div>
+                <p class="title">暂无图片</p>
+                <p class="content">请点击左上角的“上传”按钮添加</p>
+            </div>
+        </div>
+    </div>
+</script>
+
+<!--
+ 更改分组、更新封面弹出框的html模板
+ @author: cluezhang
+ @date: 2013-09-16
+-->
+<script id="dialog" type="text/html" nowith="yes">
+    <%
+    var $ = require('$'),
+    lib = require('lib'),
+    text = lib.get('./text');
+    %>
+    <div  data-no-selection class="box dirbox __ <%= text.text(data.config.klass) %>">
+        <div class="box-inner">
+            <div class="box-head">
+                <h3 class="box-title __title"><%=text.text(data.config.title) %></h3>
+            </div>
+            
+            <div class="box-body __content">
+                
+            </div>
+            
+            <div class="box-foot clear">
+                <% if(data.config.show_create_group){ %>
+                <a class="new-group" href="#">+新建分组</a>
+                <% } %>
+                <div class="box-btns">
+                    <%
+                    $.each(data.buttons || [], function(i, btn) {
+                    %>
+                    <a  data-btn-id="<%= text.text(btn.id) %>" class="g-btn <%= text.text(btn.klass) %>" href="#">
+                        <span class="btn-inner"><%= text.text(btn.text) %></span>
+                    </a>
+                    <%
+                    });
+                    %>
+                </div>
+                <div class="edit-cover-msg" style="display:none;"></div>
+            </div>
+            
+        </div>
+        <!-- .box-inner -->
+        <a class="box-close" data-btn-id="CANCEL" href="#!/close/"><span class="hidden-text">×</span></a>
+        
+    </div>
+</script>

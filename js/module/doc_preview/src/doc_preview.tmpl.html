@@ -1,0 +1,137 @@
+<!--
+文件预览框
+@author jameszuo
+@date 13-3-15 上午10:28
+-->
+<script id="file_preview_box" type="text/html" nowith="yes">
+    <%
+        var lib = require('lib'),
+            text = lib.get('./text');
+        var file_type_map = {
+            ppt: 'ppt',
+            pptx: 'ppt',
+            doc: 'doc',
+            docx: 'doc',
+            rtf: 'doc',
+            wps: 'doc',
+            txt: 'doc',
+            text: 'doc',
+            xls: 'excel',
+            xlsx: 'excel',
+            pdf: 'pdf'
+        };
+        var cls_type = file_type_map[data.file.get_type()] || 'doc';
+    %>
+    <div class="viewer">
+        <div data-id="wrapper" data-no-selection class="mod-office office-<%=cls_type%> " style="" data-label-for-aria="文件预览内容区域">
+            <div data-id="header" class="header">
+                <h2 data-id="title" title="" style="text-align: left;"><%=text.text(data.file._meta_name ? data.file._meta_name : data.file.get_name())%></h2>
+                <a data-action="close" href="#" class="close" title="关闭" tabindex="0"><span>x</span></a>
+                <a data-action="download" href="#" class="download" title="下载" tabindex="0">下载</a>
+            </div>
+            <div data-id="content" class="main">
+                <%= tmpl.document_preview_box(data) %>
+            </div>
+        </div>
+        <div class="preview-back" style="display:none;"><a data-id="back" class="pvb-btn" href="#" style=""></a></div>
+    </div>
+</script>
+
+<!--
+预览文档
+@author jameszuo
+@date 13-3-15 上午10:28
+-->
+<script id="document_preview_box" type="text/html" nowith="yes">
+    <%
+    var lib = require('lib'),
+        common = require('common'),
+        $ = require('$'),
+
+        text = lib.get('./text'),
+        constants = common.get('./constants'),
+
+        file = data.file,
+
+        // 大于若干字节即表示这是一个大文件，提示文本有所不同
+        is_large = file.get_size() > 500 * 1024;
+    %>
+    <div data-name="viewer" class="other-viewer">
+        <div data-name="box" class="" id="pdf-content">
+            <div data-name="content" class="viewer-docs">
+                <!--<h3 data-name="title" class="ui-title">
+                    <span class="ui-text"><%= text.text(file._meta_name ? file._meta_name:file.get_name()) %></span>
+                    <span class="ui-btns"><a data-action="download" class="ui-btn" href="#" hidefocus="true"><i class="icon icon-download"></i>下载</a></span>
+                </h3>-->
+
+                <!-- 用来预览的iframe -->
+                <!--<iframe frameborder="0" src="javascript:document.domain='<%=constants.MAIN_DOMAIN%>';void 0;"></iframe>-->
+                <div class data-name="preview-container" style="overflow:auto;">
+                </div>
+
+
+                <!-- 进度条 -->
+                <div data-name="loading" class="viewer-init" id="pdf-loading">
+                    <div class="ui-quota">
+                        <div data-name="loading-bar" class="ui-quota-bar" style="width:0%;"></div>
+                    </div>
+                    <p class="ui-quota-text">
+                        <span data-name="loading-text"><%= is_large ? '文档较大，正在加载，请耐心等候':'文档正在加载中，请稍候' %></span>
+                        <span>...</span>
+                        <!--<span class="jumping-dots">
+                            <span>.</span>
+                            <span>.</span>
+                            <span>.</span>
+                        </span>-->
+                    </p>
+                </div>
+            </div>
+
+            <div data-name="error" class="viewer-tips" style="display:none;">
+                <div class="ui-tips">
+                    <i class="ui-icon icon-err"></i>
+                    <p class="ui-text">附件预览时发生错误，请 <a data-action="retry" href="#">重试</a> 或直接 <a data-action="download" href="#">下载</a> 查看。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<!--
+分批加载基础html
+@author cluezhang
+@date 2013-12-13
+-->
+<script id="dynamic_preview" type="text/html" nowith="yes">
+    <div data-name="preview-content" class="previewer-dynamic-content"></div>
+    <div data-name="preview-loadmore-container" class="previewer-dynamic-loadmore-container" style="height: 1px;">
+        <div data-name="preview-loadmore" class="previewer-dynamic-loadmore" style="background-color: #eee;height: 36px;line-height: 36px;text-align: center;margin-top: -36px;position: relative;width: 100%;vertical-align: middle;display:none;">
+            <img style="vertical-align: middle;" src="http://imgcache.qq.com/vipstyle/nr/box/img/loading.gif" /> 加载中...
+        </div>
+    </div>
+</script>
+
+<!--
+预览错误提示
+@author cluezhang
+@date 2013-12-17
+-->
+<script id="preview_error" type="text/html" nowith="yes">
+<%
+    var operate_tips = {
+        'retry-down' : '请点击<a data-action="retry" href="#">重试</a>或直接 <a data-action="download" href="#">下载</a> 查看',
+        'retry-none' : '请点击<a data-action="retry" href="#">重试</a>',
+        'none-down' : '请直接 <a data-action="download" href="#">下载</a> 查看',
+        'none-none' : ''
+    };
+    var opr_key = [(data.retry ? 'retry' : 'none'), (data.download ? 'down' : 'none')].join('-'),
+        operate = operate_tips[opr_key];
+
+    var sentences = [data.tip];
+    if(operate){
+        sentences.push(operate);
+    }
+%>
+<%= sentences.join('，') %>。
+</script>

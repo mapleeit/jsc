@@ -1,0 +1,101 @@
+<script id="body" type="text/html" nowith="yes">
+    <% var _ = require('weiyun/mobile/lib/underscore'); %>
+    <%=require('weiyun/util/inline').css('app-wx-pay', true)%>
+    <div class="app-wx-pay">
+        <div class="main-container">
+            <div class="mod-head">
+                <div class="head-inner">
+                    <i class="icon icon-logo"></i>
+                    <span class="tit j-title"></span>
+                </div>
+            </div>
+            <div class="mod-input-new">
+                <span class="tit">开通账号：</span>
+                <span class="name"><%=data.nick_name || ''%></span>
+            </div>
+            <div class="mod-btn">
+                <a href="javascript:void(0);" class="btn-open j-btn" data-type="<%=_.escape(data.pay_type)%>" data-params="<%=_.escape(data.pay_params)%>">确认开通</a>
+            </div>
+
+        </div>
+    </div>
+<script type='text/javascript' src='//img.weiyun.com/club/weiyun/js/publics/tcss/tcss.ping.js'></script>
+<script type="text/javascript" src="//imgcache.qq.com/club//weiyun/js/publics/zepto/zepto-1.1.6.min.js?max_age=604800"></script>
+<script type="text/javascript">
+    var _MAP = {
+        'vip': {
+            'title': '开通微云会员',
+            'actionText': '确认开通',
+            'action': 'vip_purchase'
+        }
+    };
+
+    var $btn = $('.j-btn'),
+        $title = $('.j-title');
+
+    var type = $btn.data('type'),
+        params = $btn.data('params'),
+        item =_MAP[type] || _MAP['vip'],
+        action = item.action,
+        actionText = item.actionText,
+        title = item.title;
+
+    $btn.text(actionText);
+    $title.text(title);
+    $btn.on('click', function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        var aid,
+            openid = _getCookie('openid'),
+            wxAppid2 = _getCookie('wy_appid'),
+            openkey = _getCookie('access_token');
+
+        var redirect_url;
+
+        switch (action) {
+            // 开通会员
+            case 'vip_purchase':
+                aid = 'web_weixin_pay';
+
+                redirect_url = 'https://pay.qq.com/h5/index.shtml?m=buy&c=subscribe&service=wyhyh5&appid=1450005554&aid=' + aid +
+                    '&wxAppid2=' + wxAppid2 + '&pf=sq.lz.khd&' + 'openid=' + openid + '&sessionid=hy_gameid&sessiontype=wc_actoken&openkey=' + openkey;
+                break;
+            default:
+                redirect_url = 'EMPTY PAGE';
+        }
+
+        location.href = redirect_url;
+    });
+
+    var _getCookie = function(name){
+        var cookieValue = '';
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = $.trim(cookies[i]);
+
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    };
+
+</script>
+
+<script type="text/javascript">
+    (function(){
+        if (typeof pgvMain == 'function') {
+            pgvMain("", {
+                tagParamName: 'WYTAG',
+                virtualURL: '/h5/wx_pc_pay.html',
+                virtualDomain: "www.weiyun.com"
+            });
+        }
+    })();
+</script>
+
+</script>

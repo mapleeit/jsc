@@ -1,0 +1,125 @@
+<!--
+appbox 侧边栏安装app
+@bondli
+-->
+<script id="install_app" type="text/html" nowidth="yes">
+    <%
+    var lib = require('lib'),
+        common = require('common'),
+        click_tj = common.get('./configs.click_tj');
+    %>
+    <div class="install-download">
+        <a class="android" href="#" title="安装android版" data-action="android" tabindex="-1" <%=click_tj.make_tj_str('GUIDE_INSTALL_ANDROID')%>><span>android</span></a>
+        <a class="iphone" href="#" title="安装iphone版" data-action="iphone" tabindex="-1" <%=click_tj.make_tj_str('GUIDE_INSTALL_IPHONE')%>><span>iphone</span></a>
+        <a class="ipad" href="#" title="安装ipad版" data-action="ipad" tabindex="-1" <%=click_tj.make_tj_str('GUIDE_INSTALL_IPAD')%>><span>ipad</span></a>
+    </div>
+</script>
+<!--
+安装客户端弹出层
+@bondli
+-->
+<script id="download_dialog" type="text/html" no-width="yes">
+    <div data-no-selection class="full-pop full-pop-download" style="margin-top: -184px;">
+        <h3 class="full-pop-header"><div class="inner __title"></div></h3>
+        <div class="__content">
+        </div>
+        <a data-btn-id="CANCEL" href="javascript:void(0);" class="full-pop-close" title="关闭">×</a>
+    </div>
+</script>
+<script id="way_qrcode" type="text/html" no-width="yes">
+    <%
+    var common = require('common'),
+        constants = common.get('./constants');
+
+    var url_suffix = (constants.IS_APPBOX) ? 'appbox' : 'web';
+    var qrcode_url = constants.HTTP_PROTOCOL + '//img.weiyun.com/vipstyle/nr/box/home/img/qrcode.png';
+    %>
+    <div class="qrcode" data-download-name="qrcode" style="height:247px;">
+        <img alt="二维码" src="<%=qrcode_url%>">
+    </div>
+</script>
+<script id="way_download" type="text/html" no-width="yes">
+    <div class="way way-1"><h4>方法1：下载安装包</h4>
+        <button data-id="android" data-action="appdown" class="btn-goto">点击开始下载</button>
+    </div>
+</script>
+<script id="way_appstore" type="text/html" no-width="yes">
+    <div class="way way-1"><h4><%if(data.type != 'ipad') { %>方法1：<% } %>前往App Store下载</h4>
+        <button class="btn-goto" data-action="appdown" data-id="<%=data.type%>">前往App Store</button>
+    </div>
+</script>
+<script id="way_sendmsg" type="text/html" no-width="yes">
+    <div class="way way-2">
+        <h4>方法2：短信获取下载地址</h4>
+        <div data-id="sms_normal">
+            <p class="desc">请填写手机号，下载地址将发送到您的手机</p>
+            <div class="phonenum clearfix">
+                <input data-id="phone_num" type="text" class="ipt-phonenum">
+                <button class="btn-send" data-action="send">发送短信</button>
+            </div>
+        </div>
+        <div data-id="sms_info" class="sms-info clearfix" style="display: none;">您将收到一条包含微云下载地址的短信，点击短信中的地址即可开始下载。
+            <a href="#" data-action="resend">重新发送</a>
+        </div>
+        <div data-id="sms_error" class="sms-error clearfix" style="display: none;"></div>
+    </div>
+</script>
+<script id="android_content" type="text/html" no-width="yes">
+    <%
+        var tmpl = require('./tmpl');
+    %>
+    <div class="pop-download">
+        <%= tmpl.way_qrcode()%>
+        <div class="info" data-download-name="methods">
+            <%= tmpl.way_download()%>
+            <%= tmpl.way_sendmsg()%>
+        </div>
+    </div>
+</script>
+<script id="iphone_content" type="text/html" no-width="yes">
+    <%
+        var tmpl = require('./tmpl');
+    %>
+    <div class="pop-download">
+        <%= tmpl.way_qrcode()%>
+        <div class="info" data-download-name="methods">
+            <%= tmpl.way_appstore({type: 'iphone'})%>
+            <%= tmpl.way_sendmsg()%>
+        </div>
+    </div>
+</script>
+<script id="ipad_content" type="text/html" no-width="yes">
+    <%
+        var tmpl = require('./tmpl');
+    %>
+    <div class="pop-download">
+        <%= tmpl.way_qrcode()%>
+        <div class="info" data-download-name="methods">
+            <%= tmpl.way_appstore({type: 'ipad'})%>
+        </div>
+    </div>
+</script>
+<script id="install_guide" type="text/html" no-width="yes">
+    <div data-no-selection class="full-pop download-pop" style="margin-top: -184px; z-index: 10000">
+        <h3 class="full-pop-header"><div class="inner">下载客户端</div></h3>
+        <div class="download-pop-con">
+            <ul>
+                <li class="download-platform-item">
+                    <div class="phone-wrap">
+                        <img src="//img.weiyun.com/vipstyle/nr/box/home/img/newqrcode.png">
+                        <span>下载微云手机版</span>
+                    </div>
+                </li>
+                <li class="download-platform-item">
+                    <i data-action="download" data-id="windows" class="icon icon-win"></i>
+                    <p data-action="download" data-id="windows">Windows版</p>
+                </li>
+                <li class="download-platform-item ios-item">
+                    <i data-action="download" data-id="mac" class="icon icon-ios"></i>
+                    <p data-action="download" data-id="mac">Mac版</p>
+                </li>
+            </ul>
+        </div>
+        <a data-action="close" href="#" class="full-pop-close" title="关闭">×</a>
+    </div>
+</script>

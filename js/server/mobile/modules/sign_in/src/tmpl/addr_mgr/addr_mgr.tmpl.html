@@ -1,0 +1,32 @@
+<script id="addr_mgr" type="text/html" nowith="yes">
+    <%
+        data = data || {};
+        var __addressModel = data.__addressModel || {};
+
+        var i, j, key, len, list, item;
+    %>
+    <div class="app-checkin-address j-container" style="display: none">
+        <ul class="address-list" style="display:<%=__addressModel.has_address ? 'block' : 'none'%>;">
+            <li class="item">
+                <div class="address-wrap tBor bBor">
+                    <div class="content bBor">
+                        <div class="name-phone"><span class="name"><%=__addressModel.name%></span><span class="phone"><%=__addressModel.phone%></span></div>
+                        <div class="address"><span><%=__addressModel.address%></span></div>
+                    </div>
+                    <div class="bottom">
+                        <div class="edit" data-action="go_edit_address"><i class="icon icon-edit"></i><span>编辑</span></div>
+                        <div class="trash" data-action="remove_address"><i class="icon icon-trash"></i><span>删除</span></div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+
+        <div class="no-address" style="display:<%=__addressModel.has_address ? 'none' : 'block'%>;">
+            <div class="no-address-bg"><p class="text">请添加新地址</p></div>
+        </div>
+        <div class="btn-wrap btn-add tBor">
+            <!-- 不可点击.disable -->
+            <button class="btn <%=__addressModel.has_address ? 'disable' : ''%>" data-action="go_edit_address"><span>添加新地址</span></button>
+        </div>
+    </div>
+</script>

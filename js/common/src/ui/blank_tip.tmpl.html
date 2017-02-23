@@ -1,0 +1,15 @@
+<script id="blank_tip" type="text/html" nowith="yes">
+    <%
+        var icon_class = data.icon_class;
+        var title = data.title;
+        var content = data.content;
+    %>
+    <div class="empty-box">
+        <!-- 最近为空 -->
+        <div class="status-inner" style="">
+            <i class="icon <%=icon_class%>"></i>
+            <h2 class="title"><%=title%></h2>
+            <p class="txt"><%=content%>~</p>
+        </div>
+    </div>
+</script>

@@ -1,0 +1,32 @@
+<script id="edit_addr" type="text/html" nowith="yes">
+    <%
+        data = data || {};
+        var __addressModel = data.__addressModel || {};
+    %>
+
+    <div class="app-checkin-edit j-container" style="display: none">
+    <ul class="edit-wrap j-edit-address">
+        <li class="item bBor tBor">
+            <span class="term">收货人</span>
+            <input class="content j-address-name" type="text" placeholder="" value="<%=__addressModel.name%>">
+        </li>
+        <li class="item bBor">
+            <span class="term">联系方式</span>
+            <input class="content j-address-phone" type="tel" placeholder="" value="<%=__addressModel.phone%>">
+        </li>
+        <li class="item bBor">
+            <span class="term">所在地区</span>
+            <!--<input type="text" class="info-input j-address-province-city" id="txt_area" value="<%=__addressModel.province ? __addressModel.province : '北京'%> <%=__addressModel.city ? __addressModel.city : '北京市'%>" readonly="readonly" data-value="1,1">-->
+            <input type="text" data-id="city" class="info-input content j-address-province-city" id="txt_area" value="<%=__addressModel.province ? __addressModel.province : '北京'%> <%=__addressModel.city ? __addressModel.city : '北京市'%>"/>
+            <input type="hidden" id="hd_area" value="1,1"/>
+        <li class="item bBor">
+            <span class="term">详细地址</span>
+            <input class="content j-address-detail" type="text" placeholder="" value="<%=__addressModel.detail%>">
+        </li>
+    </ul>
+    <div class="btn-wrap tBor">
+        <!-- 不可点击.disable -->
+        <button class="btn j-add-address-btn <%=__addressModel.has_address ? '' : 'disable'%>" data-action="confirm_edit_address"><span>确认</span></button>
+    </div>
+</div>
+</script>

@@ -1,0 +1,19 @@
+<script type="text/html" nowith="yes" id="captcha">
+    <%
+        data = data || {};
+        var isHttps = data.isHttps || false;
+    %>
+    <script src="<%=isHttps ? 'https://ssl.captcha.qq.com/template/TCapIframeApi.js?clientype=1&apptype=1&aid=543009514&rand=' + Math.random()
+            : 'http://captcha.qq.com/template/TCapIframeApi.js?clientype=1&apptype=1&aid=543009514&rand=' + Math.random()%>"></script>
+    <script type="text/javascript">
+        window.capInit && capInit(document, {
+            callback: function(retJson) {
+                if (retJson.ret === 0) { // 验证成功
+                    var ticket = retJson.ticket;
+                    location.href += '?captcha_ticket=' + ticket;
+                }
+            },
+            showHeader: false
+        });
+    </script>
+</script>

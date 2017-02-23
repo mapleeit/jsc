@@ -1,0 +1,40 @@
+<!--
+ 列表容器模板
+ @author: cluezhang
+ @date: 2013-09-16
+-->
+<script id="detail_group_list" type="text/html" nowith="yes">
+    <ul class="photo-group-aside-inner">
+    </ul>
+</script>
+<!--
+ 单项模板
+ @author: cluezhang
+ @date: 2013-09-16
+-->
+<script id="detail_group_items" type="text/html" nowith="yes">
+    <%
+        var constants = require('common').get('./constants');
+        var default_img_url = constants.HTTP_PROTOCOL + '//img.weiyun.com/vipstyle/nr/box/img/photo-group-empty-min.png';
+        var text = require('lib').get('./text');
+        var records = data.records;
+    %>
+    <% 
+    $.each(records, function(index, record){
+        var text_name = text.text(record.get('name'));
+     %>
+        <li data-list="true" class="list" data-record-id="<%=record.id%>">
+            <div class="list-inner <%= record.get('selected') ? 'list-focus' : '' %>">
+                <div class="img">
+                    <i class="bg"></i>
+                    <img src="<%=default_img_url%>" tabindex="0" aria-label="<%=text_name%>" hidefocu="on" />
+                    <i class="mask"></i>
+                </div>
+                <div class="infor">
+                    <p class="title ellipsis"><%=text_name || '?'%></p>
+                    <p class="size ellipsis"><%=record.get('size') || 0%>张</p>
+                </div>
+            </div>
+        </li>
+    <% }); %>
+</script>

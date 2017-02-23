@@ -1,0 +1,138 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <title>微云网盘</title>
+    <meta name="Keywords" content="QQ, 腾讯,微云, 分享, 网盘, 网络硬盘, U盘, 云存储, 传输, 存储, 同步, 备份, 拍照, 上传, 下载, 中转, 文件, 照片, 相册, 离线, 传文件, wifi, cloud" />
+    <meta name="Description" content="微云是腾讯公司为用户精心打造的一项智能云服务, 您可以通过微云方便地在手机和电脑之间,同步文件、推送照片和传输数据。" />
+    <link rel="stylesheet" href="http://imgcache.qq.com/vipstyle/nr/box/web/css/webbase.css" media="screen" />
+    <link rel="stylesheet" href="http://imgcache.qq.com/vipstyle/nr/box/web/css/to-signin.css" media="screen" />
+    <style type="text/css">
+        .to-signin-box {height: 130px; margin:70px auto;}
+        .to-signin-head h3 {line-height: 30px;}
+        .to-signin-head h3 span{ display: inline-block; _display:inline; _zoom:1; width:30px; height:30px; margin-right:5px; vertical-align: -5px; background: url(http://imgcache.qq.com/vipstyle/nr/box/img/tips-icons.png) no-repeat -43px 0; }
+    </style>
+    <script type="text/javascript">
+        var FROM = (function(){
+            var m = window.location.search.match(/(?!\?)from=([^&]*)/);
+            return m ? decodeURIComponent(m[1]) : '';
+        })();
+        var IS_APPBOX = FROM.indexOf('/appbox/') > -1;
+        var IS_QPLUS = FROM.indexOf('/qplus/') > -1;
+    </script>
+</head>
+<body class="app-web" onkeydown="keyDown(event)">
+    <script type="text/javascript">
+        (function(){
+            if(IS_APPBOX) {
+                document.body.className = 'app-appbox';
+            } else {
+                // 获取url
+                var get_url = (function(){
+                    var path = 'http://www.weiyun.com/' + (IS_APPBOX ? 'appbox/':(IS_QPLUS ? 'qplus/':''));
+                    return function (file, params){
+                        var url = path + file;
+                        if(params) {
+                            url += '?' + $.map(params, function(value, key){
+                                return encodeURIComponent(key) + '=' + encodeURIComponent(value);
+                            });
+                        }
+                        return url;
+                    }
+                })();
+
+                document.write([
+                    '<div class="header">',
+                        '<div class="header-cnt">',
+                            '<h1><a class="logo" href="', get_url('indep-login.html', { from: get_url('web/index.html'), WYTAG: 'webapp.indep-check-fail.logo' }), '"><span>微云</span></a></h1>',
+                            '<ul class="nav-main clear">',
+                                '<li class="nav-item">',
+                                    '<a class="current" href="javascript:void(0)"><i class="nav-disk"></i>网盘<s></s></a><b></b>',
+                                '</li>',
+                                '<li class="nav-item">',
+                                    '<a href="', get_url('indep-login.html', { from: get_url('photo/index.html'), WYTAG: 'webapp.indep-check-fail.photo' }), '"><i class="nav-ablum"></i>相册<s></s></a>',
+                                '</li>',
+                            '</ul>',
+                            '<div class="nav">',
+                                '<ul>',
+                                    '<li><span id="nickName"></span>[ <a id="-logout" href="javascript:void(0)" tj-action="btn-adtag-tj" tj-value="50006">退出</a> ]<span></span></li>',
+                                    '<li><a href="http://www.weiyun.com/?WYTAG=webapp.indep-check-fail.guanwang" target="_blank">官网</a><span>|</span></li>',
+                                    '<li><a href="http://kf.qq.com/product/weiyun.html?WYTAG=weiyun.webapp.indep-check-fail.help" target="_blank">帮助</a><span>|</span></li>',
+                                    '<li><a href="http://support.qq.com/discuss/715_1.shtml?WYTAG=weiyun.webapp.indep-check-fail.fankui" target="_blank">反馈</a></li>',
+                                '</ul>',
+                            '</div>',
+                        '</div>',
+                    '</div>'
+                ].join(''));
+            }
+        })();
+    </script>
+
+    <div class="to-signin-box">
+        <div class="to-signin-head">
+            <h3><span class="warn"></span>验证独立密码失败</h3>
+        </div>
+        <div class="to-signin-body to-signin">
+            <div class="ui-form">
+                独立密码因后台异常导致验证失败，请稍后重试。<a href="#" id="-back">返回</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script type="text/javascript" src="http://imgcache.qq.com/club/qqdisk/web/js/jquery-1.6.4.js"></script>
+<script type="text/javascript" src="http://imgcache.qq.com/club/qqdisk/web/js/lib/sea.js"></script>
+<script type="text/javascript" src="http://imgcache.qq.com/club/qqdisk/web/js/qqviplib_2.0.0.js"></script>
+<script type="text/javascript" src="http://imgcache.qq.com/club/qqdisk/web/js/lib/core.js"></script>
+<script type="text/javascript" src="http://imgcache.qq.com/club/qqdisk/web/js/appbox/qqdisk_web_wy.js?v=20130820"></script>
+<script type='text/javascript' src='http://img.weiyun.com/club/weiyun/js/publics/tcss/tcss.ping.js'></script>
+<script type="text/javascript">
+
+    jQuery(function($){
+        var loc = location;
+        var MAIN_VERSION = IS_APPBOX ? 12 : 11;
+        var WEIYUN_DOMAIN = 'http://www.weiyun.com/';
+        var BACK_URL = (FROM && FROM.indexOf(WEIYUN_DOMAIN) == 0)
+            ? FROM
+            : WEIYUN_DOMAIN+(IS_APPBOX ? 'appbox/disk/index.html':(IS_QPLUS ? 'qplus/disk/index.html':'disk/index.html'))
+        $('#-back').attr('href', BACK_URL);
+    });
+
+    function keyDown(event){
+        var type = null;
+        var node = {text:1,password:1};
+        var evt = window.event || event;
+        var code = evt.which || evt.keyCode ;
+        if(code == 8){
+            if (typeof window.event != 'undefined') {
+                type = evt.srcElement.type;
+            }else{
+                type = evt.target.localName.toLowerCase();
+                if(type == "input"){
+                    type = evt.target.attributes.type;
+                    var typeArr = type.split('=');
+                    type = typeArr[1];
+                }
+            }
+            if(!(type in node)){
+                QQDISK_WEB.View.prevList();
+                if(evt.which){
+                    evt.preventDefault();
+                }else{
+                    window.event.returnValue=false;
+                }
+            }
+        }
+    }
+    jQuery(window).bind('load', function(){
+        if (typeof pgvMain == 'function') {
+            pgvMain("", {
+                tagParamName: 'WYTAG',
+                virtualURL: 'indep-check-fail.html',
+                virtualDomain: "www.weiyun.com"
+            });
+        }
+    });
+</script>
+</html>

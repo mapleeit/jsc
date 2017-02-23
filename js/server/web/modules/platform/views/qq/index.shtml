@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>微云 QQ 弹窗</title>
+    <link rel="stylesheet" href="//qzonestyle.gtimg.cn/qz-proj/wy-pc/css/page-qqtips.css">
+    <script type='text/javascript' src='//imgcache.qq.com/bossweb/pay/js/wallet.js'></script>
+</head>
+<%$BEGIN$%>
+<body>
+<!-- 续费弹出 s -->
+<div id="container" class="mod-tips vip-reminder-wrapper">
+    <div class="tips-hd clearfix">
+        <span class="logo"></span>
+        <div class="checkbox-wrapper">
+            <input type="checkbox" name="" id="nomore">
+            <i class="icon icon-checkbox"></i>
+            <label id="no_remind" for="nomore">本月不再提醒</label>
+        </div>
+    </div>
+
+    <div class="tips-bd clearfix">
+        <div class="img-wrapper" aria-hidden="true"></div>
+        <div class="txt-wrapper">
+            <p class="title">每天<strong>20G</strong>的畅爽</p>
+            <p class="title" id="tips">只剩最后<strong>4</strong>天了</p>
+            <p class="sub-title">建议您尽快续费哦～</p>
+            <a id="pay" href="javascript:;" class="btn btn-l">立即续费</a>
+        </div>
+    </div>
+
+</div>
+<!-- 续费弹出 e -->
+<script type="text/javascript">
+    try {
+        var expiredays = wallet.get('expiredays'),
+            text = '';
+        if(expiredays == 0) {
+            text = '今天到期';
+        } else if(expiredays > 0) {
+            text = '只剩最后<strong>' + expiredays + '</strong>天了';
+        } else {
+            text = '已过期<strong>' + Math.abs(expiredays) + '</strong>天了';
+        }
+        wallet.id('tips').html(text);
+        wallet.id('pay')[0].onclick = function() {
+            wallet.open('http://jump.weiyun.qq.com/client_jump.php?ptlang=2052&from=1016');
+        }
+        wallet.id('no_remind')[0].onclick = function() {
+            wallet.refuse(1);
+        }
+    } catch(e) {
+//        alert(wallet.error.join());
+    }
+</script>
+</body>
+<%$END$%>
+</html>
+

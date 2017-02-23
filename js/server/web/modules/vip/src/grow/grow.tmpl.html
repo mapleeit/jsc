@@ -1,0 +1,139 @@
+<script id="growth_body" type="text/html" nowith="yes">
+    <%
+    var is_login = !!data.is_login;
+
+    if(is_login) {
+        var nickname = data.nickname,
+                isVip = data.isVip,
+                __vipLevel = data.__vipLevel,
+                isOldVip = data.oldVip,
+                head_url = data.headUrl,
+                aid = data.aid,
+                expiresDate = data.expiresDate,
+                posText = (isVip || isOldVip) ? '续费' : '开通会员',
+                vipLevelInfo = data.vipLevelInfo,
+                currentLevel = parseInt(vipLevelInfo.level),
+                growthScoreList = data.growthScoreList,
+                growthRate = Math.ceil(vipLevelInfo.current_score / growthScoreList[currentLevel + 1]);
+
+        var growSpeed = vipLevelInfo.grow_speed > 0 ? vipLevelInfo.grow_speed : 0;
+        var scoreNextLevel = currentLevel < 8 ? (growthScoreList[currentLevel + 1] - vipLevelInfo.current_score) : '';
+        var upgradeDay = growSpeed != 0 ? Math.abs(Math.ceil(scoreNextLevel / growSpeed)) : 0;
+        var growText = currentLevel < 8 ? '升级还需' + scoreNextLevel : '已达最高等级';
+    }
+    %>
+
+    <!-- 页面内容 s -->
+    <div class="hd">
+        <!-- 当前等级为n,则加.now-level-0n -->
+        <div class="hd-path now-level-0<%=currentLevel%>">
+            <div class="inner">
+                <div class="title-wrap">
+                    <h1 class="title">成长体系</h1>
+                    <h3 class="sub-title">成长值=每日成长值+开通成长值-非会员状态成长下降值</h3>
+                </div>
+                <%
+                    if(is_login && currentLevel>0) {
+                %>
+                <div class="bubble">
+                    <div class="bubble-hd">
+                        <div class="avatar"><img src="<%=head_url%>"></div>
+                        <div class="info"><span>当前等级 LV<%=currentLevel%></span></div>
+                    </div>
+                    <div class="bubble-bd clearfix">
+                        <div class="item">
+                            <h5 class="title">当前成长值</h5>
+                            <span class="num"><%=vipLevelInfo.current_score%></span>
+                            <% if(growSpeed > 0) { %>
+                            <span class="tip">+<%=growSpeed%>点/天</span>
+                            <% } %>
+                        </div>
+                        <div class="item">
+                            <h5 class="title">升级还需</h5>
+                            <span class="num"><%=scoreNextLevel%></span>
+                            <% if(upgradeDay > 0) { %>
+                            <span class="tip"><%=upgradeDay%>天</span>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+                <span class="point"></span>
+                <% } %>
+            </div>
+        </div>
+        <ul class="level-list clearfix">
+            <li class="item level-01">
+                <div class="level"><span>lv1</span></div>
+                <div class="num"><span>0</span></div>
+            </li>
+            <li class="item level-02">
+                <div class="level"><span>lv2</span></div>
+                <div class="num"><span>600</span></div>
+            </li>
+            <li class="item level-03">
+                <div class="level"><span>lv3</span></div>
+                <div class="num"><span>1800</span></div>
+            </li>
+
+            <li class="item level-04">
+                <div class="level"><span>lv4</span></div>
+                <div class="num"><span>3600</span></div>
+            </li>
+            <li class="item level-05">
+                <div class="level"><span>lv5</span></div>
+                <div class="num"><span>6000</span></div>
+            </li>
+            <li class="item level-06">
+                <div class="level"><span>lv6</span></div>
+                <div class="num"><span>10000</span></div>
+            </li>
+            <li class="item level-07">
+                <div class="level"><span>lv7</span></div>
+                <div class="num"><span>20000</span></div>
+            </li>
+            <li class="item level-08">
+                <div class="level"><span>lv8</span></div>
+                <div class="num"><span>35000</span></div>
+            </li>
+        </ul>
+    </div>
+    <div class="bd">
+        <div class="title-wrap">
+            <h1 class="title">每日成长速度</h1>
+            <h3 class="sub-title">用户会员过期后，成长值将以10点/天的速度下降</h3>
+        </div>
+        <div class="table">
+            <table>
+                <thead>
+                <tr>
+                    <th class="ctg"></th>
+                    <th>LV1-3</th>
+                    <th>LV4-6</th>
+                    <th>LV7-8</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>财付通/微信</td>
+                    <td class="regular highlight">16点/天</td>
+                    <td class="regular highlight">18点/天</td>
+                    <td class="regular highlight">20点/天</td>
+                </tr>
+                <tr class="gray">
+                    <td>Q币</td>
+                    <td class="regular">15点/天</td>
+                    <td class="regular">17点/天</td>
+                    <td class="regular">19点/天</td>
+                </tr>
+                <tr>
+                    <td>手机渠道</td>
+                    <td class="regular">13点/天</td>
+                    <td class="regular">15点/天</td>
+                    <td class="regular">17点/天</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- 页面内容 e -->
+</script>

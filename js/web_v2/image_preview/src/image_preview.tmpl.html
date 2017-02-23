@@ -1,0 +1,85 @@
+<!--
+图片预览外部框
+@author trumpli
+@date 14-1-03 上午10:28
+-->
+<script id="image_preview_box" type="text/html" nowith="yes">
+	<div class="mod-pic-preview j-preview-wrap" data-no-selection style="z-index: 999;">
+		<div class="inner"><!-- 隐藏底部面板及上下张按钮时加.hide -->
+			<div class="pic-preview-bd j-preview-bd">
+				<div class="pic">
+					<div data-id="big_img" draggable="true" style="display: inline-block;"></div>
+				</div>
+				<a class="expansion expansion_down" data-id="expansion" href="javascript: void(0);" style="display: none;">
+					<i></i><span data-id="total-info" class="viewer-info-text"></span>
+				</a>
+				<a class="btn btn-close" data-id="destroy" hidefocus="true">
+					<i class="icon icon-close"></i>
+				</a>
+				<a data-id="prev" class="pre disable" title="上一张" href="javascript: void(0);"><i class="icon icon-pre"></i></a>
+				<a data-id="next" class="next" title="下一张" href="javascript: void(0);"><i class="icon icon-next"></i></a>
+			</div>
+			<div class="pic-preview-ft j-preview-ft">
+				<a class="expansion expansion_up" href="javascript: void(0);" data-id="expansion" style="display: none;"></a>
+				<ul class="operate-list clearfix">
+					<li class="item" data-id="share">
+						<i class="icon icon-share"></i>
+						<p class="tip">分享</p>
+					</li>
+					<li class="item" data-id="download">
+						<i class="icon icon-download"></i>
+						<p class="tip">下载</p>
+					</li>
+					<li class="item" data-id="remove">
+						<i class="icon icon-trash"></i>
+						<p class="tip">删除</p>
+					</li>
+					<li class="item" data-id="code" style="display: none;">
+						<i class="icon icon-code"></i>
+						<p class="tip">二维码</p>
+					</li>
+					<li class="item line">
+						<i class="icon icon-line"></i>
+					</li>
+					<li class="item" data-id="zoomin">
+						<i class="icon icon-enlarge"></i>
+						<p class="tip">放大</p>
+					</li>
+					<li class="item disable" data-id="zoomout">
+						<i class="icon icon-narrow"></i>
+						<p class="tip">缩小</p>
+					</li>
+					<li class="item disable" data-id="match">
+						<i class="icon icon-resize"></i>
+						<p class="tip">重置</p>
+					</li>
+				</ul>
+				<div class="small-pic-list-wrap" data-id="img-thumbnail-list">
+					<div class="wrap">
+						<ul class="small-pic-list clearfix" data-id="img-thumbnail-content"></ul>
+					</div>
+					<div class="pre disable" data-id="prev_group">
+						<i class="icon icon-pre-s"></i>
+					</div>
+					<div class="next" data-id="next_group">
+						<i class="icon icon-next-s"></i>
+					</div>
+				</div>
+				<div class="ft-mask"></div>
+			</div>
+		</div>
+		<div data-id="loading" class="viewer-loading" style="display: none;"></div>
+	</div>
+</script>
+
+<script id="thumb_instance" type="text/html" nowith="yes">
+	<li class="small-pic-item" data-index="<%=data%>" data-id="pick">
+		<i></i>
+		<div class="pic"></div>
+		<div class="pic-mask"></div>
+	</li>
+</script>
+
+<script id="error" type="text/html" nowith="yes">
+    <i class="loading-img-error"></i>
+</script>

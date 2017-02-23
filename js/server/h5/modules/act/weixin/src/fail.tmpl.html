@@ -1,0 +1,39 @@
+<script id="fail" type="text/html" nowith="yes">
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html><head>
+    <meta charset="UTF-8">
+    <title>领取容量</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,minimum-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="http://imgcache.qq.com/vipstyle/nr/box/web/css/weiyun-global.css">
+    <link rel="stylesheet" href="http://imgcache.qq.com/vipstyle/nr/box/web/css/weiyun-get-capacity.css?v=1">
+</head>
+<body>
+<section class="wy-act-wrapper">
+    <header class="wy-logo-wrapper">
+        <i class="icon icon-wy-logo">微云</i>
+    </header>
+
+    <!-- 领取容量失败时使用 -->
+     <section class="wy-act-fail-wrapper">
+      <div class="text-wrapper">
+        <h1 class="main-title">非常抱歉</h1>
+        <p class="sub-title"><%=data%></p>
+      </div>
+    </section>
+</section>
+<script type='text/javascript' src='http://pingjs.qq.com/tcss.ping.js'></script>
+<script>
+    (function() {
+        if (typeof pgvMain == 'function') {
+            pgvMain("", {
+                tagParamName: 'WYTAG',
+                virtualURL: '/act/weixin/fail.html',
+                virtualDomain: "h5.weiyun.com"
+            });
+        }
+    })();
+</script>
+</body>
+</html>
+</script>

@@ -1,0 +1,81 @@
+<!--
+ 容器体
+ @author: trump
+-->
+<script id="time_body" type="text/html" nowith="yes">
+    <div style="height:100%" data-label-for-aria="图片文件列表内容区域">
+        <div id="photo-time-view" class="photo-view photo-module-timeline"></div>
+    </div>
+</script>
+<!--
+无数据时的运营广告
+@author: trump
+-->
+<script id="time_empty" type="text/html" nowidth="yes">
+<div style="height:100%" class="ui-view ui-view-empty">
+    <div class="g-empty sort-pic-empty" id="photo_time_empty">
+        <div class="empty-box" tabindex="0">
+        <div class="ico"></div>
+        <p data-id="title" class="title">暂无图片</p>
+        <p data-id="content" class="content">请点击左上角的“上传”按钮添加</p>
+    </div>
+    </div>
+</div>
+</script>
+<!--
+ 行
+ @author: trump
+-->
+<script id="time_row" type="text/html" nowith="yes">
+<%
+    var $ = require('$'),
+        tmpl = require('./tmpl'),
+        html = [];
+    $.each(data.get_array(),function(i,item){
+        html.push( tmpl.time_cell(item) );
+    });
+%>
+<div class="photo-view-box clear" id="day_id_<%=data.get_day_id()%>">
+    <div class="time">
+        <p class="d"><%=data.get_date()%></p>
+        <p class="m"><%=(data.get_year()+'.'+data.get_month())%></p>
+    </div>
+    <%=html.join('')%>
+</div>
+</script>
+<!--
+ 单元格
+ @author: trump
+-->
+<script id="time_cell" type="text/html" nowith="yes">
+<div class="photo-view-list" data-file-id="<%=data.get_id()%>" id="<%=('time_'+data.get_id())%>">
+    <a tabindex="0" aria-label="<%=data.get_name()%>" hidefocus="on" href="javascript:void(0)" class="photo-view-list-link photo-view-loading">
+        <span class="photo-view-list-checkbox"></span>
+        <span class="photo-view-list-mask"></span>
+    </a>
+</div>
+</script>
+
+
+<!--
+拖拽时的指针
+@author bondli
+@date 13-12-27 下午3:14
+-->
+<script id="drag_cursor" type="text/html" nowith="yes">
+    <%
+    var lib = require('lib'),
+        $ = require('$'),
+
+        length = data.files.length,
+        files = data.files.slice(0, 4);
+    %>
+    <div class="icons">
+        <% $.each(files, function (i, file) { %>
+            <i class="icon icon<%= i %> filetype icon-<%= file.get_type() %>"></i>
+        <% }); %>
+    </div>
+    <span class="sum"><%= length %></span>
+
+</script>
+

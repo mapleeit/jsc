@@ -1,0 +1,157 @@
+<script id="body" type="text/html" nowith="yes">
+<%
+var server_taken = new Date() - window.serv_start_time;
+var APPID = require('weiyun/util/appid')();
+var server_config = plug('config') || {};
+var is_test_env = !!server_config.isTest;
+
+var prettysize = require('weiyun/util/prettysize'),
+    dateformat = require('weiyun/util/dateformat');
+var data = data || {};
+var validCouponList = data.validCouponList || [];
+var invalidCouponList = data.invalidCouponList || [];
+%>
+
+<script>
+    var IS_TEST_ENV = <%=is_test_env%>;
+    window.IS_MOBILE = <%=window['g_weiyun_info'].is_mobile%>;
+    window.APPID = <%=APPID%>;
+    window.g_serv_taken = <%=server_taken%>;
+    window.g_start_time = +new Date();
+</script>
+
+<%=require('weiyun/util/inline').css(['app-act-flow'])%>
+<%=require('weiyun/util/inline').css(['g-err','g-component'])%>
+
+<script>
+    window.g_css_time = +new Date();
+    document.domain='weiyun.com';
+</script>
+
+
+<div class="app-act-flow j-container">
+    <!-- 头部 s -->
+    <div class="hd">
+        <div class="title"></div>
+        <div class="head-banner"></div>
+    </div>
+    <!-- 头部 e -->
+    <div class="bd">
+        <div class="box j-buy-box" style="display: none;">
+            <div class="box-hd">
+                <h2 class="title"><span class="inner">购买流量券 当日文件任性传</span></h2>
+            </div>
+
+            <div class="box-bd buy-box">
+  				<div class="item-ticket buy">
+                    <div class="main">
+                        <div class="tip"><span class="inner">24小时流量券</span></div>
+                        <div class="flow"><span class="num-100g"></span></div>
+                        <!-- 2705（购买100G流量券） 2704（购买无限流量券）-->
+                        <div class="btn" data-action="buy_coupon" data-coupon-type="2705"><span>10元购买</span></div>
+                    </div>
+                </div>
+                <div class="item-ticket buy">
+                    <div class="main">
+                        <div class="tip"><span class="inner">24小时流量券</span></div>
+                        <div class="flow"><span class="num-unlimited"></span></div>
+                        <div class="btn" data-action="buy_coupon" data-coupon-type="2704"><span>30元购买</span></div>
+                    </div>
+                </div>
+  			</div>
+        </div>
+
+        <%if (validCouponList.length || invalidCouponList.length) {%>
+        <div class="box">
+            <div class="box-hd">
+                <h2 class="title"><span class="inner">我的流量券</span></h2>
+            </div>
+            <div class="box-bd">
+                <%
+                    for (let i = 0; i < validCouponList.length; i++) {
+                        let item = validCouponList[i];
+                        let statusClass = item.flow_coupon_status == 1 ? 'use' : 'hasuse';
+                %>
+                <div data-coupon-id="<%=item.flow_coupon_id%>" class="item-ticket <%=statusClass%>">
+                    <div class="main">
+                        <div class="flow"><span class="num-<%=item.flow_coupon_type == 0 ? '100g' : 'unlimited'%>"></span></div>
+                        <div class="tip"><span class="inner">24小时流量券</span></div>
+                    </div>
+                    <div class="right">
+                        <div <%if (item.flow_coupon_status == 1) {%>data-action="use_coupon"<%}%> class="btn">
+                            <span><%=item.flow_coupon_status == 1 ? '立即使用' : '已使用'%></span>
+                        </div>
+                        <p class="txt">
+                            <% if (item.flow_coupon_status == 1) {%>
+                            点击立即使用后<br>仅24小时内有效
+                            <%} else {%>
+                                <span class="date"><%=dateformat(item.use_time + item.ttl, 'mm-dd HH:MM')%></span>前有效<br/>之后流量会失效
+                            <%}%>
+                        </p>
+                    </div>
+                </div>
+                <%
+                    }
+                    for (let i = 0; i < invalidCouponList.length; i++) {
+                        let item = invalidCouponList[i];
+                %>
+                <div class="item-ticket fail"><!-- 失效的券加.fail -->
+                    <div class="main">
+                        <div class="flow"><span class="num-<%=item.flow_coupon_type == 0 ? '100g' : 'unlimited'%>"></span></div>
+                        <div class="tip"><span class="inner">24小时流量券</span></div>
+                    </div>
+                    <div class="right">
+                        <div class="btn"><span>已使用</span></div>
+                        <p class="txt">已在<span class="date"><%=dateformat(item.use_time, 'mm-dd HH:MM')%></span>使用后失效</p>
+                    </div>
+                </div>
+                <%
+                    }
+                %>
+            </div>
+        </div>
+        <%}%>
+
+        <div class="box">
+            <div class="box-hd">
+                <h2 class="title"><span class="inner">活动说明</span></h2>
+            </div>
+            <div class="box-bd">
+                <ul class="rule-list">
+                    <li class="item-rule"><i class="icon icon-point"></i><p class="txt">24小时流量券是在当前流量的基础上叠加使用。自点击“立即使用”起24小时内有效。超过24小时，流量券自动失效。</p></li>
+                    <li class="item-rule"><i class="icon icon-point"></i><p class="txt">无限量流量券可在24小时内无限上传（注：可上传流量小于等于您的微云空间总剩余容量），请根据使用情况酌情购买。</p></li>
+                    <li class="item-rule"><i class="icon icon-point"></i><p class="txt">购买后未使用的流量券将在2016年12月31日后失效。</p></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+<div class="ft">
+    <p class="inner"><a href="http://www.tencent.com/">关于腾讯</a>|<a href="http://www.weiyun.com/mobile/xy.html">服务条款</a>|<a href="http://service.qq.com/">客服中心</a></p>
+    <p class="inner">Copyright © 1998-<%=(new Date()).getFullYear()%> Tencent. All Rights Reserved.</p>
+    <p class="inner">腾讯公司 版权所有</p>
+</div>
+</div>
+
+
+<script src="//img.weiyun.com/c/=/club/weiyun/js/publics/seajs/sea.js,/club/weiyun/js/publics/seajs-plugins/seajs-combo.js?max_age=31104000"></script>
+<script src="//img.weiyun.com/club/weiyun/js/act/coupon/config.js?v160822"></script>
+<script type="text/javascript">
+    seajs.use(['$', 'lib', 'common', 'index'], function($, lib, common, index){
+        var coupon = index.get('./coupon');
+        coupon.render(<%=JSON.stringify(data)%>);
+    });
+</script>
+<script type='text/javascript' src='//img.weiyun.com/club/weiyun/js/publics/tcss/tcss.ping.js'></script>
+<script>
+    (function() {
+        if (typeof pgvMain == 'function') {
+            pgvMain("", {
+                tagParamName: 'WYTAG',
+                virtualURL: '/mobile/act/coupon.html',
+                virtualDomain: "www.weiyun.com"
+            });
+        }
+    })();
+</script>
+
+</script>

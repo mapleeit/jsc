@@ -1,0 +1,1 @@
+<wx-button type="primary" bindtap="requestPayment">requestPayment（未完成）</wx-button>

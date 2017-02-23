@@ -1,0 +1,3 @@
+<wx-button type="primary" bindtap="navigateTo">navigateTo</wx-button>
+<wx-button type="primary" bindtap="navigateBack">navigateBack</wx-button>
+<wx-button type="primary" bindtap="redirectTo">redirectTo</wx-button>

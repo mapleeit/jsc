@@ -1,0 +1,56 @@
+<!--
+图片预览外部框
+@author trumpli
+@date 14-1-03 上午10:28
+-->
+<script id="image_preview_box" type="text/html" nowith="yes">
+    <div data-no-selection class="viewer" style="z-index: 999;">
+        <div class="preview-back"><a data-id="back" class="pvb-btn" href="#"></a></div>
+        <div class="viewer-header">
+            <!-- 关闭按钮 -->
+            <a data-id="destroy" class="viewer-close" hidefocus="true" href="#">×</a>
+        </div>
+        <table class="img-viewer">
+            <tbody><tr>
+                <td class="viewer-inner" data-id="big_img"></td>
+            </tr>
+            </tbody></table>
+        <!-- 图片预览控制
+        <div>            -->
+            <div style="margin-bottom: 0px;" class="viewer-info ui-pos">
+                <div class="bar-top">
+                    <!--展开：expansion_down，收起：expansion_up-->
+                    <a href="#" class="expansion expansion_up" data-id="expansion"><i></i><span data-id="total-info" class="viewer-info-text">第3/63张</span></a>
+                    <div class="viewer-info-action ui-pos-right">
+                        <a data-id="download" class="viewer-download" href="#"><i></i></a><!--快捷按钮 下载-->
+                        <a data-id="share" class="viewer-share" href="#"><i></i></a><!--快捷按钮 分享-->
+                        <a data-id="remove" class="viewer-del" href="#" style=""><i></i></a><!--快捷按钮 删除-->
+                        <a data-id="code" class="viewer-code" href="#" style=""><i></i></a><!--快捷按钮 二维码-->
+                    </div>
+                </div>
+                <div class="img-thumbnail-list" data-id="img-thumbnail-list" style="display:none;">
+                    <!--翻页不可用时加：disable-prev-->
+                    <a data-id="prev_group" href="#" class="list-prev disable-prev"></a>
+                    <div class="img-thumbnail-content">
+                        <ul data-id="img-thumbnail-content"></ul>
+                    </div>
+                    <!--翻页不可用时加：disable-next-->
+                    <a data-id="next_group" href="#" class="list-next"></a>
+                </div>
+            </div>
+            <!--翻页不可用时，加上 disable-next disable-prev-->
+            <a data-id="prev" class="viewer-prev disable-prev" title="上一张" href="#"></a>
+            <a data-id="next" class="viewer-next" title="下一张" href="#"></a>
+        <!--</div>                                            -->
+        <div data-id="loading" class="viewer-loading" style="display: none;"></div>
+    </div>
+</script>
+
+<script id="thumb_instance" type="text/html" nowith="yes">
+    <li  data-index="<%=data%>" data-id="pick"><a href="#" class="img-error"><i></i></a></li>
+</script>
+
+<script id="error" type="text/html" nowith="yes">
+    <i class="loading-img-error"></i>
+</script>
+

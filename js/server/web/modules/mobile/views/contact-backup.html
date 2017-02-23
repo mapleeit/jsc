@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>通讯录备份</title>
+    <meta name="keywords", content="">
+    <meta name="description" content="">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1,minimum-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no" />
+    <link rel="stylesheet" href="//qzonestyle.gtimg.cn/qz-proj/wy-h5/app-contacts.css">
+    <link rel="stylesheet" href="//img.weiyun.com/vipstyle/nr/box/h5/css/g-component.css">
+</head>
+<body>
+<div class="app-contacts">
+    <div class="contacts-pic">
+        <div class="bg"></div>
+        <i class="icon icon-contacts-update"></i>
+    </div>
+    <div id="content" class="content">
+        <p class="text">微云将接入QQ同步助手为您提供更专业的服务,您已备份的通讯录保存在同步助手中</p>
+        <div class="btn-wrap"><div data-action="open" class="btn" onclick="if($(this).hasClass('open')) { pvClickSend('weiyun.app.qqcontact.open'); } else if($(this).hasClass('download')) {  pvClickSend('weiyun.app.qqcontact.download'); }">
+            <span data-id="btn_text">下载QQ同步助手</span></div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="//img.weiyun.com/club/weiyun/js/publics/zepto/zepto-1.1.6.min.js"></script>
+<script type="text/javascript">
+
+    var contact = (function() {
+        var _init = function() {
+            var params = get_params(),
+                action_name = (params['app_install'] && parseInt(params['app_install']))? 'open' : 'download',
+                text = (params['app_install'] && parseInt(params['app_install']))? '打开QQ同步助手' : '下载QQ同步助手';
+            $('#content [data-id=btn_text]').text(text);
+            $('#content [data-action]').attr('data-action', action_name);
+            $('#content [data-action]').addClass(action_name);
+            _bind_events();
+        }
+        var download_map = {
+            'IOS': 'https://itunes.apple.com/app/apple-store/id389481236?pt=69276&ct=weiyun&mt=8',
+            'ANDROID': 'http://tools.3g.qq.com/j/wyttb',        //不支持https
+            'unknown': 'https://www.weiyun.com/mobile/index.html'
+        };
+
+        var scheme_map = {
+            'IOS': 'qqpim://sync_view?from=qcloud',
+            'ANDROID': 'qqpim://com.qq.qcloud',
+            'unknown': 'qqpim://'
+        }
+
+        var _bind_events = function() {
+            $('#content').on('touchend', '[data-action]' ,function(e) {
+                e.preventDefault();
+                var os_name = _getOSname(),
+                    $target = $(e.target).closest('[data-action]'),
+                    action_name = $target.attr('data-action');
+                if(action_name === 'open') {
+                    location.href = scheme_map[os_name];
+                } else if(action_name === 'download') {
+                    window.open(download_map[os_name]);
+                }
+            })
+        }
+        //获取操作系统名称
+        var _getOSname = function(){
+            var nav = navigator.userAgent,
+                map = {
+                    'IOS': /(iPad|iPhone|iPod).*? Weiyun\/([\d\.]+)/,
+                    'ANDROID': /Android.*? Weiyun\/([\d\.]+)/
+                }
+            for(var item in map) {
+                if(map[item].test(nav)) {
+                    return item;
+                }
+            }
+            return 'unknown';
+        };
+        //解析URL参数
+        var get_params = function(){
+            var hash = location.search.substring(1), params = {}, parts, i, part, key;
+            if(hash){
+                parts = hash.split('&');
+                for(i=0; i<parts.length; i++){
+                    part = parts[i].split('=');
+                    key = decodeURIComponent(part[0]);
+                    params[key] = decodeURIComponent(part.slice(1).join('='));
+                }
+            }
+            return params;
+        }
+
+        return {
+            _init: _init
+        }
+    })();
+
+    contact._init();
+</script>
+<script type='text/javascript' src='//img.weiyun.com/club/weiyun/js/publics/tcss/tcss.ping.js'></script>
+<script>
+    var pvClickSend = function (tag) {
+        if (typeof(pgvSendClick) == "function") {
+            pgvSendClick({
+                hottag: tag,
+                virtualDomain: 'www.weiyun.com'
+            });
+        }
+    };
+    (function() {
+        if (typeof pgvMain == 'function') {
+            pgvMain("", {
+                tagParamName: 'WYTAG',
+                virtualURL: '/mobile/contact-backup.html',
+                virtualDomain: "www.weiyun.com"
+            });
+        }
+    })();
+</script>
+</body>
+</html>

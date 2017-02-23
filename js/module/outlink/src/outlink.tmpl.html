@@ -1,0 +1,208 @@
+<!--
+外链页面WEB主体模板
+@yuyanghe
+@date 13-9-17
+-->
+<script id="outlink_header" type="text/html" nowith="yes">
+    <div class="lay-header clear" id='_outlink_header'>
+        <a class="logo" href="javascript:void(0)" target='_blank'></a>
+        <p id='outlink_title' class="title"></p>
+        <a id="outlink_login"class="login" href="javascript:void(0)" style="display:none">登录</a>
+        <div class="user">
+            <div id="header-user" class="normal" style="display:none;">
+                <div class="inner">
+                    <img class="user-icon" />
+                    <i class="ico"></i>
+                </div>
+            </div>
+        </div>
+        <%= this['face_menu']() %>
+    </div>
+</script>
+
+<!--
+    下载栏
+@yuyanghe
+-->
+<script id="outlink_download" type="text/html" nowith="yes">
+    <%
+        var data = data || {},
+            headIconUrl = data.headIconUrl,
+            nickname = data.nickname,
+            count = data.count,
+            word = data.word,
+            notShowDownload = data.notShowDownload,
+            notSaveToWy = data.notSaveToWy,
+            isSingleFile = data.isSingleFile; 
+    %>
+    <div class="lay-main-toolbar">
+        <!-- 分享个人信息 -->
+        <div class="user-share-info">
+            <span class="avatar share-vip">
+                <img src="<%=headIconUrl.replace(/http:/i, '').replace(/https:/i, '')%>">
+            </span>
+            <div class="info"><%=nickname%>分享的<%=count%>个<%=word%></div>
+        </div>
+        <div class="toolbar-btn clear photo-toolbar">
+            <div class="btn-message">
+                <%if(!notShowDownload) {%>
+                    <a class="g-btn g-btn-gray download <%if(!isSingleFile) {%>g-btn-disabled<%}%>" id="ui-btn-down" href="javascript:void(0);">
+                        <span class="btn-inner ">
+                            <i class="ico ico-down"></i>
+                            <span class="text">下载</span>
+                        </span>
+                    </a>
+                <%}%>
+                <%if(!notSaveToWy) {%>
+                    <a class="g-btn g-btn-gray save-to-weiyun <%if(!isSingleFile) {%>g-btn-disabled<%}%>" id="ui-btn-save" href="javascript:void(0);">
+                        <span class="btn-inner">
+                            <i class="ico ico-down-wy"></i>
+                            <span class="text">保存到微云</span>
+                        </span>
+                    </a>
+                <%}%>
+                <a class="g-btn g-btn-gray" id="ui-btn-qr" href="javascript:void(0);">
+                    <span class="btn-inner download-by-qr">
+                        <i class="ico ico-qr"></i>
+                        <span class="text">二维码</span>
+                    </span>
+                </a>
+            </div>
+        </div>
+    </div>
+</script>
+<!--
+    面包屑
+-->
+<script id="outlink_breadcrumb" type="text/html" nowith="yes">
+    <div class="lay-main-head">
+        <div class="inner">
+            <div class="wrap">
+                <label id="checkall" class="checkall"></label>
+                <div class="main-path">
+                    <!-- 麻烦前端对面包屑的z-index进行倒序填充 -->
+                    <!-- <a style="z-index:7;" class="path more" href="#"><span>«</span></a> -->
+                    <a style="z-index:2;" class="path" href="javascript:void(0);">
+                        <span>微云分享</span>
+                    </a>
+                    <%if(data && data.dir_name) {%>
+                        <a style="z-index:1;" class="path current" href="javascript:void(0);">
+                            <span><%=data.dir_name%></span>
+                        </a>
+                    <%}%>
+                    <!--a style="z-index:1;" class="path current" href="#"><span>2012web</span></a-->
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<!--
+头像下方的菜单
+@yuyanghe
+-->
+<script id="face_menu" type="text/html" nowith="yes">
+    <!-- 用户信息于旧版保持一致 -->
+    <div id="_main_face_menu"  data-no-selection class="ui-pop ui-pop-user hide">
+        <div class="ui-pop-head">
+            <span id="_main_nick_name" class="user-nick">...</span>
+            <div id="_main_space_info">
+                <div class="ui-text quota-info">
+                    <label>已使用：</label>
+                    <span id="_used_space_info_text">0G</span>
+                </div>
+                <div class="ui-text quota-info">
+                    <label>总容量：</label>
+                    <span id="_total_space_info_text">0G</span>
+                </div>
+                <div class="ui-quota" title="1%">
+                    <div id="_main_space_info_bar" class="ui-quota-bar" style="width: 1%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <ul class="ui-menu">
+            <li><a id="_main_client_down" href="http://www.weiyun.com/download.html?WYTAG=weiyun.share.pc" target="_blank" tabindex="-1">下载客户端</a></li>
+            <li><a id="_main_feedback" href="http://support.qq.com/discuss/715_1.shtml?WYTAG=weiyun.share.pc" target="_blank" tabindex="-1">反馈</a></li>
+            <li><a id="outlink_login_out" href="javascript:void(0)" tabindex="0">退出</a></li>
+        </ul>
+        <i class="ui-arr"></i>
+        <i class="ui-arr ui-tarr"></i>
+    </div>
+</script>
+
+<!--
+外链主体界面
+@yuyanghe
+-->
+<script id="outlink_body" type="text/html" nowith="yes">
+    <div id='_outlink_body' class="wrapper">
+
+    </div>
+    <!-- .wrapper -->
+    <a class="ui-fixed-rb complain" href="javascript:void(0);" onclick="javascript:alert('举报成功！');">举报</a>
+    <!-- 遮罩 -->
+
+    <div class="ui-mask full-mask" id="page-mask" style="display:none"></div>
+
+    <div id="saveas" data-no-selection="" class="full-pop full-pop-small hide" style="margin-top:-100px">
+        <h3 class="full-pop-header"><div class="inner _title">提示</div></h3>
+        <div class="full-pop-content">
+            <div class="mod-alert"><div class="alert-inner">
+                <i class="ico"></i>
+                <h4 id="infoBoxTips" class="" style="color: #020202;font-size: 14px;font-weight: normal;">保存成功！<a href="http://www.weiyun.com/disk/index.html?WYTAG=weiyun.share.pc"
+                                           target="_blank">查看</a></h4>
+                <p id="infoBoxContent" class="info" title=""></p>
+            </div></div>
+        </div>
+        <div class="full-pop-btn">
+            <a data-id="outlink_store_success_close" class="g-btn g-btn-gray" href="javascript:void(0)"><span class="btn-inner">关闭</span></a>
+        </div>
+        <a data-id="outlink_store_success_close" href="javascript:void(0)" class="full-pop-close" title="关闭">×</a>
+    </div>
+
+    <div class="pop-tishi hide" style="left:220px;" id="saveas-note">
+        <div class="tishi-header">
+            <h1>提示</h1>
+            <a href="" class="tishi-close"></a>
+        </div>
+        <div class="tishi-cont">
+            <div class="tishi-left">
+                <h3>
+                    <span class="ico-right"></span>
+                    保存成功
+                </h3>
+                <p>请在<a href="http://www.weiyun.com/d" target="_blank">微云手机端</a>-“笔记”中查看</p>
+            </div>
+            <div class="tishi-right">
+                <img src="http://imgcache.qq.com/vipstyle/nr/box/img/qrcode-big.png" alt="扫描安装微云手机端" width="64" height="64">
+                <p>扫描安装微云手机端</p>
+            </div>
+        </div>
+    </div>
+
+</script>
+
+<script id="outlink_down_verifycode" type="text/html" nowith="yes">
+<div class="pop-box poplink-code full-pop full-pop-small" close-box="true" style="display:none;">
+    <h3 class="full-pop-header"><div class="inner _title">请输入验证码</div></h3>
+    <div class="full-pop-content pop-main">
+        <div class="tit">验证码：</div>
+        <ul class="con">
+            <li class="in">
+                <input type="text" value="" /><!-- ie6 .focus -->
+            </li>
+            <li class="err" style="display:none;">验证码输入错误，请重新输入</li>
+            <li class="code">
+                <img class="img-code" />
+                <a href="#" class="refresh-code">换一张</a>
+            </li>
+        </ul>
+    </div>
+    <div class="full-pop-btn">
+        <a class="submit g-btn g-btn-blue" href="#"><span class="btn-inner">确定</span></a>
+    </div>
+    <a href="javascript:void(0);" class="full-pop-close pop-close" close-btn="true" title="关闭">x</a>
+</div>
+
+</script>

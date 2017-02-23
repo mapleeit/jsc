@@ -1,0 +1,431 @@
+<!DOCTYPE HTML>
+<!--[if lt IE 7 ]> <html class="ie6" style="overflow:hidden;"> <![endif]-->
+<!--[if IE 7 ]> <html class="ie7" style="overflow:hidden;"> <![endif]-->
+<!--[if IE 8 ]> <html class="ie8" style="overflow:hidden;"> <![endif]-->
+<!--[if IE 9 ]> <html class="ie9" style="overflow:hidden;"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]>--> <html style="overflow:hidden;"> <!--<![endif]-->
+<!--<html style="overflow:hidden;">-->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>微云-文档预览</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+        }
+    </style>
+    <link charset="utf-8" rel="stylesheet" href="//img.weiyun.com/vipstyle/nr/box/css/file-preview.css?max_age=31104000">
+    <link charset="utf-8" rel="stylesheet" href="//img.weiyun.com/vipstyle/nr/box/css/file-edit.css?max_age=31104000">
+    <link charset="utf-8" rel="stylesheet" href="//img.weiyun.com/vipstyle/nr/box/css/p-web.css?max_age=31104000">
+    <script type="text/javascript" src="//img.weiyun.com/c/=/club/weiyun/js/publics/jquery/jquery-1.8.3.min.js,/club/weiyun/js/publics/seajs/sea.js,/club/weiyun/js/publics/seajs-plugins/seajs-combo.js?max_age=31104000"></script>
+    <script type="text/javascript" src="//www.weiyun.com/disk/js/configs_web.js"></script>
+</head>
+<body class="web-app">
+<div class="file-preview file-preview-xls">
+    <div id="header" class="file-preview-hd clearfix">
+        <div id="back" class="file-back"><i class="ui-icon icon-back"></i></div>
+        <div class="file-info">
+            <i class="ui-icon icon-file icon-file-xls"></i>
+            <div class="name"></div>
+        </div>
+        <div id="tools" class="actions-wrap actions-normal">
+            <a id="edit_btn" class="btn write" href="#"><span class="btn-inner enabled"><i class="ui-icon icon-write"></i><span class="text">编辑</span></span></a>
+            <a id="download" class="btn" href="#"><span class="btn-inner"><i class="ui-icon icon-down"></i><span class="text">下载</span></span></a>
+        </div>
+        <div class="actions-edit-wrap" style="display:none;">
+            <div class="btn"><a href="###">退出编辑</a></div>
+            <div class="text"><span>正在编辑</span></div>
+        </div>
+        <div class="microsoft-info">
+            <span id="p_logo" class="logo"></span>
+            <p class="links" style="display:none;">
+                <a href="#">帮助</a><i class="split"></i><a href="">意见反馈</a>
+            </p>
+            <p class="state" style="display:none;">此服务使用微软Office服务预览技术</p>
+        </div>
+    </div>
+    <!--<div class="file-load">-->
+        <!--<i class="ui-icon icon-load"></i>-->
+        <!--<span class="text">正在加载文档内容……</span>-->
+    <!--</div>-->
+    <div id="iframe-ct" class="file-preview-bd">
+    </div>
+</div>
+<script type="text/javascript">
+    document.domain = 'weiyun.com';
+
+    var decode = decodeURIComponent;
+    function get_params(){
+        var hash = location.search.substring(1), params = {}, parts, i, part, key;
+        if(hash){
+            parts = hash.split('&');
+            for(i=0; i<parts.length; i++){
+                part = parts[i].split('=');
+                key = decode(part[0]);
+                params[key] = decode(part.slice(1).join('='));
+            }
+        }
+        return params;
+    }
+    var params = get_params();
+
+    function iframe_post_data(cfg) {
+        var flag = $('#preview_iframe').length > 0;
+        var $iframe = $('#preview_iframe').length? $('#preview_iframe') : $('<iframe id="preview_iframe" src="https://www.weiyun.com/office/previewer-inner.html" frameBorder=false style="width:100%;"></iframe>').appendTo(document.body);
+        if(flag) {
+            //重置src刷新iframe
+            $iframe[0].src = "https://www.weiyun.com/office/previewer-inner.html";
+        }
+        $iframe.on('load', function(e) {
+            var iframe_win = $iframe[0].contentWindow;
+            iframe_win.go_office_online({
+                target: cfg['preview_url'],
+                access_token: cfg['access_token']
+            });
+            $iframe.off('load');
+        });
+
+        var height = $(window).height() - $('#header').height();
+        $iframe.height(height);
+    }
+    var white_list = {
+        '790651315': 1,
+        '3246854421': 1,
+        '397352950': 1,
+        '179944990': 1,
+        '657714964': 1,
+        '25500128': 1,
+        '80361790': 1,     //lisaye
+        '395043390': 1,    //oxtuo
+        '23066699': 1,     //vincenthuang
+        '345680969': 1,    //youkunhuang
+        '94058156': 1,     //yunishi
+        '104493350': 1,    //iscowei
+        '3984710': 1,      //jinjinliu
+        '627578263': 1,    //lucifa
+        '2976853334': 1,   //river小号
+        '438056599': 1,    //kiddle
+        '123751109': 1,    //angela
+        '112918899': 1,    //xxcxu
+        '24728803': 1,     //kakajin
+        '361909309': 1,    //yiyinglu
+        '1732532': 1,      //微软合作方
+        '69984446': 1,     //微软合作方
+        '125551781': 1     //gyv的商务同事
+    };
+
+    var server = {
+        init: function(cfg) {
+            this.fid = cfg.fid;
+            this.pid = cfg.pid;
+            this.ppid = cfg.ppid || '';
+            this.name = cfg.name;
+            this.size = cfg.size;
+            this.from = cfg.from;
+            this.share_key = cfg.share_key || '';
+            this.report_data = cfg;
+            ui.init(cfg);
+            this.load_modules();
+        },
+        load_modules: function() {
+            var me = this;
+            seajs.use(['$', 'lib', 'common', 'office_preview'], function($, lib, common, previewer_mod) {
+                me.office_preview = previewer_mod.get('./office_preview');
+                me.report_invoice = common.get('./report_invoice');
+                me.request = common.get('./request');
+                me.https_tool = common.get('./util.https_tool');
+                me.cookie = lib.get('./cookie');
+                me.do_preview();
+            });
+        },
+        is_valid: function() {
+            return !server.fid || !server.pid;
+        },
+        getExt: function() {
+            var file_name = this.name,
+                EXT_REX = /\.([^\.]+)$/;
+            var m = (file_name || '').match(EXT_REX);
+            return m ? m[1].toLowerCase() : null;
+        },
+        get_req_cfg: function(type) {
+            var req_cfg = {
+                file_id: params.fid,
+                file_pid: params.pid
+            };
+            if(this.share_key) {
+                req_cfg['share_key'] = this.share_key;
+            } else {
+                req_cfg['type'] = type;
+            }
+            if(this.ppid) {
+                req_cfg['ppdir_key'] = this.ppid;
+            }
+            return req_cfg;
+        },
+        can_office_edit: function() {
+            var office_edit_types = {'pptx': 1, 'docx': 1, 'xlsx': 1};
+            return (this.getExt() in office_edit_types);
+        },
+        do_preview: function() {
+            var req_cfg = this.get_req_cfg(3),
+                me = this;
+            this.office_preview.async_get_preveiw_url(req_cfg).done(function(data) {
+                ui.render({
+                    id: 'preview',
+                    preview_url: data.preview_url,
+                    access_token: data.access_token
+                });
+                var log = me.report_data;
+                log.access = 'async_get_preveiw_url';
+                log.report_time = new Date().toLocaleString();
+                me.report_invoice(JSON.stringify(log));
+            }).fail(function(msg, ret) {
+                console.log(msg + ':' + ret);
+                var log = me.report_data;
+                log.access = 'async_get_preveiw_url_error';
+			    log.error_ret = msg + ':' + ret;
+			    log.report_time = new Date().toLocaleString();
+                me.report_invoice(JSON.stringify(log));
+            });
+        },
+        do_edit: function() {
+            var req_cfg = this.get_req_cfg(4),
+                me = this;
+            this.office_preview.async_get_preveiw_url(req_cfg).done(function(data) {
+                ui.render({
+                    id: 'edit',
+                    preview_url: data.preview_url,
+                    access_token: data.access_token
+                });
+                var log = me.report_data;
+                log.access = 'async_get_edit_url';
+                log.report_time = new Date().toLocaleString();
+                me.report_invoice(JSON.stringify(log));
+            }).fail(function(msg, ret) {
+                console.log(msg + ':' + ret);
+                var log = me.report_data;
+                log.access = 'async_get_edit_url_error';
+                log.error_ret = msg + ':' + ret;
+                log.report_time = new Date().toLocaleString();
+                me.report_invoice(JSON.stringify(log));
+            });
+        },
+        do_download: function() {
+            var params_list = [],
+                url = 'http://web2.cgi.weiyun.com/qdisk_download.fcg',
+                cmd = 'DiskFileBatchDownload',
+                me = this;
+
+            params_list.push({
+                file_id: this.fid,
+                filename: this.name,
+                pdir_key: this.pid
+            });
+
+            this.request.xhr_post({
+                url: url,
+                cmd: cmd,
+                cavil: true,
+                pb_v2: true,
+                body: {
+                    file_list: params_list
+                }
+            }).ok(function(msg , body) {
+                var file = body['file_list'][0],
+                    cookie_name = file.cookie_name,
+                    cookie_value = file.cookie_value;
+
+                me.cookie.set(cookie_name, cookie_value, {
+                    domain: 'weiyun.com',
+                    path: '/'
+                });
+
+                var log = me.report_data;
+                log.access = 'async_get_download_url';
+                log.report_time = new Date().toLocaleString();
+
+                //FTN cookie 写入失败！
+                if(me.cookie.get(cookie_name) !== cookie_value) {
+                    log.error_msg = 'FTN cookie set fail';
+                }
+                location.href = me.get_real_down_url(file);
+
+                me.report_invoice(JSON.stringify(log));
+            }).fail(function(msg, ret) {
+                var log = me.report_data;
+                log.access = 'async_get_download_url_error';
+                log.error_ret = msg + ':' + ret;
+                log.report_time = new Date().toLocaleString();
+                me.report_invoice(JSON.stringify(log));
+            });
+        },
+        get_real_down_url: function(ftn_opt) {
+            var path,
+                server_name,
+                fname,
+                is_package = false,
+                url;
+
+            if(ftn_opt.download_url) {
+                url = ftn_opt.download_url;
+            }
+            else {
+                server_name = ftn_opt.server_name;
+                fname = this.name;
+                path = ftn_opt.encode_url;
+
+                if(!is_package) {
+                    url = 'https://' + server_name + (ftn_opt.server_port ? ':' + ftn_opt.server_port : '') + '/ftn_handler/' + path + '/';
+                }
+            }
+
+            return this.https_tool.translate_url(url);
+        },
+        do_back: function() {
+            var url = this.share_key? 'http://share.weiyun.com/' + this.share_key : 'http://www.weiyun.com/disk/index.html';
+            if(this.from) {
+                url += '#m=' + this.from;
+            }
+            location.href = url;
+        }
+    }
+
+    var ui = {
+        init: function(cfg) {
+            var file_name = cfg.name.length > 14? cfg.name.substr(0, 14) : cfg.name,
+                msg = this.htmlEncode(file_name) + '<span class="size">(' + this.get_readsize(cfg.size) + ')</span>';
+            $('.name')[0].innerHTML = msg;
+
+            if(white_list[this.get_uin()] > -1 && server.can_office_edit()) {
+                $('#edit_btn').show();
+            }
+            this.bind_events();
+        },
+        render: function(data) {
+            iframe_post_data(data);
+            if(server.getExt() !== 'pptx') {
+                $('#' + data.id).css('margin-top', '20px');
+            }
+            var class_list = {'doc': 'word', 'docx': 'word', 'xls': 'excel', 'xlsx': 'excel', 'ppt': 'ppt', 'pptx': 'ppt'};
+            $('#p_logo').addClass('logo-' + class_list[server.getExt()]);
+        },
+        bind_events: function() {
+            $('#edit_btn').on('click', function() {
+                if(server.is_valid()) {
+                    console.warn('params error');
+                    return;
+                }
+                server.do_edit();
+            });
+            $('#download').on('click', function(e) {
+                server.do_download();
+            });
+            $('#back').on('click', function(e) {
+                server.do_back();
+            });
+        },
+        get_uin: function() {
+            var pluses = /\+/g,
+                    cookies = document.cookie.split('; ');
+
+            for (var i = 0, l = cookies.length; i < l; i++) {
+                var parts = cookies[i].split('=');
+                if (decodeURIComponent(parts[0].replace(pluses, ' ')) === 'uin') {
+                    return parseInt(parts[1].replace(/^[oO0]*/, '')) || '';
+                }
+            }
+            return '';
+        },
+        get_readsize: function(bytes, decimal_digits) {
+            var BYTE_UNITS = ['B', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y', 'D', 'N', '...'];
+            bytes = parseInt(bytes);
+            decimal_digits = parseInt(decimal_digits);
+            decimal_digits = decimal_digits >= 0 ? decimal_digits : 1;
+            if (!bytes)
+                return '0B';
+            var unit = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+            var size = bytes / Math.pow(1024, unit);
+            var decimal_mag = Math.pow(10, decimal_digits); // 2位小数 -> 100，3位小数 -> 1000
+            var decimal_size = Math.round(size * decimal_mag) / decimal_mag;  // 12.345 -> 12.35
+            var int_size = parseInt(decimal_size);
+            var result = decimal_size !== int_size ? decimal_size : int_size; // 如果没有小数位，就显示为整数（如1.00->1)
+            return result + BYTE_UNITS[unit];
+        },
+        htmlEncode: function(str) {
+            // 要转义的HTML字符
+            var re_html_escape = /[&<>'"]/g,
+                    html_escapes = {
+                        '&': "&amp;",
+                        '<': "&lt;",
+                        '>': "&gt;",
+                        "'": "&#39;",
+                        '"': "&quot;",
+                        '/': '&#x2F;'
+                    };
+            if(!str){
+                return str;
+            }
+            return str.replace(re_html_escape, function (chr) {
+                return html_escapes[chr] || chr;
+            });
+        }
+    }
+
+    server.init(params);
+
+//    var log = params;
+//    init();
+//    if(params.access_token) {
+////	    init();
+////	    iframe_post_data({
+////		    id: 'preview',
+////		    preview_url: params.preview_url,
+////		    access_token: params.access_token
+////	    });
+//	    //上报
+//	    seajs.use('common', function(common) {
+//            request = common.get('request');
+//		    var reportInvoice = common.get('./report_invoice');
+//		    log.access = 'iframe_post';
+//		    log.report_time = new Date().toLocaleString();
+//		    reportInvoice(JSON.stringify(log));
+//	    });
+//    } else if(params.fid && params.pid) {
+//	    seajs.use(['$', 'lib', 'common', 'office_preview'], function($, lib, common, previewer_mod) {
+//		    var office_preview = previewer_mod.get('./office_preview');
+//		    var reportInvoice = common.get('./report_invoice');
+//		    var type = params.type ? 4 : 3;
+//		    var req_cfg = {
+//			    file_id: params.fid,
+//			    file_pid: params.pid
+//		    };
+//            if(params.share_key) {
+//                req_cfg['share_key'] = params.share_key;
+//            } else {
+//                req_cfg['type'] = type;
+//            }
+//            if(params.ppid) {
+//                req_cfg['ppdir_key'] = params.ppid;
+//            }
+//		    office_preview.async_get_preveiw_url(req_cfg).done(function(data) {
+//
+////			    location.href = 'https://www.weiyun.com/office/previewer.html?preview_url=' + encodeURIComponent(data.preview_url) + '&access_token=' + data.access_token + '&type=3'
+////					    + '&fid=' + params.fid + '&pid=' + params.pid + '&ppid=' + params.ppid + '&name=' + encodeURIComponent(params.name) + '&size=' + params.size;
+//
+//		    }).fail(function(msg, ret) {
+//			    console.log(msg + ':' + ret);
+//			    //上报
+//			    log.access = 'async_get_preveiw_url_error';
+//			    log.error_ret = msg + ':' + ret;
+//			    log.report_time = new Date().toLocaleString();
+//			    reportInvoice(JSON.stringify(log));
+//		    });
+//		    //上报
+//		    log.access = 'async_get_preveiw_url';
+//		    log.report_time = new Date().toLocaleString();
+//		    reportInvoice(JSON.stringify(log));
+//	    });
+//    }
+</script>
+</body>
+</html>

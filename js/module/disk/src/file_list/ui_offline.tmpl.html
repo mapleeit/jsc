@@ -1,0 +1,123 @@
+<!--
+离线文件列表模板
+@author trump li
+@date 2013-6-27
+-->
+<script id="offline_dir_file_list" type="text/html" nowith="yes">
+    <div data-view="offline" class="dirs-view-virtual offline-container" style="display: none;">
+        <div id="virtual_file_container" data-type="file" class="files"></div>
+        <div data-action="empty-offline-empty" style="display:none;position: relative;" class="g-empty sort-offline-empty offline-empty">
+            <div class="empty-box" tabindex="0">
+                <div class="ico"></div>
+                <p class="title">暂无离线文件</p>
+                <p class="content">QQ收发的离线文件，在这里查看</p>
+            </div>
+        </div>
+    </div>
+</script>
+
+<!--
+文件列表项
+@author trump li
+-->
+<script id="file_item_offline" type="text/html" nowith="yes">
+    <%
+    var lib = require('lib'),
+        common = require('common'),
+        $ = require('$'),
+
+        text = lib.get('./text'),
+
+        constants = common.get('./constants'),
+        click_tj = common.get('./configs.click_tj'),
+        scr_reader_mode = common.get('./scr_reader_mode'),
+        ui_offline = require('./file_list.ui_offline'),
+        click_enter_mode = constants.IS_APPBOX,
+
+        p_dir = data.p_dir,
+        files = data.files,
+        only_content = data.only_content === true,
+        icon_map = data.icon_map,
+        // 日期
+        time_str_len = 'yyyy-MM-dd hh:mm'.length,
+
+        get_single_time = function(time){
+            if(!time || time <= 0 ){
+                return ret;
+            }
+            var ret = Math.ceil( time/86400000 );
+            return ret <= 1 ? '即将过期' : (ret+'天');
+        };
+
+    $.each(files, function (i, file) {
+        var is_image = file.is_image(),
+            is_removable = file.is_removable(),
+            is_downable = file.is_downable(),
+            is_selectable = file.is_selectable(),
+            is_selected = file.get_ui().is_selected(),
+            is_whole_click = true,   /*click_enter_mode || p_dir.is_vir_dir() || file.is_vir_dir(),*/
+            icon_cls =  icon_map[file.get_icon()] || file.get_icon() || (is_image ? 'icon-image' : ('icon-' + (file.get_type() || 'file'))),
+            op_class = [
+                    is_removable?'':' ui-no-remove',
+                    is_downable?'':' ui-no-down',
+                    is_selectable?'':' ui-no-sel',
+                    is_whole_click?' ui-whole-click':'',
+                    is_selected?' ui-selected':''
+                ].join(''),
+            belong_text = (file.get_down_type() === 2 ? '来自： ' : '发给： ') + text.text(file.get_nickname()),
+            safe_id =  ui_offline.get_html_node_id(file.get_id()),
+            text_name = text.text(file.get_name());
+
+    if (!only_content) {%>
+    <div id="_disk_vdir_item_<%=safe_id%>" <%=click_tj.make_tj_str('OFFLINE_CLICK_ITEM')%> data-file-id="<%=safe_id%>"
+    <%=is_removable ? '':'data-no-remove'%> <%=is_downable ? '':'data-no-down'%> <%=is_whole_click ? 'data-whole-click':''%>
+    class="list clear<%=op_class%>">
+    <%}%>
+        <label data-file-check class="checkbox" tabindex="0" aria-label="<%=text_name%>" hidefocus="hidefocus"></label>
+        <span data-action="enter" class="img"><i data-quick-drag data-ico class="filetype <%= icon_cls %>"></i></span>
+        <span data-action="enter" class="name ellipsis"><p class="text"><em data-quick-drag data-name="file_name"><%=text_name%></em></p></span>
+        <span data-action="enter" class="tool">
+            <a data-action="saveas" title="另存为" href="#" hidefocus="on" tabindex="-1" <%=click_tj.make_tj_str('OFFLINE_ITEM_SAVEAS')%>><i class="ico-saveas"></i></a>
+            <%if(is_removable){%>
+            <a data-action="remove" title="删除" href="#" hidefocus="on" <%=click_tj.make_tj_str('OFFLINE_ITEM_DEL')%>><i class="ico-del"></i></a>
+            <%}%>
+            <%if(is_downable){%>
+            <a data-action="download" title="下载" href="#" hidefocus="on" <%=click_tj.make_tj_str('OFFLINE_ITEM_DOWN')%>><i class="ico-download"></i></a>
+            <%}%>
+        </span>
+        <% if (scr_reader_mode.is_enable()) { %>
+            <div class="time" tabindex="0"><div>过期时间剩余：<%=get_single_time(file.get_life_time())%></div></div>
+            <div class="source" tabindex="0"><%=belong_text%></div>
+            <div class="size" tabindex="0"><%=file.get_readability_size() %></div>
+        <% } else { %>
+            <span data-action="enter" class="time"><span><%=get_single_time(file.get_life_time())%></span></span>
+            <span data-action="enter" class="source"><%=belong_text%></span>
+            <span data-action="enter" class="size"><%=file.get_readability_size() %></span>
+        <% } %>
+    <% if (!only_content) { %>
+    </div>
+    <% } %>
+    <%});%>
+</script>
+
+<!--
+拖拽时的指针
+@author bondli
+@date 13-12-27 下午3:14
+-->
+<script id="drag_cursor" type="text/html" nowith="yes">
+    <%
+    var lib = require('lib'),
+        $ = require('$'),
+
+        length = data.files.length,
+        files = data.files.slice(0, 4);
+    %>
+    <div class="icons">
+        <% $.each(files, function (i, file) { %>
+            <i class="icon icon<%= i %> filetype icon-<%= file.get_type() %>"></i>
+        <% }); %>
+    </div>
+    <span class="sum"><%= length %></span>
+
+</script>

@@ -1,0 +1,45 @@
+<!--
+ 列表容器模板
+ @author: cluezhang
+ @date: 2013-09-16
+-->
+<script id="group_list" type="text/html" nowith="yes">
+    <div id="photo-group" class="photo-group" data-label-for-aria="图片文件列表内容区域">
+        <div class="photo-group-box clear" style="position:relative">
+        </div>
+    </div>
+
+</script>
+<!--
+ 单项模板
+ @author: cluezhang
+ @date: 2013-09-16
+-->
+<script id="group_items" type="text/html" nowith="yes">
+    <%
+        var text = require('lib').get('./text');
+        var records = data.records;
+    %>
+    <% 
+    $.each(records, function(index, record){
+     %>
+        <div data-list="true"  id="group_items_<%=record.id%>" class="photo-group-list-wrap <%=record.get('menu_active') ? 'photo-group-menu' : ''%>" data-record-id="<%=record.id%>">
+            <div class="photo-group-list">
+                <div class="photo-group-img-border photo-group-loading"></div>
+                <div class="photo-group-img-mask"></div>
+                <div class="photo-group-list-text"><span data-textlen="100" class="text"><%=text.text(record.get('name'))%></span><span class="count">(<%=record.get('size')%>)</span></div>
+                <div class="photo-group-list-edit"><input type="text" value=""></div>
+                <% if(!record.get('dummy')){ %>
+                <a data-tool-link="true" class="photo-group-tool" href="#"><i></i></a>
+                <ul data-tool-menu="true" class="photo-group-toolmenu">
+                    <% if(!record.get('readonly')){ %>
+                    <li><a data-action="rename" href="#">重命名</a></li>
+                    <li><a data-action="delete" href="#">删除</a></li>
+                    <% } %>
+                    <li><a data-action="set_cover" href="#">更改封面</a></li>
+                </ul>
+                <% } %>
+            </div>
+        </div>
+    <% }); %>
+</script>

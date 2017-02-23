@@ -1,0 +1,48 @@
+<!--
+ 列表容器模板
+ @author: cluezhang
+ @date: 2013-09-16
+-->
+<script id="cover_list" type="text/html" nowith="yes">
+    <ul class="edit-cover clear">
+    </ul>
+</script>
+
+
+<script id="cover_items" type="text/html" nowith="yes">
+    <%
+    var text = require('lib').get('./text');
+        var empty_group_img,
+        thumb_url,
+        group = data.group,
+        old_cover_id = group.get('cover')[0].file_id,
+        records = data.records;
+
+    if(records && records.length > 0 ) {
+        $.each(records, function(index, record){
+            empty_group_img = "//img.weiyun.com/vipstyle/nr/box/img/photo-group-empty-min.png";
+            thumb_url = record.get_thumb_url() + '?size=64*64';
+            %>
+            <li data-id="<%=index%>" class="list" data-record-id="<%=record.get_id()%>">
+                <a class="link" href="#">
+                    <img src="<%=thumb_url%>">
+                    <div class="mask"></div>
+                    <i class="check"></i>
+                </a>
+            </li>
+            <%
+        });
+    }
+    %>
+</script>
+
+<!--
+ 更改封面容器，没有图片
+ @author: xixinhuang
+ @date: 2016-08-25
+-->
+<script id="cover_empty" type="text/html" nowith="yes">
+    <div style="height: 30px;line-height: 30px;color: #adb2b9;font-size: 18px;text-align: center;">
+        此分组中无图片
+        <div>
+</script>

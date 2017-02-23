@@ -1,0 +1,1154 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1,minimum-scale=1, maximum-scale=1, user-scalable=no">
+    <title>压缩包文件预览</title>
+    <!--<link charset="utf-8" rel="stylesheet" href="//img.weiyun.com/vipstyle/nr/box/h5/css/g-component.css">-->
+    <style>
+        html{overflow-x:hidden;height:100%}
+        body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td{margin:0;padding:0}
+        table{border-collapse:collapse;border-spacing:0}
+        fieldset,img{border:0}
+        address,caption,cite,code,dfn,em,strong,th,var,b,i{font-style:normal;font-weight:normal}
+        ol,ul{list-style:none}
+        caption,th{text-align:left}
+        h1,h2,h3,h4,h5,h6{font-size:100%}
+        q:before,q:after{content:''}
+        abbr,acronym{border:0;font-variant:normal}
+        sup{vertical-align:text-top}
+        sub{vertical-align:text-bottom}
+        input,textarea,select{font-family:inherit;font-size:inherit;font-weight:inherit}
+        input,textarea,select{#font-size:100%}
+        legend{color:#000}
+        iframe{overflow:hidden}
+        article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}
+        iframe{border:0}
+        textarea{resize:vertical;overflow-y:auto}
+        body{line-height:1.34;font-size:12px;font-family:Tahoma}
+        a{text-decoration:none}
+        a:hover{text-decoration:underline}
+        a div,a strong,a span,a i{#cursor:hand}
+        .none{display:none}
+        .visuallyhidden{position:absolute!important;clip:rect(1px 1px 1px 1px);clip:rect(1px,1px,1px,1px);padding:0!important;border:0!important;height:1px!important;width:1px!important;overflow:hidden}
+        .clearfix:before,.clearfix:after{content:".";display:block;height:0;visibility:hidden}
+        .clearfix:after{clear:both}
+        .clearfix{zoom:1}
+        body{background-color:#000;font-family:"Hiragino Sans GB","\5FAE\8F6F\96C5\9ED1","Tohoma"}
+        .header{height:17px;border-bottom:1px solid #b2b2b2;padding:14px 10px;background-color:#f9f9f9;position:relative}
+        .header .title{font-size:17px;color:#000;text-align:center;line-height:17px}
+        .header .btn{position:absolute;display:block;font-size:17px;color:#0079ff;top:14px}
+        .header .back-btn{left:10px}
+        .header .close-btn{right:10px}
+        .header .btn:hover{text-decoration:none}
+        .header .title .ico{width:16px;height:16px;display:inline-block;vertical-align:middle;margin-right:10px}
+        .header .title span{display:inline-block;vertical-align:middle}
+        .i-loading{background-image:url(//imgcache.qq.com/vipstyle/nr/box/qq_previewer/img/loading.png?max_age=19830212&d=20140114114716);-webkit-animation:rotateIn 1s 0s infinite linear both;-moz-animation:rotateIn 1s 0s infinite linear both}
+        @-webkit-keyframes rotateIn{0%{-webkit-transform-origin:center center;-webkit-transform:rotate(-360deg);opacity:1}
+            100%{-webkit-transform-origin:center center;-webkit-transform:rotate(0);opacity:1}}
+        @-moz-keyframes rotateIn{0%{-moz-transform-origin:center center;-moz-transform:rotate(-360deg);opacity:1}
+            100%{-moz-transform-origin:center center;-moz-transform:rotate(0);opacity:1}}
+        .container{background-color:#fff;height:100%;position:relative}
+        .container .loading{text-align:center;padding:50% 0}
+        .container .ico{width:100px;height:100px;display:block;margin:0 auto}
+        .ico-loading-error{background-image:url(//imgcache.qq.com/vipstyle/nr/box/qq_previewer/img/loading-error.png?max_age=19830212&d=20140114114716)}
+        .container .loading p{margin-top:20px;font-size:16px;color:#a6a6a6}
+        .container .loading .loading-txt{margin-top:0;font-size:20px;color:#ababab}
+        .container .file-list{background-color:#fff;border-bottom:1px solid #c8c7cc;padding-top:1px}
+        .file-list .file-item{padding:10px 0 0 14px;cursor:pointer;position:relative;margin-top:-1px}
+        .file-list .file-item:after{content:".";display:block;height:0;visibility:hidden;clear:both}
+        .file-list .file-item .ico{width:31px;height:31px;display:inline-block;float:left;margin-right:14px;background-repeat:no-repeat}
+        .file-list .file-item .file-desc{margin-left:45px;border-bottom:1px solid #c8c7cc;height:31px;padding-bottom:11px}
+        .file-list .file-item:last-child .file-desc{border-bottom:none}
+        .file-list .file-item .file-desc .file-name{font-size: 16px;line-height: 18px;margin-top: 4px;margin-bottom: 2px;color: #000;font-weight: normal;width: 100%;padding-right: 10px;-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
+        .file-list .file-item .file-desc .send-pc{font-size:12px;color:#808080}
+        .file-list .file-item .file-desc .file-size{font-size:13px;color:#a3a3a3;line-height: 13px;}
+        .file-list .file-item .ico-more{position:absolute;right:10px;width:10px;height:20px;margin-right:0;top:50%;margin-top:-10px}
+        .file-list .file-item .ico-more .bor_c{position:relative;display:inline-block;font-size:0;width:0;border-color:#ccc;border-bottom:1px dashed transparent;border-right:1px dashed transparent;border-top:1px dashed transparent;border-style:dashed dashed dashed solid;border-width:10px}
+        .file-list .file-item .ico-more .bor_i{position:absolute;display:inline-block;font-size:0;width:0;border-color:#fff;border-bottom:1px dashed transparent;border-right:1px dashed transparent;border-top:1px dashed transparent;border-style:dashed dashed dashed solid;right:-8px;top:-10px;border-width:10px}
+        .file-list .file-item-select{background-color:#0079ff}
+        .file-list .file-item-select .file-desc{border-bottom:1px solid #0079ff}
+        .file-list .file-item-select .file-desc .file-name{color:#fff}
+        .file-list .file-item-select .file-desc .send-pc{color:#fff}
+        .file-list .file-item-select .file-desc .file-size{color:#fff}
+        .file-list .file-item-select .ico-more .bor_c{position:relative;display:inline-block;font-size:0;width:0;border-color:#fff;border-bottom:1px dashed transparent;border-right:1px dashed transparent;border-top:1px dashed transparent;border-style:dashed dashed dashed solid;border-width:10px}
+        .file-list .file-item-select .ico-more .bor_i{position:absolute;display:inline-block;font-size:0;width:0;border-color:#0079ff;border-bottom:1px dashed transparent;border-right:1px dashed transparent;border-top:1px dashed transparent;border-style:dashed dashed dashed solid;right:-8px;top:-10px;border-width:10px}
+        .icons-filetype{display:inline-block;width:32px;height:32px}
+        .ico-xlsx{background-image:url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_xlsx_small.png?max_age=19830212&d=20150906102200)}
+        .ico-rm{background-image:url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_rm_small.png?max_age=19830212&d=20150906102200)}
+        .ico-vsd{background-image:url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_vsd_small.png?max_age=19830212&d=20150906102200)}
+        .ico-docx{background-image:url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_docx_small.png?max_age=19830212&d=20150906102200)}
+        .ico-png{background-image:url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_png_small.png?max_age=19830212&d=20150906102200)}
+                .ico-pic{background-image:url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_png_small.png?max_age=19830212&d=20150906102200)}    .ico-dmg{background-image:url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_dmg_small.png?max_age=19830212&d=20150906102200)}
+        .ico-rar{background-image:url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_rar_small.png?max_age=19830212&d=20150906102200)}   .ico-txt{background-image:url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_txt_small.png?max_age=19830212&d=20150906102200)}.ico-mkv{background-image:url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_mkv_small.png?max_age=19830212&d=20150906102200)}.ico-mp4{background-image:url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_mp4_small.png?max_age=19830212&d=20150906102200)}.ico-wps{background-image:url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_wps_small.png?max_age=19830212&d=20150906102200)}.ico-bat{background-image:url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_bat_small.png?max_age=19830212&d=20150906102200)}.ico-3gp{background-image:url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_3gp_small.png?max_age=19830212&d=20150906102200)}.ico-bak{background-image:url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_bak_small.png?max_age=19830212&d=20150906102200)}.ico-asp{background-image:url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_asp_small.png?max_age=19830212&d=20150906102200)}.ico-pdf{background-image:url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_pdf_small.png?max_age=19830212&d=20150906102200)}.ico-folder{background-image:url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_folder_small.png?max_age=19830212&d=20150906102200)}
+        .ico-pptx{background-image:url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_pptx_small.png?max_age=19830212&d=20150906102200)}
+        .ico-ppt{background-image:url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_ppt_small.png?max_age=19830212&d=20150906102200)}
+        .ico-apk{background-image:url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_apk_small.png?max_age=19830212&d=20150906102200)}
+        .ico-xls{background-image:url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_xls_small.png?max_age=19830212&d=20150906102200)}
+        .ico-gif{background-image:url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_gif_small.png?max_age=19830212&d=20150906102200)}
+        .ico-zip{background-image:url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_zip_small.png?max_age=19830212&d=20150906102200)}
+        .ico-doc{background-image:url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_doc_small.png?max_age=19830212&d=20150906102200)}
+        .ico-rmvb{background-image:url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_rmvb_small.png?max_age=19830212&d=20150906102200)}
+        .ico-mov{background-image:url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_mov_small.png?max_age=19830212&d=20150906102200)}
+        .ico-jpeg{background-image:url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_jpeg_small.png?max_age=19830212&d=20150906102200)}
+        .ico-mpg{background-image:url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_mpg_small.png?max_age=19830212&d=20150906102200)}
+        .ico-jpg{background-image:url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_jpg_small.png?max_age=19830212&d=20150906102200)}
+        .ico-file{background-image:url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_normal_small.png?max_age=19830212&d=20150906102200)}
+        .ico-mp3{background-image:url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_mp3_small.png?max_age=19830212&d=20150906102200)}
+        .icon-3gp {
+            background-image: url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_3gp_small.png?max_age=19830212&d=20150914180322)
+        }
+        .ico-7z {
+            background-image: url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_7z_small.png?max_age=19830212&d=20150914180322)
+        }
+        .ico-aac {
+            background-image: url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_aac_small.png?max_age=19830212&d=20150914180322)
+        }
+        .ico-ace {
+            background-image: url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_ace_small.png?max_age=19830212&d=20150914180322)
+        }
+
+        .ico-ai {
+            background-image: url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_ai_small.png?max_age=19830212&d=20150914180322)
+        }
+
+        .ico-asf {
+            background-image: url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_asf_small.png?max_age=19830212&d=20150914180322)
+        }
+        .icon-asp {
+            background-image: url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_asp_small.png?max_age=19830212&d=20150914180322)
+        }
+        .ico-c {
+            background-image: url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_c_small.png?max_age=19830212&d=20150914180322)
+        }
+        .ico-h {
+            background-image: url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_c_small.png?max_age=19830212&d=20150914180322)
+        }
+        .ico-chm {
+            background-image: url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_chm_small.png?max_age=19830212&d=20150914180322)
+        }
+        .ico-cpp {
+            background-image: url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_c_small.png?max_age=19830212&d=20150914180322)
+        }
+        .ico-fla {
+            background-image: url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_fla_small.png?max_age=19830212&d=20150914180322)
+        }
+        .ico-ipa {
+            background-image: url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_ipa_small.png?max_age=19830212&d=20150914180322)
+        }
+        .ico-msg {
+            background-image: url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_msg_small.png?max_age=19830212&d=20150914180322)
+        }
+        .ico-psd {
+            background-image: url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_psd_small.png?max_age=19830212&d=20150914180322)
+        }
+        .ico-rp {
+            background-image: url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_rp_small.png?max_age=19830212&d=20150914180322)
+        }
+        .ico-vsd {
+            background-image: url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_vsd_small.png?max_age=19830212&d=20150914180322)
+        }
+        .ico-key {
+            background-image: url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_key_small.png?max_age=19830212&d=20150914180322)
+        }
+        .ico-ttf {
+            background-image: url(//imgcache.qq.com/vipstyle/nr/box/h5/img/filetype-icons/ico_ttf_small.png?max_age=19830212&d=20150914180322)
+        }
+
+        body{background-color:#fff}
+.wy-img-previewer-wrapper {
+    position: fixed;
+    z-index: 30;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #000;
+    transition: opacity 0.5s ease-out 0s;
+    -moz-transition: opacity 0.5s ease-out 0s;
+    -webkit-transition: opacity 0.5s ease-out 0s;
+    -o-transition:opacity 0.5s ease-out 0s;
+}
+.wy-share-nav {
+    padding: 5px 9px 4px 9px;
+    background: #f7f6f6;
+    position: relative;
+    font-size: 16px;
+    line-height: 12px
+}
+.wy-back-nav {
+    margin-top: 12px;
+    padding: 5px 12px 4px 12px;
+    background: rgba(0,0,0,.5);
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    left: 50%;
+    -webkit-transform: translate(-50%,0);
+    -moz-transform: translate(-50%,0);
+    -ms-transform: translate(-50%,0);
+    -o-transform: translate(-50%,0);
+    transform: translate(-50%,0);
+    text-align: center;
+    color: #fff;
+    font-size: 16px;
+    line-height: 1;
+    border-radius: 15px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box
+}
+.wy-hor-img-bg {
+    position: fixed;
+    top: 0;
+    bottom: 46px;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #000
+}
+.wy-img-preview-list {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+    width: 960px;
+    background: #000
+}
+
+.wy-img-preview-list .wy-img-item {
+    display: inline-block;
+    vertical-align: middle;
+    width: 320px;
+    line-height: 0;
+    position: relative;
+    text-align: center
+}
+
+    </style>
+    <script type="application/javascript">
+        var start_time = new Date();
+    </script>
+    <link rel="stylesheet" type="text/css" href="//img.weiyun.com/vipstyle/nr/box/web/css/weiyun-global.css"/>
+    <link rel="stylesheet" type="text/css" href="//img.weiyun.com/vipstyle/nr/box/web/css/weiyun-file-preview.css" />
+</head>
+<body>
+<div class="container" id="container">
+    <div id="fileList" class="file-list"></div>
+</div>
+
+
+<div class="wy-img-previewer-wrapper" style="opacity: 0;display:none" id="j-wy-img-previewer-wrapper" data-show="false">
+    <nav data-id="page_text" data-id="back" class="wy-share-nav wy-back-nav" style="" id="j-wy-back-nav">1/27</nav>
+    <div class="wy-hor-img-bg">
+        <ul data-id="img_list" class="wy-img-preview-list" id="j-wy-img-preview-list">
+        </ul>
+    </div>
+</div>
+<script>
+    //接口页本身定义的错误
+    var LOCALERROR = {
+        NETERR: {
+            code: 1000, //网络错误，超时or请求失败
+            msg: '网络错误，请稍后重试。'
+        },
+        PARSEERR: {
+            code: 1001, //解析SVR返回的内容失败
+            msg: '解析数据失败，请稍后重试。'
+        },
+        RENDERERR: {
+            code: 1002, //渲染失败（加载iframe or img失败）
+            msg: '加载内容失败，请稍后重试。'
+        }
+    }
+    var html_escapes = {
+        '&': "&amp;",
+        '<': "&lt;",
+        '>': "&gt;",
+        "'": "&#39;",
+        '"': "&quot;",
+        '/': '&#x2F;'
+    };
+
+    var currentIndex = -1;
+    var imgList = [];
+    var imgListSrc = [];
+    var tempCurrentIndex = -1;
+
+    // 要转义的HTML字符
+    var re_html_escape = /[&<>'"]/g;
+
+    function init(json) {
+        var protocol = location.protocol;
+        server.init({
+            pageUrl: protocol + '//' + json.domain + ':' + json.port + '/ftn_compress_list/',
+            subDirUrl: protocol + '//' + json.domain + ':' + json.port + '/ftn_doc_previewer/h5_weiyun_compress_previewer.html?rkey=' + json.downloadkey +
+                    '&filetype=' + json.fileType+ '&filename=' + json.fileName + '&filesize=' + json.fileSize + '&domain='+json.domain+'&port='+json.port,
+
+            downloadUrl: protocol + '//' + json.domain + ':' + json.port + '/ftn_compress_getfile/',
+            fileType: json.fileType,
+            rkey: json.downloadkey,
+            fileSize: json.fileSize,
+            fileName: json.fileName,
+            curPath: json.curPath || '/'
+        });
+
+        if(json.cookie) {
+            document.cookie = 'FTN5K=' + encodeURIComponent(json.cookie) + ';domain=' + json.domain + ';path=/'; //防盗链
+        }
+
+        if(server.isRequesting || server.hasLoaded || server.isRetrying || ui.isRendering) {
+            return;
+        }
+
+        //h5下预览图片
+        if(server.can_preview()) {
+            server.preview_img();
+            return;
+        }
+
+        server.showFileList();
+
+        window.onhashchange = function(){
+            if(location.hash == ''){
+                $('j-wy-img-previewer-wrapper').style.opacity = 0;
+                setTimeout(function(){
+                    $('j-wy-img-previewer-wrapper').style.display = "none";
+                }, 500);
+            }
+        }
+    };
+
+
+    var server = {
+        init: function(cfg) {
+            this.pageUrl = cfg.pageUrl;
+            this.subDirUrl = cfg.subDirUrl;
+            this.downloadUrl = cfg.downloadUrl;
+            this.rkey = cfg.rkey;
+            this.fileType = cfg.fileType;
+            this.file_name = cfg.fileName || '';
+            this.file_size = cfg.fileSize || 0;
+            this.curPath = cfg.curPath;
+            this.isDownloadFile = false;
+            this.hasLoaded = false;
+            this.isFirstLoad = true;
+            this.tryTimes = 0;
+            this.reporter = new Reporter();
+        },
+        showFileList: function() {
+            this.isRequesting = true;
+            var me = this;
+            request({
+                url: this.pageUrl,
+                data: {
+                    rkey: this.rkey,
+                    filetype: this.fileType,
+                    path: this.curPath
+                },
+                success: function(rspData) {
+                    me.isRequesting = false;
+                    me.isRetrying = false;
+                    me.tryTimes = 0;
+                    ui.render(rspData);
+                    if(rspData && rspData['files']){
+                        var fileNodes = rspData['files'] || [];
+                        fileNodes.forEach(function(fileNode, i){
+                            if(me.is_image(fileNode.filename)){
+                                var path = me.curPath === '/'? me.curPath + fileNode.filename : me.curPath + '/' + fileNode.filename,
+                                    url = me.downloadUrl + 'rkey=' + me.rkey + '&filetype=' + me.fileType + '&path=' + encodeURIComponent(path) + '&';
+                                imgListSrc.push(url);
+                                imgList.push(fileNode.filename);
+
+                            }
+                        });
+                    }
+                    //计算图片的总宽度
+                    $('j-wy-img-preview-list').style.width = imgList.length * document.body.offsetWidth + "px";
+                },
+                error: function(rspData) {
+                    me.isRequesting = false;
+                    me.isRetrying = false;
+                    if(me.isTryByCode(rspData.code)) {
+                        me.tryTimes++;
+                        me.isRetrying = true;
+                        setTimeout(function() {
+                            me.showFileList();
+                        }, 3*1000);
+                    }
+                    me.reporter.reportMD(179000125, rspData.code, 1);
+                    me.reporter.reportLP(rspData);
+                    if(me.isFirstLoad && !me.isRetrying) {
+                        ui.onRenderError();
+                    }
+                }
+            })
+        },
+        downloadFile: function(fileName, index) {
+            var path = this.curPath === '/'? this.curPath + fileName : this.curPath + '/' + fileName,
+                url = this.downloadUrl + 'rkey=' + this.rkey + '&filetype=' + this.fileType + '&path=' + encodeURIComponent(path) + '&';
+           if(this.is_image(fileName)) {
+               //图片则进行大图预览
+               if(!$('j-wy-img-preview-index-' + index).getAttribute("img-show")){
+                    $('j-wy-img-preview-index-' + index).innerHTML = '<img src="' + url + '" class="wy-img-preview" style="width:' + document.body.offsetWidth + 'px; transition-duration: 0s;-moz-transition-duration: 0s;-webkit-transition-duration: 0s;-o-transition-duration: 0s;height:' + document.body.offsetHeight + 'px"></img>';
+                    $('j-wy-img-preview-index-' + index).setAttribute('img-show', true);
+               }
+               $('j-wy-img-previewer-wrapper').style.display = "block";
+               $('j-wy-img-preview-list').style.transform = 'translate(-' + (index * document.body.offsetWidth) + 'px, -50%)';
+                $('j-wy-img-preview-list').style.webkitTransform = 'translate(-' + (index * document.body.offsetWidth) + 'px, -50%)';
+               setTimeout(function(){
+                    $('j-wy-img-previewer-wrapper').style.opacity = 1;
+               }, 0);
+               $('j-wy-back-nav').innerHTML = (parseInt(index) + 1) + "/" + imgList.length;
+               
+               location.hash = "preview";
+               currentIndex = index;
+               tempCurrentIndex = index;
+
+               server.reporter.pushUserLog({
+                   'image_preview_url': url
+               });
+           }else{
+               server.reporter.pushUserLog({
+                   'download_file_url': url
+               });
+                //下载文件
+                this.isDownloadFile = true;
+                window.open(url);       
+           }
+//            if(this.is_ios()) {
+//                alert('it is ios');
+//            }
+            
+
+//            request({
+//                url: url,
+//                data: {
+//                },
+//                success: function(rspData) {
+//                    var aLink = document.createElement('a');
+//                    var blob = new Blob([rspData]);
+//                    var evt = document.createEvent("HTMLEvents");
+//                    evt.initEvent("click", false, false);
+//                    aLink.download = 'test';
+//                    aLink.href = URL.createObjectURL(blob);
+//                    aLink.dispatchEvent(evt);
+//                },
+//                error: function(rspData) {
+//                    alert('error');
+//                }
+//            })
+        },
+        iosDownloadFile: function(aLink, fileName, content){
+            aLink.download = fileName;
+            aLink.href = "data:text/plain," + content;
+        },
+        preview_img: function() {
+            var url = this.downloadUrl + 'rkey=' + this.rkey + '&filetype=' + this.fileType + '&path=' + server.curPath + '&';
+            var img = document.createElement('img');
+            img.src = url;
+            img.style.maxWidth = '100%';
+            img.style.height = 'auto';
+            document.body.appendChild(img);
+        },
+        is_image: function(file_name) {
+            if(get_icon(file_name) == 'pic'){
+                return true;
+            }
+            return false;
+        },
+        is_ios: function() {
+            var REGX_IOS = /iPhone|iPod|iPad/i,
+            ua = window.navigator.userAgent;
+            if(REGX_IOS.test(ua)){
+                return true;
+            }
+            return false;
+        },
+        can_preview: function() {
+            //图片的url最后一个字符是&
+            var str = location.href;
+            return str.slice(-1) == '&';
+        },
+        isTryByCode: function(code) {
+            return (code == -29126 || code == -28126) && this.tryTimes < 3;
+        }
+    }
+
+    var ui = {
+        container: $('fileList'),
+        isFirstRender: true,
+        startRenderTime: new Date(),
+        file_type_map: {
+            1: 'doc',
+            2: 'docx',
+            //xls: 3,
+            //xlsx: 4,
+            5: 'ppt',
+            6: 'pptx',
+            7: 'rtf',
+            8: 'pdf',
+            13: 'zip',
+            14: 'rar',
+            15: '7z',
+            16: 'txt'
+        },
+
+        render: function(data) {
+            if(data['dirs'] == null && data['files'] == null){
+                this.emptyDir();
+                return;
+            }
+            var dirNodes = data['dirs'] || [];
+            var fileNodes = data['files'] || [];
+            var $fileList = this.container;
+            var imgCount = 0;
+            var me = this;
+            var load_timer;
+            var toogle_timer;
+            dirNodes.forEach(function(dirNode, i) {
+                var dirdiv = document.createElement('div');
+                dirdiv.className = 'file-item';
+                dirdiv.innerHTML = '<i class="ico ico-folder"></i><div class="file-desc"><span class="file-name">' +
+                        text(smart_sub(dirNode,14)) + '</span><p><span class="file-size"></span><span class="send-pc"></span>' +
+                        '</p></div><a href="#" class="ico ico-more"><i class="bor_c"><i class="bor_i"></i></i></a>';
+                $fileList.appendChild(dirdiv);
+                dirdiv.addEventListener('touchstart', function (e) {
+                    clearTimeout(load_timer);
+                    toogle_timer = setTimeout(function() {
+                        dirdiv.className = 'file-item file-item-select';
+                        load_timer = setTimeout(function() {
+                            dirdiv.className = 'file-item';
+                            me.enterSubDir(dirNode);
+                        }, 30);
+
+                    }, 300)
+                }, false);
+                dirdiv.addEventListener('touchmove', function (e) {
+                    clearTimeout(load_timer);
+                    clearTimeout(toogle_timer);
+                    dirdiv.className = 'file-item';
+                }, false);
+            });
+            //绘制文件
+            fileNodes.forEach(function(fileNode, i) {
+                var filediv = document.createElement('div');
+                filediv.className = 'file-item';
+                filediv.innerHTML = '<i class="ico ico-' + get_icon(fileNode.filename) + '"></i><div class="file-desc"><span class="file-name">' +
+                        text(smart_sub(fileNode.filename,14)) + '</span><p><span class="file-size">' + get_readsize(fileNode.size) + '</span><span class="send-pc"></span>' +
+                        '</p></div>';
+                if(is_image(fileNode.filename)){
+                    filediv.setAttribute("data-img-index", imgCount);
+                    //创建li
+                    var imgLi = document.createElement("li");
+                    imgLi.className = 'wy-img-item';
+                    imgLi.style.width = document.body.offsetWidth + "px";
+                    imgLi.id = "j-wy-img-preview-index-" + imgCount;
+                    imgLi.innerHTML = '<i class="icons icons-reminder icon-reminder-loading" style=""></i>'
+                    $('j-wy-img-preview-list').appendChild(imgLi);
+                    imgCount++;
+                }
+                $fileList.appendChild(filediv);
+                filediv.addEventListener('touchstart', function (e) {
+                    clearTimeout(load_timer);
+                    toogle_timer = setTimeout(function() {
+                        filediv.className = 'file-item file-item-select';
+                        load_timer = setTimeout(function() {
+                            filediv.className = 'file-item';
+//                            server.downloadFile(fileNode.filename);
+                        }, 30);
+
+                    }, 300)
+                }, false);
+                filediv.addEventListener('click', function(e){
+                    server.downloadFile(fileNode.filename, this.getAttribute("data-img-index"));
+                },false)
+                filediv.addEventListener('touchmove', function (e) {
+                    clearTimeout(load_timer);
+                    clearTimeout(toogle_timer);
+                    filediv.className = 'file-item';
+                }, false);
+
+                var touchStartX = 0;
+                var distance = -1;
+                $('j-wy-img-preview-list').addEventListener('touchstart', function(e){
+                    e.preventDefault();
+                    touchStartX = e.touches[0].pageX;
+                    currentIndex = tempCurrentIndex;
+                });
+
+                $('j-wy-img-preview-list').addEventListener('touchmove', function(e){
+                    e.preventDefault()
+                    distance = e.touches[0].pageX - touchStartX;
+                    if(distance < 0 && parseInt(currentIndex) + 1 < imgList.length || distance > 0 && parseInt(currentIndex) - 1 >= 0){
+                        $('j-wy-img-preview-list').style.webkitTransition = '';
+                        $('j-wy-img-preview-list').style.transition = '';
+                        var distanceX = -parseInt(currentIndex) * document.body.offsetWidth + distance;
+                        // $('j-wy-img-preview-list').cssText = 'transform:translate(' + distanceX + 'px, -50%);-ms-transform:translate(' + distanceX + 'px, -50%);-moz-transform:translate(' + distanceX + 'px, -50%);-webkit-transform:translate(' + distanceX + 'px, -50%);-o-transform:translate(' + distanceX + 'px, -50%);';
+                        $('j-wy-img-preview-list').style.webkitTransform = 'translate(' + (-parseInt(currentIndex) * document.body.offsetWidth + distance) + 'px, -50%)';
+                        $('j-wy-img-preview-list').style.transform = 'translate(' + (-parseInt(currentIndex) * document.body.offsetWidth + distance) + 'px, -50%)';
+                    }
+                    // $('console').innerHTML += distance + "<br/>"
+                });
+                $('j-wy-img-preview-list').addEventListener('touchend', function(e){
+                    e.preventDefault();
+                    if(distance < 0 && parseInt(currentIndex) + 1 < imgList.length || distance > 0 && parseInt(currentIndex) - 1 >= 0){
+                        if(Math.abs(distance) > document.body.offsetWidth / 5){
+                            //滑动距离大于屏幕宽度的1/5,则切换到下一张图片，否则不切换
+                            if(distance > 0){
+                                //大于0,切换到上一张
+                                if(!$('j-wy-img-preview-index-' + (parseInt(currentIndex) - 1)).getAttribute('img-show')){
+                                    $('j-wy-img-preview-index-' + (parseInt(currentIndex) - 1)).innerHTML = '<img src="' + imgListSrc[parseInt(currentIndex) - 1] + '" class="wy-img-preview" style="width:' + document.body.offsetWidth + 'px; transition-duration: 0s;-moz-transition-duration: 0s;-webkit-transition-duration: 0s;-o-transition-duration: 0s;height:' + document.body.offsetHeight + 'px"></img>';
+                                    $('j-wy-img-preview-index-' + (parseInt(currentIndex) - 1)).setAttribute('img-show', true);
+                                }
+                                $('j-wy-img-preview-list').style.webkitTransition = '300ms linear';
+                                $('j-wy-img-preview-list').style.transition = '300ms linear';
+                                $('j-wy-img-preview-list').style.webkitTransform = 'translate(-' + ((parseInt(currentIndex) - 1) * document.body.offsetWidth) + 'px, -50%)';
+                                $('j-wy-img-preview-list').style.transform = 'translate(-' + ((parseInt(currentIndex) - 1) * document.body.offsetWidth) + 'px, -50%)';
+
+                                tempCurrentIndex = parseInt(currentIndex) - 1;
+                                $('j-wy-back-nav').innerHTML = tempCurrentIndex + 1 + "/" + imgList.length;
+                            }else{
+                                //小于0，切换到下一张
+                                if(!$('j-wy-img-preview-index-' + (parseInt(currentIndex) + 1)).getAttribute('img-show')){
+                                    $('j-wy-img-preview-index-' + (parseInt(currentIndex) + 1)).innerHTML = '<img src="' + imgListSrc[parseInt(currentIndex) + 1] + '" class="wy-img-preview" style="width:' + document.body.offsetWidth + 'px; transition-duration: 0s;-moz-transition-duration: 0s;-webkit-transition-duration: 0s;-o-transition-duration: 0s;height:' + document.body.offsetHeight + 'px"></img>';
+                                    $('j-wy-img-preview-index-' + (parseInt(currentIndex) + 1)).setAttribute('img-show', true);
+                                }
+                                $('j-wy-img-preview-list').style.webkitTransition = '300ms linear';
+                                $('j-wy-img-preview-list').style.transition = '300ms linear';
+                                $('j-wy-img-preview-list').style.webkitTransform = 'translate(-' + ((parseInt(currentIndex) + 1) * document.body.offsetWidth) + 'px, -50%)';
+                                $('j-wy-img-preview-list').style.transform = 'translate(-' + ((parseInt(currentIndex) + 1) * document.body.offsetWidth) + 'px, -50%)';
+                                tempCurrentIndex = parseInt(currentIndex) + 1;
+                                $('j-wy-back-nav').innerHTML = tempCurrentIndex + 1 + "/" + imgList.length;
+                            }
+                        }else{
+                            // alert(2);
+                            //不切换
+                            $('j-wy-img-preview-list').style.webkitTransition = '50ms linear';
+                            $('j-wy-img-preview-list').style.transition = '50ms linear';
+                            $('j-wy-img-preview-list').style.webkitTransform = 'translate(-' + (parseInt(currentIndex) * document.body.offsetWidth) + 'px, -50%)';
+                            $('j-wy-img-preview-list').style.transform = 'translate(-' + (parseInt(currentIndex) * document.body.offsetWidth) + 'px, -50%)';
+                        }
+                    }
+                });
+            });
+
+            if(server.isFirstLoad && server.curPath === '/'){
+                this.report(); 
+            }
+        },
+        emptyDir: function () {
+            var dirdiv = document.createElement('div');
+            var $fileList = this.container;
+            dirdiv.innerHTML = '<div class="wy-blank-wrap">' +
+                    '<div class="wy-blank">' +
+                    '<i class="wy-gray-logo"></i>' +
+                    '<p>文件夹是空的</p>' +
+                    '</div></div>';
+            //设置borderBottom让下边线消失
+            $fileList.style.borderBottom = '50px';
+            $fileList.appendChild(dirdiv);
+        },
+
+        report: function() {
+            server.reporter.reportMD(179000125, 0, 0);
+            server.isFirstLoad = false;
+        },
+
+        enterSubDir: function(dirName) {
+            var url = server.subDirUrl;
+            if (server.curPath == '/') {
+                url += '&path=' + server.curPath + encodeURIComponent(dirName);
+            } else {
+                url += '&path=' + server.curPath + '/' + encodeURIComponent(dirName);
+            }
+            server.reporter.pushUserLog({
+                'enter_dir_path': url
+            });
+            window.location.href = url;
+        },
+
+        //  出错处理
+        onRenderError: function() {
+            var items = this.container.children;
+            for(var i=items.length; i>0; i--){
+                var itemElement = items[i-1];
+                itemElement.parentNode.removeChild(itemElement);
+            }
+
+            this.showFailTips();
+        },
+
+        showFailTips: function(){
+            var html = '<section class="wy-file-previewer">' +
+                    '<i class="icon icons-previewer icon-' + this.get_file_type(server.fileType) + '"></i>' +
+                    '<div class="file-info">' +
+                    '<h2 class="file-name">' + this.htmlEncode(server.file_name) +
+                    '</h2><p class="file-size">' + this.translate_file_size(server.file_size) +
+                    '</p></div>' +
+                    '<div class="previewer-text-wrapper">' +
+                    '<p class="previewer-text">预览失败，请稍后重试</p>' +
+                    '</div></section>';
+            var div = document.createElement('div');
+            div.id = 'failTip';
+            div.innerHTML = html;
+            document.body.appendChild(div);
+        },
+
+        get_file_type: function(filetype) {
+            if(isNaN(parseInt(filetype))) {
+                return 'file';
+            }
+            return this.file_type_map[filetype] || 'file';
+        },
+
+        htmlEncode: function(str) {
+            if(!str){
+                return str;
+            }
+            return str.replace(re_html_escape, function (chr) {
+                return html_escapes[chr] || chr;
+            });
+        },
+
+        translate_file_size: function(size){
+            if(!isNaN(size)){
+                return 0 + 'B';
+            } else if(size < 1024){
+                return size + ' B';
+            } else{
+                size /= 1024;
+            }
+            var unit = size > 1024? ' MB' : ' KB';
+            var result = size > 1024? size / 1024 : size;
+            return result.toFixed(1)*10/10 + unit;
+        }
+    }
+
+    var Reporter = function() {
+        var cache = {},
+            last_time,
+            cache_log = [],
+            timer = {},
+            uin = _getCookie('uin') || _getCookie('p_uin') || '4294967295',
+            cgi_url = location.protocol + '//www.weiyun.com/report/md';
+
+        uin = parseInt(uin.replace(/^[oO0]*/, ''));
+        var view_key = 'weiyun_' + uin;
+        var file_type_list = ['', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'rtf', 'pdf', 'BMP', 'JPG', 'PNG', 'GIF', 'zip', 'rar', '7z', 'txt'];
+        var extraLog = [];
+
+        //逻辑失败错误码
+        var logi_error_code = {
+            '403': 1,    //触发防盗链
+            '1001': 1,   //数据解析失败
+            '-9006': 1,   //压缩文件有密码
+            '-28126': 1,  //刚上传文件未转码完成
+            '-28133': 1,  //office文件有密码
+            '-29126': 1   //文档正在转码
+        };
+
+        //记录用户点击的log如预览图片和下载文件
+        var pushUserLog = function(log) {
+            if(typeof log === 'object') {
+                for(var key in log) {
+                    extraLog.push(' [' + key + '] ' + log[key]);
+                }
+            } else {
+                extraLog.push(log);
+            }
+        }
+
+        //构造日志内容
+        var _getUserLog = function(errData) {
+            var log = [
+                'preview_url: ' + location.href,
+                'error_code: ' + errData.code,
+                'error_msg: ' + errData.msg,
+                'file_name: ' + server.file_name + ' file_size: ' + server.file_size + ' fileType:' + file_type_list[server.fileType],
+                'curPath: ' + server.curPath,
+                'hasLoaded: ' + server.hasLoaded + ' isFirstLoad:' + server.isFirstLoad + ' tryTimes:' + server.tryTimes
+            ];
+
+            var user_log = [];
+            user_log.push('【用户日志】');
+            user_log.push('记录时间 ' + (new Date()).Format("yyyy-mm-dd HH:MM:ss"));
+            user_log.push('uin ' + uin);
+            user_log.push('\n【error log】：');
+            for(var key in log) {
+                if(log[key] && log[key].length) {
+                    user_log.push('[log] [previewer] ' + log[key]);
+                }
+            }
+            console.log('ssssssssssssss' + JSON.stringify(extraLog))
+            for(var key in extraLog) {
+                if(extraLog[key] && extraLog[key].length) {
+                    user_log.push('[log] [previewer] ' + extraLog[key]);
+                }
+            }
+            return user_log.join('\n') + '\n';
+        }
+        /**
+         * 操作日志上报罗盘
+         */
+        var reportLP = function(errData) {
+            var user_log = _getUserLog(errData);
+            try {
+                var now = new Date().getTime(),
+                    take_time = last_time ? (now - last_time) / 1000 : 4,
+                    url = location.protocol === 'https:' ? 'https://www.weiyun.com/log/post/' + view_key : 'http://www.weiyun.com/log/post/' + view_key;
+
+                //三秒上报一次, 这里last_time标识上次上报的时间点。
+                if(take_time > 3) {
+                    timer && clearTimeout(timer);
+                    cache_log.push(user_log);
+                    timer = (function(reportUrl) {
+                        setTimeout(function() {
+                            request({
+                                url: reportUrl,
+                                method: 'POST',
+                                data: cache_log.join('\n'),
+                                success: function (rspData) {
+
+                                },
+                                error: function (rspData) {
+
+                                }
+                            });
+                            cache_log = [];
+                        }, 3 * 1000);
+                    })(url);
+                    last_time = now;
+                } else {
+                    cache_log.push(user_log);
+                }
+            } catch(e) {
+            }
+        };
+        /**
+         * 摘自库common/report_md
+         * oz 模调被调上报，注意查询被调而不是主调。
+         * 查询方法：m.isd.com的模调页，选被调查询，微云-微云业务-Web接入业务，填被调id和接口id
+         * @param {String|Number} id 接口id，在模调系统里建的
+         * @param {String|Number} code 调用结果
+         * @param {String|Number} result 0：成功，1:失败，2:逻辑失败
+         */
+        var reportMD = function(id, code, result) {
+            var ext = '';
+            if(id) {
+                if(code != undefined) {
+                    ext += "&code=" + code;
+                }
+                if(result != undefined) {
+                    result = (result && logi_error_code[code])? 2 : result;
+                    ext += "&type=" + result;
+                }
+                //主调和被调ID均写死
+                var url = cgi_url + "?fromId=204971707&toId=277000034&interfaceId=" + id + ext + "&r=" + Math.random();
+                report(url);
+            }
+        };
+
+        var report = function(url) {
+            var img = new Image();
+            img.src = url;
+            img.id = +new Date();
+            img.onload = img.onerror = function() {
+                img.onload = img.onerror = null;
+                delete cache[img.id];
+            }
+            cache[img.id] = img;
+        };
+
+        return {
+            reportMD: reportMD,
+            reportLP: reportLP,
+            pushUserLog: pushUserLog
+        };
+    }
+
+    //##########################util##################################
+    String.prototype.trim = function() {
+        return this.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+    }
+
+    // 对Date的扩展，将 Date 转化为指定格式的String
+    // (new Date()).Format("yyyy-mm-dd HH:MM:ss") ==> 2016-09-02 10:06:23
+    Date.prototype.Format = function (fmt) {
+        var o = {
+            "y+": this.getFullYear(),  //年份
+            "m+": this.getMonth() + 1,  //月份
+            "d+": this.getDate(),       //日
+            "H+": this.getHours(),      //小时
+            "M+": this.getMinutes(),    //分
+            "s+": this.getSeconds(),    //秒
+            "S": this.getMilliseconds() //毫秒
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    }
+
+    //获取cookie
+    var _getCookie = function(name){
+        var cookieValue = '';
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    };
+    function get_params() {
+        var hash = location.search.substring(1), params = {}, parts, i, part, key;
+        if (hash) {
+            parts = hash.split('&');
+            for (i = 0; i < parts.length; i++) {
+                part = parts[i].split('=');
+                key = decodeURIComponent(part[0]);
+                params[key] = decodeURIComponent(part.slice(1).join('='));
+            }
+        }
+        return params;
+    }
+
+    function text(str) {
+        if (typeof str != 'string') return str;
+        if (!str) return str;
+        return str.replace(re_html_escape, function (chr) {
+            return html_escapes[chr] || chr;
+        });
+    }
+    function get_icon(_name) {
+        var icon;
+        try {
+            icon = get_suffix(_name);
+            icon = switch_type(icon);
+            var type_map = ["doc", "xls", "ppt", "pic", "pdf", "txt", "mp4", "mp3", "apk", "zip", "3gp", "7z", 'ace', 'ai', 'ape', 'asf', 'asp', 'c', 'chm', 'cpp', 'fla', 'h', 'ipa', 'msg', 'psd', 'rp', 'vsd', 'key', 'ttf'];
+            for (var i in type_map) {
+                if (type_map[i] == icon) {
+                    return icon;
+                }
+            }
+            return 'file';
+        } catch (e) {
+            return 'file';
+        }
+    }
+
+    function is_image(file_name) {
+        if(get_icon(file_name) == 'pic'){
+            return true;
+        }
+        return false;
+    }
+    function get_suffix(_name) {
+        var EXT_REX = /\.([^\.]+)$/;
+        var m = (_name || '').match(EXT_REX);
+        return m ? m[1].toLowerCase() : null;
+    }
+
+    function switch_type(type) {
+        type = type.toLowerCase();
+        type = type.replace(/wps|rtf|docx|docm|dot[xm]?/g, "doc");
+        type = type.replace(/pptx|pptm|ptm/g, "ppt");
+        type = type.replace(/xls[xm]?|xl[tx|tm|am|sb]+/g, "xls");
+        type = type.replace(/raw|png|gif|jpeg|jpg|bmp|tiff|exif|raw'/g, "pic");
+        type = type.replace(/text/g, "txt");
+        type = type.replace(/avi|swf|flv|mov|ape|aac|flac|m1v|m2v|m4a|m4b|m4p|m4v|midi|mid/g, "mp4");
+        type = type.replace(/audio|wmv|wma|mp3|mp4|wav|amr/g, "mp3");
+        type = type.replace(/html/g, "html");
+        type = type.replace(/rar|zip/g, "zip");
+        type = type.replace(/3g2|3gp[2|p]?|mkv|mod|mpeg4|mpeg|mpe|mpg|ogg|rmvb|rm|webm|wmf|dat/g, "3gp");
+        type = type.replace(/7-zip|7z|cab|dmg|gzip|iso|jar|tar|uue/g, "7z");
+        type = type.replace(/ass|asp|arj|au|bak|bat|bz2|exe|log|msi|old|tmp|xmin|dll/g, "asp");
+        type = type.replace(/chm|cnt|hlp|lzh|ogm/g, "chm");
+        type = type.replace(/cpp|css|cs|divx|html|htm|xml|php|sh|jsp|js|java|py/g, "cpp");
+        return type;
+    }
+
+    function smart_sub(str, len, exceed_tail) {
+        try {
+            var index = 0;
+            len *= 2;
+            exceed_tail = typeof exceed_tail === 'string' ? exceed_tail : '..';
+            // 截断符长度
+            var tail_length = exceed_tail.length;
+            // 如果字串被截断，除去截断符后能显示的长度
+            var exceed_max_length = len - tail_length;
+            // 如果达到截断后的最大长度，记录字符位置，以便后面真要截断时快速判断
+            var exceed_max_charindex;
+
+            for (var i = 0, l = str.length; i < l; i++) {
+                if (/[^\x00-\xFF]/.test(str.charAt(i))) {
+                    index += 2;
+                } else {
+                    index++;
+                }
+                if(!exceed_max_charindex && index >= exceed_max_length){
+                    exceed_max_charindex = i+1;
+                }
+                if (index > len) { // 要进行截断了
+                    return ( str.substr(0, exceed_max_charindex) + exceed_tail );
+                }
+            }
+            return str;
+        }
+        catch (e) {
+            return str;
+        }
+    }
+
+    function get_readsize(bytes, decimal_digits) {
+        var BYTE_UNITS = ['B', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y', 'D', 'N', '...'];
+        bytes = parseInt(bytes);
+        decimal_digits = parseInt(decimal_digits);
+        decimal_digits = decimal_digits >= 0 ? decimal_digits : 1;
+        if (!bytes)
+            return '0B';
+        var unit = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+        var size = bytes / Math.pow(1024, unit);
+        var decimal_mag = Math.pow(10, decimal_digits); // 2位小数 -> 100，3位小数 -> 1000
+        var decimal_size = Math.round(size * decimal_mag) / decimal_mag;  // 12.345 -> 12.35
+        var int_size = parseInt(decimal_size);
+        var result = decimal_size !== int_size ? decimal_size : int_size; // 如果没有小数位，就显示为整数（如1.00->1)
+        return result + BYTE_UNITS[unit];
+    }
+
+    function $(id) {
+        return document.getElementById(id);
+    }
+    var extend = function(ori, dest) {
+        for(var o in dest) {
+            ori[o] = dest[o];
+        }
+        return ori;
+    };
+
+    var toQueryString = function(json) {
+        var arr = [];
+        for(var o in json) {
+            arr.push(encodeURIComponent(o) + '=' + encodeURIComponent(json[o]));
+        }
+        return arr.join('&');
+    }
+
+    var request = function(){
+        var defaultOpt = {
+            url: 'default.fcg',
+            method: 'GET',
+            data: null,
+            success: function() {},
+            error: function() {},
+            timeout: 30 * 1000
+        };
+        //只实现GET请求
+        return function(opt) {
+            opt = extend(Object.create(defaultOpt), opt);
+            opt.method = opt.method.toUpperCase();
+            var url = '';
+            if(opt.method === 'POST') {
+                url = opt.url;
+            } else {
+                url = opt.data ? opt.url + toQueryString(opt.data) + '&' : opt.url;
+            }
+            var xhr = new XMLHttpRequest();
+            var aborted = false;
+            var xhrTimer = setTimeout(function() {
+                aborted = true;
+                xhr.abort();
+                xhr = null;
+            }, opt.timeout);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 || aborted) {
+                    if (!aborted && ((xhr.status >= 200 && xhr.status < 300 ) || xhr.status == 304)) { //检查aborted属性是否超时
+                        var code = 0,
+                            errMsg = '',
+                            errDesc = '';
+                        if(opt.method === 'GET') {
+                            code = parseInt(xhr.getResponseHeader('User-ReturnCode'), 10);
+                            errMsg = xhr.getResponseHeader('User-ReturnMsg') || '';
+                        }
+                        var isSuccsess = code === 0;
+                        var result;
+                        try {
+                            if(server.isDownloadFile) {
+                                result = xhr.responseText;
+                                server.isDownloadFile = false;
+                            } else {
+                                result = JSON.parse(xhr.responseText);
+                            }
+                        } catch(e) {
+                            isSuccsess = false;
+                            errDesc = e.message;
+                        }
+                        if(isSuccsess) {
+                            opt.success(result);
+                        } else {
+                            opt.error({
+                                code: code === 0 ? LOCALERROR.PARSEERR['code'] : code,//parse result error
+                                msg: errMsg,
+                                desc: errDesc
+                            });
+                        }
+                        //超时或主动abort
+                    } else {
+                        opt.error({
+                            code: xhr.status || LOCALERROR.NETERR['code'],
+                            msg: LOCALERROR.NETERR['msg'],
+                            desc: xhr.statusText
+                        });
+                    }
+                    xhr = null;
+                    clearTimeout(xhrTimer);
+                }
+            }
+            xhr.open(opt.method, url, true);
+            xhr.send(opt.data);
+            return {
+                abort: function() {
+                    xhr.abort();
+                    xhr = null;
+                    clearTimeout(xhrTimer);
+                }
+            };
+        }
+
+    }();
+    //for test //183.61.37.13:443/ftn_doc_previewer/qq_compress_previewer_v2.html?downloadkey=c7f27ed118063daca49f0e26d041ac12e4152c6b37fe7e187282cd399f025e64f8b0b64a805c359ff48078ee8f9e1e5bcbd013459da794fd33ab943c468d31c2&fileType=13&domain=183.61.37.13&port=443&path=/
+    /*qpreview.onClientResponse('init', {
+     domain: '183.61.37.13',
+     port: 443,
+     fileType: 1,
+     downloadkey: 'ef7a575cf2f827071bbd89dcf7f222976411a99b7b655eb292fcfe97d9b3df40eb318bcc422b30fddc9ab5a68acc70e815b7c466c849197a4804c2448499ffba'
+     });
+
+     qpreview.onClientResponse('addMorePage')
+     */
+
+    window.onload = function() {
+        var params = get_params();
+        init({
+            domain: location.hostname,
+            port: location.port,
+            downloadkey: params['rkey'],
+            fileType: params['filetype'],
+            fileSize: params['filesize'],
+            fileName: params['filename'],
+            curPath: params['path']
+        });
+    }
+
+</script>
+</body>
+</html>

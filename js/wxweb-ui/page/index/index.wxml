@@ -1,0 +1,78 @@
+<import src="../common/filterItem.wxml" />
+
+<!-- 目录/文件列表 -->
+
+<view class="wy-wrapper">
+
+    <!-- 顶部导航 S -->
+    <block>
+        <include src="../common/navList.wxml"/>
+    </block>
+    <!-- 顶部导航 E -->
+
+    <!-- 列表 S -->
+    <block>
+        <!-- [ATTENTION!!] 文档类型添加 .main-doc -->
+        <view class="main main-doc">
+            <!-- 文档类型有个头 -->
+            <block>
+                <view class="main-hd" style="display:{{filterDisplay?'':'none'}}">
+					<!-- 模板定义在 ../common/filterItem.wxml -->
+					<block wx:for="{{filterList}}" wx:for-item="filterItem" wx:for-index="index" wx:key="unique">
+						<template is="filterItem" data="{{...filterItem, index}}">
+						</template>
+					</block>
+                </view>
+
+				<view class="breadcrumbs" style="display:{{breadcrumbsDisplay?'':'none'}}">
+					<block wx:for="{{breadcrumbsList}}" wx:for-item="breadcrumbsItem" wx:for-index="index" wx:key="unique" wx:for-item="breadcrumb">
+						<text class="txt" data-key="{{breadcrumb.unique}}" data-name="{{breadcrumb.name}}" bindtap="bindBreadcrumbTap">{{breadcrumb.name}}</text>
+						<text class="arrow">></text>
+					</block>
+				</view>
+            </block>
+
+            <!-- 列表循环 S -->
+            <block>
+                <include src="../common/listView.wxml"/>
+            </block>
+            <!-- 列表循环 E -->
+        </view>
+    </block>
+    <!-- 列表 E -->
+
+    <!-- 重命名 S -->
+    <block>
+        <view class="rename-wrapper" style="display: {{renameDisplay?'':'none'}};">
+			<view class="mask" bindtap="bindReNameMaskTap"></view>
+			<view class="rename-content">
+				<input class="rename-input" type="text" maxlength="100" placeholder="请输入文件名" focus="{{renameFocus}}" value="{{renameName}}" data-key="{{renameKey||''}}" bindinput="bindReNameInput" bindconfirm="bindReNameConfirm"></input>
+        	</view>
+        </view>
+    </block>
+    <!-- 重命名 E -->
+
+    <!-- 视频 S -->
+    <block>
+        <include src="../common/video.wxml"/>
+    </block>
+    <!-- 视频 E -->
+
+    <!-- 音乐 S -->
+    <block>
+        <include src="../common/audio.wxml"/>
+    </block>
+    <!-- 音乐 E -->
+
+    <!-- 统计 S -->
+    <block>
+        <include src="../common/cal.wxml"/>
+    </block>
+    <!-- 统计 E -->
+</view>
+
+<!-- dialog S -->
+<block>
+    <include src="../common/dialog.wxml"/>
+</block>
+<!-- dialog E -->

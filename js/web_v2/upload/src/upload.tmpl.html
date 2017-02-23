@@ -1,0 +1,151 @@
+<!--
+上传列表模版
+@author trumpli
+@date 13-3-7
+-->
+<script id="box" type="text/html" nowith="yes">
+	<div id="_task_body" class="mod-list-group task-ctrl-list mod-list-group-with-loc" style="background: #fff; display: none;">
+		<div class="group-item j-process-group" style="display: none;">
+			<div class="list-group-hd">
+				<p class="tit">
+					进行中 (剩余<span class="j-process-count"></span>)
+					<span class="tips j-top-tips">
+						<span class="tips with-border loc-abs with-logo j-speedup-vip-span">会员专享传输最高提速500%<a class="txt-link" href="javascript: void(0);" data-upload="speedup_vip">开通会员</a></span>
+						<a href="//www.weiyun.com/vip/capacity_purchase.html?from=web_capacity" class="tips with-border loc-abs j-capacity-purchase-a" style="display: none;" target="_blank"><i class="icon icon-assert"></i>容量不足，超大容量立即购买<i class="icon icon-link-to">跳转</i></a>
+						<span class="tips with-border loc-abs with-logo j-capacity-vip-span" style="display: none;">容量不足，会员专享3T容量<a class="txt-link" href="javascript: void(0);" data-upload="capacity_vip">开通会员</a><i class="icon icon-tips-close j-tips-close">关闭</i></span>
+					</span>
+				</p>
+				<div class="btn-group">
+					<div class="btn-vip-wrapper j-upbox-speedup" style="display: none;">
+						<button class="btn btn-m btn-vip" data-upload="speedup_try" style="display: none;">体验加速</button>
+						<!-- [ATTENTION!!] 加速体验 s -->
+						<div class="accelerate-wrapper try-accelerate j-novip-inner" style="display:none;">
+							<!-- 60s 倒数 -->
+							<i class="icon icon-count-down j-speedup-try-num">30</i>
+							加速中
+							<b class="effect-wrapper"></b>
+						</div>
+						<!-- [ATTENTION!!] 加速体验 e -->
+						<!-- [ATTENTION!!] 会员加速 s -->
+						<div class="accelerate-wrapper vip-accelerate j-vip-inner" style="display:none;">
+							<i class="icon icon-vip-accelerate" aria-hidden="true"></i>
+							会员加速中
+							<b class="effect-wrapper"></b>
+						</div>
+						<!-- [ATTENTION!!] 会员加速 e -->
+					</div>
+					<button class="btn btn-m" data-upload="clear_process">取消</button>
+				</div>
+			</div>
+			<div class="list-group-bd">
+				<ul class="list-group j-process-list"></ul>
+			</div>
+		</div>
+		<div class="group-item j-complete-group" style="display: none;">
+			<div class="list-group-hd">
+				<p class="tit">已完成 (<span class="j-complete-count"></span>)</p>
+				<div class="btn-group">
+					<button class="btn btn-m" data-upload="clear_complete">清空记录</button>
+				</div>
+			</div>
+			<div class="list-group-bd">
+				<ul class="list-group j-complete-list"></ul>
+			</div>
+		</div>
+		<!--空内容展示-->
+		<div class="empty-box j-upload-empty">
+			<!-- 任务为空 -->
+			<div class="status-inner" id="js-nofile" style="">
+				<i class="icon icon-nofile"></i>
+				<h2 class="title">没有任务</h2>
+			</div>
+		</div>
+	</div>
+</script>
+
+<script id="instance_wrap" type="text/html" nowith="yes">
+	<li id="<%=data.id%>"></li>
+</script>
+
+<!--JS 只需在 ui-item 上添加当前状态的样式名，如 completed, uploading, paused, waiting, error以及设置当前正在上传的 upbox-mask 的宽度即可。 -->
+<!--CSS .icon-upload-mini, .icon-upload-cancel, .icon-upload-switch, .pause .icon-upload-switch -->
+<script id="instance" type="text/html" nowith="yes">
+    <%
+        var text = require('lib').get('./text');
+    %>
+    <div class="list-group-item j-upload-item" id="upload_row_<%=data.view_id%>" data-vid="<%=data.view_id%>">
+	    <div class="processing j-upload-mask" style="width: <%=data.mask_width%>%;"></div>
+	    <div class="item-tit">
+		    <div class="label"><i class="icon <%=(data.icon ? data.icon : 'icon-upload-mini')%>"></i></div>
+		    <div class="thumb"><i class="icon icon-m icon-<%=data.file_type%>-m"></i></div>
+		    <div class="info">
+			    <span class="tit ellipsis"><%=text.text(data.file_name)%></span>
+					<span class="sub-info">
+						<span class="item-info-list item-info-status fail j-upload-error" style="display: none;">
+							<span class="j-upload-error-text">上传失败</span>
+							<a href="javascript: void(0);" class="link">反馈</a>
+						</span>
+						<span class="item-info-list item-info-size j-upload-data-size"><%=data.file_size%></span>
+						<span class="item-info-list item-info-status j-upload-state-text" style="display: none;"></span>
+						<span class="item-info-list item-info-duration j-upload-remain-time" style="display: none;"></span>
+					</span>
+				</span>
+		    </div>
+	    </div>
+	    <div class="item-info">
+		    <!-- [ATTENTION!!] 会员加速速度显示 -->
+		    <span class="item-info-list item-info-speed j-upload-speed" style="display: none;">
+			    <i class="icon icon-speed j-upload-speed-up" style="display: none;"></i>
+			    <span class="j-upload-speed-text"></span>
+		    </span>
+		    <span class="item-info-list item-info-loc j-upload-path" style="display: none;">
+                <a href="javascript: void(0);" class="txt txt-link" title="<%=(data.target_path ? data.target_path : data.file_dir)%>"><%=data.file_dir%></a>
+            </span>
+			<span class="item-info-list">
+				<span class="mod-act-list">
+				<!-- [ATTENTION!!] .pause 切换，继续上传 || 暂停上传 -->
+					<a href="javascript: void(0);" class="act-list pause j-upload-oper j-upload-switch" title="暂停上传" data-upload="click_event" data-action="click_pause"><i class="icon icon-upload-switch"></i></a>
+					<a href="javascript: void(0);" class="act-list j-upload-oper j-upload-cancel" title="取消上传" data-upload="click_event" data-action="click_cancel"><i class="icon icon-upload-cancel"></i></a>
+				</span>
+			</span>
+	    </div>
+    </div>
+</script>
+
+<!--浮动消息提示层-->
+<script id="pop" type="text/html" nowith="yes">
+	<div class="ui-pop box-pop" style="right:auto;">
+		<p class="ui-pop-text"></p>
+		<span class="ui-pop-darr hide"> <i class="ui-darr"></i> <i class="ui-darr ui-darr-mask"></i> </span>
+		<span class="ui-pop-uarr hide"> <i class="ui-uarr"></i> <i class="ui-uarr ui-uarr-mask"></i> </span>
+	</div>
+</script>
+
+<!--浮动消息提示层-->
+<script id="err_pop" type="text/html" nowith="yes">
+    <div class="ui-pop box-pop upbox-err-pop" style="right:auto;">
+        <div class="ui-pop-inner"></div>
+        <span class="ui-pop-darr hide" style="left:30%;"> <i class="ui-darr"></i> <i class="ui-darr ui-darr-mask"></i> </span>
+        <span class="ui-pop-uarr hide"> <i class="ui-uarr"></i> <i class="ui-uarr ui-uarr-mask"></i> </span>
+    </div>
+</script>
+
+<!-- 文件夹上传部分失败列表（放置于TIP中） -->
+<script id="folder_errors" type="text/html" nowith="yes">
+    <%
+        var i, file;
+        var common = require('common'),
+            File = common.get('./file.file_object'),
+            lib = require('lib'),
+            text = lib.get('./text');
+    %>
+    <ul class="task-group" style="margin-bottom: 20px;">
+        <% for(i=0; i<data.length; i++){ file = data[i]; error_tip = (file.error_tip|| '').replace(/<\/?[^>]*>/g,'');%>
+        <li class="item">
+            <p class="name" title="<%=text.text(file.fullname)%>"><%=text.text(file.name)%></p>
+            <p class="size"><%=File.get_readability_size(file.size)%></p>
+            <p class="exp" title="<%=error_tip%>"><%=file.error||file.error_tip%></p>
+        </li>
+        <% } %>
+    </ul>
+</script>

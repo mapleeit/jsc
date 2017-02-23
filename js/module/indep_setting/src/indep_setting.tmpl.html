@@ -1,0 +1,55 @@
+<!--
+独立密码设置对话框  (新增)
+@author hibincheng
+@date 14-4-8 上午11:40
+-->
+<script id="create" type="text/html" nowith="yes">
+    <%
+    var pwd_max_len = 16;
+    %>
+    <div class="token-pass"><div class="pass-inner pass-add">
+        <ul class="err">
+            <li class="list"><label class="label">输入独立密码</label><input name="new_pwd" class="input" type="password" maxlength="<%=pwd_max_len%>"></li>
+            <li class="list"><label class="label">确认密码</label><input name="confirm_new_pwd" class="input" type="password" maxlength="<%=pwd_max_len%>"></li>
+            <li class="msg-box"><label class="label label-place"></label><span data-id="err_msg" class="msg"></span></li>
+        </ul>
+    </div></div>
+
+</script>
+<!--
+独立密码设置对话框  (管理)
+@author hibincheng
+@date 14-4-8 上午11:40
+-->
+<script id="modify" type="text/html" nowith="yes">
+    <%
+    var pwd_max_len = 16;
+    %>
+    <div class="token-pass">
+        <div class="pass-inner pass-change">
+            <ul class="err">
+                <li class="list check-box">
+                    <label class="label label-place"></label><i data-opr="modify" data-id="radio_modify" data-action="switch_opr" class="ico-radio checked"></i><span data-opr="modify" data-action="switch_opr">更改密码</span><i data-opr="remove" data-id="radio_remove" class="ico-radio" data-action="switch_opr"></i><span data-opr="remove" data-action="switch_opr">删除密码</span>
+                </li>
+                <li class="list"><label class="label">输入当前密码</label><input name="cur_pwd" class="input" type="password" maxlength="<%=pwd_max_len%>"></li>
+                <li data-group="modify" class="list"><label class="label">填写新密码</label><input name="new_pwd" class="input" type="password" maxlength="<%=pwd_max_len%>"></li>
+                <li data-group="modify" class="list"><label class="label">确认新密码</label><input name="confirm_new_pwd" class="input" type="password" maxlength="<%=pwd_max_len%>"></li>
+                <li class="msg-box"><label class="label label-place"></label><span class="msg" data-id="err_msg"></span></li>
+            </ul>
+        </div>
+    </div>
+
+</script>
+<!--
+独立密码设置对话框  (设置成功）
+@author hibincheng
+@date 14-4-8 上午11:40
+-->
+<script id="success_tip" type="text/html" no-width="yes">
+    <div class="token-pass">
+        <div class="pass-inner pass-success">
+            <i class="ico"></i>
+            <h4 class="title"><%= data.msg%></h4>
+        </div>
+    </div>
+</script>

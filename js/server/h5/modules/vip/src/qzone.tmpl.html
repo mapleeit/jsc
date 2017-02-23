@@ -1,0 +1,35 @@
+<!-- 2017.1.18 PV:600 等PV没了就下掉这个页面 -->
+<script id="qzone_download_guide" type="text/html" nowith="yes">
+	<style>
+		.qzone-download-guide{position:absolute;left:0;top:0;bottom:0;right:0}.qzone-download-guide .wrap{position:absolute;top:50%;left:50%;transform:translate(-50%,-80%);-webkit-transform:translate(-50%,-80%)}.qzone-download-guide .wrap .txt{width:160px;text-align:center;color:#575a5f;font-size:16px;line-height:1.5;margin:0 auto}.qzone-download-guide .wrap .btn{width:133px;height:40px;line-height:40px;font-size:16px;text-align:center;background:#00a4ff;color:#fff;margin:18px auto 0;border-radius:30px}
+	</style>
+	<div class="qzone-download-guide">
+		<div class="wrap">
+			<p class="txt">会员服务已升级<br>请下载最新版微云使用</p>
+			<div class="btn j-download-btn"><span>立即下载</span></div>
+		</div>
+	</div>
+
+	<script type="text/javascript" src="//imgcache.qq.com/club/qqdisk/web/js/lib/zepto-1.0.0.min.js?max_age=604800"></script>
+	<script type='text/javascript' src='//img.weiyun.com/club/weiyun/js/publics/tcss/tcss.ping.js'></script>
+<script>
+	(function() {
+		if (typeof pgvMain == 'function') {
+			pgvMain("", {
+				tagParamName: 'WYTAG',
+				virtualURL: '/h5/vip_qzone.html',
+				virtualDomain: "www.weiyun.com"
+			});
+		}
+	})();
+
+	$('.j-download-btn').on('click', function(e) {
+		if (navigator.userAgent.match(/Android/i)) {
+			window.open('https://m.qzone.com/l?g=1513');
+		} else {
+			window.open('https://itunes.apple.com/cn/app/id522700349?mt=8&ls=1');
+		}
+	});
+
+</script>
+</script>

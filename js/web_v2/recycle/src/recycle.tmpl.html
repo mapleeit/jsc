@@ -1,0 +1,40 @@
+<!--
+回收站主体模板
+@author jameszuo
+@date 13-3-22 下午6:18
+-->
+<script id="body" type="text/html" nowith="yes">
+    <%
+    var common = require('common');
+    var query_user = common.get('./query_user');
+    var constants = common.get('./constants');
+    var user = query_user.get_cached_user();
+    var is_vip = user && user.is_weiyun_vip();
+    var expire = user && user.get_recycle_nonvip_tip();
+    var vip_expire = user && user.get_recycle_vip_tip();
+    %>
+    <div id="_recycle_body" class="mod-list-group mod-list-group-trank" data-label-for-aria="回收站文件列表内容区域">
+
+        <div class="list-group-bd">
+            <!--文件列表模板，在./recycle_list/recycle_list.tmpl.html中-->
+        </div>
+        <div id="_recycle_empty_tip" class="g-empty sort-recycle-empty" style="display:none;">
+            <div class="empty-box">
+                <!-- 回收站为空 -->
+                <div class="status-inner">
+                    <i class="icon icon-notrash"></i>
+
+                    <!--不是会员-->
+                    <% if (!is_vip) {%>
+                    <p class="txt">会员专享回收站文件保存<%=vip_expire%>天</p>
+                    <a href="<%=constants.GET_WEIYUN_VIP_URL + 'from%3D1018'%>" target="_blank" style="color:#2688EA;font-size:18px">开通会员</a>
+                    <% } else {%>
+                    <h2 class="title">尊贵的会员</h2>
+                    <p class="txt">专享回收站文件保存<%=vip_expire%>天 批量删除轻松找回</p>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</script>

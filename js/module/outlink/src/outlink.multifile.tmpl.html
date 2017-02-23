@@ -1,0 +1,54 @@
+<!--
+外链页面多文件分享模版界面
+@yuyanghe
+@date 13-9-21
+-->
+<script id="outlink_multifile" type="text/html" nowith="yes">
+    <%
+        var shareList = data.shareList || [],
+            obj = null;
+    %>
+    <div id="lay-main-con" class="lay-main-con">
+        <div class="inner">
+            <div class="wrap">
+                <!-- 列表模式样式ui-listview -->
+                <!-- 缩略图模式样式ui-thumbview -->
+                <!-- update jin 20131014 : new style height -->
+                <div id="_disk_view" class="disk-view ui-view ui-thumbview" style="overflow: auto; position: relative;">
+                    <!-- 文件列表 -->
+                    <!-- 目录 -->
+                    <div class="dirs-view" style="">
+
+                        <!-- 目录列表 -->
+                        <div id="_disk_files_dir_list" data-count="<%=shareList.length%>" class="dirs share-file-list">
+                            <!-- 高级浏览器使用:hover选择器，ie6请使用鼠标悬停添加list-hover样式 -->
+                            <!-- 选中样式list-selected -->
+                            <!-- 拖入接收容器样式list-dropping -->
+                            <!-- 不可选样式list-unselected -->
+                            <!-- 不带复选框模式list-nocheckbox-->
+                            <!-- 当前列表，用于右键和单行菜单模式list-menu-on-->
+                            <%for(var i = 0, len = shareList.length; i < len; i++) {
+                                obj = shareList[i];
+                                %>
+                                <div id="<%=obj.id%>" data-list="true" data-record-id="<%=obj.id%>" class="list-wrap share-file">
+                                    <div class="list clear">
+                                        <label class="checkbox"></label>
+                                        <span class="img">
+                                        <%if(obj.isImg && obj.thumb_url){%>
+                                            <img src="<%=obj.thumb_url + '&size=64*64' %>" class="filetype icon-image default" unselectable="on" />
+                                        <%}else{%>
+                                            <i class="filetype icon-<%=obj['icon']%>"></i>
+                                        <%}%>
+                                        </span>
+                                        <span class="name"><p class="text"><em><%=obj['name']%></em></p></span>
+                                        <span class="info"><%=obj['text']%></span>
+                                    </div>
+                                </div>
+                            <%}%>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>

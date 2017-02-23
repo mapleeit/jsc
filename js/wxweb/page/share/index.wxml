@@ -1,0 +1,88 @@
+<import src="../common/blankStatus.wxml"/>
+
+<view class="share-wrapper" wx:if="{{!shareBlankDisplay}}">
+	<view class="wy-sharer">
+		<view class="sharer-avator">
+			<image class="avator" background-size="cover" src="{{shareAvator}}"></image>
+		</view>		
+		<view class="sharer-info">
+			<view class="sharer-name">{{shareNickname}}</view>
+			<view class="sharer-content">
+				<text class="sharer-count">{{shareCount}}</text>
+			</view>			
+		</view>
+		<view class="link-to-wy" bindtap="backToHome">
+			<image class="logo" background-size="cover" src="../../img/logo@2x.png"></image>
+		</view>				
+	</view>
+	<view class="share-detail">	
+		<!--普通图片类型s-->
+		<view class="wy-img-list-wrapper" wx:if="{{item.is_image}}">
+		    <view class="img-item" bindtap="bindThumbTap">
+		    	<image class="img" style="width:{{width}}px;" mode="aspectFill" src="{{shareThumb}}" bindload="{{imgLoaded}}"></image>		    	
+		    </view>
+		</view>
+		<!--普通图片类型e-->
+
+		<!--视频类型s-->
+		<view class="wy-img-list-wrapper" wx:if="{{item.is_video}}">
+			<include src="../common/video.wxml"/>
+		    <view class="img-item img-item-spec" style="height:{{videoHeight+'px'}}; width:{{videoWidth+'px'}}" bindtap="bindThumbTap" wx:if="{{show!==false}}"><!--视频类型:添加类名 img-item-spec-->
+		    	<image class="img" mode="aspectFill" src="{{shareThumb}}"></image>
+		    	<view class="img-item-attr"><!--视频类型:显示播放图标/相关信息-->
+			        <view class="icon-media-ctrl">
+			        	<image class="icon" mode="aspectFit"  src="../../img/icon-media-play@2x.png"></image>
+			        </view>
+			        <text class="time">{{videoTimeDurning}}</text>
+		        </view>
+		    </view>
+		    <view class="img-item-info"><!--视频类型:显示播放图标/相关信息-->
+		    	 <view class="img-item-info-hd bBor">
+		    	 	<text class="name">{{shareName}}</text>
+		    	 </view>
+		    	 <view class="img-item-info-bd">
+		    	 	<text class="size">{{shareSize}}</text>
+		    	 </view>
+		    </view>
+		</view>
+		<!--视频类型e-->
+        
+		<!--列表类型s-->
+		<view class="wy-share-filelist-wrapper" wx:if="{{!item.is_video && !item.is_image}}">
+		    <view class="wy-file-item-list" bindtap="bindThumbTap">
+		        <view class="wy-file-item">
+		            <image wx:if="{{!shareThumb}}" class="icon icons-filetype" background-size="cover" src="{{shareIcon}}"></image>                            
+		            <view class="file-describe bBor">
+		                <view class="file-name">{{shareName}}</view>
+		                <view class="file-info">
+		                    <text data-action="open" class="file-size">{{shareSize}}</text>
+		                </view>
+		            </view>                        
+		        </view>
+		    </view>
+		</view>
+        <!--列表类型e-->
+
+    </view>
+
+	<view class="wy-file-controller g-bottom-bar g-bottom-bar-txt" wx:if="{{isHost}}">
+		<text class="btn">点击右上角「···」分享给好友</text>
+	</view>
+	<view class="wy-file-controller g-bottom-bar" wx:if="{{!isHost && type==1}}" style="display : {{shareButtonDisplay?'':'none'}}" bindtap="bindSaveTap" >
+		<text class="btn">保存到微云</text>
+	</view>
+	<view class="wy-file-controller g-bottom-bar" wx:if="{{!isHost && type==2}}" style="display : {{shareButtonDisplay?'':'none'}}" bindtap="backToHome" >
+		<text class="btn">查看我的微云</text>
+	</view>
+	<!-- dialog S -->
+	<block>
+		<include src="../common/dialog.wxml"/>
+	</block>
+	<!-- dialog E -->
+</view>
+
+<view class="share-blank" wx:if="{{!!shareBlankDisplay}}">
+	<!-- 模板定义在 ../common/blankStatus.wxml -->
+	<template is="blankStatus" data="{{...shareBlankData}}">
+	</template>
+</view>

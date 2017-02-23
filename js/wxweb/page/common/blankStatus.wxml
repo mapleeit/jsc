@@ -1,0 +1,26 @@
+<!-- 目录/文件列表结构 -->
+<!-- 定义模板 -->
+<template name="blankStatus">
+	<view class="blank-status">
+		<view class="status-image">
+			<!-- 不同的空目录，引用不同的 src，格式是 icon-noxxx.png -->
+			<image class="img" src="{{img}}" background-size="cover">
+			</image>
+		</view>
+		<view class="txt-wrapper">
+			<!-- all：下载手机客户端添加文件，无 sub-title -->
+			<!-- doc：文档列表为空，分门别类查看自己的文档 -->
+			<!-- img：图片列表为空，分门别类查看自己的文档 -->
+			<!-- video：视频列表为空，从电脑上传视频，手机也可以播放 -->
+			<!-- audio：音乐列表为空，从电脑上传音乐，手机也可以播放 -->
+			<!-- nodir：文件夹是空的，无 sub-title -->
+			<text class="title">
+				{{title}}
+			</text>
+			<!-- all: 可以删除 sub-title 的节点 -->
+			<text class="sub-title" style="display:{{subTitle===''?'none':''}}">
+				{{subTitle}}
+			</text>
+		</view>
+	</view>
+</template>

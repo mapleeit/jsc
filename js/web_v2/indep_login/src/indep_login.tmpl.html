@@ -1,0 +1,64 @@
+<!--
+独立密码登录框
+@author jameszuo
+@date 13-3-25 下午4:16
+-->
+<script id="indep_login_box" type="text/html" nowith="yes">
+    <%
+    var common = require('common'),
+        query_user = common.get('./query_user'),
+        constants = common.get('./constants'),
+        click_tj = common.get('./configs.click_tj'),
+
+        uin = query_user.get_uin_num(),
+
+        forget_pwd_url = 'http://aq.qq.com/cn2/ipwd/my_ipwd';
+    %>
+    <div data-no-selection class="to-signin-box">
+        <div class="to-signin-body to-signin">
+                <div class="ui-form">
+                    <div class="ui-form-item">
+                        <div class="to-signin-user">
+                            <label class="ui-label" data-id="nickname"></label><!--nickname-->
+                            <% if (uin) { %>
+                                <span class="ui-text">(<%= uin %>)</span>
+                            <% } %>
+                        </div>
+                        <div class="ui-passwords">
+                            <label class="ui-text-defult" for="_indep_login_pwd">请输入您的独立密码</label>
+                            <input id="_indep_login_pwd" type="password" class="ui-password" maxlength="16">
+                        </div>
+                        <p data-id="err_msg" class="ui-tips ui-tips-err" style="display:none;"><!--您输入的独立密码有误，请重新输入--></p>
+                    </div>
+                    <div class="ui-form-item  to-signin-btn">
+                        <a href="<%=forget_pwd_url%>" target="_blank">忘记密码？</a>
+                        <% if (!constants.IS_APPBOX && !constants.IS_WRAPPED) { %>
+                        <a data-action="change-account" href="#">更换帐号</a>
+                        <% } %>
+                        <a data-action="ok" class="g-btn g-btn-blue" href="#"><span class="btn-inner medium">确定</span></a>
+                    </div>
+                </div>
+            </div>
+    </div>
+</script>
+
+<!--
+独立密码验证失败提示
+@author jameszuo
+@date 13-3-25 下午4:16
+-->
+<script id="indep_login_box_error" type="text/html" nowith="yes">
+    <div data-no-selection class="to-signin-box error">
+        <div class="to-signin-head" tabindex="0"><h3><span class="warn"></span>验证独立密码失败</h3></div>
+        <div class="to-signin-body to-signin" style="min-height: 100px;">
+            <div class="ui-form">
+                <div class="ui-form-item" tabindex="0">
+                    <p data-id="-err-msg" class="ui-tips ui-tips-err">
+                        验证独立密码过程中出现错误<br>如果您从未设置过独立密码，请尝试
+                        <a href="javascript:void(0)" onclick="location.reload()">刷新页面</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>

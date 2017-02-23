@@ -1,0 +1,4 @@
+<view class="page-title">canvas</view>
+<view style="text-align: center">
+  <canvas width="{{canvas.width}}" height="{{canvas.height}}" bindcanvasidchange="canvasIdChange"></canvas>
+</view>

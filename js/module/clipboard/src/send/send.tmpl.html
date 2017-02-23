@@ -1,0 +1,37 @@
+<!--
+ 发送tab内容区 富文本编辑器
+ @author hibincheng
+ @date 2014-01-21
+-->
+<script id="send" type="text/html" no-width="yes">
+    <div class="clip-txt">
+        <div class="clip-txt-inner" style="">
+            <div data-id="editor_ct" class="editor-wrap"></div>
+            <div data-id="footbar_ct"></div>
+        </div>
+    </div>
+</script>
+<!--
+ 发送tab 底部工具栏
+ @author hibincheng
+ @date 2014-01-21
+-->
+<script id="footbar" type="text/html" no-width="yes">
+    <div class="clip-txt-bot">
+        <a href="#" class="g-btn g-btn-gray btn-clear" data-action="clear" style="display:none;" tabindex="0"  title="清空"><span class="btn-inner">清空</span></a>
+        <a href="#" class="g-btn g-btn-blue btn-send" data-action="send" tabindex="0"  title="发送"><span class="btn-inner"><i class="ico ico-send"></i><span class="text">发送</span></span></a>
+        <a href="javascript:void(0);" class="g-btn g-btn-blue btn-send" data-id="sending" style="display:none;" tabindex="-1"><span class="btn-inner disabled">发送中...</span></a>
+        <div data-id="send_succ_tip" style="display:none;">
+            <div class="send-suc"><span class="ico-right"></span>发送成功！</div>
+            <div class="ui-dialog ui-light-dialog ui-light-dialog-s ui-popover ui-popover-right-top ui-super-light-dialog">
+                <div class="ui-dl-inner clear" style="width:238px;">
+                    <b class="ui-dl-arrow ui-dl-arrow1"></b>
+                    <b class="ui-dl-arrow ui-dl-arrow2"></b>
+                    <div class="ui-dl-bd">
+                        <p>可以在您其他安装了微云的设备上接收。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>

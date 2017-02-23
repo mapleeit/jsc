@@ -1,0 +1,170 @@
+<!--
+分享窗口模板
+@author hibincheng
+@date 2013-09-16
+-->
+<script id="share_dialog" type="text/html" nowith="yes">
+    <%
+        var $ = require('$'),
+        lib = require('lib'),
+        text = lib.get('./text'),
+        common = require('common'),
+        constants = common.get('./constants'),
+        Copy = common.get('./util.Copy');
+    %>
+    <div id="_disk_share_pop_container" data-no-selection class="full-pop full-pop-large" close-box="true" style="">
+        <h3 data-draggable-target class="full-pop-header" style=""><div class="inner __title" tabindex="0"></div></h3>
+        <div class="full-pop-content __content">
+            <div class="popshare-box popshare-make">
+                <div class="pass-box clear">
+                    <div class="msg" tabindex="0"><i class="icon"></i>已创建链接</div>
+                    <!-- loading 为密码检查模式，带loading图标 -->
+                    <!-- success 为密码规则验证成功 -->
+                    <!-- error 为密码规则验证失败 -->
+                    <div data-id="pwd_con" class="topass buf-password" style="display:none;">
+                        密码：<input style="ime-mode:disabled" data-id="pwd_text" type="text" maxlength="6" value=""><i class="ico"></i><a href="#" data-action="cancel_pwd">取消加密</a>
+                        <span class="err-msg">密码不足六位<i class="arr-border"></i><i class="arr"></i></span>
+                    </div>
+                    <div data-id="create_pwd_btn" class="topass">
+                        <a data-action="create_pwd" href="#" tabindex="-1">添加访问密码</a>
+                    </div>
+                </div>
+                <ul class="tab-head">
+                    <li data-id="tab_head_link" class="link on"><a href="#" tabindex="0"><i class="icon"></i><s style="display:none">通过</s>链接分享</a></li>
+                    <li data-id="tab_head_mail" class="email"><a href="#" tabindex="0"><i class="icon"></i><s style="display:none">通过</s>邮件分享</a></li>
+                </ul>
+                <ul class="tab-body">
+                    <li data-id="link_tab" style="display:block;">
+                        <p calss="infor">复制链接发送给您的好友吧！</p>
+                        <p class="copyurl">
+                            <span data-id="link_text" style="height:<%=constants.IS_APPBOX ? 48 : 42%>px;">
+                            </span>
+                        </p>
+                    </li>
+                    <li data-id="mail_tab" style="display: none;">
+                        <dl data-id="mail_receiver_ct" class="clear">
+                        </dl>
+                        <dl class="clear">
+                            <dt><label>发送内容：</label></dt>
+                            <dd class="con"><textarea data-id="mail_con" tabindex="0"></textarea></dd>
+                        </dl>
+                        <dl data-id="verify_code_ct" class="clear" style="display:none;">
+                        </dl>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="full-pop-btn __buttons">
+            <ul data-id="buttons" class="tab-footer">
+                <%
+                $.each(data.buttons || [], function(i, btn) {
+                %>
+                    <% if(btn.id === 'copy') { %>
+                        <li data-id="<%=btn.id %>_btn" class="popshare-foot-copy" style="display:none;">
+                            <span class="infor" style="display:none;"></span>
+                            <a data-clipboard-target data-btn-id="<%=btn.id %>" type="button" class="g-btn g-btn-blue" href="#" tabindex="-1"><span class="btn-inner"><%= btn.text %></span></a>
+                        </li>
+                    <% } else { %>
+                        <li data-id="<%=btn.id %>_btn" class="" style="display:none;">
+                            <span class="infor" style="display:none;"></span>
+                            <a data-btn-id="<%=btn.id %>" type="button" class="g-btn g-btn-blue" href="#" tabindex="0"><span class="btn-inner"><%= btn.text %></span></a>
+                        </li>
+                    <% } %>
+                <%
+                });
+                %>
+            </ul>
+        </div>
+        <a data-btn-id="CANCEL" href="javascript:void(0);" class="full-pop-close" close-btn="true" title="关闭">×</a>
+    </div>
+
+</script>
+<!--
+验证码
+@author hibincheng
+@date 2013-12-13
+-->
+<script id="verify_code" type="text/html" no-width="yes">
+    <dl data-id="verify_code_ct" class="clear" style="display:none;">
+        <dt class="code"><label>验证码：</label></dt>
+        <dd class="code">
+            <input data-id="verify_code_text" type="text" maxlength="4"/>
+            <a href="#" title="换一张"><img data-action="change_verify_code" alt="验证码"/></a> <a data-action="change_verify_code" href="#">换一张</a>
+        </dd>
+    </dl>
+</script>
+<!--
+邮件收件人地址
+@author hibincheng
+@date 2013-09-26
+-->
+<script id="mail_receiver" type="text/html" nowidth="yes">
+    <dt><label>收件人：</label></dt>
+    <dd class="email">
+        <!-- 获取焦点时ie6使用.focus样式 -->
+        <input data-id="mail_receiver_text" type="text" value="输入收件人，多收件人中间用分号隔开" />
+        <div data-id="mail_list_ct" class="normal">
+            <a data-id="mail_list_trigger" class="link" href="#" tabindex="-1">常用联系人<i></i></a>
+            <div data-id="mail_list" class="mail-list" style="display:none;"></div>
+        </div>
+
+        <!-- 高度请使用js判断，高度大于132px时设置固定高度，小于132px时不需要设置 -->
+        <div data-id="mail_match_list" class="autocompletion" style="display:none;"></div>
+    </dd>
+</script>
+<!--
+收件人智能匹配列表
+@author hibincheng
+@date 2013-09-25
+-->
+<script id="mail_match_list" type="text/html" nowidth="yes">
+    <%
+        var $ = require('$'),
+            lib = require('lib'),
+            text = lib.get('./text');
+    %>
+    <%
+    $.each(data || [], function(i, item) { %>
+        <!-- 这里的name 不需要html转义，因为匹配成功的已经有加粗，在获取时已经先转义过了-->
+        <a href="javascript:void(0);" data-mail="<%= item[2] %>" data-index="<%= i %>" tabindex="-1">"<%= item[0] %>" <%= item[1] %></a>
+    <% }); %>
+</script>
+<!--
+常用联系人列表
+@author hibincheng
+@date 2013-09-25
+-->
+<script id="mail_receiver_list" type="text/html" nowidth="yes">
+        <div>
+            <div class="title">
+                <span class="t1"><span data-id="checkall" class="checkbox"></span></span>
+                <span class="t2">姓名</span>
+                <span class="t3">Email地址</span>
+            </div>
+            <!-- 高度请使用js判断，高度大于130时设置固定高度，小于130时不需要设置 -->
+            <div data-id="mail_receiver_list_con" class="con" style="">
+            </div>
+            <a href="javascript:void(0);" class="close"></a>
+        </div>
+</script>
+<!--
+常用联系人item
+@author hibincheng
+@date 2013-09-26
+-->
+<script id="mail_receiver_item" type="text/html" nowidth="yes">
+    <%
+    var $ = require('$'),
+        lib = require('lib'),
+        text = lib.get('./text');
+    %>
+    <!-- ie6使用con-list-hover样式 -->
+    <%
+    $.each(data || [], function(i, record) { %>
+    <div class="con-list">
+        <span class="c1"><span class="checkbox" data-mail="<%= record.get('mail')%>"></span></span>
+        <span class="c2 ellipsis"><%= text.text(record.get('user_name')) %></span>
+        <span class="c3 ellipsis"><%= text.text(record.get('mail_addr')) %></span>
+    </div>
+    <% }); %>
+</script>

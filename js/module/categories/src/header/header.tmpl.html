@@ -1,0 +1,83 @@
+<!--
+文档模块工具样
+@autor: hibincheng
+@date: 2013-10-31
+-->
+<script id="doc_toolbar" type="text/html" nowith="yes">
+    <div class="toolbar-btn clear sort-doc-toolbar">
+        <div class="btn-message">
+            <a data-no-selection data-action="batch_delete" class="g-btn g-btn-gray" href="#" tabindex="-1"><span class="btn-inner"><i class="ico ico-del"></i><span class="text">删除</span></span></a>
+            <a data-no-selection data-action="refresh" class="g-btn g-btn-gray" href="#" tabindex="-1"><span class="btn-inner minpad"><i class="ico ico-ref"></i><span class="text"></span></span></a>
+        </div>
+        <!-- 视图切换 -->
+        <%= this.sort_tool()%>
+        <!-- 分类视图切换 -->
+        <div class="view-mode-sort" id="view-mode-sort">
+            <span data-action="filter" data-filter="all"><a title="查看所有文档" class="vm-l" href="javascript:void(0)"><em>全部</em></a></span>
+            <span data-action="filter" data-filter="word"><a title="查看所有doc文档" class="vm-m" href="javascript:void(0)"><em>DOC</em></a></span>
+            <span data-action="filter" data-filter="excel"><a title="查看所有excel表格" class="vm-m" href="javascript:void(0)"><em>XLS</em></a></span>
+            <span data-action="filter" data-filter="ppt"><a title="查看所有ppt" class="vm-m" href="javascript:void(0)"><em>PPT</em></a></span>
+            <span data-action="filter" data-filter="pdf"><a title="查看所有pdf电子文档" class="vm-r" href="javascript:void(0)"><em>PDF</em></a></span>
+        </div>
+    </div>
+
+</script>
+<!--
+视频模块工具样
+@autor: hibincheng
+@date: 2013-10-31
+-->
+<script id="video_toolbar" type="text/html" nowidth="yes">
+    <div class="toolbar-btn clear sort-video-toolbar">
+        <div class="btn-message">
+            <a data-no-selection data-action="batch_delete" class="g-btn g-btn-gray" href="#" tabindex="-1"><span class="btn-inner"><i class="ico ico-del"></i><span class="text">删除</span></span></a>
+            <a data-no-selection data-action="refresh" class="g-btn g-btn-gray" href="#" tabindex="-1"><span class="btn-inner minpad"><i class="ico ico-ref"></i><span class="text"></span></span></a>
+        </div>
+        <%= this.sort_tool()%>
+    </div>
+</script>
+<!--
+音频模块工具样
+@autor: hibincheng
+@date: 2013-10-31
+-->
+<script id="audio_toolbar" type="text/html" nowidth="yes">
+    <div class="toolbar-btn clear sort-audio-toolbar">
+        <div class="btn-message">
+            <a data-no-selection data-action="batch_delete" class="g-btn g-btn-gray" href="#" tabindex="-1"><span class="btn-inner"><i class="ico ico-del"></i><span class="text">删除</span></span></a>
+            <a data-no-selection data-action="refresh" class="g-btn g-btn-gray" href="#" tabindex="-1"><span class="btn-inner minpad"><i class="ico ico-ref"></i><span class="text"></span></span></a>
+        </div>
+        <%= this.sort_tool()%>
+    </div>
+</script>
+<!--
+排序工具样
+@autor: hibincheng
+@date: 2013-10-31
+-->
+<script id="sort_tool" type="text/html" nowidth="yes">
+    <%
+        var lib = require('lib'),
+            common = require('common'),
+            click_tj = common.get('./configs.click_tj'),
+            query_user = common.get('./query_user'),
+            cur_view = 'newestlist',
+            cur_cls = 'vm-time';
+        //库3.0用户去掉排序工具
+        if(query_user.get_cached_user().is_lib3_user()) {
+            return '';
+        }
+
+    %>
+        <!--<div class="view-mode">
+            <span data-no-selection data-action="sort" data-sort="mtime"><a title="按时间排序" class="vm-l vm-time" href="javascript:void(0)"><i></i></a></span>
+            <span data-no-selection data-action="sort" data-sort="az"><a title="按A到Z顺序排序" class="vm-r vm-a-z" href="javascript:void(0)"><i></i></a></span>
+        </div>-->
+        <div data-no-selection class="view-mode-dropdown">
+            <a data-id="sort" data-link="true" class="vm-btn vm-time" href="javascript:void(0)" title="排序方式" tabindex="-1"><i class="ico"></i></a>
+            <ul data-dropdown="true" class="view-mode-dropdown-box" style="display:none;">
+                <li data-view="mtime" class="focus"><a class="vm-time" href="#"><i class="ico"></i>按时间排序</a></li>
+                <li data-view="az" class=""><a class="vm-az" href="#"><i class="ico"></i>按字母顺序</a></li>
+            </ul>
+        </div>
+</script>

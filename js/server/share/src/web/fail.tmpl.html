@@ -1,0 +1,21 @@
+<!--
+相关错误提示
+-->
+<script id="webFail" type="text/html" nowith="yes">
+    <%
+        var msg = data.msg,
+            type = data.type;
+    %>
+    <div id="error_content" class="wrapper">
+
+        <div class="link-out-msg">
+            <div class="<%=type%>">
+                <i class="ico"></i>
+                <h3><%=msg%></h3>
+            </div>
+        </div>
+
+    </div>
+    <div id='outlink_fail_msg' style="display:none">
+    </div>
+</script>

@@ -1,0 +1,45 @@
+<script id="exchange_success" type="text/html" nowith="yes">
+    <%
+        data = data || {};
+
+        var __exchangeSuccessModel = data.__exchangeSuccessModel || {};
+        var goodsInfo = __exchangeSuccessModel.goodsInfo || {};
+        var addressInfo = __exchangeSuccessModel.addressInfo || {};
+        var i, j, key, len, list, item;
+    %>
+<div class="app-checkin-order-result j-container" style="display: none">
+    <div class="result-wrap success">
+        <div class="result"><i class="icon icon-result"></i></div>
+        <p class="tip"><%=goodsInfo.pathway === 'lottery' ? '恭喜，抽中奖品' : '兑换成功'%></p>
+        <p class="text">您可以在我的物品页面中查看兑换记录</p>
+    </div>
+    <ul class="shop-list">
+        <li class="item">
+            <div class="pic"><div class="info" style="background-image:url(<%=goodsInfo.image_url%>)"></div></div>
+            <div class="main">
+                <p class="text"><%=goodsInfo.name%></p>
+                <div class="integral-num"><i class="icon icon-coin"></i><span class="num"><%=goodsInfo.score%></span></div>
+            </div>
+            <div class="right"><p class="text">X1</p></div>
+        </li>
+    </ul>
+    <% if (addressInfo.has_address) { %>
+    <div class="address-wrap">
+        <div class="personal">
+            <div class="name"><span>收件人：<%=addressInfo.name%></span></div>
+            <div class="num"><span><%=addressInfo.phone%></span></div>
+        </div>
+        <div class="address"><span>配送地址：<%=addressInfo.address%></span></div>
+        <div class="way"><span>配送方式：快递（暂不支持修改）</span></div>
+    </div>
+    <div class="btn-wrap tBor">
+        <button class="btn" data-action="go_sign_in"><span>返回商城</span></button>
+    </div>
+    <% } else { %>
+    <div class="btn-wrap tBor">
+        <button class="btn" data-action="go_edit_address"><span>填写地址</span></button>
+    </div>
+    <% } %>
+</div>
+
+</script>

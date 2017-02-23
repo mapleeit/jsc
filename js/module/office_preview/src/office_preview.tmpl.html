@@ -1,0 +1,29 @@
+<!--
+office预览模板
+@author hibincheng
+@date 2014-05-04
+-->
+<script id="preview" type="text/html" no-width="yes">
+    <%
+        var lib = require('lib'),
+            text = lib.get('./text');
+    %>
+    <div data-no-selection class="mod-office office-<%=data.file_type%>" style="display: none;" data-label-for-aria="文件预览内容区域">
+        <div data-id="header" class="header">
+            <h2 data-id="title" title="<%=text.text(data.title)%>"><%=text.text(data.title)%></h2>
+            <a data-action="close" href="#" class="close" title="关闭" tabindex="0"><span>x</span></a>
+            <a data-action="download" href="#" class="download" title="下载" tabindex="0">下载</a>
+        </div>
+        <div data-id="content" class="main"></div>
+    </div>
+</script>
+<!--
+office预览模板 (appbox下全屏 )
+@author hibincheng
+@date 2014-05-04
+-->
+<script id="full_preview" type="text/html" no-width="yes">
+    <div data-no-selection class="mod-office office-<%=data.file_type%>" style="display: none;">
+        <div data-id="content" class="main" style="top:0"></div>
+    </div>
+</script>

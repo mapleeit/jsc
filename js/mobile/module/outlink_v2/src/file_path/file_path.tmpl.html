@@ -1,0 +1,16 @@
+<script id="file_path" type="text/html" nowidth="yes">
+    <ul class="wy-dir-crumbs">
+        <!-- 点击时添加 wy-hl-dir class -->
+        <%
+            var $ = require('$');
+            var lib = require('lib');
+            var text = lib.get('./text');
+            var len = data.length;
+            $.each(data, function(i, dir){
+        %>
+            <li class="wy-dir <%if(i== len-1) { %> wy-dir-current <% } %>" data-key="<%=dir.get_id()%>"><%=text.text(dir.get_name())%></li>
+        <%
+            });
+        %>
+    </ul>
+</script>

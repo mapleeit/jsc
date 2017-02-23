@@ -1,0 +1,10 @@
+<wx-view>
+  <wx-form bindsubmit="setNavigationBarTitle" reportsubmit>
+    <wx-input placeholder="title" value="自定义标题123" name="title"></wx-input>
+    <wx-button type="primary" formType="submit">setNavigationBarTitle</wx-button>
+  </wx-form>
+
+  <wx-button type="primary" bindtap="showNavigationBarLoading">showNavigationBarLoading</wx-button>
+  <wx-button type="primary" bindtap="hideNavigationBarLoading">hidewNavigationBarLoading</wx-button>
+  <wx-button type="primary" bindtap="nop" hover-style="background-color:#1aad19;color:#ffffff;">点击态</wx-button>
+</wx-view>

@@ -1,0 +1,142 @@
+<script id="list" type="text/html" nowidth="yes">
+    <%
+        var $ = require('$');
+        var lib = require('lib');
+        var text = lib.get('./text');
+        var prettysize = lib.get('./prettysize');
+        var list = data.list;
+
+        $.each(list, function(i, file) {
+            var thumb_url = file.get_thumb_url();
+            var file_type = file.get_type();
+            var is_dir = file.is_dir();
+            var file_size = file.get_size();
+            var id = file.get_id();
+            var file_name = text.text(file.get_name());
+    %>
+
+        <li data-action="open" data-id="item" data-file-id="<%=id%>" id="item_<%=id%>" class="wy-file-item">
+            <!-- icons icons-filetype是公共class，
+                 icon-doc 文档
+                 icon-ppt 演示文件
+                 icon-folder 文件夹 -->
+            <% if(thumb_url) { %>
+            <i class="icons-filetype icon-<%=file_type%>" data-src="<%=thumb_url%>"></i>
+            <% } else { %>
+            <i class="icons-filetype icon-<%=file_type%>"></i>
+            <% } %>
+            <div class="file-describe bBor">
+                <h3 class="file-name"><%=file_name%></h3>
+                <span class="file-info">
+                    <%
+                        if(!is_dir) {
+                    %>
+                            <span data-action="open" class="file-size"><%=prettysize(file_size)%></span>
+                    <%
+                        }
+                    %>
+                </span>
+            </div>
+            <% if(is_dir) { %>
+            <i class="icon-grey-rarr"></i>
+            <% } %>
+        </li>
+    <%
+        });
+    %>
+</script>
+
+<!--
+空白页
+-->
+<script id="empty" type="text/html" no-width="yes">
+    <div class="wy-blank-wrap">
+        <div class="wy-blank">
+            <i class="wy-gray-logo"></i>
+            <p>文件夹是空的</p>
+        </div>
+    </div>
+</script>
+
+<script id="fail" type="text/html" no-width="yes">
+    <div id="_fail" class="wy-reload-wrap">
+        <a href="#" class="reload-btn" title="重新加载">
+            <div class="reload-btn-box">
+                <div class="reload-btn-wrap">
+                    <i class="icon icon-reload"></i>
+                    <p class="reload-txt"><%=data.msg%></p>
+                </div>
+            </div>
+        </a>
+    </div>
+</script>
+
+
+<!--
+云播浮层
+-->
+<script id="video" type="text/html" no-width="yes">
+    <%
+    var lib         = require('lib');
+    var text        = lib.get('./text');
+    var prettysize  = lib.get('./prettysize');
+    %>
+    <div class="wy-previewer-wrapper" style="display: none;">
+        <!-- 视频名称，点 .wy-previewer-title:after 关闭视频 -->
+        <h1 class="wy-previewer-title"><%=text.text(data.title)%></h1>
+        <div class="wy-video-wrap">
+            <!--  视频内容，以下地址为测试用 -->
+            <video data-id="video_elem" webkit-playsinline x-webkit-airplay controls poster="<%=data.poster%>" src="<%=data.video_src%>" class="wy-video">
+                你的浏览器不支持视频播放，请保存到微云后查看。
+            </video>
+        </div>
+
+        <!-- 视频描述 -->
+        <div class="wy-previewer-desc">
+            <div class="file-info">
+                <span class="info file-size"><%=prettysize(data.file_size)%></span>
+                <time class="info file-duration"><%=data.time%></time>
+            </div>
+            <p class="reminder">保存到微云即可查看完整版</p>
+        </div>
+
+        <!-- image preveiw nav-->
+        <footer class="wy-preview-controller">
+            <button data-action="save" class="btn-item" role="button">保存到微云</button>
+        </footer>
+        <!-- end image preview nav -->
+    </div>
+</script>
+<!--
+笔记浮层
+-->
+<script id="note" type="text/html" no-width="yes">
+    <%
+    var lib         = require('lib');
+    var text        = lib.get('./text');
+    var dateformat  = lib.get('./dateformat');
+    %>
+    <div id="note_container">
+        <section class="wy-notes-wrapper">
+            <header class="note-title-wrapper">
+                <h2 class="note-title"><%=text.text(data.title)%></h2>
+                <time class="note-time"><%=dateformat(data.time, 'yyyy-mm-dd HH:MM:ss')%></time>
+            </header>
+            <article data-id="content" class="note-body">
+                <div class="note-content"><b><%=data.content%></b><br></div>
+            </article>
+        </section>
+        <div class="wy-file-controller g-bottom-bar">
+            <button data-action="save" class="btn" role="button">保存到微云</button>
+        </div>
+    </div>
+</script>
+
+<!--
+H5顶部广告
+-->
+<script id="ad_h5" type="text/html" nowidth="yes">
+    <div data-id="ad_container" class="wy-ad" style="">
+        <i data-id="ad_close" class="icon icon-close"></i>
+    </div>
+</script>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>editor</title>
+    <link rel="stylesheet" href="css/tfl-base.css">
+    <link rel="stylesheet" href="css/tfl-tab.css">
+    <link rel="stylesheet" href="css/tfl-tips.css">
+    <link rel="stylesheet" href="css/tfl-editor.css">
+    <link rel="stylesheet" href="css/tfl-skin0.css">
+    <script src="http://tdl.oa.com/tfl/js/jquery-1.4.2.min.js"></script>
+    <script src="js/tfl-core.js"></script>
+    <script src="js/tfl-editor.js"></script>
+</head>
+<body>
+    <textarea name="" id="tflEditor"   cols="60" rows="10" class="tfl-editor"></textarea>
+    <script>
+      var editor = null;
+      TFL.use('editor', function() {
+          TFL.editor.init();
+          var editor = (".tlf-editor")[0];
+          editor.setHtml("<div>abcd</div>");
+      })
+</script>
+</body>
+</html>

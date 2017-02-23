@@ -1,0 +1,126 @@
+<!-- Cross domain proxy page - james -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <script type="text/javascript">
+        var win = window, doc = document, pseajs;
+
+        doc.domain = doc.domain.split('.').slice(-2).join('.');
+        if (doc.domain !== parent.document.domain) doc.close();
+
+        /**
+         * @param {String} o.url
+         * @param {Object} o.data
+         * @param {String} o.method
+         * @param {Boolean} o.callback
+         */
+        var Request = function (o) {
+            this.o = o;
+        };
+
+        Request.prototype = {
+            send: function () {
+                var me = this, o = me.o, headers = {};
+
+                var xhr = me._xhr = me._get_xhr();
+                if (!xhr)
+                    return o.callback.call(me, 'NOT_SUPPORT', '该域名不支持跨域访问' + o.url);
+
+                var method = o.method.toUpperCase();
+                var referer = o.referer;
+                if(referer != null && typeof referer === 'number'){
+                    headers['custom_referer'] = referer;
+                }
+
+                try {
+                    xhr.open(method, o.url, true);
+                } catch (err) {
+                    return o.callback.call(me, 'SEND_FAILED', '发送请求失败' + o.url);
+                }
+
+                if (method === 'POST') {
+                    headers['Content-Type'] = 'application/x-www-form-urlencoded';
+                }
+
+                headers['X-Requested-With'] = 'XMLHttpRequest';
+
+                try {
+                    for (var i in headers) {
+                        xhr.setRequestHeader(i, headers[ i ]);
+                    }
+                } catch (_) {
+                }
+
+                var callback = me._callback = function (_, is_abort) {
+                    if (callback && (is_abort || xhr.readyState === 4)) {
+                        callback = null;
+                        me._callback = null;
+
+                        if (is_abort) {
+                            if (xhr.readyState !== 4) {
+                                xhr.abort();
+                            }
+                        } else {
+                            var status = xhr.status, text = xhr.responseText, is_ok = 200 <= xhr.status && xhr.status < 300;
+                            me.release();
+                            o.callback.call(xhr, is_ok, status, text);
+                        }
+                    }
+                };
+                xhr.onreadystatechange = callback;
+
+                xhr.send(o.data);
+
+                // IE6 & IE7 可能会缓存，需要手动触发callback
+                if (xhr.readyState === 4) {
+                    callback && setTimeout(callback, 0);
+                }
+            },
+
+            abort: function () {
+                this._callback && this._callback(0, true);
+                this.release();
+            },
+
+            release: function () {
+                var xhr = this._xhr;
+                if (xhr) {
+                    xhr.onreadystatechange = noop;
+                    this._xhr = null;
+                }
+            },
+
+            _get_xhr: function () {
+                return this._try(function () {
+                    return new XMLHttpRequest();
+                }, function () {
+                    return new ActiveXObject("Msxml2.XMLHTTP");
+                }, function () {
+                    return new ActiveXObject("Microsoft.XMLHTTP");
+                });
+            },
+
+            _try: function () {
+                var res;
+                for (var ii = 0, len = arguments.length; ii < len; ii++) {
+                    try {
+                        res = arguments[ii]();
+                        return res;
+                    } catch (ignore) {
+                    }
+                }
+                return res;
+            }
+
+        };
+
+        var noop = function () {
+        };
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>

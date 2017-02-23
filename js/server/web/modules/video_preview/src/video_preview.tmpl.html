@@ -1,0 +1,159 @@
+<script id="body" type="text/html" nowith="yes">
+<%
+	var util = data.util || {};
+	var err = data.err || false;
+	data.videoInfo = data.videoInfo || {};
+	data.episodeInfo = data.episodeInfo || {};
+
+	if (err) {
+		data.filesize = '0K';
+		data.filename = '加载错误';
+	} else {
+		data.filesize = util.prettysize(data.videoInfo.file_size, true, true) || '0K';
+		data.filename = util.htmlEscape(data.videoInfo.filename) || '';
+	}
+%>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title>微云视频-<%=data.filename%></title>
+	<meta name="keywords" content="QQ, 腾讯,微云, 分享, 网盘, 网络硬盘, U盘, 云存储, 传输, 存储, 同步, 备份, 拍照, 上传, 下载, 中转, 文件, 照片, 相册, 离线, 传文件, wifi, cloud, 微云网页版, weiyun, weiyun web">
+	<meta name="description" content="微云是腾讯公司为用户精心打造的一项智能云服务, 您可以通过微云方便地在手机和电脑之间同步文件、推送照片和传输数据。">
+	<%=require('weiyun/util/inline').css(['page_video_css'], true)%>
+	<%=require('weiyun/util/inline').css(['page_home_delay_css'], true)%>
+	<!-- videojs ie8 compatible mode -->
+	<script type="text/javascript" src="//img.weiyun.com/club//weiyun/js/publics/videojs/videojs-ie8.min.js?max_age=604800"></script>
+</head>
+<body class="page-video">
+<!-- wrapper s -->
+<div class="layout-wrapper">
+    <!-- 头部 s -->
+    <div class="layout-header">
+        <div class="layout-header-inner">
+            <!-- 顶部导航 s -->
+            <div class="mod-nav clearfix">
+                <div class="logo">
+                    <a href="//www.weiyun.com" title="腾讯微云" target="_blank">腾讯微云</a>
+                </div>
+                <div class="btn-wrap">
+                	<a class="btn btn-l btn-download j-download-btn"><span class="btn-txt j-download-btn-size">下载(<%=data.filesize%>)</span></a>
+                	<a class="btn btn-l btn-share j-share-btn"><span class="btn-txt">分享</span></a>
+                </div>
+            </div>
+            <!-- 顶部导航 e -->
+        </div>
+    </div>
+    <!-- 头部 e -->
+    <!-- 主体 s -->
+    <div class="layout-body">
+        <div class="layout-body-inner">
+            <!-- 主要内容 s -->
+            <div class="layout-main">
+            	<div class="video-wrap">
+            		<div class="main">
+            			<video id="videoPlayer" height="573" width="1020" class="video video-js">
+						</video>
+						<!-- 错误信息提示 -->
+						<div class="video-states error j-err" <%if (!err){%>style="display:none;"<%}%>>
+							<div class="tip-wrap">
+								<p class="tip j-err-msg"><%= err ? err.msg: ''%></p>
+								<a class="link j-err-action"
+								   data-action="<%=err.action%>"
+								   href="javascript:void(0)"><%=err.actionText ? err.actionText : ''%>
+								</a>
+							</div>
+						</div>
+            		</div>
+            	</div>
+				<% if (!err && data.episodeInfo && data.episodeInfo.file_list && data.episodeInfo.file_list.length !== 0) {%>
+            	<div class="drama-wrap">
+            		<h4 class="title">视频</h4>
+            		<div class="video-list-wrap">
+            			<!-- width为160*n px，n为li的个数；滑动时更改left的值即可。 -->
+						<% var episodeList = data.episodeInfo.file_list || []; %>
+	            		<ul class="video-list clearfix j-video-list" style="width:<%=episodeList.length * 160%>px;left:0;">
+							<%
+								for (var i = 0; i < episodeList.length; i++) {
+									var item = episodeList[i];
+ 							%>
+	            			<li class="video-list-item <%=(item.file_id === data.videoID) ? 'act' : ''%> j-video-list-item" data-video-index="<%=i%>" data-video-id="<%=item.file_id%>">
+	            				<div class="video-list-item-pic j-video-list-item-pic">
+
+	            				</div>
+	            				<div class="video-list-item-txt">
+	            					<p class="video-title"><%=util.htmlEscape(item.filename)%></p>
+	            					<p class="video-sub-title">文件大小：<%=util.prettysize(item.file_size, true, true)%></p>
+	            				</div>
+	            			</li>
+							<%
+								}
+ 							%>
+	            		</ul>
+	            		<a class="pre j-pre-btn">
+	            			<i class="icon icon-pre"></i>
+	            		</a>
+						<a class="next j-next-btn"><!-- 不可点击状态加.disable -->
+							<i class="icon icon-next"></i>
+						</a>
+	            	</div>
+            	</div>
+				<%}%>
+            </div>
+            <!-- 主要内容 e -->
+        </div>
+    </div>
+    <!-- 主体 e -->
+    <!-- foot s -->
+    <div class="layout-foot">
+        <!-- 帮助 s -->
+        <div class="mod-txt-list">
+        	<ul class="txt-list clearfix">
+        		<li class="txt-item"><a href="javascript:void(0)">版权声明</a>
+                    <!-- 版权声明内容 s -->
+                    <div class="mod-bubble-dropdown with-border bottom-left copyright-bubble-dropdown">
+                        <div class="txt-dropdown">
+                            <p>您应尊重相关作品著作权人合法权益，未经著作权人合法授权，不能违法上传、储存、分享他人作品。</p>
+                        </div>
+                        <b class="bubble-arrow-border"></b>
+                        <b class="bubble-arrow"></b>
+                    </div>
+                    <!-- 版权声明内容 e -->
+                </li>
+        		<li class="txt-item"><a href="//www.weiyun.com/complaint.html" target="_blank">投诉指引</a></li>
+        	</ul>
+        </div>
+        <!-- 帮助 e -->
+    </div>
+    <!-- foot e -->
+</div>
+<!-- wrapper e -->
+<script src="//img.weiyun.com/c/=/club/weiyun/js/publics/seajs/sea.js,/club/weiyun/js/publics/seajs-plugins/seajs-combo.js?max_age=31104000"></script>
+<!--<script src="//img.weiyun.com/club/weiyun/js/publics/seajs/sea.js"></script>-->
+<%=require('weiyun/util/inline').js(['configs_web_v2'])%>
+<script type="text/javascript">
+    seajs.use(['$', 'lib', 'common', 'video_preview'], function ($, lib, common, video_preview) {
+        var video_preview = video_preview.get('./video_preview');
+        video_preview.init(<%=JSON.stringify(data)%>);
+    });
+</script>
+
+<!-- pv 上报 -->
+<script type='text/javascript' src='//img.weiyun.com/club/weiyun/js/publics/tcss/tcss.ping.js'></script>
+<script>
+	(function() {
+		if (typeof pgvMain == 'function') {
+			pgvMain("", {
+				tagParamName: 'WYTAG',
+				virtualURL: '/video_preview',
+				virtualDomain: "www.weiyun.com"
+			});
+		}
+	})();
+</script>
+
+</body>
+</html>
+
+</script>

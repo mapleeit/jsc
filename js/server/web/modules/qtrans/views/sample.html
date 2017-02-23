@@ -1,0 +1,48 @@
+<html>
+    <head>   
+    </head>
+    <body>
+<p>testestest</p>
+    </body> 
+</html>
+<script type="text/javascript">
+    var _obj2str = function(o){
+        var r = [];
+        if(typeof o =="string") return "\""+o.replace(/([\'\"\\])/g,"\\$1").replace(/(\n)/g,"\\n").replace(/(\r)/g,"\\r").replace(/(\t)/g,"\\t")+"\"";
+        if(typeof o == "object"){
+            if(!o.sort){
+                for(var i in o){
+                    r.push("\""+i+"\":"+_obj2str(o[i]));
+                }
+                if(!!document.all && !/^\n?function\s*toString\(\)\s*\{\n?\s*\[native code\]\n?\s*\}\n?\s*$/.test(o.toString)){
+                    r.push("toString:"+o.toString.toString());
+                }
+                r="{"+r.join()+"}";
+            }else{
+                for(var i =0;i<o.length;i++){
+                    r.push(_obj2str(o[i]));
+                }
+                r="["+r.join('')+"]";
+            }
+            r.pop();
+            return r;
+        }
+        return o.toString();
+    }
+
+ 
+
+ function getSelectedFiles() 
+ {
+       var dl_files = new Array();
+       dl_files[0] = {id:"1",name:"11.apk",path:"http://hz.yun.ftn.qq.com/ftn_handler/b1895e3c3c9b3e55b20d75cbb5a9679198ca4dac92c882a3fa76903f4c43f38338cdb6223260acc4e7d326e2562036c01e1e745959af6094775af7bcbed82fb1/11.apk",size:"372210",time:"12345"};
+       dl_files[1] = {id:"2",name:"QQ2012.exe",path:"http://sz.yun.ftn.qq.com/ftn_handler/f673aaa509266b2eb0fc85127a0b5e25d0113f8820fe46567827d48eadbf5e2316abfe7abd7c3848fb405d0fe64c0dd159602525388f08fef53fb8cd29bad11f/QQ2012.exe",size:"12345",time:"12345"};
+       var obj = {files: dl_files};     
+       //return _obj2str(obj);
+       var json_str = '{"files":[{"id":"1","name":"11.apk","path":"http://hz.yun.ftn.qq.com/ftn_handler/b1895e3c3c9b3e55b20d75cbb5a9679198ca4dac92c882a3fa76903f4c43f38338cdb6223260acc4e7d326e2562036c01e1e745959af6094775af7bcbed82fb1/11.apk","size":"372210","time":"12345"},{"id":"2","name":"QQ2012.exe","path":"http://sz.yun.ftn.qq.com/ftn_handler/f673aaa509266b2eb0fc85127a0b5e25d0113f8820fe46567827d48eadbf5e2316abfe7abd7c3848fb405d0fe64c0dd159602525388f08fef53fb8cd29bad11f/QQ2012.exe","size":"12345","time":"12345"}]}';
+       document.write(json_str);
+       return json_str;
+ }
+
+var dl_obj = getSelectedFiles();
+</script>

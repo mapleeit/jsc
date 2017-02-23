@@ -1,0 +1,11 @@
+<wx-view>
+  <wx-view class="page-title">组件</wx-view>
+
+  <wx-view>
+    <wx-repeat items="{{componentList}}" item="component">
+      <wx-navigator url="{{component.url}}">
+        <wx-button type="primary">{{component.name}}</wx-button>
+      </wx-navigator>
+    </wx-repeat>
+  </wx-view>
+</wx-view>

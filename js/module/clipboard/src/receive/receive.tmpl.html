@@ -1,0 +1,115 @@
+<!--
+ 内容列表容器
+ @author hibincheng
+ @date 2014-01-21
+-->
+<script id="receive" type="text/html" no-width="yes">
+    <div data-id="receive_ct"></div>
+</script>
+<!--
+ 内容列表内容
+ @author hibincheng
+ @date 2014-01-21
+-->
+<script id="receive_view" type="text/html" no-width="yes">
+    <div class="clip-txt">
+        <div data-id="list_wrap" class="clip-txt-inner">
+        </div>
+    </div>
+</script>
+<!--
+无数据时的运营广告
+@author: hibincheng
+@date: 2014-01-21
+-->
+<script id="view_empty" type="text/html" nowidth="yes">
+    <div class="g-empty clip-empty" style="display:none;">
+        <div class="empty-box" tabindex="0">
+            <div class="ico"></div>
+            <p data-id="title" class="title">剪贴板无内容</p>
+            <p data-id="content" class="content">安装微云手机版，使用“剪贴板”功能可以将文字发送到这里</p>
+        </div>
+    </div>
+</script>
+<!--
+内容列表
+@author hibincheng
+@date 2014-01-21
+-->
+<script id="receive_list" type="text/html" no-width="yes">
+    <ul class="clip-receive-list"></ul>
+</script>
+<!--
+ 内容列表项
+ @author hibincheng
+ @date 2014-01-21
+-->
+<script id="receive_list_item" type="text/html" no-width="yes">
+    <%
+        var $ = require('$'),
+            lib = require('lib'),
+            common = require('common'),
+            scr_reader_mode = common.get('./scr_reader_mode'),
+            read_mode = scr_reader_mode.is_enable(),  //读屏模式
+            text = lib.get('./text'),
+            records = data;
+
+        $.each(records|| [], function(i, rd) {
+            var content = text.text(rd.get('content'));
+    %>
+        <li data-action="show_detail" data-file-id class="item">
+            <div class="clip-receive-list-inner">
+                <% if(read_mode) { %>
+                    <a class="text" href="#" tabindex="0" title="点击进入详情"><%=content%></a>
+                <% } else {
+                    content = content.replace(/^([\r\n]+)+/, '').replace(/[\r\n]+/g, '<br />')
+                %>
+                    <div class="text"><%=content%></div>
+                <% } %>
+                <span class="ico-jiao"></span>
+            </div>
+        </li>
+    <%  }); %>
+</script>
+<!--
+ 剪贴内容详情
+ @author hibincheng
+ @date 2014-01-21
+-->
+<script id="receive_detail" type="text/html" no-width="yes">
+    <div class="clip-txt">
+        <div class="clip-txt-inner" style="">
+            <div data-id="content" class="textinput" ></div>
+        </div>
+    </div>
+</script>
+<!--
+ 剪贴详情操作工具栏
+ @author hibincheng
+ @date 2014-01-21
+-->
+<script id="toolbar" type="text/html" no-width="yes">
+    <%
+        var common = require('common'),
+            Copy = common.get('./util.Copy');
+    %>
+    <div class="clip-operate-wrap">
+        <div class="clip-top-operate">
+            <a data-action="back" href="#" class="clip-return" tabindex="0" title="返回"><i class="ico ico-return"></i><span>返回</span></a>
+            <div class="clip-top-btns">
+                <%
+                    if(Copy.can_copy()) {
+                %>
+                    <a data-clipboard-target data-action="copy" href="#" class="g-btn g-btn-gray" tabindex="-1" title="复制">
+                        <span class="btn-inner"><i class="ico ico-copy"></i><span class="text">复制</span></span>
+                    </a>
+                <%
+                   }
+                %>
+                <a data-action="delete" href="#" class="g-btn g-btn-gray"  tabindex="0" title="删除">
+                    <span class="btn-inner"><i class="ico ico-del"></i><span class="text">删除</span></span>
+                </a>
+            </div>
+        </div>
+    </div>
+</script>

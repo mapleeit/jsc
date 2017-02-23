@@ -1,0 +1,70 @@
+<!--
+右键菜单
+@author jameszuo
+@date 13-2-20 下午4:57
+-->
+<script id="context_menu" type="text/html" nowith="yes">
+    <%
+    var lib = require('lib'),
+    $ = require('$'),
+
+    constants = require('./constants'),
+    click_tj = require('./configs.click_tj'),
+    arrow = data.arrow,
+    items = data.items || [],
+    length = items.length;
+    %>
+    <div data-no-selection data-comm-ctxtmenu class="content-menu">
+        <ul class="large <%= data.use_small ? 'small' : '' %>"  style="<%=data.width ? 'width:'+data.width+'px;' : ''%>">
+            <%
+            $.each(items, function (i, item) { %>
+            <% if(item.config.type === 'split') { %>
+            <li class="split"><div class="line"><div></div></div></li>
+            <% } else { %>
+            <% if(item.config.split === true ) { %>
+            <li class="split"><div class="line"><div></div></div></li>
+            <% } %>
+            <li data-action="item" data-item-id="<%= item.config.id %>" <%=click_tj.make_tj_str(item.config.tj_id)%>
+            ><a href="javascript:void(0);" hidefocus="on"
+                ><i class="<%= item.config.icon_class %>"></i
+                ><span data-action="text"><%= item.config.text %></span
+                ><% if (item.get_sub_menu()) { %><em class="ico-point-right"><% } %></em
+                ></a
+                ></li>
+            <% } %>
+            <% }); %>
+        </ul>
+        <% if (arrow) {%>
+        <s class="ui-arr"></s>
+        <s class="ui-arr ui-tarr"></s>
+        <% } %>
+    </div>
+</script>
+
+<!--
+新版右键菜单
+@author xixinhuang
+@date 16-07-19
+-->
+<script id="context_menu_v2" type="text/html" nowith="yes">
+    <%
+    var lib = require('lib'),
+    $ = require('$'),
+
+    constants = require('./constants'),
+    click_tj = require('./configs.click_tj'),
+    arrow = data.arrow,
+    items = data.items || [],
+    length = items.length;
+    %>
+    <div data-no-selection data-comm-ctxtmenu class="mod-bubble-menu with-border on" id="js-menu-two" style="left: 800px;">
+        <ul>
+            <%
+            $.each(items, function (i, item) { %>
+            <li data-action="item" class="menu-item" data-item-id="<%= item.config.id %>" <%=click_tj.make_tj_str(item.config.tj_id)%>>
+            <span data-action="text" class="txt"><%= item.config.text%></span>
+            </li>
+            <% }); %>
+        </ul>
+    </div>
+</script>

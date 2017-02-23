@@ -1,0 +1,187 @@
+<!--
+目录、文件列表模板
+@author jameszuo
+@date 13-3-4 上午9:35
+-->
+<script id="file_list" type="text/html" nowith="yes">
+
+    <!-- 空目录时的提示 -->
+    <div id="_disk_files_empty" class="g-empty sort-cloud-empty">
+        <div class="empty-box" tabindex="0">
+            <div class="ico"></div>
+            <p class="title">暂无文件</p>
+            <p class="content">请点击左上角的“上传”按钮添加</p>
+        </div>
+    </div>
+
+    <!-- 目录/文件 -->
+    <div class="files-view">
+
+        <!-- 文件列表 -->
+        <div id="_disk_files_file_list" class="files">
+            <!-- 嵌套模板 file_item -->
+        </div>
+    </div>
+</script>
+
+
+
+<!--
+文件列表项
+@author jameszuo
+-->
+<script id="file_item" type="text/html" nowith="yes">
+    <%
+    var lib = require('lib'),
+        common = require('common'),
+
+        $ = require('$'),
+        text = lib.get('./text'),
+        constants = common.get('./constants'),
+        file_type_map = common.get('./file.file_type_map'),
+        FileObject = common.get('./file.file_object'),
+
+        click_tj = common.get('./configs.click_tj'),
+        scr_reader_mode = common.get('./scr_reader_mode'),
+
+        view_switch = require('./view_switch.view_switch'),
+
+        click_enter_mode = constants.IS_APPBOX,
+
+        p_dir = data.p_dir,
+        files = data.files,
+        only_content = data.only_content === true,
+        show_thumb = data.show_thumb !== false,
+        icon_map = data.icon_map,
+        line_size = data.line_size,
+
+        // 默认图片
+        default_image = constants.RESOURCE_BASE + (view_switch.is_list_view() ? '/img/img-32.png' : '/img/img-70.png'),
+
+        // 日期
+        time_str_len = 'yyyy-MM-dd hh:mm'.length,
+
+        files_count = files.length,
+
+        read_mode = scr_reader_mode.is_enable();
+
+
+
+
+    $.each(files, function (i, file) {
+        var is_dir = file.is_dir(),
+            is_tpmini = file.is_upload_by_tpmini() && !file.has_uploaded_by_tpmini(),//还在tpmini加速上传(上传失败)中的文件才需要标识出来
+            tpmini_fail = file.is_upload_by_tpmini_fail(),
+            is_broken = file.is_broken_file() && !is_tpmini,
+            is_image = file.is_image(),
+            is_removable = file.is_removable(),
+            is_movable = file.is_movable() && !is_tpmini,
+            is_downable = file.is_downable() && !is_tpmini,
+            is_renamable = file.is_renamable() && !is_tpmini,
+            is_selectable = file.is_selectable(),
+            /*is_whole_click = true,*/   /*click_enter_mode || p_dir.is_vir_dir() || file.is_vir_dir(),*/
+            is_selected = file.get_ui().is_selected(),
+            create_time = (file.get_modify_time() || file.get_create_time()).substr(0, time_str_len),
+
+            icon_cls = is_broken ? 'icon-filebroken' : (icon_map[file.get_icon()] || file.get_icon() || (is_image ? 'icon-image' : ('icon-' + (file.get_type() || 'file')))),
+            can_ident = !is_dir && file_type_map.can_identify(FileObject.get_ext(file.get_name())),
+            text_name = text.text(file.get_name());
+
+        /* 行开头 */
+        /*if (line_size > 0 && i % line_size === 0) {
+            %>
+            <div class="row clear">
+            <%
+        }*/
+
+        if (!only_content) {
+    %>
+    <div id="_disk_file_item_<%=file.get_id()%>" data-file-id="<%=file.get_id()%>"
+        <%=is_removable ? '':'data-no-remove'%> <%=is_movable ? '':'data-no-move'%> <%=is_downable ? '':'data-no-down'%>
+        <%=is_renamable ? '':'data-no-rename'%> <%=is_selectable ? '':'data-no-sel'%> <%/*=is_whole_click ? 'data-whole-click':''*/%>
+        class="list-wrap <%= [
+            is_broken?' ui-broken':'',
+            is_removable?'':' ui-no-remove',
+            is_movable?'':' ui-no-move',
+            is_downable?'':' ui-no-down',
+            is_renamable?'':' ui-no-rename',
+            is_selectable?'':' ui-no-sel',
+            /*is_whole_click?' ui-whole-click':'',*/
+            is_selected?' ui-selected':''
+        ].join('') %>">
+
+        <div class="list clear <%=is_tpmini ? 'list-tpmini': ''%>">
+        <%
+            }
+        %>
+
+            <% if (!file.is_vir_dir()) { %>
+                <% if (read_mode) { %>
+                    <a data-file-check class="checkbox" tabindex="0" aria-label="<%=is_dir ? '目录：' + text_name + '，点击进入' : '文件：' + text_name%>" href="#">&nbsp;</a>
+                <% } else { %>
+                    <label data-file-check class="checkbox"></label>
+                <% } %>
+            <% } %>
+            <span data-action="enter" class="img"><i data-quick-drag data-ico class="filetype <%= icon_cls %>"></i>
+            <% if(is_tpmini) { %>
+                <i class="tpmini-ico"></i>
+            <% } %>
+            </span>
+            <span data-action="enter" class="name"><p class="text"><em><span data-quick-drag data-name="file_name" title="<%=text_name%>"><%=text.text(can_ident ? file.get_name_no_ext() : file.get_name())%></span></em></p></span>
+            <% if(is_tpmini) { %>
+                <span class="tpmini-state <%=tpmini_fail ? 'tpmini-state-err' : 'tpmini-state-normal'%>"><%=tpmini_fail ? 'TP mini上传失败': 'TP mini加速上传中...'%></span>
+            <% } %>
+            <span data-action="enter" class="tool">
+            <% if (is_removable) { %>
+                <a data-function="remove" title="删除" href="#" hidefocus="on" tabindex="0" <%=click_tj.make_tj_str('ITEM_DELETE')%>><i class="ico-del"></i></a>
+            <% } %>
+            <% if (is_renamable) { %>
+                <a data-function="rename" title="重命名" href="#" hidefocus="on" tabindex="0" <%=click_tj.make_tj_str('ITEM_RENAME')%>><i class="ico-rename"></i></a>
+            <% } %>
+            <% if (is_movable) { %>
+                <a data-function="move" title="移动" href="#" hidefocus="on" tabindex="-1"><i class="ico-move"></i></a>
+            <% } %>
+            <% if (!file.is_tempcreate() && !is_broken && !file.is_vir_dir() && !is_tpmini) { %>
+                <a data-function="share_enter" title="分享" tabindex="0" <%=click_tj.make_tj_str('ITEM_SHARE')%>  href="#" hidefocus="on"><i class="ico-share"></i></a>
+            <% } %>
+            <% if (is_downable) { %>
+                <a data-function="download" title="下载" href="#" hidefocus="on" tabindex="0" <%=click_tj.make_tj_str('ITEM_DOWNLOAD')%>><i class="ico-download"></i></a>
+            <% } %>
+            </span>
+            <% if(!is_tpmini) { %>
+                <% if (read_mode && !file.is_vir_dir()) { %>
+                    <% if (!is_dir) { %>
+                        <div data-action="enter" class="size" tabindex="0">大小：<%= file.get_readability_size(true) %></div>
+                    <% } %>
+                    <div data-action="enter" class="time" tabindex="0">时间：<%= scr_reader_mode.readable_time(create_time) %></div>
+                <% } else { %>
+                    <span data-action="enter" class="size"><%= file.get_readability_size() %>&nbsp;</span>
+                    <span data-action="enter" class="time"><%= create_time %></span>
+
+                <% } %>
+                <% if (!is_dir && !is_broken) { %>
+                    <span class="dimensional" data-action="enter">
+                            <a data-function="qr_code" class="link-dimensional" title="二维码" href="#"><i class="ico-dimensional"></i></a>
+                    </span>
+                <% } %>
+
+            <% } %>
+        <% if (!only_content) { %>
+        </div>
+    </div>
+    <%
+        }
+
+        /* 行结尾 */
+        /*if (line_size > 0 && ((i>=(line_size-1) && (i+1) % line_size===0) || i === files_count-1)) {
+            %>
+            </div>
+            <%
+        }*/
+    });
+    %>
+</script>
+
+
+
+

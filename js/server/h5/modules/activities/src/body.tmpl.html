@@ -1,0 +1,195 @@
+
+<script id="personal" type="text/html" nowith="yes">
+    <%=require('weiyun/util/inline').css(['app-checkin-personal'], true)%>
+    <div id="act_personal" class="app-checkin-personal">
+        <div class="information-list">
+            <div data-id="address" class="item tBor">
+                <div class="text"><span>收货地址</span><i class="icon icon-personal-more"></i></div>
+            </div>
+            <div data-id="records" class="item tBor bBor">
+                <div class="text"><span>兑换记录</span><i class="icon icon-personal-more"></i></div>
+            </div>
+            <div data-id="rule" class="item rule tBor bBor">
+                <div class="text"><span>兑换规则</span><i class="icon icon-personal-more"></i></div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script id="history" type="text/html" nowith="yes">
+    <%=require('weiyun/util/inline').css(['app-checkin-history'], true)%>
+
+    <div class="app-checkin-history">
+        <ul class="shop-list">
+            <%
+            var dateformat = require('weiyun/util/dateformat');
+            var item,
+                time,
+                is_ticket,
+                is_jd_ticket,
+                itemClass,
+                head_url;
+
+            if(data && data.length) {
+                for(var key in data) {
+                    item = data[key];
+                    time = dateformat(new Date((item.time || item.redeem_time) * 1000), 'yyyy-mm-dd');
+                    head_url = item.prizeid ? '//qzonestyle.gtimg.cn/qz-proj/wy-h5/img/checkin-exchange-gift/gift-s-' + item.prizeid + '.jpg' : item.thumbnail;
+                    is_ticket = item.prizename && item.prizename.indexOf('券') > -1;
+                    is_jd_ticket = item.prizename && item.prizename.indexOf('京东') > -1;
+                    if(item.visible && !is_ticket) {
+            %>
+            <li class="item bBor tBor">
+                <div class="pic trblBor"><img src="<%=head_url%>"></div>
+                <div class="main">
+                    <p class="text"><%=item.prizename || item.name%></p>
+                    <p class="date"><%=time%></p>
+                </div>
+            </li>
+            <%
+                    } else {
+                        itemClass = is_jd_ticket? 'jd' : 'dz';
+                        time = is_jd_ticket? item.cdkey : time;
+            %>
+            <li class="item trblBor ticket <%=itemClass%>">
+                <div class="wrap">
+                    <div class="ticket-inner">
+                        <div class="price"><span><%=item.price%></span></div>
+                        <p class="ticket-num"><span class="num"><%=item.score%></span><span>积分</span></p>
+                    </div>
+                    <div class="main" data-action="touch">
+                        <p class="text" style="user-select: none;-webkit-user-select: none;"><%=item.prizename || item.name%></p>
+                        <% if(is_jd_ticket) { %>
+                        <p class="subtext">(长按兑换码复制使用)</p>
+                        <% } %>
+                        <p class="date" ><%=time%></p>
+                    </div>
+                    <% if(is_jd_ticket) { %>
+                    <div class="right" data-action="get_coupon" data-name="jd_get_coupon">
+                        <div class="btn disabled"><span>使用</span></div>
+                    </div>
+                    <% } %>
+                </div>
+            </li>
+            <%
+                    }
+                }
+            } else {
+            %>
+            <p>暂无兑换记录</p>
+            <%
+            }
+            %>
+        </ul>
+    </div>
+</script>
+
+<script id="address" type="text/html" nowith="yes">
+    <%=require('weiyun/util/inline').css(['mobile-select-area','dialog'])%>
+    <%=require('weiyun/util/inline').css(['app-checkin-address','app-checkin-edit'], true)%>
+    <%
+        var _data = data.data;
+        _data.city = _data.city==='0'? '' : _data.city;
+        var cities = {'北京':1,'上海':1,'天津':1,'重庆':1};
+        var province = (_data.province && _data.province !== '0')? (cities[_data.province]? '' : _data.province + '省') : '';
+    %>
+    <div id="show_address" class="app-checkin-address">
+        <div data-id="address_info" data-id="name" class="address-wrap tBor bBor" style="<%=(_data.name && _data.name !== '0')? '' : 'display: none'%>">
+            <div class="content bBor">
+                <div class="name-phone"><span data-id="name" class="name"><%=_data.name%></span><span data-id="phone" class="phone"><%=_data.phone%></span></div>
+                <div class="address"><span data-id="addr"><%=province + _data.city + _data.addr%></span></div>
+            </div>
+            <div class="bottom">
+                <div class="default"><i class="icon"></i><span>默认地址</span></div>
+                <div data-action="edit" class="edit"><i class="icon icon-edit"></i><span>编辑</span></div>
+                <div data-action="delete" class="trash"><i class="icon icon-trash"></i><span>删除</span></div>
+            </div>
+        </div>
+        <div data-id="no_address" class="no-address" style="<%=(_data.name && _data.name !== '0')? 'display: none' : ''%>">
+            <div class="no-address-bg"><p class="text">请添加新地址</p></div>
+            <div data-action="create" class="add-address-wrap tBor"><div class="btn"><span>添加新地址</span></div></div>
+        </div>
+    </div>
+
+    <div id="edit_address" class="app-checkin-edit" style="display: none">
+        <ul class="edit-wrap">
+            <li class="item bBor tBor">
+                <span class="term">收货人</span>
+                <p class="content" data-id="name" contenteditable="true"><span class="info"></span></p>
+            </li>
+            <li class="item bBor">
+                <span class="term">联系方式</span>
+                <p class="content" data-id="phone"  contenteditable="true"><span class="info"></span></p>
+            </li>
+            <li class="item bBor">
+                <span class="term">所在地区</span>
+                <input type="text" data-id="city" class="info-input content" id="txt_area" value=""/>
+                <input type="hidden" id="hd_area" value="1,1"/>
+                <!--<p class="content" data-id="city" contenteditable="true"><span class="info"></span></p>-->
+            </li>
+            <li class="item bBor">
+                <span class="term">详细地址</span>
+                <p class="content" data-id="addr" contenteditable="true"><span class="info"></span></p>
+            </li>
+        </ul>
+        <div data-action="save_address" class="confirm-wrap tBor"><div class="btn"><span>确认</span></div></div>
+    </div>
+</script>
+
+<script id="order" type="text/html" nowith="yes">
+    <%=require('weiyun/util/inline').css(['app-checkin-order','app-checkin-order-result'], true)%>
+    <div class="app-checkin-order">
+        <ul class="shop-list tBor">
+            <li class="item bBor">
+                <div class="pic trblBor"><img src="../img/gift-1.jpg"></div>
+                <div class="main">
+                    <p class="text">QQ猴年公仔</p>
+                    <p class="integral-num"><span class="num">800</span><span>积分</span></p>
+                </div>
+                <div class="right"><p class="text">X1</p></div>
+            </li>
+        </ul>
+        <div class="address-wrap tBor bBor">
+            <div class="personal">
+                <div class="name"><span>收件人：何俊志</span></div>
+                <div class="num"><span>18025308405</span></div>
+            </div>
+            <div class="address"><span>配送地址：广东省深圳市南山区腾讯大厦15F</span></div>
+            <div class="way"><span>配送方式：快递（暂不支持修改）</span></div>
+        </div>
+        <div class="information-list">
+            <div class="item tBor bBor">
+                <div class="text"><span>您还没有添加地址</span><i class="icon icon-personal-more"></i></div>
+            </div>
+        </div>
+        <div class="add-address-wrap tBor"><div class="btn"><span>添加新地址</span></div></div>
+    </div>
+
+    <div class="app-checkin-order-result" style="display: none">
+        <!-- 兑换成功添加类名success，失败fail-->
+        <div class="result-wrap success">
+            <div class="result"></div>
+            <p class="tip">兑换成功，我们会尽快发货</p>
+            <p class="remain">积分余额：85</p>
+            <div class="again-btn"><span>重新兑换</span></div>
+        </div>
+        <ul class="shop-list tBor">
+            <li class="item bBor">
+                <div class="pic trblBor"><img src="../img/gift-1.jpg"></div>
+                <div class="main">
+                    <p class="text">QQ猴年公仔</p>
+                    <p class="integral-num"><span class="num">800</span><span>积分</span></p>
+                </div>
+                <div class="right"><p class="text">X1</p></div>
+            </li>
+        </ul>
+        <div class="address-wrap tBor bBor">
+            <div class="personal">
+                <div class="name"><span>收件人：何俊志</span></div>
+                <div class="num"><span>18025308405</span></div>
+            </div>
+            <div class="address"><span>配送地址：广东省深圳市南山区腾讯大厦15F</span></div>
+            <div class="way"><span>配送方式：快递（暂不支持修改）</span></div>
+        </div>
+    </div>
+</script>

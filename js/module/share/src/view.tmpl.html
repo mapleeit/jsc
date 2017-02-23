@@ -1,0 +1,182 @@
+<!--
+ 外链管理文件列表
+ @author: hibincheng
+ @date: 2013-09-04
+-->
+<script id="share_list" type="text/html" nowith="yes">
+    <div id="_share_body"  class="disk-view ui-view ui-listview disk-share" data-label-for-aria="分享的链接内容区域">
+        <div id="_share_view_list">
+            <!-- 文件列表 -->
+            <div class="files"></div>
+        </div>
+        <%= this.view_empty() %>
+    </div>
+
+</script>
+<!--
+ 单个文件项
+ @author: hibincheng
+ @date: 2013-09-04
+-->
+<script id="file_item" type="text/html" nowith="yes">
+    <%
+        var lib = require('lib'),
+            common = require('common'),
+            text = lib.get('./text'),
+            Copy = common.get('./util.Copy'),
+            click_tj = common.get('./configs.click_tj'),
+            scr_reader_mode = common.get('./scr_reader_mode'),
+            date_time = lib.get('./date_time'),
+
+            read_mode = scr_reader_mode.is_enable(),
+
+            records = data;
+
+        var fixNum = function(num){
+            var n = num - 0;
+            if((n+'').length == 1){
+            return '0'+n;
+            }
+            return n;
+        };
+        var getTimeFormat = function(time){
+            var time  = new Date(time * 1000); //cgi返回的是秒的单位
+            var today = date_time.today().getTime();
+            var yesterday = date_time.yesterday().getTime();
+            if(time >= today){
+                return '今天 '+fixNum(time.getHours()) + ':' + fixNum(time.getMinutes());
+            } else if(time >= yesterday){
+                return '昨天 '+fixNum(time.getHours()) + ':' + fixNum(time.getMinutes());
+            } else {
+                return time.getFullYear() + '-' + ( time.getMonth() + 1) + '-' + time.getDate() + ' ' + fixNum(time.getHours()) + ':' + fixNum(time.getMinutes());
+            }
+        };
+        var getRemainTimeFormat = (function() {
+            var one_hour = 60*60;
+            var one_day = 24*one_hour;
+            return function(time) {
+                var remain_hour = Math.ceil(time/one_hour);
+                var remain_day = Math.ceil(time/one_day);
+                if(remain_hour > 0 && remain_hour < 24) {
+                    return '<span style="color:#ec202c">剩余'+remain_hour+'小时</span>';
+                } else if(remain_day > 1) {
+                    return '剩余'+remain_day+'天';
+                } else {
+                    return '已失效';
+                }
+            }
+        })();
+        // 点击显示更多：list-more
+        $.each(records, function(i, file) {
+            var result=file.get('result');
+            var is_normal=(result==0);
+            var is_illegalReport = result == 114503; //非法举报
+            var is_expire  = result==20002;      //20002: "链接已过期，请联系分享者重新分享。",
+            var is_used = result==20003;        //20003: "外链使用次数已用完，请联系分享者重新分享。"
+            var is_dirty = result != 0 && result != 114200 && result != 114503 && result != 20002 && result != 20003;// result　０：正常，114200：源文件已被删除，其他则表示服务端错误 114503非法文件分享，用户举报．
+            var share_name = file.get('share_name');
+            share_name = share_name && share_name!=''? share_name : '该文件已被删除，分享链接已失效';
+            var text_name = text.text(share_name);
+            var is_note = (file.get('share_flag') == 2);
+    %>
+        <div id="share-item-<%=file.id%>" data-record-id="<%=file.id%>" data-file-id data-list="file" class="list clear <%= !is_normal ? 'list-link-disabled':'' %>  <%= file.get('selected') ? 'ui-selected':'' %> <%= file.get('expanded') ? 'list-more':'' %>">
+            <label class="checkbox" tabindex="0" aria-label="<%=text_name%>"></label>
+            <span class="img"><i class="filetype icon-link"></i></span>
+            <span class="name"><p class="text"><em><span  title="<%=text_name%>"><%=text_name%></span></em></p></span>
+                <span class="tool"><span class="inner">
+                    <a data-action="cancel_share" class="link-kill-share" title="取消分享" href="#"><i class="ico-kill-share"></i></a>
+                   <%
+                     if(is_normal){
+                   %>
+                        <% if(!is_note) { %>
+                            <% if(!file.get('share_pwd')) {%>
+                                <a data-action="create_pwd" class="link-lock" title="创建访问密码" href="#" tabindex="-1"><i class="ico-kill-lock"></i></a>
+                            <%} else { %>
+                                <a data-action="manage_pwd" class="link-lock" title="密码管理" href="#" tabindex="-1"><i class="ico-lock"></i></a>
+                            <% } %>
+                        <% } %>
+                        <% if(Copy.can_copy()) { %>
+                            <a data-clipboard-target data-action="copy_share" class="link-copy" title="复制分享链接" href="#" tabindex="-1"><i class="ico-copy"></i></a>
+                        <% } %>
+                        <a data-action="view_share" class="link-link" title="访问分享链接" href="#" tabindex="0"><i class="ico-link"></i></a>
+                    <% } %>
+                </span></span>
+            <%
+            if(!is_dirty) {
+            %>
+            <span class="status" tabindex="0"><span class="inner"><%=read_mode ? '状态：' : ''%><%=(is_normal ? file.get('share_pwd') ?'私密' : '公开':'已失效')%></span></span>
+            <%
+            } else {//脏数据，一些服务端返回的有错误了
+            %>
+            <span class="status" tabindex="0"><span class="inner"><%=read_mode ? '状态：' : ''%><%=file.get('share_pwd') ?'私密' : '公开' %></span></span>
+            <%
+            }
+            %>
+            <span class="time" tabindex="0"><span class="inner"><%=read_mode ? '分享时间：' : ''%><%=getTimeFormat(file.get('create_time'))%></span></span>
+            <span class="remain" tabindex="0"><span class="inner"><%=read_mode ? '剩余时间：' : ''%><%=getRemainTimeFormat(file.get('remain_time'))%></span></span>
+            <span class="view" tabindex="0"><span class="inner"><%=read_mode ? '被浏览次数：' : ''%><%=file.get('view_cnt')>=0?file.get('view_cnt'):'-'%></span></span>
+            <span class="download" tabindex="0"><span class="inner"><%=read_mode ? '被下载次数：' : ''%><%=file.get('down_cnt')>=0?file.get('down_cnt'):'-'%></span></span>
+            <div class="more">
+                <%
+                if(is_normal){
+                %>
+
+                <label>链接：</label><a data-action="view_share" <%=click_tj.make_tj_str('SHARE_ITEM_CLICK')%>  href="#" target="_blank" tabindex="-1"><%=file.get('raw_url')%></a>
+                <% if(file.get('share_pwd')) { %>
+                <label>访问密码：</label><em data-id="share_pwd"><%=file.get('share_pwd')%></em>
+                <% } %>
+                <% if(Copy.can_copy()) { %>
+                    <a data-clipboard-target data-action="copy_share" class="g-btn g-btn-gray" href="#" title="复制" tabindex="-1"><span class="btn-inner"><i class="ico ico-copy"></i><span class="text">复制</span></span></a>
+                <% } %>
+
+                <%
+                } else if(is_dirty) {
+                %>
+                <label tabindex="0">链接信息获取失败</label>
+                <% }else if(is_illegalReport){ %>
+                <label tabindex="0">该外链因侵犯他人利益，已失效</label>
+                <%
+                }else if(is_expire){
+                %>
+                <label tabindex="0">链接已过期</label>
+                <%
+                }else if(is_used){
+                %>
+                <label tabindex="0">外链使用次数已用完</label>
+                <%
+                }else { %>
+                <label tabindex="0">文件已被删除</label>
+                <% } %>
+            </div>
+            <%
+            /* for 读屏软件 - james */
+            if (read_mode) { %>
+                <input data-action="fill_url_for_aria" title="按下Ctrl加C复制该链接" tabindex="0" style="width:10px;" value="<%=text.text(file.get('short_url'))%>" readonly="readonly"/>
+            <% } %>
+        </div>
+    <%
+    });
+    %>
+
+</script>
+<!--
+ 无数据时的运营广告
+ @author: hibincheng
+ @date: 2013-09-04
+-->
+<script id="view_empty" type="text/html" nowidth="yes">
+    <div id="_share_view_empty" class="g-empty share-empty" aria-label="分享的链接没有内容" tabindex="0">
+        <div class="empty-box">
+            <div class="ico"></div>
+            <p class="info">快把你的文件分享给好友吧！</p>
+        </div>
+    </div>
+</script>
+<!--
+加载更多提示loading
+@author: hibincheng
+@date: 2013-09-04
+-->
+<script id="load_more" type="text/html" nowith="yes">
+    <a href="javascript:void(0)" class="load-more" style="display:none;"><i class="icon-loading"></i>正在加载</a>
+</script>

@@ -1,0 +1,105 @@
+<!--
+ 内容列表容器
+ @author iscowei
+ @date 2016-07-18
+-->
+<script id="receive" type="text/html" no-width="yes">
+	<li class="tab-cont-item has-inner-cont" style="display: list-item;">
+		<div data-id="receive_ct"></div>
+	</li>
+</script>
+<!--
+ 内容列表内容
+ @author iscowei
+ @date 2016-07-18
+-->
+<script id="receive_view" type="text/html" no-width="yes">
+	<div class="clip-txt">
+		<div data-id="list_wrap"></div>
+	</div>
+</script>
+<!--
+ 无数据时的运营广告
+ @author iscowei
+ @date 2016-07-18
+-->
+<script id="view_empty" type="text/html" nowidth="yes">
+    <div class="g-empty clip-empty" style="display:none;">
+        <div class="empty-box">
+            <!-- 剪贴板无内容 -->
+            <div class="status-inner">
+                <i class="icon icon-nocont"></i>
+                <h2 class="title">剪贴板无内容</h2>
+                <p class="txt">安装微云手机版，使用“剪贴板”功能可以将文字发送到这里</p>
+            </div>
+        </div>
+    </div>
+</script>
+<!--
+ 内容列表
+ @author iscowei
+ @date 2016-07-18
+-->
+<script id="receive_list" type="text/html" no-width="yes">
+	<ul class="inner-cont-list j-clipboard-receive-list"></ul>
+</script>
+<!--
+ 内容列表项
+ @author iscowei
+ @date 2016-07-18
+-->
+<script id="receive_list_item" type="text/html" no-width="yes">
+    <%
+        var $ = require('$'),
+            lib = require('lib'),
+            common = require('common'),
+            scr_reader_mode = common.get('./scr_reader_mode'),
+            read_mode = scr_reader_mode.is_enable(),  //读屏模式
+            text = lib.get('./text'),
+            records = data;
+
+        $.each(records|| [], function(i, rd) {
+            var content = text.text(rd.get('content'));
+    %>
+        <li class="inner-cont-item" data-action="show_detail" data-file-id>
+            <% if(read_mode) { %>
+                <a class="text" href="javascript: void(0);" tabindex="0" title="点击进入详情"><%=content%></a>
+            <% } else {
+                content = content.replace(/^([\r\n]+)+/, '').replace(/[\r\n]+/g, '<br />')
+            %>
+                <div class="text"><%=content%></div>
+            <% } %>
+            <span class="ico-jiao"></span>
+        </li>
+    <%  }); %>
+</script>
+<!--
+ 剪贴内容详情
+ @author iscowei
+ @date 2016-07-18
+-->
+<script id="receive_detail" type="text/html" no-width="yes">
+    <div class="inner-cont-exp">
+	    <div class="exp-bd" data-id="content"></div>
+    </div>
+</script>
+<!--
+ 剪贴详情操作工具栏
+ @author iscowei
+ @date 2016-07-18
+-->
+<script id="toolbar" type="text/html" no-width="yes">
+    <%
+        var common = require('common'),
+            Copy = common.get('./util.Copy');
+    %>
+    <div class="exp-hd mod-act-list j-clipboard-operate">
+	    <a href="javascript: void(0);" class="act-list" tabindex="0" title="返回" data-action="back"><i class="icon icon-goback"></i>返回</a>
+	    <div class="btn-group">
+		    <% if(Copy.can_copy()) { %>
+		    <a href="javascript: void(0);" class="btn btn-w" data-clipboard-target data-action="copy" tabindex="-1" title="复制">复制</a>
+		    <% } %>
+		    <a href="javascript: void(0);" class="btn btn-w" data-action="delete" tabindex="0" title="删除">删除</a>
+	    </div>
+    </div>
+</script>

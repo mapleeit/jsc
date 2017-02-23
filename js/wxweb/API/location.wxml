@@ -1,0 +1,11 @@
+<wx-view>
+  <wx-button bindtap="getLocation" type="primary">getLocation</wx-button>
+
+  <wx-form bindsubmit="openLocation">
+    <wx-input placeholder="latitude" name="latitude" value="23.099994"></wx-input>
+    <wx-input placeholder="longitude" name="longitude" value="113.324520"></wx-input>
+    <wx-input placeholder="name" name="name" value="T.I.T 创意园"></wx-input>
+    <wx-input placeholder="address" name="address" value="广州市海珠区新港中路 397 号"></wx-input>
+    <wx-button type="primary" formType="submit">openLocation</wx-button>
+  </wx-form>
+</wx-view>

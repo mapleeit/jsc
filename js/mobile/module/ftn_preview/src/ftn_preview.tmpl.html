@@ -1,0 +1,15 @@
+<!--
+office预览模板
+@author xixinhuang
+@date 2015-06-30
+-->
+<script id="preview" type="text/html" no-width="yes">
+    <%
+    var lib = require('lib'),
+    text = lib.get('./text');
+    %>
+    <div data-no-selection class="preview_area" style="display: block; box-shadow: 0 0 9px #999;" data-label-for-aria="文件预览内容区域">
+        <span class="back-btn" id="call-back" style="z-index: 1000; left:10px; position: absolute"><span style="font-size:30px">返回</span></span>
+        <div data-id="content"></div>
+    </div>
+</script>

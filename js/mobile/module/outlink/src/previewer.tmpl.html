@@ -1,0 +1,34 @@
+
+
+<script id="previewer" type="text/html" nowith="yes">
+    <div class="wy-img-previewer-wrapper">
+        <nav data-id="page_text" data-id="back" class="wy-share-nav wy-back-nav" style=""><%=data.page_text%></nav>
+        <div class="wy-hor-img-bg">
+            <ul data-id="img_list" class="wy-img-preview-list">
+            </ul>
+        </div>
+        <footer data-id="bbar" class="wy-preview-controller verticle-wy-preview-controller">
+            <%
+                var action_name = window.mqq ? 'mobile_save' : 'view_raw',
+                    action_text = window.mqq ? '保存到手机' : '查看原图';
+
+                var store = require('./store');
+            %>
+            <button data-action="<%=action_name%>" class="btn-item" role="button"><%=action_text%><span data-id="file_size" class="file-size"></span></button>
+            <button data-action="save" class="btn-item" role="button"><% if(store.is_temporary()) { %>保存到中转站<% } else {%>保存到微云<% } %></button>
+        </footer>
+    </div>
+</script>
+<script id="previewer_item" type="text/html" nowith="yes">
+    <%
+        var $ = require('$'),
+            width = $(window).width();
+    %>
+    <%for(var i=0, len=data.total; i<len;i++) { %>
+        <li class="wy-img-item" style="width:<%=width%>px">
+            <i id="previewer_item_<%=i%>" class="icons icons-reminder icon-reminder-loading" style=""></i>
+        <% if(i == len-1) { %>
+        </li>
+        <%}%>
+    <%}%>
+</script>

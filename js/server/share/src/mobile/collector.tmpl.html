@@ -1,0 +1,28 @@
+<script id="collector" type="text/html" nowith="yes">
+    <%
+        var htmlEscape = require('weiyun/util/htmlEscape'),
+            dateformat = require('weiyun/util/dateformat'),
+            text = require('weiyun/util/text'),
+            title = htmlEscape(data.title || ''),
+            time = dateformat(new Date(data.time), 'yyyy-mm-dd HH:MM:ss'),
+            content = data.content;
+
+        title = text.cut(title, 40);
+    %>
+        <div id="noteContainer">
+            <section class="wy-notes-wrapper">
+                <header class="note-title-wrapper">
+                    <h2 class="note-title"><%=title%></h2>
+                    <time class="note-time"><%=time%></time>
+                </header>
+                <article class="note-body">
+                    <div class="note-content"><%=content%></div>
+                </article>
+            </section>
+        </div>
+    <script>
+        document.title = 'QQ收藏';
+    </script>
+    </body>
+    </html>
+</script>

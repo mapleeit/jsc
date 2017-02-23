@@ -1,0 +1,17 @@
+<!--
+相关错误提示
+-->
+<script id="fail" type="text/html" nowith="yes">
+    <%
+        var msg = data.msg,
+            type = data.type;
+    %>
+    <section class="wy-link-out-wrapper">
+        <!-- out of count
+        <i class="icons icon-link-count"></i> -->
+        <!-- 链接错误
+        <i class="icons icon-link-err"></i> -->
+        <i class="icons icon-link-<%=type%>"></i>
+        <h2 class="text"><%=msg%></h2>
+    </section>
+</script>

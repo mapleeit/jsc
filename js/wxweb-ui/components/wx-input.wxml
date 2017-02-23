@@ -1,0 +1,5 @@
+<wx-input type="text" placeholder="text"></wx-input>
+<wx-input type="number" placeholder="number"></wx-input>
+<wx-input type="idcard" placeholder="idcard"></wx-input>
+<wx-input type="digit" placeholder="digit"></wx-input>
+<wx-input type="date" placeholder="date"></wx-input>

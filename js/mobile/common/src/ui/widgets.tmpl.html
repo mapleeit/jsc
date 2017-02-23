@@ -1,0 +1,57 @@
+<script id="alert" type="text/html" nowith="yes">
+    <%
+        var title = data.title,
+            subtitle = data.subtitle || '',
+            btn = data.btn || '确定';
+    %>
+    <div class="ui-modal">
+        <div class="inner">
+            <div class="ui-modal-hd">
+                <h1 class="title"><i class="icon-tick"></i><%=title%></h1>
+            </div>
+            <div class="ui-modal-bd">
+                <p class="tips"><%=subtitle%></p>
+            </div>
+            <div class="ui-modal-ft">
+                <button data-id="ok" class="btn btn-ok"><%=btn%></button>
+            </div>
+        </div>
+    </div>
+</script>
+<script id="reminder" type="text/html" nowith="yes">
+    <%
+        var type = data.type,
+            text = data.text,
+            TYPE_KCLASS_MAP = {
+                'error': 'icon-reminder-cross',
+                'warn': 'icon-reminder-exclamation',
+                'help': 'icon-reminder-ask',
+                'ok': 'icon-reminder-tick',
+                'loading':'icon-reminder-loading'
+            };
+        var klass = TYPE_KCLASS_MAP[type];
+    %>
+    <div class="wy-reminder ui-modal">
+        <div class="inner">
+            <i class="icons icons-reminder <%=klass%>"></i>
+            <p class="text"><%=text%></p>
+        </div>
+    </div>
+</script>
+
+<script id="confirm" type="text/html" no-width="yes">
+    <div class="ui-confirm-modal" style="display:none;">
+        <div class="inner">
+            <div class="ui-modal-bd">
+                <p class="tip"><%=data.tip%></p>
+                <%if (data.sub_tip){%>
+                <p class="sub-tip"><%=data.sub_tip%></p>
+                <%}%>
+            </div>
+            <div class="ui-modal-ft">
+                <div data-id="ok" class="btn btn-ok"><span><%=data.ok_text%></span></div>
+                <div data-id="cancel" class="btn btn-cancel"><span><%=data.cancel_text%></span></div>
+            </div>
+        </div>
+    </div>
+</script>

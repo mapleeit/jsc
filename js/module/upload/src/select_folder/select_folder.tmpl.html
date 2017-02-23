@@ -1,0 +1,341 @@
+<!--
+ * 上传选择文件框
+ * @author bondli
+ * @date 13-7-3
+-->
+<script id="select_folder" type="text/html" nowith="yes">
+    <%
+    var lib = require('lib'),
+        common = require('common'),
+        click_tj = common.get('./configs.click_tj');
+    %>
+    <div class="mod-dirbox">
+        <div class="dirbox-file">
+            <span class="fileimg">
+                <i data-id="icon" class="filetype"></i>
+            </span>
+            <span data-id="name" class="filename"></span>
+        </div>
+
+        <div class="dirbox-dirs">
+
+            <div class="dirbox-dir dirbox-curdir">
+                <label>上传到：</label>
+                <label id="disk_upload_upload_to" title="上传到路径：" tabindex="0"></label>
+                <a data-btn-id="CHDIR" href="#" class="dirbox-chdir" tabindex="0" <%=click_tj.make_tj_str('UPLOAD_SELECT_PATH_MODIFY')%>>修改<s style="display:none">上传路径</s></a>
+            </div>
+
+            <div data-id="tree-container" class="dirbox-tree" style="display:none"></div>
+
+        </div>
+        <%=require('./tmpl').photo_group()%>
+    </div>
+</script>
+
+<script id="file_box_node_list" type="text/html" nowith="yes">
+    <%
+    var lib = require('lib'),
+        text = lib.get('./text'),
+        tmpl = require('./tmpl'),
+
+        files = data.files,
+        par_id = data.par_id,
+        level = data.level;
+    %>
+    <ul class="dirbox-sub-tree" role="tree">
+        <% $.each(files, function (i, file) {
+            %><%= tmpl.file_box_node({
+                file: file,
+                par_id: par_id,
+                level: level + 1
+            }) %><%
+        }); %>
+    </ul>
+</script>
+
+<!--
+ * 微云目录节点
+ * @author bondli
+ * @date 13-7-4
+-->
+<script id="file_box_node" type="text/html" nowith="yes">
+    <%
+    var lib = require('lib'),
+        text = lib.get('./text'),
+        tmpl = require('./tmpl'),
+        upload_route = require('./upload_route'),
+
+        common = require('common'),
+
+        file = data.file,
+        par_id = data.par_id,
+        level = data.level;
+    var dir_name = text.text(file.get_name()),
+        no_cursor = data.is_root ? 'cursor:default;' : '';
+    if(!upload_route.is_ku20()){//todo ku20
+        dir_name = dir_name == '微云' ? '网盘' : dir_name;
+        no_cursor = '';
+    }
+    %>
+    <li id="_file_box_node_<%= file.get_id() %>" data-file-id="<%= file.get_id() %>" data-file-pid="<%= par_id || '' %>" data-level="<%= level %>" data-dir-name="<%= dir_name %>" role="treeitem">
+        <a href="#" hidefocus="on" style="<%=no_cursor%>padding-left:<%= level * 20 %>px;" aria-label="按下回车展开。目录级别<%=level+1%>">
+            <span class="ui-text"><i class="_expander"></i><%= dir_name %></span>
+        </a>
+    </li>
+    <%
+    if(level == 0 && !upload_route.is_ku20()){//todo ku2.0
+    %>
+    <li id="_file_box_node_-1" data-file-id="-1" data-file-pid="-1" data-level="0" data-dir-name="相册">
+        <a href="#" hidefocus="on" style="padding-left:0px;">
+            <span class="ui-text" id="album"><i></i>相册</span>
+        </a>
+    </li>
+    <%
+    }
+    %>
+</script>
+
+
+<!--
+ * 微云目录树
+ * @author bondli
+ * @date 13-7-4
+-->
+<script id="file_box" type="text/html" nowith="yes">
+    <%
+    var lib = require('lib'),
+        $ = require('$'),
+        text = lib.get('./text'),
+        tmpl = require('./tmpl'),
+
+        root_dir = data.root_dir;
+        par_id = data.par_id,
+        is_root = data.is_root;//是否是根节点
+    %>
+
+        <ul class="_tree dirbox-tree-body">
+            <%= tmpl.file_box_node({
+                file: root_dir,
+                par_id: par_id, //root_dir.get_parent().get_id(),
+                level: 0,
+                is_root: is_root
+            }) %>
+        </ul>
+
+</script>
+
+
+<!--
+    自定义对话框,上传中用到
+    @author bondli 13-7-4
+-->
+<script id="dialog" type="text/html" nowith="yes">
+    <%
+    var $ = require('$'),
+        lib = require('lib'),
+        text = lib.get('./text'),
+        common = require('common'),
+        aid = common.get('./configs.aid'),
+        click_tj = common.get('./configs.click_tj'),
+
+        select_folder_msg = require('./select_folder.select_folder_msg'),
+        show_install_flash = false,
+        gsAgent = navigator.userAgent.toLowerCase(),
+        gbIsWin = gsAgent.indexOf("windows") > -1 || gsAgent.indexOf("win32") > -1,
+        inner_tag = data.config.form_dialog ? 'form':'div';
+    %>
+    <div id="_upload_dialog" data-no-selection class="full-pop full-pop-medium __ <%= text.text(data.config.klass) %>">
+            <h3 class="full-pop-header"><div class="inner __title"><%= text.text(data.config.title) %></div></h3>
+            <div class="__content full-pop-content">
+            
+            
+            </div>
+        
+            <div class="full-pop-btn clearfix">
+                <span id="tips-err" class="__msg infor err" style="background:#fff;color:red;display:none;"></span>
+                <div class="box-btns">
+                    <%
+                    $.each(data.buttons || [], function(i, btn) {
+                        var is_ok = btn.id === 'OK',
+                            btn_aria_label = text.text(btn.aria_label),
+                            btn_text = btn_aria_label || text.text(btn.text);
+
+                        if(btn.tips == 'jisu' && btn.klass == 'ui-btn-other'){
+                            //表单和flash上传特殊处理下
+                            var upload_type = require('./upload_route').type;
+                            if( upload_type === 'upload_form' && ($.browser.safari || !gbIsWin) ){
+                                //显示安装flash的文字
+                                show_install_flash = true;
+                            }
+                            else if( upload_type === 'upload_flash' && ($.browser.safari || !gbIsWin) ){
+                                //flash上传下什么都不显示
+                            }
+                            else{
+                                //提示安装控件
+                        %>
+                        <a data-btn-id="<%= text.text(btn.id) %>" href="#" class="g-btn <%= text.text(btn.klass) %>" tabindex="-1" <%=click_tj.make_tj_str('UPLOAD_INSTALL_BTN_PLUGIN')%>>
+                             <span class="btn-inner"><%= btn_text %></span>
+                        </a>
+                        <%
+                            }
+                        }
+                        else if(btn.tips == 'jisu' && btn.klass == 'ui-btn-ok' && !read_mode){
+                        %>
+                        <a data-btn-id="<%= text.text(btn.id) %>" class="g-btn <%= text.text(btn.klass) %>" href="#" tabindex="-1" <%=click_tj.make_tj_str('UPLOAD_SUBMIT_BTN_PLUGIN')%>>
+                           <span class="btn-inner"><%= btn_text %></span>
+                        </a>
+                        <%
+                        }
+                        else {
+                        %>
+                        <a data-btn-id="<%= text.text(btn.id) %>" class="g-btn <%= text.text(btn.klass) %>" href="#" tabindex="<%= btn_aria_label ? 0 : -1 %>" <%= is_ok ? 'tabindex="0"' : 'tabindex="-1"' %>" <%=click_tj.make_tj_str('UPLOAD_SUBMIT_BTN_NORMAL')%>>
+                            <span class="btn-inner"><%= btn_text %></span>
+                        </a>
+                        <%
+                        }
+                    });
+                    %>
+                </div>
+                <%
+                if( show_install_flash ) {
+                %>
+                    <p class="box-tips">
+                        建议您安装flash以帮助大幅提高上传的成功率。<br/>
+                        <a href="http://www.adobe.com/go/getflashplayer" target="_blank" tabindex="-1">安装Flash</a>
+                    </p>
+                <%
+                }
+                %>
+                
+            </div>
+        
+        <a data-btn-id="CANCEL" class="full-pop-close" aria-label="关闭上传窗口" tabindex="0" href="#" hidefocus="on" <%=click_tj.make_tj_str('UPLOAD_SELECT_PATH_CLOSE')%>>×</a>
+
+        <%= tmpl.upload_box_pop({ text: select_folder_msg.get('USE_PLUGIN_UPLOAD') }) %>
+        <div class="warning">严禁存储、处理、传输、发布任何涉密、色情、暴力、侵权等违法违规信息</div>
+    </div>
+
+</script>
+
+<!--
+    按钮下方提示
+    @author bondli 13-8-5
+-->
+<script id="upload_box_pop" type="text/html" nowith="yes">
+    <%
+    var $ = require('$'),
+        lib = require('lib'),
+        text = lib.get('./text');
+    %>
+    <div id="_upload_box_pop" class="ui-pop box-pop upload-box-pop" style="top:225px;right:95px;display:none;">
+        <p class="ui-pop-text">
+            <%= data.text %>
+        </p>
+        <span class="ui-pop-darr hide">
+            <i class="ui-darr"></i>
+            <i class="ui-darr ui-darr-mask"></i>
+        </span>
+        <span class="ui-pop-uarr">
+            <i class="ui-uarr"></i>
+            <i class="ui-uarr ui-uarr-mask"></i>
+        </span>
+    </div>
+</script>
+
+<!--
+    自定义对话框,上传中用到,文件超过大小
+    @author bondli 13-8-5
+-->
+<script id="dialog2" type="text/html" nowith="yes">
+    <%
+    var $ = require('$'),
+        lib = require('lib'),
+        text = lib.get('./text'),
+        common = require('common'),
+        aid = common.get('./configs.aid'),
+        click_tj = common.get('./configs.click_tj'),
+
+        select_folder_msg = require('./select_folder.select_folder_msg'),
+        gsAgent = navigator.userAgent.toLowerCase(),
+        gbIsWin = gsAgent.indexOf("windows") > -1 || gsAgent.indexOf("win32") > -1,
+        inner_tag = data.config.form_dialog ? 'form':'div';
+    %>
+    <div data-no-selection class="full-pop full-pop-large __ <%= text.text(data.config.klass) %>">
+        <h3 class="full-pop-header"><div class="inner __title"><%= text.text(data.config.title) %></div></h3>
+
+        <div class="__content full-pop-content">
+
+
+        </div>
+
+        <div class="full-pop-btn">
+            <p class="__msg infor err" style="display:none;"></p>
+            <%
+            $.each(data.buttons || [], function(i, btn) {
+                if(btn.tips == 'jisu' && btn.klass == 'ui-btn-other'){
+                    if( !$.browser.safari && gbIsWin ){
+                %>
+
+                <a data-btn-id="<%= text.text(btn.id) %>" href="javascript:void(0)" class="g-btn upbox-btn-speed" <%=click_tj.make_tj_str('UPLOAD_FILE_OVER_LIMIT_INSTALL')%>>
+                  <span class="btn-inner"><%= text.text(btn.text) %></span>
+                </a>
+                <%
+                    }
+                }
+                else {
+                %>
+                <a data-btn-id="<%= text.text(btn.id) %>" class="g-btn <%= text.text(btn.klass) %>" type="button">
+                    <span class="btn-inner"><%= text.text(btn.text) %></span>
+                </a>
+                <%
+                }
+            });
+            %>
+        </div>
+        
+        <a data-btn-id="CANCEL" class="full-pop-close" href="javascript:void(0)" hidefocus="on" <%=click_tj.make_tj_str('UPLOAD_FILE_OVER_LIMIT_CLOSE')%>>×</a>
+
+        <%= tmpl.upload_box_pop({ text: select_folder_msg.get('USE_PLUGIN_UPLOAD') }) %>
+
+    </div>
+
+</script>
+
+<!--
+    自定义对话框,上传文件夹中用到,文件超过大小等验证
+    @author bondli 13-8-5
+-->
+<script id="dialog3" type="text/html" nowith="yes">
+    <%
+    var $ = require('$'),
+        lib = require('lib'),
+        text = lib.get('./text'),
+        common = require('common');
+    %>
+    <div data-no-selection class="full-pop full-pop-large __ <%= text.text(data.config.klass) %>">
+        <h3 class="full-pop-header"><div class="inner __title"><%= text.text(data.config.title) %></div></h3>
+
+        <div class="__content full-pop-content">
+
+
+        </div>
+
+        <div class="full-pop-btn">
+            <p class="__msg infor err" style="display:none;"></p>
+            <%
+            $.each(data.buttons || [], function(i, btn) {
+            %>
+                <a data-btn-id="<%= text.text(btn.id) %>" class="g-btn <%= text.text(btn.klass) %>" type="button">
+                    <span class="btn-inner"><%= text.text(btn.text) %></span>
+                </a>
+            <%
+            });
+            %>
+
+        </div>
+        
+        <a data-btn-id="CANCEL" class="full-pop-close" href="javascript:void(0)" hidefocus="on">×</a>
+
+    </div>
+
+</script>

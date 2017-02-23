@@ -1,0 +1,3 @@
+<wx-button type="primary" bindtap="authorize">authorize</wx-button>
+<wx-button type="primary" bindtap="getUserInfo">getUserInfo</wx-button>
+<wx-button type="primary" bindtap="getFriends">getFriends</wx-button>

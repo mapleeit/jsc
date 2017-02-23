@@ -1,0 +1,32 @@
+<script id="webImgList" type="text/html" nowith="yes">
+    <div id="lay-main-con" class="lay-main-con">
+        <div class="inner">
+            <div class="wrap">
+                <div id="_file_list" data-count="<%=data['file_list'].length%>" class="dirs photo-view share-file-list">
+                    <%
+                    var imgList = data['file_list'] || [];
+                    imgList.forEach(function(file){
+                    var thumb_url = file['thumb_url'] + '&size=640*640';
+                    var id = file['file_id'];
+                    %>
+                    <div data-list="true" id="<%=id%>" data-file-id="<%=id%>" class="share-file photo-view-list">
+                        <a href="javascript:void(0)" class="photo-view-list-link">
+                            <img src="<%=thumb_url%>" onload="var width = this.width,height = this.height;if(width >= 266 && height >= 266) {if(height > width) {this.style.width = '266px';this.style.height = height * 266 / width + 'px';height = height * 266 / width;width = 266;} else {this.style.height = '266px';this.style.width = width * 266 / height + 'px';width = width * 266 / height;height = 266;}}this.style.margin = (266 - height) / 2 + 'px ' + (266 - width) / 2 + 'px';"/>
+                            <span class="photo-view-list-checkbox checkbox"></span>
+                            <span class="photo-view-list-mask"></span>
+                        </a>
+                    </div>
+                    <%
+                    })
+                    %>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script id="webOneImg" type="text/html" nowith="yes">
+    <div id="_outlink_body" class="share-file-list files-view files-view-img">
+        <img class="ui-selected" data-file-id="<%=data && data.file_id%>" id="prew_img" src="<%=data.url%>" />
+    </div>
+</script>

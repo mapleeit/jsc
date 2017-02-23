@@ -1,0 +1,212 @@
+<script id="main_old" type="text/html" nowith="yes">
+    <div id="_main_ui_root" class="layout module-disk">
+        <div id="_main_fixed_header" class="lay-header clear">
+            <a class="logo" href="http://www.weiyun.com/?WYTAG=appbox.disk.logo" target="_blank" tabindex="-1"></a>
+            <div id="_head_ad_left" class="app clear diff-appdown" style="">
+            </div>
+            <div id="_head_ad_right" class="ad diff-adright"  style="">
+            </div>
+            <div id="_main_face" data-no-selection class="user">
+                <div class="normal">
+                    <div class="inner">
+                        <i data-id="qzone_vip" class="ico ico-vip" style="display:none;"></i>
+                        <img src="//img.weiyun.com/ptlogin/v4/style/0/images/1.gif"/>
+                        <i class="ico"></i>
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="_main_face_menu"  data-no-selection class="ui-pop ui-pop-user" style="display:none;">
+                <div class="ui-pop-head">
+                    <span id="_main_nick_name" class="user-nick">...</span>
+                    <div id="_main_space_info">
+                        <div class="ui-text quota-info">
+                            <label>已使用：</label>
+                            <span id="_main_space_info_used_space_text">0G</span>
+                        </div>
+                        <div class="ui-text quota-info">
+                            <label>总容量：</label>
+                            <span id="_main_space_info_total_space_text">0G</span>
+                        </div>
+                        <div class="ui-quota">
+                            <div id="_main_space_info_bar" class="ui-quota-bar" style="width: 0%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <ul class="ui-menu">
+                    <li><a id="_main_renew_qzonevip" href="javascript:void(0)" tabindex="-1">开通会员</a></li>
+                    <!--@capacity_purchase-->
+                    <li><a href="//www.weiyun.com/vip/capacity_purchase.html?from=web" tabindex="-1" target="_blank">购买容量</a></li>
+                    <% if(!data.is_weixin_user) { %>
+                    <li><a id="_main_pwd_locker" href="javascript:void(0)" tabindex="-1"><i class="icon-pwd"></i>独立密码<span class="menu-text">（未开启）</span></a></li>
+                    <% } %>
+                    <li><a id="_main_https_config" href="javascript:void(0)" tabindex="-1" style="display: none;"><i></i>https模式<span class="menu-text">（未开启）</span></a></li>
+                    <!--<li><a id="_main_client_down" href="http://www.weiyun.com/download.html?WYTAG=weiyun.app.web.disk" target="_blank" tabindex="-1"><i class="icon-dwn"></i>下载客户端</a></li>-->
+                    <li><a id="_main_feedback" href="#" target="_blank" tabindex="-1">反馈</a></li>
+                    <% if(!window.g_weiyun_info.is_appbox && !window.g_weiyun_info.is_qzone) { %>
+                    <li><a id="_main_logout" href="#" tabindex="0"><i class="icon-exit"></i>退出</a></li>
+                    <% } %>
+                </ul>
+                <i class="ui-arr"></i>
+                <i class="ui-arr ui-tarr"></i>
+            </div>
+            <div class="header-search" style="display:none;">
+                <div class="beautiful-input">
+                    <i class="ico"></i>
+                    <label>搜索全部文件</label>
+                    <input type="text" autocomplete="off" maxlength="40" aria-label="输入文件名并按下回车进行搜索" tabindex="0"/>
+                    <a class="close" href="#" aria-label="关闭搜索界面" tabindex="0" hidefocus="on"></a>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="_main_nav" class="lay-aside">
+	        <div data-action="upload" class="upload-btn">
+                <a id="upload-btn" class="g-btn g-btn-blue" href="#" hidefocus="on">
+                    <span class="btn-inner"><i>+</i><span class="text">上传</span></span>
+                </a>
+            </div>
+            <div class="aside-box" id="_main_nav_aside_box">
+                <div class="aside-wrap" id="_main_nav_aside_wrap">
+                    <ul class="nav-box">
+                        <li data-mod="disk" data-op="NAV_DISK" class="nav-list">
+                            <a class="link all" href="#" title="目录"><i></i>目录</a>
+                        </li>
+                        <li data-mod="recent" data-op="NAV_RECENT" class="nav-list">
+                            <a class="link recent" href="#" title="最近"><i></i>最近</a>
+                        </li>
+                        <li class="nav-gap"><span class="gap"></span></li>
+                        <li data-mod="doc" data-op="NAV_DOC" class="nav-list">
+                            <a class="link doc" href="#" title="文档"><i></i>文档</a>
+                        </li>
+                        <li data-mod="album" data-op="NAV_ALBUM" class="nav-list">
+                            <a class="link pic" href="#" title="图片"><i></i>图片</a>
+                        </li>
+                        <li data-mod="audio" data-op="NAV_AUDIO" class="nav-list">
+                            <a class="link voice" href="#" title="音乐"><i></i>音乐</a>
+                        </li>
+                        <li data-mod="video" data-op="NAV_VIDEO" class="nav-list">
+                            <a class="link video" href="#" title="视频"><i></i>视频</a>
+                        </li>
+                        <% if(!data.is_weixin_user) { %>
+                        <li data-mod="note" data-op="NAV_NOTE" class="nav-list">
+                            <a class="link note" href="#" title="笔记"><i></i>笔记</a>
+                        </li>
+                        <% } %>
+                        <li class="nav-gap"><span class="gap"></span></li>
+                        <li data-mod="clipboard" data-op="NAV_CLIPBOARD" class="nav-list">
+                            <a class="link clip" href="#" title="剪贴板"><i></i>剪贴板</a>
+                            <span data-id="clip-num" class="clip-num" style="display:none;"></span>
+                        </li>
+                        <li class="nav-gap"><span class="gap"></span></li>
+                        <li data-mod="share" data-op="NAV_SHARE" class="nav-list">
+                            <a class="link share" href="#" title="分享的链接"><i></i>分享的链接</a>
+                        </li>
+                        <li data-mod="recycle" data-op="NAV_RECYCLE" class="nav-list">
+                            <a class="link recycle" href="#" title="回收站"><i></i>回收站</a>
+                        </li>
+                    </ul>
+                    <div class="nav-split-bottom" id="_main_nav_split"></div>
+                </div>
+            </div>
+
+            <% if(!window.g_weiyun_info.is_appbox) { %>
+            <div class="aside-ft">
+                <ul>
+                    <li class="item copyright">版权声明
+                        <!-- 气泡浮层 (如果需要更宽，请在bubble-box上赋宽度值) -->
+                        <div class="bubble-box trans-file-info-bubble">
+                            <div class="bubble-i">
+                                <p>您应尊重相关作品著作权人合法权益，未经著作权人 合法授权，不能违法上传、存储、分享他人作品。</p>
+                            </div>
+                            <b class="bubble-trig ui-trigbox ui-trigbox-bl">
+                                <b class="ui-trig"></b>
+                                <b class="ui-trig ui-trig-inner"></b>
+                            </b>
+                            <!-- <span class="bubble-close">×</span> -->
+                        </div>
+                        <!-- <div class="pop-box">
+                            <div class="cont">
+                                <p>您应尊重相关作品著作权人合法权益，未经著作权人 合法授权，不能违法上传、存储、分享他人作品。</p>
+                            </div>
+                            <b class="pop-bub bub-b">
+                                <b class="inner"></b>
+                            </b>
+                        </div> -->
+                    </li>
+                    <li class="item spliter"></li>
+                    <li class="item last"><a href="http://www.weiyun.com/complaint.html" target="_blank"> 投诉指引</a></li>
+                </ul>
+            </div>
+            <% } %>
+            <b class="aside-beautiful"></b>
+        </div>
+
+
+        <div id="_main_top" class="lay-share-top" style="display:none">
+
+        </div>
+        <div id="_main_bar1" class="lay-main-toolbar">
+            <div id="_disk_default_toolbar" class="toolbar-btn clear disk-toolbar">
+                <div class="btn-message">
+                    <a data-btn-id="pack_down" data-no-selection class="g-btn g-btn-gray" href="#" style="" tabindex="-1"><span class="btn-inner "><i class="ico ico-down"></i><span class="text">下载</span></span></a>
+                    <a data-btn-id="share" data-no-selection class="g-btn g-btn-gray" href="#" style="" tabindex="-1"><span class="btn-inner "><i class="ico ico-share"></i><span class="text">分享</span></span></a>
+                    <a data-btn-id="move" data-no-selection class="g-btn g-btn-gray" href="#" style="" tabindex="-1"><span class="btn-inner "><i class="ico ico-move"></i><span class="text">移动到</span></span></a>
+                    <a data-btn-id="rename" data-no-selection class="g-btn g-btn-gray" href="#" style="" tabindex="-1"><span class="btn-inner "><i class="ico ico-rename"></i><span class="text">重命名</span></span></a>
+                    <a data-btn-id="del" data-no-selection class="g-btn g-btn-gray" href="#" style="" tabindex="-1"><span class="btn-inner "><i class="ico ico-del"></i><span class="text">删除</span></span></a>
+                    <a data-btn-id="mkdir" data-no-selection class="g-btn g-btn-gray" href="#" style="" tabindex="-1"><span class="btn-inner "><i class="ico ico-mkdir"></i><span class="text">新建文件夹</span></span></a>
+                    <a data-btn-id="refresh" data-no-selection class="g-btn g-btn-gray" href="#" style="" tabindex="-1"><span class="btn-inner  minpad "><i class="ico ico-ref"></i><span class="text"></span></span></a>
+                    <a data-btn-id="offline_remove" data-no-selection class="g-btn g-btn-gray" href="#" style="display:none;" tabindex="-1"><span class="btn-inner "><i class="ico ico-del"></i><span class="text">删除</span></span></a>
+                    <a data-btn-id="offline_save_as" data-no-selection class="g-btn g-btn-gray" href="#" style="display:none;" tabindex="-1"><span class="btn-inner "><i class="ico ico-saveas"></i><span class="text">另存为</span></span></a>
+                    <a data-btn-id="offline_refresh" data-no-selection class="g-btn g-btn-gray" href="#" style="display:none;" tabindex="-1"><span class="btn-inner  minpad "><i class="ico ico-ref"></i><span class="text"></span></span></a>
+                </div>
+            </div>
+
+        </div>
+        <div id="_main_bar2" class="lay-main-head" >
+            <div id="_disk_file_path" class="inner">
+                <div class="wrap">
+                    <label id="_disk_all_checker" data-file-check class="checkall"></label>
+                    <div data-inner class="main-path"><a style="z-index:20;" class="path current" href="#" hidefocus="on">微云</a></div>
+                </div>
+            </div>
+
+        </div>
+        <div id="_main_station_header" class="lay-files-head" style="display:none">
+        </div>
+        <div id="_main_share_header" class="lay-share-head" style="display:none">
+
+        </div>
+        <div id="_rec_file_header" class="lay-recycle-head" style="display:none">
+
+        </div>
+
+        <div id="_main_special_header"></div>
+        <div id="_main_content" class="lay-main-con" >
+            <div class="inner">
+                <div id="_main_box" class="wrap">
+                    <div id="_disk_body" class="disk-view ui-view ui-thumbview" style="display:none" data-label-for-aria="文件列表内容区域">
+                        <!-- 空目录时的提示 -->
+                        <div id="_disk_files_empty" class="g-empty sort-cloud-empty">
+                            <div class="empty-box">
+                                <div class="ico"></div>
+                                <p class="title">暂无文件</p>
+                                <p class="content">请点击左上角的“上传”按钮添加</p>
+                            </div>
+                        </div>
+
+                        <!-- 文件 -->
+                        <div class="files-view">
+                            <!-- 文件列表 -->
+                            <div id="_disk_files_file_list" class="files">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>

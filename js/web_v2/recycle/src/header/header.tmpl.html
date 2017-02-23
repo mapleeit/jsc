@@ -1,0 +1,27 @@
+<script id="_main_bar1" type="text/html" nowith="yes">
+    <li class="edit-item" data-action="restore"><i class="icon icon-undo"></i><span class="text">还原</span></li>
+    <li class="edit-item" data-action="shred"><i class="icon icon-clear"></i><span class="text">清除</span></li>
+</script>
+
+<script id="_main_bar2" type="text/html" nowith="yes">
+    <%
+    var common = require('common');
+    var query_user = common.get('./query_user');
+    var constants = common.get('./constants');
+    var user = query_user.get_cached_user();
+    var is_vip = user && user.is_weiyun_vip();
+    var expire = user && user.get_recycle_nonvip_tip();
+    var vip_expire = user && user.get_recycle_vip_tip();
+    var vip_info = query_user.get_cached_user().get_weiyun_vip_info() || {};
+    var vip_level = (is_vip && vip_info && vip_info.weiyun_vip_level_info && vip_info.weiyun_vip_level_info.level) ? vip_info.weiyun_vip_level_info.level : 0;
+    %>
+    <div class="act-panel-inner cleafix">
+        <% if (is_vip) { %>
+        <p class="tit">您是微云LV<%=vip_level%>级用户，专享回收站文件保存<%=vip_expire%>天</p>
+        <% } else { %>
+        <p class="tit">文件保存<%=expire%>天，会员专享最长保存<%=vip_expire%>天 <a href="<%=constants.GET_WEIYUN_VIP_URL + 'from%3D1017'%>" target="_blank" style="color: #2688EA;">开通会员</a></p>
+        <% } %>
+
+        <button data-id="empty_recycle" data-action="empty_recycle" class="btn btn-m">全部清空</button>
+    </div>
+</script>

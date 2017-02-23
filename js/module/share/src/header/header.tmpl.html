@@ -1,0 +1,94 @@
+<!--
+* 外链管理分享信息（web）
+* @author hibincheng
+* @date 2013-09-04
+*
+-->
+<script id="web_share_info" type="text/html" nowith="yes">
+    <div class="inner">
+        <div class="share-top">
+            <div class="head" id='share_head'>
+                <h2 class="title">分享的链接</h2>
+                <p class="con" data-id="share_count_ct" style="display:none;"><span data-id="public_count"></span>个公开分享&nbsp;&nbsp;<span data-id="private_count"></span>个私密分享</p>
+            </div>
+            <!--<div class="infor">微云分享链接，不限下载次数，永久有效！</div>-->
+        </div>
+    </div>
+</script>
+<!--
+* 外链管理分享信息（appbox）
+* @author hibincheng
+* @date 2013-10-15
+*
+-->
+<script id="appbox_share_info" type="text/html" nowith="yes">
+    <div><p data-id="share_count_ct" style="display:none;"><span data-id="public_count"></span>个公开分享&nbsp;&nbsp;<span data-id="private_count"></span>个私密分享</p></div>
+</script>
+<!--
+* 外链管理工具栏（web）
+* @author hibincheng
+* @date 2013-09-04
+*
+-->
+<script id="web_toolbar" type="text/html" nowith="yes">
+    <!-- update jin 20130731 -->
+    <!-- .btn项hover状态使用.hover样式 -->
+    <!-- .btn项菜单弹出状态使用.on样式 -->
+    <!-- .btn项不可用状态使用.disable样式 -->
+    <div id="_share_toolbar" class="toolbar-btn clear share-toolbar" style="display:none">
+        <div class="btn-message">
+            <a class="g-btn g-btn-gray" href="#" data-no-selection data-action="bat_cancel_share" tabindex="-1"><span class="btn-inner"><i class="ico ico-kill-share"></i><span class="text">取消分享</span></span></a>
+            <a data-action="refresh" class="g-btn g-btn-gray" href="#"  tabindex="-1"><span class="btn-inner minpad"><i class="ico ico-ref"></i><span class="text"></span></span></a>
+        </div>
+    </div>
+</script>
+<!--
+* 外链管理工具栏（appbox）
+* @author hibincheng
+* @date 2013-10-15
+*
+-->
+<script id="appbox_toolbar" type="text/html" nowith="yes">
+    <!-- update jin 20130731 -->
+    <!-- .btn项hover状态使用.hover样式 -->
+    <!-- .btn项菜单弹出状态使用.on样式 -->
+    <!-- .btn项不可用状态使用.disable样式 -->
+    <div id="_share_toolbar" class="toolbar-btn clear share-toolbar" style="display:none">
+        <div class="btn-message">
+            <a class="g-btn g-btn-gray" href="#" data-no-selection data-action="bat_cancel_share" tabindex="-1"><span class="btn-inner"><i class="ico ico-kill-share"></i><span class="text">取消分享</span></span></a>
+            <a data-action="refresh" class="g-btn g-btn-gray" href="#"  tabindex="-1"><span class="btn-inner"><i class="ico ico-ref"></i><span class="text"></span></span></a>
+        </div>
+        <div class="infor share-infor-ct" data-id="share_count_ct"></div>
+        <div data-id="share_info_empty" class="infor share-infor-empty" tabindex="0">暂无分享</div>
+    </div>
+</script>
+<!--
+* 外链管理列表表头
+* @author hibincheng
+* @date 2013-09-04
+-->
+<script id="columns" type="text/html" nowith="yes">
+        <div class="inner" style="display:none">
+            <div class="share-head">
+                <!-- list-hover 为ie6下hover样式 -->
+                    <span class="list name"><span class="wrap"><span class="inner">
+                        名称
+                        <label class="checkall" data-action="checkall" data-no-selection ></label>
+                    </span></span></span>
+                    <span class="list status"><span class="wrap"><span class="inner">状态<i class="gap"></i>
+                    </span></span></span>
+                    <span class="list time"><span class="wrap"><span class="inner">
+                        分享时间<i class="gap"></i>
+                    </span></span></span>
+                    <span class="list remain"><span class="wrap"><span class="inner">
+                        剩余时间<i class="gap"></i>
+                    </span></span></span>
+                    <span class="list view"><span class="wrap"><span class="inner">
+                        浏览次数<i class="gap"></i>
+                    </span></span></span>
+                    <span class="list download"><span class="wrap"><span class="inner">
+                        下载次数<i class="gap"></i>
+                    </span></span></span>
+            </div>
+    </div>
+</script>

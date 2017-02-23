@@ -1,0 +1,718 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>腾讯微云文档预览</title>
+    <style>
+        html{overflow-x:hidden}
+        body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td{margin:0;padding:0}
+        table{border-collapse:collapse;border-spacing:0}
+        fieldset,img{border:0}
+        address,caption,cite,code,dfn,em,strong,th,var,b,i{font-style:normal;font-weight:normal}
+        ol,ul{list-style:none}
+        caption,th{text-align:left}
+        h1,h2,h3,h4,h5,h6{font-size:100%}
+        q:before,q:after{content:''}
+        abbr,acronym{border:0;font-variant:normal}
+        sup{vertical-align:text-top}
+        sub{vertical-align:text-bottom}
+        input,textarea,select{font-family:inherit;font-size:inherit;font-weight:inherit}
+        input,textarea,select{#font-size:100%}
+        legend{color:#000}
+        iframe{overflow:hidden}
+        article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}
+        iframe{border:0}
+        textarea{resize:vertical;overflow-y:auto}
+        body{line-height:1.34;font-size:12px;font-family:Tahoma}
+        a{text-decoration:none}
+        a:hover{text-decoration:underline}
+        a div,a strong,a span,a i{#cursor:hand}
+        .none{display:none}
+        .visuallyhidden{position:absolute!important;clip:rect(1px 1px 1px 1px);clip:rect(1px,1px,1px,1px);padding:0!important;border:0!important;height:1px!important;width:1px!important;overflow:hidden}
+        .clearfix:before,.clearfix:after{content:".";display:block;height:0;visibility:hidden}
+        .clearfix:after{clear:both}
+        .clearfix{zoom:1}
+        /*body{background-color:#000;font-family:"Hiragino Sans GB","\5FAE\8F6F\96C5\9ED1","Tohoma"}*/
+        .header{height:17px;border-bottom:1px solid #b2b2b2;padding:14px 10px;background-color:#f9f9f9;position:relative}
+        .header .title{font-size:17px;color:#000;text-align:center;line-height:17px}
+        .header .btn{position:absolute;display:block;font-size:17px;color:#0079ff;top:14px}
+        .header .back-btn{left:10px}
+        .header .close-btn{right:10px}
+        .header .btn:hover{text-decoration:none}
+        .header .title .ico{width:16px;height:16px;display:inline-block;vertical-align:middle;margin-right:10px}
+        .header .title span{display:inline-block;vertical-align:middle}
+        .container{background-color:#efeff4;height:100%;position:relative}
+        .container .ico{width:100px;height:100px;display:block;margin:0 auto}
+        .container .view-model{background-color:#fff}
+        .loading{position:absolute;top:50%;left:50%;margin-top:-30px;margin-left:-30px;}
+        .viewer-tips {
+            position: absolute;
+            width: 250px;
+            height: 60px;
+            left: 50%;
+            top: 50%;
+            margin: -32px 0 0 -125px;
+            text-align: left;
+            border: 4px solid #e8e8e8;
+            border-radius: 4px;
+            background: #FFF;
+        }
+        .viewer-tips .ui-icon {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            vertical-align: middle;
+            background: #CCC;
+        }
+        .viewer-tips .ui-tips {
+            position: relative;
+            margin: 15px;
+            padding-left: 45px;
+        }
+        .viewer-tips .icon-err {
+            position: absolute;
+            top: 0;
+            left: 5px;
+            background: url(//img.weiyun.com/vipstyle/nr/box/img/sprite-preview.png?t=130118) -144px -131px no-repeat;
+        }
+        .viewer-tips .ui-text{padding-top:6px;}
+
+        iframe {
+            border: none;
+            margin: 0 auto;
+            width: 100%;
+            display: block
+        }
+        pre {white-space: pre-wrap;
+            word-wrap: break-word;
+            padding:5px;
+            background-color:white;
+        }
+        /*body {*/
+            /*background-color: white*/
+        /*}*/
+        .pic{display:block;width:100%;margin-bottom:5px;}
+    </style>
+    <script>
+        var g_start_time = +new Date();
+    </script>
+</head>
+<body>
+<div id="docContainer" style="width:980px;margin:0 auto;"></div>
+<div id="loading" class="loading"><img src="//img.weiyun.com/vipstyle/nr/box/img/loading_white.gif"></div>
+<div id="loadmore" class="previewer-dynamic-loadmore" style="display: none;background-color: #eee;height: 36px;line-height: 36px;text-align: center;margin-top: -36px;position: relative;width: 100%;vertical-align: middle;">
+    <img style="vertical-align: middle;" src="//img.weiyun.com/vipstyle/nr/box/img/loading.gif" /> 加载中...
+</div>
+<script type="text/javascript">
+</script>
+<script>
+/**
+ * 架平ftn预览接入接口页，需要部署到架平的预览服务器上，联系人：@shoutxiao，@fredsu
+ * @author hibincheng
+ * @date 2014-12-12
+ */
+//接口页本身定义的错误
+var LOCALERROR = {
+    NETERR: {
+        code: 1000, //网络错误，超时or请求失败
+        msg: '网络错误，请稍后重试。'
+    },
+    PARSEERR: {
+        code: 1001, //解析SVR返回的内容失败
+        msg: '解析数据失败，请稍后重试。'
+    },
+    RENDERERR: {
+        code: 1002, //渲染失败（加载iframe or img失败）
+        msg: '加载内容失败，请稍后重试。'
+    }
+}
+
+function init(json) {
+    var path = json.fileType == 16 ? '/ftn_txt_abstract/' : '/ftn_doc_abstract/'
+    server.init({
+        pageUrl: location.protocol + '//' + json.domain + ':' + json.port + path,
+        fileType: json.fileType,
+        rkey: json.downloadkey
+    });
+
+    window.onscroll = function() {
+        if(Math.max(document.body.scrollTop,document.documentElement.scrollTop) + document.documentElement.clientHeight > document.body.scrollHeight - 1000) {
+            addMorePage();
+        }
+    }
+    addMorePage();
+};
+
+function addMorePage() {
+    if(server.isRequesting || server.hasLoaded || server.isRetrying || ui.isRendering) {
+        return;
+    }
+    server.getMorePage();    
+};
+
+var server = {
+    init: function(cfg) {
+        this.pageUrl = cfg.pageUrl;
+        this.rkey = cfg.rkey;
+        this.fileType = cfg.fileType;
+        this.stepPage = cfg.stepPage || 3;
+        this.currentPage = 1;
+        this.totalPage = 1;
+        this.hasLoaded = false;
+        this.isFirstLoad = true;
+        this.tryTimes = 0;
+        this.reporter = new Reporter();
+    },
+    update: function(rspData) {
+        this.totalPage = parseInt(rspData['total_page'], 10) || this.totalPage;
+        if(rspData['data']) {//返回的是内容，则为txt，每次只返回一页内容
+            this.currentPage = this.currentPage + 1;
+        }
+        this.currentPage = this.currentPage + (rspData['files'] && rspData['files'].length || 0);
+        if(this.currentPage > this.totalPage) {
+            this.hasLoaded = true;
+        }
+        this.isFirstLoad = false;
+    },
+    getMorePage: function() {
+        this.isRequesting = true;
+        var me = this;
+        var start_time = +new Date();
+        request({
+            url: this.pageUrl,
+            data: {
+                rkey: this.rkey,
+                filetype: this.fileType,
+                sp: this.currentPage,
+                pc: this.stepPage
+            },
+            success: function(rspData) {
+                if(me.isFirstLoad) {
+                    me.reporter.reportMD(179000125, 0, 0);
+//                    reporter.reportFirstCGI(0, (+new Date()) - start_time);
+                }
+                me.isRequesting = false;
+                me.isRetrying = false;
+                me.tryTimes = 0;
+                me.update(rspData);
+                ui.render(rspData);
+
+            },
+            error: function(rspData) {
+                me.isRequesting = false;
+                me.isRetrying = false;
+                if(me.isTryByCode(rspData.code)) {
+                    me.tryTimes++;
+                    me.isRetrying = true;
+                    setTimeout(function() {
+                        me.getMorePage();
+                    }, 3*1000);
+                }
+                me.reporter.reportMD(179000125, rspData.code, 1);
+                me.reporter.reportLP(rspData);
+                if(me.isFirstLoad && !me.isRetrying) {
+//                    reporter.reportFirstCGI(rspData.code, (+new Date()) - start_time);
+                    ui.showFailTip();
+                }
+            }
+        })
+    },
+    isTryByCode: function(code) {
+        return (code == -29126 || code == -28126) && this.tryTimes < 3;
+    },
+    getTotalPage: function() {
+        return this.totalPage;
+    },
+    hasMore: function() {
+        return this.currentPage < this.totalPage;
+    }
+}
+
+var ui = {
+    itemTagName: 'iframe',
+    curRendingItems: [],
+    uid: 1,
+    itemIdPrefix: 'item_',
+    container: $('docContainer'), 
+    isFirstRender: true,
+    render: function(data) {
+        var urls = data['files'];
+        var urlPrefix = data['url_prefix'];
+        if(data['data']) {
+            this.renderType = 'pre';
+            this.renderByPre(data);
+            return;
+        }
+        if(!urls || !urls.length) {
+            return;
+        }
+        this.isRendering = true;
+        this.startRenderTime = +new Date();
+        if(urls[0].indexOf('.htm') < 0) {
+            this.renderType = 'img';
+            this.itemTagName = 'img';
+            this.renderByImg(urlPrefix, urls);
+        } else {
+            this.renderType = 'iframe';
+            this.renderByIframe(urlPrefix, urls);
+        }
+        
+    },
+    renderByIframe: function(urlPrefix, urls) {
+        var me = this;
+        urls.forEach(function(url) {
+            var itemElement = document.createElement(me.itemTagName);
+            itemElement.frameBorder = 'no';
+            itemElement.scrolling = 'no';
+            itemElement.id = me.itemIdPrefix + (++me.uid);
+            me.curRendingItems.push(itemElement.id);
+            itemElement.style.display = 'none';
+            itemElement.src = server.pageUrl + urlPrefix + url;
+            if(itemElement.attachEvent) {
+                itemElement.attachEvent('onload', function() {
+                    var iframeDoc = itemElement.contentWindow.document;
+                    var error = !iframeDoc.getElementsByTagName('meta').length;//简单认为没有meta标签则为加载失败
+                    if (error) {
+                        me.onRenderError();
+                    } else {
+                        itemElement.setAttribute('data-rendered', true);
+                        me.checkRender();
+                    }
+                });
+
+                itemElement.attachEvent('onerror', function() {
+                    me.onRenderError();
+                });
+
+            } else {
+                itemElement.onload = function() {
+                    var iframeDoc = itemElement.contentWindow.document;
+                    var error = !iframeDoc.body.children.length;//简单认为没有meta标签则为加载失败
+                    if (error) {
+                        me.onRenderError();
+                    } else {
+                        itemElement.setAttribute('data-rendered', true);
+                        me.checkRender();
+                    }
+                }
+                itemElement.onerror = function() {
+                    me.onRenderError();
+                }
+            }
+
+            me.container.appendChild(itemElement);
+        });
+    },
+    renderByImg: function(urlPrefix, urls) {
+        var me = this;
+        urls.forEach(function(url) {
+            var itemElement = document.createElement('img');
+            itemElement.style.display ='none';
+            itemElement.id = me.itemIdPrefix + (++me.uid);
+            itemElement.className = 'pic';
+            me.curRendingItems.push(itemElement.id);
+            itemElement.onload = function() {
+                itemElement.setAttribute('data-rendered', true);
+                me.checkRender();
+            }
+            itemElement.onerror = itemElement.onabort =function(){
+                me.onRenderError();
+            }
+            me.container.appendChild(itemElement);
+            itemElement.src = server.pageUrl + urlPrefix + url;
+        });
+    },
+    //txt直接返回文本内容
+    renderByPre: function(data) {
+        var content = data['data'];
+        var pre = document.createElement('pre');
+        this.isRendering = true;
+        pre.innerText = content;
+        this.container.appendChild(pre);
+        this.afterRender();
+    },
+    onRenderError: function() {
+        this.curRendingItems.forEach(function(id) {
+            var itemElement = $(id);
+            itemElement.onload = itemElement.onerror = null;
+            itemElement.parentNode.removeChild(itemElement);
+        });
+        this.isRenderFail = true;
+        this.afterRender();
+//        reporter.reportRender(LOCALERROR.PARSEERR['code'], (+new Date)-this.startRenderTime);
+    },
+    checkRender: function() {
+        var hasRendered = true;
+        this.curRendingItems.forEach(function(id) {
+            var itemElement = $(id); 
+            if(!itemElement.getAttribute('data-rendered')) {
+                hasRendered = false;
+                return;
+            }
+        });
+        if(hasRendered) {
+            this.show();    
+        }
+    },
+    show: function() {
+        var me = this;
+        this.curRendingItems.forEach(function(id) {
+            var itemElement = $(id);
+            if(me.itemTagName === 'iframe') {
+                itemElement.style.display = '';
+                var iframeBody = itemElement.contentWindow.document.body;
+                if(server.fileType == 3 || server.fileType == 4) {
+                    itemElement.style.height = document.documentElement.clientHeight + 'px';
+                } else {
+                    itemElement.style.height = iframeBody.scrollHeight + 'px';
+                }
+            } else {
+                itemElement.style.display = '';
+            }
+        });
+        this.isRenderFail = false;
+//        reporter.reportRender(0, (+new Date)-this.startRenderTime);
+        this.afterRender();
+    },
+    afterRender: function() {
+        this.curRendingItems = [];
+        this.isRendering = false;
+        if(this.isFirstRender) {
+            $('loading').style.display = 'none';
+            if(this.isRenderFail) {
+                this.showFailTip();
+            } else {
+                $('loadmore').style.display = 'block';
+            }
+            addMorePage();
+            //首屏测速上报，后续补充
+//            reporter.reportFirstRender();
+        }
+        if(!server.hasMore()) {
+            $('loadmore').style.display = 'none'
+        }
+        this.isFirstRender = false;
+    },
+    showFailTip: function() {
+        var html = '<div data-name="error" class="viewer-tips" style="/* display: none; */">'
+                        + '<div class="ui-tips">'
+                        + '<i class="ui-icon icon-err"></i>'
+                        + '<p class="ui-text">文件预览时发生错误，请 <a data-action="retry" href="javascript:ui.retry();">重试</a></p>'
+                        + '</div>'
+                    +'</div>';
+        var div = document.createElement('div');
+        div.id = 'failTip';
+        div.innerHTML = html;
+        document.body.appendChild(div);
+    },
+    //首次预览失败才会有显示重试按钮，用户可重试，后面加载更多页时通过滚动重试
+    retry: function() {
+        var failTip = $('failTip');
+        failTip.parentNode.removeChild(failTip);
+        $('loading').style.display = '';
+        server.getMorePage();
+    }
+}
+
+var Reporter = function() {
+    var cache = {},
+        last_time,
+        cache_log = [],
+        timer = {},
+        uin = _getCookie('uin') || _getCookie('p_uin') || '4294967295',
+        cgi_url = location.protocol + '//www.weiyun.com/report/md';
+
+    uin = parseInt(uin.replace(/^[oO0]*/, ''));
+    var view_key = 'weiyun_' + uin;
+    var file_type_list = ['', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'rtf', 'pdf', 'BMP', 'JPG', 'PNG', 'GIF', 'zip', 'rar', '7z', 'txt'];
+
+    //逻辑失败错误码
+    var logi_error_code = {
+        '403': 1,    //触发防盗链
+        '1001': 1,   //数据解析失败
+        '-9006': 1,   //压缩文件有密码
+        '-28126': 1,  //刚上传文件未转码完成
+        '-28133': 1,  //office文件有密码
+        '-29126': 1   //文档正在转码
+    };
+
+    //构造日志内容
+    var _getUserLog = function(errData) {
+        var log = [
+            'preview_url: ' + location.href,
+            'error_code: ' + errData.code,
+            'error_msg: ' + errData.msg,
+            'fileType:' + file_type_list[server.fileType],
+            'totalPage: ' + server.totalPage +'　currentPage:' + server.currentPage,
+            'hasLoaded: ' + server.hasLoaded + ' isFirstLoad:' + server.isFirstLoad + ' tryTimes:' + server.tryTimes
+        ];
+
+        var user_log = [];
+        user_log.push('【用户日志】');
+        user_log.push('记录时间 ' + (new Date()).Format("yyyy-mm-dd HH:MM:ss"));
+        user_log.push('uin ' + uin);
+        user_log.push('\n【error log】：');
+        for(var key in log) {
+            if(log[key] && log[key].length) {
+                user_log.push('[log] [previewer] ' + log[key]);
+            }
+        }
+        return user_log.join('\n') + '\n';
+    }
+    /**
+     * 操作日志上报罗盘
+     */
+    var reportLP = function(errData) {
+        var user_log = _getUserLog(errData);
+        try {
+            var now = new Date().getTime(),
+                take_time = last_time ? (now - last_time) / 1000 : 4,
+                url = location.protocol === 'https:' ? 'https://www.weiyun.com/log/post/' + view_key : 'http://www.weiyun.com/log/post/' + view_key;
+
+            //三秒上报一次, 这里last_time标识上次上报的时间点。
+            if(take_time > 3) {
+                timer && clearTimeout(timer);
+                cache_log.push(user_log);
+                timer = (function(reportUrl) {
+                    setTimeout(function() {
+                        request({
+                            url: reportUrl,
+                            method: 'POST',
+                            data: cache_log.join('\n'),
+                            success: function (rspData) {
+
+                            },
+                            error: function (rspData) {
+
+                            }
+                        });
+                        cache_log = [];
+                    }, 3 * 1000);
+                })(url);
+                last_time = now;
+            } else {
+                cache_log.push(user_log);
+            }
+        } catch(e) {
+        }
+    };
+    /**
+     * 摘自库common/report_md
+     * oz 模调被调上报，注意查询被调而不是主调。
+     * 查询方法：m.isd.com的模调页，选被调查询，微云-微云业务-Web接入业务，填被调id和接口id
+     * @param {String|Number} id 接口id，在模调系统里建的
+     * @param {String|Number} code 调用结果
+     * @param {String|Number} result 0：成功，1:失败，2:逻辑失败
+     */
+    var reportMD = function(id, code, result) {
+        var ext = '';
+        if(id) {
+            if(code != undefined) {
+                ext += "&code=" + code;
+            }
+            if(result != undefined) {
+                result = (result && logi_error_code[code])? 2 : result;
+                ext += "&type=" + result;
+            }
+            //主调和被调ID均写死
+            var url = cgi_url + "?fromId=204971707&toId=277000034&interfaceId=" + id + ext + "&r=" + Math.random();
+            report(url);
+        }
+    };
+
+    var report = function(url) {
+        var img = new Image();
+        img.src = url;
+        img.id = +new Date();
+        img.onload = img.onerror = function() {
+            img.onload = img.onerror = null;
+            delete cache[img.id];
+        }
+        cache[img.id] = img;
+    };
+
+    return {
+        reportMD: reportMD,
+        reportLP: reportLP
+    };
+}
+
+//##########################util##################################
+Array.prototype.forEach = Array.prototype.forEach || function(fn) {
+    for(var i= 0, len=this.length; i < len; i++) {
+        fn(this[i],i, this);
+    }
+}
+String.prototype.trim = function() {
+    return this.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+}
+
+// 对Date的扩展，将 Date 转化为指定格式的String
+// (new Date()).Format("yyyy-mm-dd HH:MM:ss") ==> 2016-09-02 10:06:23
+Date.prototype.Format = function (fmt) {
+    var o = {
+        "y+": this.getFullYear(),  //年份
+        "m+": this.getMonth() + 1,  //月份
+        "d+": this.getDate(),       //日
+        "H+": this.getHours(),      //小时
+        "M+": this.getMinutes(),    //分
+        "s+": this.getSeconds(),    //秒
+        "S": this.getMilliseconds() //毫秒
+    };
+    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    for (var k in o)
+        if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    return fmt;
+}
+
+//获取cookie
+var _getCookie = function(name){
+    var cookieValue = '';
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+};
+function getParams() {
+    var hash = location.search.substring(1), params = {}, parts, i, part, key;
+    if (hash) {
+        parts = hash.split('&');
+        for (i = 0; i < parts.length; i++) {
+            part = parts[i].split('=');
+            key = decodeURIComponent(part[0]);
+            params[key] = decodeURIComponent(part.slice(1).join('='));
+        }
+    }
+    return params;
+}
+function $(id) {
+    return document.getElementById(id);
+}
+var extend = function(ori, dest) {
+    var Fn = function() {};
+    Fn.prototype = ori;
+    var ret = new Fn();
+    for(var o in dest) {
+        ret[o] = dest[o];
+    }
+    return ret;
+};
+
+var toQueryString = function(json) {
+    var arr = [];
+    for(var o in json) {
+        arr.push(encodeURIComponent(o) + '=' + encodeURIComponent(json[o]));
+    }
+    return arr.join('&');
+}
+
+var request = function(){
+    var defaultOpt = {
+        url: 'default.fcg',
+        method: 'GET',
+        success: function() {},
+        error: function() {},
+        data: null,
+        timeout: 30 * 1000
+    };
+    //只实现GET请求
+    return function(opt) {
+        opt = extend(defaultOpt, opt);
+        opt.method = opt.method.toUpperCase();
+        var url = '';
+        if(opt.method === 'POST') {
+            url = opt.url;
+        } else {
+            url = opt.data ? opt.url + toQueryString(opt.data) + '&' : opt.url;
+        }
+        var xhr = new XMLHttpRequest();
+        var aborted = false;
+        var xhrTimer = setTimeout(function() {
+            aborted = true;
+            xhr.abort();
+            xhr = null;
+        }, opt.timeout);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 || aborted) {
+                if (!aborted && ((xhr.status >= 200 && xhr.status < 300 ) || xhr.status == 304)) { //检查aborted属性是否超时
+                    var code = 0,
+                        errMsg = '',
+                        errDesc = '';
+                    if(opt.method === 'GET') {
+                        code = parseInt(xhr.getResponseHeader('User-ReturnCode'), 10);
+                        errMsg = xhr.getResponseHeader('User-ReturnMsg') || '';
+                    }
+                    var isSuccsess = code === 0;
+                    var result;
+                    try {
+                        result = JSON.parse(xhr.responseText);
+                    } catch(e) {
+                        isSuccsess = false;
+                        errDesc = e.message;
+                    }
+                    if(isSuccsess) {
+                        opt.success(result);    
+                    } else {
+                        opt.error({
+                            code: code === 0 ? LOCALERROR.PARSEERR['code'] : code,//parse result error
+                            msg: errMsg,
+                            desc: errDesc
+                        });
+                    }
+                    //超时或主动abort
+                } else {
+                    opt.error({
+                        code: xhr.status || LOCALERROR.NETERR['code'],
+                        msg:  LOCALERROR.NETERR['msg'],
+                        desc: xhr.statusText
+                    });
+                }
+                xhr = null;
+                clearTimeout(xhrTimer);
+            }
+        }
+        xhr.open(opt.method, url, true);
+        xhr.send(opt.data);
+        return {
+            abort: function() {
+                xhr.abort();
+                xhr = null;
+                clearTimeout(xhrTimer);
+            }
+        };
+    }
+}();
+
+//for test http://113.142.8.164:443/ftn_doc_abstract/rkey=ef7a575cf2f827071bbd89dcf7f222976411a99b7b655eb292fcfe97d9b3df40eb318bcc422b30fddc9ab5a68acc70e815b7c466c849197a4804c2448499ffba&filetype=1&sp=1&pc=3&
+//http://183.61.37.14:443/ftn_doc_abstract/rkey=1657a6884943c6761bbf0a9a99258decf8049ff68ac4f830ff2868077c502c9b201d98d44cc46775ebac076bd9a07162d652dd6b94c81c2e98b6ba10f3a98e84&filetype=8&sp=1&pc=3&
+
+
+/*qpreview.onClientResponse('init', {
+    domain: '183.61.37.13',
+    port: 443,
+    fileType: 8,
+    downloadkey: '1657a6884943c6761bbf0a9a99258decf8049ff68ac4f830ff2868077c502c9b201d98d44cc46775ebac076bd9a07162d652dd6b94c81c2e98b6ba10f3a98e84'
+});
+
+qpreview.onClientResponse('addMorePage')
+*/
+
+window.onload = function() {
+    var params = getParams();
+    init({
+        domain: location.hostname,
+        port: location.port,
+        downloadkey: params['rkey'],
+        fileType: params['filetype']
+    });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+<!-- 定义底部文件统计信息 -->
+<view wx:if="{{dirList.length||fileList.length}}" class="cal">
+    <view class="load-status" wx:if="{{!!loadStatus}}">
+		<image wx:if="{{loadStatus===1}}" class="loading" mode="aspectFit" src="../../img/more-loading.gif"></image>
+		<icon wx:if="{{loadStatus===2}}" class="done" type="success_circle" color="rgb(116,120,124)" size="20"></icon>
+    </view>
+    <text class="cal-num">{{fileLength?(fileLength+'个文件'):''}} {{dirLength?(dirLength+'个文件夹'):''}}</text>
+</view>

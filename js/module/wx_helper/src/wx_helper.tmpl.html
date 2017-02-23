@@ -1,0 +1,124 @@
+<!--
+    微云助手相关模板
+    @author jackbinwu 2013/2/22
+-->
+
+<!-- 获取最近收藏文章列表 -->
+<script id="article_list" type="text/html" nowith="yes">
+    [#
+    if(items && items.length) {
+        $.each(items, function(i, item){
+            var ctime = item.ctime,
+                desc = item.desc,
+                link = item.link,
+                msgid = item.msgid,
+                title = item.title;
+    #]
+    <li class="item">
+        <div class="ui-btns">
+            <span class="date-text">[#= ctime #]</span>
+            <!--
+            <a href="" class="ui-btn del">删除</a>
+            -->
+        </div>
+        <a class="summary" href="[#= link #]">
+            <h3 class="ui-title">[#= title #]</h3>
+            <p class="ui-text">[#= desc #]</p>
+        </a>
+    </li>
+    [#
+        });
+    }
+    #]
+</script>
+
+<!-- 获取保存的聊天记录信息 -->
+<script id="chat_list" type="text/html" nowith="yes">
+    [#
+    if(items && items.length) {
+        for (var i = items.length - 1; i >= 0; i--) {
+
+            var cst_len = 60;
+
+            var item = items[i];
+            var ctime = item.ctime,
+                type = item.type,
+                msgid = item.msgid,
+                content = item.content;
+
+            var _tmp_cnt = content;
+            var _flag_cnt_len = false;
+
+            if(content.length > cst_len){
+                _flag_cnt_len = true;
+                _tmp_cnt = [content.substr(0, cst_len), '...'].join('');
+            }
+
+            content = item.content.replace(
+                /'/g, '&#039;').replace(
+                /"/g, '&quot;').replace(
+                /</g, '&lt;').replace(
+                />/g, '&gt;').replace(
+                /&/g, '&amp;');
+    #]
+    <li class="item">
+        <div class="ui-btns">
+            <span class="date-text">[#= ctime #]</span>
+           <!--
+            <a href="" class="ui-btn del">删除</a>
+            -->
+        </div>
+        <div class="weixin">
+            <div class="ui-text _smalltext">
+                [#= _tmp_cnt #]
+            </div>
+            <div class="ui-text _fulltext hide">
+                [#= content #]
+            </div>
+            [# if(_flag_cnt_len){ #]
+                <div class="ui-more">
+                    <a href="javascript:void(0)">点击展开</a>
+                </div>
+            [# } #]
+        </div>
+    </li>
+    [#
+        };
+    };
+    #]
+</script>
+
+<!-- 获取最近文件列表 -->
+<script id="file_list" type="text/html" nowith="yes">
+    [#
+    if(items && items.length) {
+
+       var file = common.get('./file.file_object');
+
+        $.each(items, function(i, item){
+            var ctime = item.ctime,
+                fileid = item.fileid,
+                outlink = item.outlink,
+                pdirkey = item.pdirkey,
+                filename = item.filename,
+                filetype = file.get_type(filename, false);
+
+                filetype = (filetype == 'file' || filetype =='') ? 'unknow' : filetype;
+    #]
+    <li class="item">
+        <a href="[#= outlink #]" style="text-decoration:none;">
+            <span class="img">
+                <i class="filetype icon-[#= filetype #]"></i>
+            </span>
+            <h3 class="ui-title">[#= filename #]</h3>
+            <span class="ui-text">[#= ctime #]</span>
+            <!--
+            <a href="#">删除</a>
+            -->
+        </a>
+    </li>
+    [#
+        });
+    }
+    #]
+</script>

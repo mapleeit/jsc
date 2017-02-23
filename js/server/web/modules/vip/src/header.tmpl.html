@@ -1,0 +1,67 @@
+<script id="header" type="text/html" nowith="yes">
+    <% if (data.need_vip_bar) { %>
+    <!-- 页面头部 s -->
+    <!-- 用户信息 S -->
+    <div class="wy-acct">
+        <%
+        var is_login = !!data.is_login;
+
+        if(is_login) {
+            var nickname = data.nickname,
+                isVip = data.isVip,
+                __vipLevel = data.__vipLevel,
+                isOldVip = data.oldVip,
+                head_url = data.headUrl,
+                expiresDate = data.expiresDate,
+                posText = (isVip || isOldVip)? '续费' : '开通会员';
+        %>
+        <div class="acct">
+            <!-- 头像 -->
+            <div class="avatar-wrapper">
+                <img src="<%=head_url%>" alt="" class="avatar">
+                <%
+                if(isVip || isOldVip) {
+                    var iconClass = isVip ? 'icon-vip-' + __vipLevel + '-on-s' : 'icon-vip-' + __vipLevel + '-off-s';
+                %>
+                <i class="icon icon-vip-s <%=iconClass%>" title="LV<%=__vipLevel%>"></i>
+                <% } %>
+            </div>
+            <!-- 账号信息 -->
+            <div class="info-wrapper">
+                <p class="name"><%=nickname%></p>
+                <%if(isVip){ %>
+                <p class="time"><%=expiresDate%></p>
+                <% } else if(isOldVip) { %>
+                <p class="time">会员已到期</p>
+                <% } else { %>
+                <p class="time">未开通会员</p>
+                <% } %>
+            </div>
+            <!-- 退出 -->
+            <div class="logout-wrapper">
+                <button class="btn-icon icon-logout-s" data-action="logout">退出</button>
+            </div>
+        </div>
+        <button class="btn btn-outline" data-action="pay" data-id="3" onclick="pvClickSend('weiyun.vip.web.paybtn3')"><%=posText%></button>
+        <% } else { %>
+        <button class="btn btn-fill" data-action="login">登录</button>
+        <% } %>
+    </div>
+    <!-- 用户信息 E -->
+    <% } %>
+
+    <div class="wy-hd-inner clearfix">
+        <div class="logo"><a href="//www.weiyun.com" title="微云会员">微云会员</a></div>
+        <ul class="nav j-nav-list">
+            <!-- [ATTENTION!!] 选中态，添加 .act -->
+            <li class="item" data-page="weiyun_vip"><a href="//www.weiyun.com/vip/weiyun_vip.html?from=<%=data.source%>">首页</a></li>
+            <li class="item" data-page="privilege"><a href="//www.weiyun.com/vip/privilege.html?from=<%=data.source%>">特权介绍</a></li>
+            <li class="item" data-page="growth"><a href="//www.weiyun.com/vip/growth.html?from=<%=data.source%>">成长体系</a></li>
+            <li class="item" data-page="capacity_purchase">
+                <a href="//www.weiyun.com/vip/capacity_purchase.html?from=<%=data.source%>">购买容量</a>
+                <span class="tag tag-fornew"></span>
+            </li>
+        </ul>
+    </div>
+    <!-- 页面头部 e -->
+</script>

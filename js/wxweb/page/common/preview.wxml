@@ -1,0 +1,14 @@
+<template name="preview">
+    <view class="media-wrapper">
+    	<view class="audio-wrapper" wx:if="{{audio.src}}">
+			<audio id="media_audio" class="audio" src="{{audio.src}}" poster="{{audio.poster}}" name="{{audio.name}}"></audio>
+			<button type="primary" bindtap="audioPlay">播放</button>
+			<button type="primary" bindtap="audioPause">暂停</button>
+			<button type="primary" bindtap="audio14">设置当前播放时间为14秒</button>
+			<button type="primary" bindtap="audioStart">回到开头</button>
+        </view>
+    	<view class="video-wrapper" wx:if="{{video.src}}">
+        	<video id="media_video" class="video" src="{{video.src}}"></video>
+        </view>
+    </view>
+</template>

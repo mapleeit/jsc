@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>一键恢复文件</title>
+    <meta name="description" content="">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1,minimum-scale=1, maximum-scale=1, user-scalable=no" /><meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="//imgcache.qq.com/vipstyle/nr/box/mobile/css/style.min.css">
+    <link rel="stylesheet" href="//imgcache.qq.com/vipstyle/nr/box/mobile/act/css/weiyun3.0-act.css?max_age=31104000">
+    <style type="text/css">
+        body{font-family: 'droid sans',Helvetica,'Microsoft YaHei';}
+        .main{margin:0 auto;}
+        .main .des-area{width:310px;margin:15px auto;}
+        .main p{margin:0 10px;font-size:16px;line-height:1.9em;color: #666;}
+        .main p i{margin-right:5px;font-style: normal;color: #999;}
+        .btn-weiyun{display:block;width: 137px;height: 47px;margin:0 auto;}
+        footer{margin: 0 10px;border-top: 1px solid #d9d9d9;margin-top: 23px;padding:10px 0;}
+        footer p{margin:0;padding: 0;font-size:12px;color: #cccccc;}
+        footer p a{color: #4bb1e4;text-decoration: none;}
+        footer .copyright{font-size: 12px;}
+    </style>
+</head>
+
+<body style="background-color:#FFF">
+<div id="container">
+    <div class="detail-box">
+        <h3 class="q-title">&nbsp;&nbsp;通过空间备份的照片丢失了怎么办？</h3>
+        <div class="q-content">
+            <div style="LINE-HEIGHT: 21px">
+                <p style="line-height: 21px;">
+                    &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;亲爱的用户，现手机照片管家备份与微云照片备份已合并互通，之前备份的照片将会保存在微云中名为【照片管家】的文件夹，删除该文件夹则会将照片删除。
+                </p>
+                <p style="line-height: 21px;">
+                    &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;如您误删掉这些照片，请【<a class="btn" id="restore" href="javascript:void(0);">点此恢复</a>】，即可找回丢失的照片，感谢您对空间及腾讯微云的支持！
+                </p>
+            </div>
+        </div>
+    </div>
+    <!--<footer>-->
+        <!--<p><a href="http://support.qq.com/discuss/715_1.shtml?WYTAG=weiyun.mobile.wysc.help.fankui">意见反馈</a> | <a href="http://www.weiyun.com">访问PC版官网</a></p>-->
+        <!--<p class="copyright">Copyright © 1998 - 2015 Tencent. All Rights Reserved.</p>-->
+    <!--</footer>-->
+</div>
+</body>
+<script type="text/javascript" src="//imgcache.qq.com/club/qqdisk/web/js/lib/zepto-1.0.0.min.js?max_age=604800"></script>
+<script type="text/javascript" src="//imgcache.qq.com/c/=/club/weiyun/js/publics/seajs/sea.js,/club/weiyun/js/publics/seajs-plugins/seajs-combo.js?max_age=31104000"></script>
+<script type="text/javascript" src="//www.weiyun.com/disk/js/configs_mobile.js"></script>
+<script type='text/javascript' src='//img.weiyun.com/club/weiyun/js/publics/tcss/tcss.ping.js'></script>
+<script type="text/javascript">
+    document.domain = 'weiyun.com';
+
+    seajs.use(['$', 'lib', 'common'], function($, lib, common) {
+        var request = common.get('./request');
+        var widgets = common.get('./ui.widgets');
+        var btn = $('#restore');
+        btn.on('click', function() {
+            request.xhr_get({
+                url: 'http://web2.cgi.weiyun.com/weiyun_other.fcg',
+                cmd: 'AlbumUserDataFix'
+            }).ok(function(msg) {
+                widgets.reminder.error('您的照片已经恢复');
+            }).fail(function(msg, ret) {
+                if(ret == 190011 || ret == 190051) {
+                    window.location.href = "https://ui.ptlogin2.qq.com/cgi-bin/login?appid=527020901&no_verifyimg=1&f_url=loginerroralert&hide_close_icon=1&daid=372&low_login=0&qlogin_auto_login=1&s_url="+encodeURIComponent(location.href)+"&style=9&hln_css=https%3A%2F%2Fimgcache.qq.com%2Fvipstyle%2Fnr%2Fbox%2Fweb%2Fimages%2Fwy-logo-qq@2x.png";
+                } else {
+                    widgets.reminder.error('未找到符合条件的照片，无需恢复');
+                }
+            });
+        });
+    });
+
+    (function() {
+        if (typeof pgvMain == 'function') {
+            pgvMain("", {
+                tagParamName: 'WYTAG',
+                virtualURL: 'mobile/wx_help.html',
+                virtualDomain: "www.weiyun.com"
+            });
+        }
+    })();
+</script>
+</html>

@@ -1,0 +1,31 @@
+<import src="../common/listItem.wxml"/>
+<import src="../common/blankStatus.wxml"/>
+
+<!-- 定义滚动列表 -->
+<!-- bindscrolltoupper 滚动到顶部/左边，会触发 scrolltoupper 事件，可以刷新页面；
+    bindscrolltolower 滚动到底部/右边，会触发 scrolltolower 事件，可以加载更多
+ -->
+<scroll-view class="list-wrapper" scroll-y="true" bindscrolltoupper="onPullDownRefresh"
+             scroll-top="{{scrollTop}}" style="height:{{height}}px;" bindscrolltolower="loadMore" bindscroll="onScroll">
+    <view class="list-file" style="display:{{dirList.length?'':'none'}}">
+        <!-- 模板定义在 ../common/listItem.wxml -->
+        <block wx:for="{{dirList}}" wx:for-item="dirItem" wx:for-index="index" wx:key="dir_key">
+            <template is="listItem" data="{{...dirItem, index}}">
+            </template>
+        </block>
+    </view>
+
+    <view class="list-file" style="display:{{fileList.length?'':'none'}}">
+        <!-- 模板定义在 ../common/listItem.wxml -->
+        <block wx:for="{{fileList}}" wx:for-item="fileItem" wx:for-index="index" wx:key="file_id">
+            <template is="listItem" data="{{...fileItem, index}}">
+            </template>
+        </block>
+    </view>
+
+    <view class="blank-file" style="display:{{(dirList.length||fileList.length)?'none':''}}">
+        <!-- 模板定义在 ../common/blankStatus.wxml -->
+        <template is="blankStatus" data="{{...fileBlankData}}">
+        </template>
+    </view>
+</scroll-view>

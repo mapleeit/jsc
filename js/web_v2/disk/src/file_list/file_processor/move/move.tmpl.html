@@ -1,0 +1,90 @@
+<!--
+移动文件目录选择框
+@author jameszuo
+@date 13-1-15
+-->
+<script id="file_move_box" type="text/html" nowith="yes">
+    <%
+    var lib = require('lib'),
+        $ = require('$'),
+        text = lib.get('./text'),
+        tmpl = require('./tmpl'),
+
+        root_dir = data.root_dir,
+
+        len = data.files.length,
+        first = data.files[0];
+    %>
+    <div class="mod-dirbox">
+        <div class="dirbox-file">
+            <span class="fileimg">
+                <i data-id="icon" class="filetype icon icon-m icon-<%= first.get_type() %>-m"></i>
+            </span>
+            <span class="filename"><%= text.text(text.smart_sub(first.get_name(), 17)) %>
+                <%  if(len > 1) { %>
+                    <em>等 <%= len %> 个文件</em>
+                <% } %>
+                <br><em class="size"><%=first.get_readability_size()%></em></span>
+        </div>
+
+        <div class="dirbox-dirs">
+
+            <div class="dirbox-dir dirbox-curdir">
+                <label><%=(data.oper_name ? data.oper_name : '移动到')%>：</label>
+                <label id="_file_move_paths_to" title="路径：" tabindex="0"></label>
+            </div>
+
+            <div data-id="tree-container" class="dirbox-tree" style="">
+                <ul class="_tree dirbox-tree-body">
+                    <%= tmpl.file_move_box_node({
+                        file: root_dir,
+                        par_id: root_dir.get_parent().get_id(),
+                        level: 0
+                    }) %>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</script>
+
+
+<script id="file_move_box_node_list" type="text/html" nowith="yes">
+    <%
+    var lib = require('lib'),
+        text = lib.get('./text'),
+        tmpl = require('./tmpl'),
+
+        files = data.files,
+        par_id = data.par_id,
+        level = data.level;
+    %>
+    <ul class="dirbox-sub-tree">
+        <% $.each(files, function (i, file) {
+            %><%= tmpl.file_move_box_node({
+                file: file,
+                par_id: par_id,
+                level: level + 1
+            }) %><%
+        }); %>
+    </ul>
+</script>
+
+
+<script id="file_move_box_node" type="text/html" nowith="yes">
+    <%
+    var lib = require('lib'),
+        text = lib.get('./text'),
+        tmpl = require('./tmpl'),
+
+        common = require('common'),
+        click_tj = common.get('./configs.click_tj'),
+
+        file = data.file,
+        par_id = data.par_id,
+        level = data.level || 0;
+    %>
+    <li data-level="<%= level %>" id="_file_move_box_node_<%= file.get_id() %>" data-dir-name="<%= file.get_name() %>" data-file-id="<%= file.get_id() %>" data-file-pid="<%= par_id || '' %>">
+        <a href="#" hidefocus="on" style="padding-left:<%= level * 20 %>px;"><span class="ui-text"><i class="_expander" <%=click_tj.make_tj_str('TOOLBAR_MANAGE_MOVE_EXPAND_DIR')%>></i><%= text.text(file.get_name()) %></span></a>
+    </li>
+</script>

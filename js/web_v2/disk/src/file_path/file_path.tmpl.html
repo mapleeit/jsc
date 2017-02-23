@@ -1,0 +1,111 @@
+<!--
+路径
+@author jameszuo
+@date 13-3-5 上午10:34
+-->
+<script id="file_path" type="text/html" nowith="yes">
+    <div id="_disk_file_path" class="act-panel-inner cleafix" style="display: none;">
+        <div class="mod-check"><i id="_disk_all_checker" data-file-check="" class="icon j-icon-checkbox icon-check-s"></i></div>
+        <!-- 面包屑导航 s -->
+        <!-- 面包屑导航 -->
+        <div data-id="breadcrumb" class="mod-breadcrumb">
+            <ul data-inner class="breadcrumb clearfix">
+                <li class="item cur">
+                    <a href="javascript:void(0)">全部</a>
+                </li>
+            </ul>
+        </div>
+        <!-- 面包屑导航 e -->
+    </div>
+</script>
+
+<!--
+路径子项
+@author jameszuo
+@date 13-3-5 上午10:34
+-->
+<script id="file_path_items" type="text/html" nowith="yes">
+    <%
+    var lib = require('lib'),
+        $ = require('$'),
+        text = lib.get('./text'),
+
+        file_list = require('./file_list.file_list'),
+
+        common = require('common'),
+        constants = common.get('./constants'),
+        click_tj = common.get('./configs.click_tj'),
+        scr_reader_mode = common.get('./scr_reader_mode'),
+
+        name_len = constants.UI_VER === 'WEB' ? 10 : 5,
+        target_node = data.target_node, // 目标目录
+        nodes = data.nodes, // 当前目录的所有父节点列表
+        enable = data.enable !== false, // 是否可点击
+        has_more = !!data.has_more,
+        z_index_start = (nodes && nodes.length || constants.DIR_DEEP_LIMIT) + 1,
+        path = [],
+
+        read_mode = scr_reader_mode.is_enable();
+
+        if(has_more) {
+    %>
+            <li data-more class="item">
+                <a href="javascript:void(0)">全部</a>
+            </li>
+            <!--<a data-more style="z-index:<%=z_index_start+1%>;" class="path more" href="#"><span>«</span></a>-->
+    <%
+        }
+    if (nodes && nodes.length) {
+        $.each(nodes, function (i, node) {
+            var first = i <= 0,
+                is_cur = target_node === node,
+                name = text.text(text.smart_sub(node.get_name(), name_len)),
+                aria_label = read_mode?(is_cur ? '当前':'进入') + '路径：' + path.join('。'):'';
+            path.push(name);
+            %>
+        <li <% if (!is_cur) { %> data-file-id="<%= node.get_id() %>" <% } else {%>data-cur<%} %>
+                tabindex="0" hidefocus="on"
+                class="item <%= is_cur ? 'cur':'' %>"
+        >
+        <% if(!first) { %>
+            <i class="icon icon-bread-next"></i>
+        <% } %>
+        <a href="javascript:void(0)"><%=read_mode?aria_label:''%><%= name %></a></li>
+            <%
+        });
+    }
+    %>
+</script>
+<!--
+路径过深时，部分收起做为下拉菜单展示
+@author hibincheng
+@date 14-2-27 上午10:34
+-->
+<script id="path_menu" type="text/html" no-width="yes">
+    <%
+        var lib = require('lib'),
+            $ = require('$'),
+            text = lib.get('./text'),
+
+            common = require('common'),
+            scr_reader_mode = common.get('./scr_reader_mode'),
+            constants = common.get('./constants'),
+            dir_deep = constants.DIR_DEEP_LIMIT + 2,
+
+            nodes = data.nodes, // 当前目录的所有父节点列表
+            enable = data.enable !== false, // 是否可点击
+
+            read_mode = scr_reader_mode.is_enable();
+    %>
+    <div class="content-menu" style="z-index: <%=dir_deep%>;display:none;">
+        <ul class="ico-mod path-mod">
+            <% $.each(nodes, function(i, node) {
+                name = text.text(node.get_name());
+            %>
+                <li><a data-file-id="<%= node.get_id() %>" href="javascript:void(0);" tabindex="0" hidefocus="on"><i class="ico-folder"></i><span><%= name%></span></a></li>
+            <% }); %>
+        </ul>
+    </div>
+</script>
+
+

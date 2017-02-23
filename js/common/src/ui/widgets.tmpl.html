@@ -1,0 +1,127 @@
+<!--
+    确认框
+    @author jameszuo 13-1-5 上午10:24
+-->
+<script id="confirm" type="text/html" nowith="yes">
+    <%
+        var lib = require('lib'),
+            text = lib.get('./text');
+    %>
+    <div data-no-selection class="full-pop full-pop-small" style="display:none;">
+        <h3 class="full-pop-header"><div class="inner _title"><%= text.text(data.title) %></div></h3>
+        <div class="full-pop-content">
+            <div class="mod-alert"><div class="alert-inner">
+                <i class="ico"></i>
+                <h4 class="title"><%= data.escape_html ? text.text(data.msg) : data.msg %></h4>
+                <p class="info" title="<%= text.text(data.tip) %>"><%= data.escape_html ? text.text(data.desc) : data.desc %></p>
+            </div></div>
+        </div>
+        <div class="full-pop-btn">
+            <a class="_ok g-btn g-btn-blue" href="javascript:void(0)"><span class="btn-inner"><%= data.button_texts[0] ? text.text(data.button_texts[0]) : '确定' %></span></a>
+            <a class="_x g-btn g-btn-gray" href="javascript:void(0)"><span class="btn-inner"><%= data.button_texts[1] ? text.text(data.button_texts[1]) : '取消' %></span></a>
+        </div>
+        <a href="javascript:void(0)" class="_x full-pop-close" title="关闭">×</a>
+    </div>
+</script>
+
+<!--
+    确认框
+    @author jameszuo 13-1-5 上午10:24
+-->
+<script id="mask" type="text/html" nowith="yes">
+    <div id="_widgets_mask" data-no-selection class="ui-mask" style="display:none;"></div>
+</script>
+
+
+<!--
+    自定义对话框
+    @author jameszuo 13-1-16
+-->
+
+<script id="dialog" type="text/html" no-width="yes">
+    <%
+        var $ = require('$'),
+            lib = require('lib'),
+            text = lib.get('./text'),
+            inner_tag = data.config.form_dialog ? 'form':'div';
+    %>
+    <div data-no-selection class="full-pop <%= text.text(data.config.klass) %>" style="">
+        <h3 class="full-pop-header"><div class="inner __title"><%= text.text(data.config.title) %></div></h3>
+        <div class="full-pop-content __content">
+        </div>
+        <div class="full-pop-btn __buttons">
+            <span class="__msg infor err"></span>
+            <%
+                $.each(data.buttons || [], function(i, btn) {
+                    var cls = text.text(btn.klass);
+            %>
+                <a data-id="button" data-btn-id="<%= text.text(btn.id) %>" class="g-btn <%= cls %>" href="javascript:void(0);">
+                    <span class="btn-inner"><%= text.text(btn.text) %></span>
+                </a>
+            <%
+                });
+            %>
+        </div>
+        <a data-btn-id="CANCEL" href="javascript:void(0)" class="full-pop-close" title="关闭">×</a>
+    </div>
+</script>
+
+<!--
+    2.0对话框样式
+    @author trump 13-11-06
+-->
+<script id="dialog_2_0" type="text/html" nowith="yes">
+    <%
+    var $ = require('$'),
+    lib = require('lib'),
+    text = lib.get('./text'),
+    inner_tag = data.config.form_dialog ? 'form':'div';
+    %>
+    <div class="ui-xbox dialog_2_0 __ <%= text.text(data.config.klass) %>" data-no-selection >
+        <div class="box-inner">
+            <div class="box-head ui-xbox-title">
+                <h3 class="__title box-title"><%=text.text(data.config.title) %></h3>
+            </div>
+            <div class="box-body __content"></div>
+            <div class="__buttons foot">
+                <div class="__msg tips ui-tips-err" style="display:none;"></div>
+                <%
+                $.each(data.buttons || [], function(i, btn) {
+                %>
+                <button data-btn-id="<%= text.text(btn.id) %>" class="<%= text.text(btn.klass) %>" type="button">
+                    <%= text.text(btn.text) %></button>
+                <%
+                });
+                %>
+            </div>
+        </div>
+        <a data-btn-id="CANCEL" class="box-close" href="javascript:void(0)"><span class="hidden-text">×</span></a>
+    </div>
+
+</script>
+
+
+<!--
+   alert
+-->
+<script id="alert_dialog_content" type="text/html" nowith="yes">
+    <%
+    var cls = 'info';
+    switch(data.type) {
+        case 'info':
+            cls = 'icon-xbox-info';
+            break;
+        case 'ok':
+            cls = 'icon-xbox-ok';
+            break;
+        case 'warn':
+            cls = 'icon-xbox-warn';
+            break;
+    }
+    %>
+    <div class="ui-confirm-cnt">
+        <i class="icon-xbox <%= cls %>"></i>
+        <h4 class="ui-title"><%= data.msg || '' %></h4>
+        <div class="ui-text"><%= data.desc || '' %></div>
+    </div>
+</script>

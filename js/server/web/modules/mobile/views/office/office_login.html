@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>微云帐号登录</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,minimum-scale=1, maximum-scale=1, user-scalable=no">
+    <script type="text/javascript">
+        document.domain = 'weiyun.com';
+    </script>
+    <style type="text/css">
+        html,body{height: 100%;margin: 0;padding: 0;}
+        .link{
+            position: absolute;
+            left: 50%;
+            color: #74787c;
+            bottom: 10px;
+            font-size: 12px;
+            margin-left: -138px;
+        }
+        .link a{
+            color: #146fdf;
+        }
+        .wrap{
+            height: 100%;
+            position: relative;
+        }
+    </style>
+    <style>@-moz-keyframes nodeInserted{from{opacity:0.99;}to{opacity:1;}}@-webkit-keyframes nodeInserted{from{opacity:0.99;}to{opacity:1;}}@-o-keyframes nodeInserted{from{opacity:0.99;}to{opacity:1;}}@keyframes nodeInserted{from{opacity:0.99;}to{opacity:1;}}embed,object{animation-duration:.001s;-ms-animation-duration:.001s;-moz-animation-duration:.001s;-webkit-animation-duration:.001s;-o-animation-duration:.001s;animation-name:nodeInserted;-ms-animation-name:nodeInserted;-moz-animation-name:nodeInserted;-webkit-animation-name:nodeInserted;-o-animation-name:nodeInserted;}</style>
+</head>
+<body>
+<div id="login_box" class="wrap">
+    <iframe style="height: 100%; width: 100%;border:none;"></iframe>
+    <div class="link">使用微云账号登录，需遵循<a href="//www.weiyun.com/mobile/office/agreement.html">微云使用条款与隐私政策</a></div>
+</div>
+<script type="text/javascript" src="//img.weiyun.com/club/weiyun/js/publics/zepto/zepto-1.1.6.min.js"></script>
+<script type="text/javascript">
+    function get_params(){
+        var hash = location.search.substring(1), params = {}, parts, i, part, key;
+        if(hash){
+            parts = hash.split('&');
+            for(i=0; i<parts.length; i++){
+                part = parts[i].split('=');
+                key = decodeURIComponent(part[0]);
+                params[key] = decodeURIComponent(part.slice(1).join('='));
+            }
+        }
+        return params;
+    }
+
+    var win_h = $(window).height();
+    var win_w = $(window).width();
+
+    var params = get_params();
+    var s_url = (params && params.s_url)? params.s_url : location.href;
+    var url = 'https://ui.ptlogin2.qq.com/cgi-bin/login?appid=527020901&no_verifyimg=1&pt_no_onekey=1&f_url=loginerroralert&hide_close_icon=1&daid=372&low_login=0&qlogin_auto_login=1&s_url=' +
+            encodeURIComponent(s_url) + '&style=9&hln_css=https%3A%2F%2Fimgcache.qq.com%2Fvipstyle%2Fnr%2Fbox%2Fweb%2Fimages%2Fwy-logo-qq@2x.png';
+
+    $('#login_box').css({'height': win_h + 'px', 'width': win_w + 'px'});
+    $('#login_box').find('iframe')[0].src = url;
+</script>
+</body>
+</html>

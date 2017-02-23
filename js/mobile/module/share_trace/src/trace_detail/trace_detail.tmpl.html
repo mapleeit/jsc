@@ -1,0 +1,30 @@
+<script id="user_item" type="text/html" nowith="yes">
+    <%  var item = data.item || {}; %>
+    <%  var util = data.util || {}; %>
+    <%
+        util.formatSource = function (source) {
+            source = JSON.parse(source || "{}").browser;
+            var map = {
+                'weixin': '来自微信',
+                'qq': '来自QQ'
+            };
+
+            return map[source] || '来自Web';
+        };
+        item.__nickname = util.htmlEscape(item.nickname) || '未知用户';
+        item.__from_source = util.formatSource(item.from_source);
+    %>
+    <li data-user-uin="<%=  item.uin  %>" class="guest-item">
+        <div class="avatar" style="background-image:url(<%= item.head_logo_url %>)"></div>
+        <div class="guest bBor">
+            <h3 class="name"><%= item.__nickname %></h3>
+            <span class="info">
+                <span class="from"><%= item.__from_source %></span>
+            </span>
+        </div>
+        <div class="right">
+            <span class="date"><%= util.dateformat(parseInt(item.op_time), 'mm/dd HH:MM') %></span>
+        </div>
+    </li>
+
+</script>
