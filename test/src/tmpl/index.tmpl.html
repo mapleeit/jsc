@@ -1,0 +1,17 @@
+<script type="text/html" nowith="yes" id="index">
+    <%
+        data = data || {};
+
+        var data_string = data.string || '',
+            data_number = data.number || 1,
+            data_boolean = data.boolean || true;
+    %>
+
+    <div class="container">
+        <p><%=data_string%></p>
+        <p><%=data_number%></p>
+        <% if (data_boolean ) { %>
+            <p><%=data_string + data_number%></p>
+        <% } %>
+    </div>
+</script>
