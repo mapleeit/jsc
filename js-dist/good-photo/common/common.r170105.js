@@ -2208,6 +2208,9 @@ define.pack("./pb_cmds",[],function(require, exports, module) {
 
         AuthProxyVerifyLoginTicket                              : 245900,   //校验登录态
         AuthProxyGetUserInfo                                    : 245901,   //获取用户信息
+        ShareAlbumLinkAdd                                       : 245100,   //好照片添加分享外链
+        ShareAlbumLinkView                                      : 245101,   //好照片拉取分享外链
+        ShareAlbumLinkDownload                                  : 245102,   //好照片拉取文件下载地址
 
         // 微云流量券
         WeiyunFlowCouponUse                         : 245540,

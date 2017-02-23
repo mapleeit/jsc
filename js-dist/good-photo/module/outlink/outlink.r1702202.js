@@ -1109,7 +1109,7 @@ define.pack("./mgr",["lib","$","common","./retry","./store","./user_info","./use
 
         to_login: function() {
             if(browser.WEIXIN) {
-                var r_url = location.href.slice(0,location.href.indexOf('?'));
+                var r_url = location.href;
                 var redirect_url = 'http://hzp.qq.com/weixin_oauth20.fcg?g_tk=5381&appid=wx847160118bbab80c&action=join_hzp&r_url=' + encodeURIComponent(r_url) + '&use_r_url=1';
                 window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx847160118bbab80c&redirect_uri=' + encodeURIComponent(redirect_url) + '%26use_r_url%3D1&response_type=code&scope=snsapi_userinfo&state=join_hzp#wechat_redirect';
             } else {
@@ -1174,7 +1174,7 @@ define.pack("./mgr",["lib","$","common","./retry","./store","./user_info","./use
                 share_data = {
                     title: title,
                     desc: share_desc,
-                    url: share_url + '?_ws=5&_wv=2098177',
+                    url: share_url + '?_ws=5&_wv=2098177&share_type=0',
                     image: share_icon
                 },
                 _data = {

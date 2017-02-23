@@ -3684,6 +3684,7 @@ __p.push('    <!-- 左侧栏 s -->\r\n\
                         <div class="acct-info">\r\n\
                             <div class="name-container clearfix">\r\n\
                                 <span id="_main_nick_name" class="name"></span>\r\n\
+                                <a id="_main_logout" class="btn" href="javascript: void(0);" title="退出登录"><i class="icon icon-logout"></i></a>\r\n\
                             </div>\r\n\
                             <div id="_main_space_info" class="space-container">\r\n\
                                 <!-- space_info/space_info.tmpl.html -->\r\n\
@@ -3705,7 +3706,6 @@ __p.push('    <!-- 左侧栏 s -->\r\n\
                             <li id="_main_pwd_locker" class="acct-item"><span class="txt"><span class="j-pwd-state">开启</span>独立密码</span></li>\r\n\
                             <li id="_main_feedback" class="acct-item"><span class="txt">帮助与反馈</span></li>\r\n\
                             <a href="//www.weiyun.com/complaint.html" target="_blank"><li id="_main_copyright_complaint" class="acct-item"><span class="txt">投诉指引</span></li></a>\r\n\
-	                        <li id="_main_logout" class="acct-item"><span class="txt">退出登录</span></li>\r\n\
                         </ul>\r\n\
                     </div>\r\n\
                 </div>\r\n\

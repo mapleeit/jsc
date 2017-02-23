@@ -5051,11 +5051,11 @@ define.pack("./file_list.menu.menu",["lib","common","$","./file_list.file_list",
 	                me.create_item('package_download'),
 	                me.create_item('offline_download'),
 	                me.create_item('xuanfeng_download'),
-	                me.create_item('share'),
                     me.create_item('remove'),
                     me.create_item('move'),
                     me.create_item('rename'),
-                    me.create_item('qrcode')
+                    me.create_item('qrcode'),
+                    me.create_item('share')
 
                 ]
             });

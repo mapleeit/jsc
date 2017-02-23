@@ -1105,7 +1105,6 @@ define.pack("./ui",["lib","common","$","./tmpl","./share_enter","./share_mail","
         Copy = common.get('./util.Copy'),
         user_log = common.get('./user_log'),
         scr_reader_mode = common.get('./scr_reader_mode'),
-	    query_user = common.get('./query_user'),
         tmpl = require('./tmpl'),
         share_mail,
         share_secret,
@@ -1127,9 +1126,6 @@ define.pack("./ui",["lib","common","$","./tmpl","./share_enter","./share_mail","
         NUM_WORD_REG = /[0-9a-zA-Z]/,
         NUM_WORD_FILTER_REG = /[^0-9a-zA-Z]/g,
         filter_key_code = [8, 9, 37, 39, 35, 46],//BackSpace、Tab、Left、Right Delete、End,字符过滤时不对这几个操作字符过虑
-
-	    cur_user = query_user.get_cached_user() || {},
-	    is_weixin_user = cur_user.is_weixin_user && cur_user.is_weixin_user(),
 
         undefined;
 
@@ -1231,21 +1227,14 @@ define.pack("./ui",["lib","common","$","./tmpl","./share_enter","./share_mail","
             content = me.get_$mail_con().val();
             share_mail.send_mail(receiver, send_mail_title, content, verify_code_text)
                 .done(function() {
-		            mini_tip.ok('发送成功');
+                    me.show_msg_tip(true, '发送成功');
                     verify_code.change_verify_code();//每次都更新下验证码
-		            me.get_share_dialog().hide();
                 })
                 .fail(function(msg, ret) {
                     if(ret == '102037') { //超过频率限制，需提供验证码
                         verify_code.show();
                     }
-
-		            var message = {
-			            '(-5)': 'QQ邮箱发送频率限制',
-			            '(-104)': 'QQ邮箱发送频率限制',
-			            '(-105)': 'QQ邮箱垃圾邮件拦截'
-		            };
-		            mini_tip.error('发送失败【' + (message[msg] || msg) + '】');
+                    me.show_msg_tip(false, msg);
                 })
                 .always(function() {
                     $send_btn.removeClass('disabled');
@@ -1521,14 +1510,6 @@ define.pack("./ui",["lib","common","$","./tmpl","./share_enter","./share_mail","
             } else {
                 mail_receiver.reset_ui();
             }
-
-	        if(is_weixin_user) {
-		        this.get_$tab_head().hide();
-		        this.get_$tab_body().css({
-			        'border-top': 'none',
-			        'padding-top': '0px'
-		        });
-	        }
         },
 
         //显示老密码
@@ -1697,14 +1678,6 @@ define.pack("./ui",["lib","common","$","./tmpl","./share_enter","./share_mail","
         get_$mail_tab: function() {
             return this.$mail_tab || (this.$mail_tab = share_dialog.$el.find('[data-id=mail_tab]'));
         },
-
-	    get_$tab_head: function() {
-		    return this.$tab_head || (this.$tab_head = share_dialog.$el.find('[data-id=tab_head]'));
-	    },
-
-	    get_$tab_body: function() {
-		    return this.$tab_body || (this.$tab_body = share_dialog.$el.find('[data-id=tab_body]'));
-	    },
 
         get_$tab_head_link: function() {
             return this.$tab_head_link || (this.$tab_head_link = share_dialog.$el.find('[data-id=tab_head_link]'));
@@ -1898,11 +1871,11 @@ __p.push('    ');
                         <a data-action="create_pwd" href="#" tabindex="-1">添加访问密码</a>\r\n\
                     </div>\r\n\
                 </div>\r\n\
-	            <ul data-id="tab_head" class="tab-head">\r\n\
+                <ul class="tab-head">\r\n\
                     <li data-id="tab_head_link" class="link on"><a href="#" tabindex="0"><i class="icon"></i><s style="display:none">通过</s>链接分享</a></li>\r\n\
                     <li data-id="tab_head_mail" class="email"><a href="#" tabindex="0"><i class="icon"></i><s style="display:none">通过</s>邮件分享</a></li>\r\n\
                 </ul>\r\n\
-                <ul data-id="tab_body" class="tab-body">\r\n\
+                <ul class="tab-body">\r\n\
                     <li data-id="link_tab" style="display:block;">\r\n\
                         <p calss="infor">复制链接发送给您的好友吧！</p>\r\n\
                         <p class="copyurl">\r\n\

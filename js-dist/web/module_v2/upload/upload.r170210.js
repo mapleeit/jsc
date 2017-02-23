@@ -2731,7 +2731,7 @@ define.pack("./event",["$","./upload_route","./tool.upload_cache","lib","common"
 		query_user = common.get('./query_user'),
 		functional = common.get('./util.functional'),
 		mini_tip = common.get('./ui.mini_tip_v2'),
-		global_event = common.get('./global.global_event').namespace('upload2'),
+		global_event = common.get('./global.global_event'),
 		main_mod = require('main'),
 		main_ui = main_mod.get('./ui'),
 		$content = main_ui.get_$main_content(),
@@ -2820,7 +2820,6 @@ define.pack("./event",["$","./upload_route","./tool.upload_cache","lib","common"
 				} else {
 					view.show();
 				}
-				global_event.trigger('manage_toggle', { status: view.is_show() });
 			});
 			/**
 			 * 失败列表 添加到管理器底部，重新上传
@@ -3971,7 +3970,7 @@ define.pack("./file_exif",["lib","common","$","./exif"],function (require, expor
         1000002:'',
         1000003: {
             simple : '容量不足',
-            normal : '容量不足，{容量超限}'
+            normal : '容量不足，请删除一些旧文件后重试'
         },
         1000004: '文件大小为空',
         1000005: {//老控件时，超过大小提示，非控件或cgi返回 by hibincheng
@@ -4032,7 +4031,7 @@ define.pack("./file_exif",["lib","common","$","./exif"],function (require, expor
 
         1053: {
             simple : '容量不足',
-            normal : '容量不足，{容量超限}'
+            normal : '容量不足，请删除一些旧文件后重试'
         },
         1083: {
             simple : '文件过多',
@@ -4188,28 +4187,14 @@ define.pack("./file_exif",["lib","common","$","./exif"],function (require, expor
     //替换{开通会员}
     var replace_qzone_vip = function(code, error_text, msg_type, type) {
 	    type = type || 'upload_error';
-        var user = query_user.get_cached_user(),
-	        msg;
+        var user = query_user.get_cached_user();
         if(user.is_weiyun_vip()) {
             return g[type][code][msg_type === 'tip' ? 'tip' : 'simple'];
         } else {
-            msg = '<a class="link" href="'+constants.GET_WEIYUN_VIP_URL+'from%3D1012" target="_blank">开通会员</a>';
+            var msg = '<a class="link" href="'+constants.GET_WEIYUN_VIP_URL+'from%3D1012" target="_blank">开通会员</a>';
             return error_text.replace('{开通会员}', msg);
         }
     };
-
-	//替换{容量超限}
-	var replace_rongliang = function(code, error_text) {
-		var user = query_user.get_cached_user(),
-			msg;
-		if(user.is_weiyun_vip()) {
-			msg = '超大容量&nbsp;<a class="link" href="//www.weiyun.com/vip/capacity_purchase" target="_blank">立即购买</a>';
-			return error_text.replace('{容量超限}', msg);
-		} else {
-			msg = '会员专享3T容量&nbsp;<a class="link" href="'+constants.GET_WEIYUN_VIP_URL+'from%3D1012" target="_blank">开通会员</a>';
-			return error_text.replace('{容量超限}', msg);
-		}
-	};
 
 	//替换{续传文件}
 	var continue_upload = function(code, error_text) {
@@ -4251,8 +4236,6 @@ define.pack("./file_exif",["lib","common","$","./exif"],function (require, expor
 		        return replace_fankui(msg);
 	        } else if(code === 1029 || code === 1127) {
 		        return replace_qzone_vip(code, msg, msg_type);
-	        } else if(code === 1053 || code === 1000003) {
-		        return replace_rongliang(code, msg);
 	        } else if(code >= 2000005 && code <= 2000009) {
 		        return continue_upload(code, msg);
 	        }
@@ -5054,7 +5037,7 @@ define.pack("./offline_download.offline_download_class",["$","lib","common","./U
  * @author iscowei
  * @date 2016-09-29
  */
-define.pack("./offline_download.offline_download_start",["$","lib","common","./tmpl","./upload_file_validata.upload_file_validata","./tool.upload_static","./offline_download.file_dir_list","./offline_download.offline_download","./tool.upload_cache","main","disk"],function(require, exports, module) {
+define.pack("./offline_download.offline_download_start",["$","lib","common","./tmpl","./upload_file_validata.upload_file_validata","./tool.upload_static","./offline_download.file_dir_list","./offline_download.offline_download","main","disk"],function(require, exports, module) {
 	var $ = require('$'),
 		lib = require('lib'),
 		common = require('common'),
@@ -5068,16 +5051,13 @@ define.pack("./offline_download.offline_download_start",["$","lib","common","./t
 		ui_center = common.get('./ui.center'),
 		constants = common.get('./constants'),
 		query_user = common.get('./query_user'),
-		global_event = common.get('./global.global_event'),
-		upload_event = global_event.namespace('upload2'),
-		offline_event = global_event.namespace('offline_download'),
+		offline_event = common.get('./global.global_event').namespace('offline_download'),
 
 		tmpl = require('./tmpl'),
 		validata = require('./upload_file_validata.upload_file_validata'),
 		upload_static = require('./tool.upload_static'),
 		file_dir_list = require('./offline_download.file_dir_list'),
 		offline_download = require('./offline_download.offline_download'),
-		upload_cache = require('./tool.upload_cache'),
 
 		//扩展模块
 		main = require('main').get('./main'),
@@ -5139,19 +5119,15 @@ define.pack("./offline_download.offline_download_start",["$","lib","common","./t
 			});
 
 			me.get_task_list();
+			interval = setInterval(me.get_task_list, 30000);
 		},
 
 		//拉取任务列表
 		get_task_list: function() {
-			var me = this,
-				count_nums = (upload_cache.get_od_main_cache() || {}).count_nums || {};
+			var me = this;
 			offline_download.get_task_list().done(function(result) {
 				if(result.task_list && result.task_list.length) {
 					offline_event.trigger('update_task', result.task_list);
-				}
-				//已经没有进行中的任务就不再更新
-				if(!count_nums.length || count_nums.length === count_nums.done) {
-					clearInterval(interval);
 				}
 			}).fail(function(result) {
 				me.report_error('offline_download_get_task_list', result.msg, result.ret || 2001031, null, result);
@@ -5682,22 +5658,8 @@ define.pack("./offline_download.offline_download_start",["$","lib","common","./t
 				error = JSON.stringify(header);
 			} catch(e) {}
 			logger.dcmdWrite([mod + ' error: --------> ' + error], 'offline_download_monitor', ret, 2);
-		},
-
-		on_manage_toggle: function(params) {
-			var me = this,
-				count_nums = (upload_cache.get_od_main_cache() || {}).count_nums || {};
-			//有离线任务在跑
-			if(count_nums.length && count_nums.length !== count_nums.done) {
-				clearInterval(interval);
-				interval = setInterval(me.get_task_list.bind(me), 30000);
-			} else {
-				clearInterval(interval);
-			}
 		}
 	});
-
-	upload_event.off('manage_toggle').on('manage_toggle', offline_download_start.on_manage_toggle.bind(offline_download_start));
 
 	return offline_download_start;
 });/**
@@ -20248,6 +20210,8 @@ define.pack("./view",["lib","common","$","main","./upload_route","./tmpl","./upl
 						while(instance_wrap[m]) {
 							if(m === k || (m <= refer1 && m >= refer2)) {
 								$('#' + instance_wrap[m].id).css('visibility', 'visible');//将与自己邻居的区域和自己都显示出来
+							} else {
+								$('#' + instance_wrap[m].id).css('visibility', 'hidden');//将自己显示处理
 							}
 							m += 1;
 						}

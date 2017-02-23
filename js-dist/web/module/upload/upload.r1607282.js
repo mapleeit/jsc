@@ -3933,7 +3933,7 @@ define.pack("./file_exif",["lib","common","$","./exif"],function (require, expor
         1000002:'',
         1000003: {
             simple : '容量不足',
-	        normal : '容量不足，{容量超限}'
+            normal : '容量不足，请删除一些旧文件后重试'
         },
         1000004: '文件大小为空',
         1000005: {//老控件时，超过大小提示，非控件或cgi返回 by hibincheng
@@ -3967,7 +3967,7 @@ define.pack("./file_exif",["lib","common","$","./exif"],function (require, expor
 
         1053: {
             simple : '容量不足',
-	        normal : '容量不足，{容量超限}'
+            normal : '容量不足，请删除一些旧文件后重试'
         },
         1083: {
             simple : '文件过多',
@@ -4110,19 +4110,6 @@ define.pack("./file_exif",["lib","common","$","./exif"],function (require, expor
         }
     };
 
-	//替换{容量超限}
-	var replace_rongliang = function(code, error_text) {
-		var user = query_user.get_cached_user(),
-			msg;
-		if(user.is_weiyun_vip()) {
-			msg = '超大容量&nbsp;<a class="link" href="//www.weiyun.com/vip/capacity_purchase" target="_blank">立即购买</a>';
-			return error_text.replace('{容量超限}', msg);
-		} else {
-			msg = '会员专享3T容量&nbsp;<a class="link" href="'+constants.GET_WEIYUN_VIP_URL+'from%3D1012" target="_blank">开通会员</a>';
-			return error_text.replace('{容量超限}', msg);
-		}
-	};
-
 	//替换{续传文件}
 	var continue_upload = function(code, error_text) {
 		var msg = '<a href="javascript: void(0);" target="_self" data-upload="click_event" data-action="click_re_try">续传文件</a>';
@@ -4163,8 +4150,6 @@ define.pack("./file_exif",["lib","common","$","./exif"],function (require, expor
                 return replace_fankui(msg);
             } else if(code === 1029 || code === 1127) {
                 return replace_qzone_vip(code, msg);
-            } else if(code === 1053 || code === 1000003) {
-	            return replace_rongliang(code, msg);
             } else if(code >= 2000005 && code <= 2000009) {
 	            return continue_upload(code, msg);
             }
