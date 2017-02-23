@@ -27,7 +27,7 @@ module.exports = {
 
 		logger.info('root: ${root}',{root: root});
 
-		res = util.getForderList(root,config.excludeForder);
+		res = util.getFolderList(root,config.excludeFolder);
 		
 		res.forEach(function(v,i){
 			

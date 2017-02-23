@@ -1,31 +1,30 @@
-
 /**
  * jsc：把模板转换成js，合并js
  * @author youkunhuang
- *
  */
 
 
-var logger		= require('./logger')(__filename),
-	config		= require('./config.js'),
-	watcher		= require('./watcher.js'),
-	parse		= require('./parse.js'),
-	Queue		= require('./queue.js'),
-	removeComments 	= require('./removeComments.js'),
-	util	 	= require('./util.js'),
+var logger = require('./logger')(__filename),
+    config = require('./config.js'),
+    watcher = require('./watcher.js'),
+    parse = require('./parse.js'),
+    Queue = require('./queue.js'),
+    removeComments = require('./removeComments.js'),
+    util = require('./util.js'),
     crypto = require('crypto'),
-	q			= new Queue(),
-	fs			= require("fs"),
-	path		= require('path'),
-	cdnPath		= require('./cdn.path.js'),
-	UglifyJS    = require("uglify-js"),
-	// crc	       = require("crc"),
-    crypto      = require('crypto'),
-	jscTimes	= 0,
-	beforeCode,//_config.js内设置对象属性:before{name:xxx.js}必须放在合并js文件最前的js代码，例如seajs，不设置则没有
-	undefined;
+    q = new Queue(),
+    fs = require("fs"),
+    path = require('path'),
+    cdnPath = require('./cdn.path.js'),
+    UglifyJS = require("uglify-js"),
+    jscTimes = 0,
+    beforeCode,//_config.js内设置对象属性:before{name:xxx.js}必须放在合并js文件最前的js代码，例如seajs，不设置则没有
+    undefined;
 
-//https://github.com/seajs/seajs
+// https://github.com/seajs/seajs
+// 在node环境中也可以使用define函数
+// 这里的作用主要是能让`_config.js`配置文件写成define(factory)形式
+// 如果`_config.js`写成module.exports形式，就不用引这个东西了
 require('./seajs');
 
 module.exports = jsc;
@@ -38,66 +37,64 @@ module.exports = jsc;
  *  {String} cfgkey 要合并的配置key
  *  {Function} callback
  */
-function jsc(opt){
+function jsc(opt) {
 
-	var seajsRoot = opt.seajsRoot,
-		modulePath = opt.modulePath,
-		callback = opt.callback,
-		listen = opt.listen,
+    var seajsRoot = opt.seajsRoot,
+        modulePath = opt.modulePath,
+        callback = opt.callback,
+        listen = opt.listen,
         cfgkey = opt.cfgkey,
-		undefined;
+        undefined;
 
-	if(!(fs.existsSync || path.existsSync)(modulePath)){
-		callback && callback();
-		return;
-	}
+    if (!(fs.existsSync || path.existsSync)(modulePath)) {
+        callback && callback();
+        return;
+    }
 
-	if((fs.existsSync || path.existsSync)(modulePath + '/src')){
-		q.queue(function(){
-			this.clear();
-			createALL(seajsRoot,modulePath, cfgkey);
-			//parseHTML(seajsRoot,modulePath);
-			logger.info('finish! ${times} : ${module}',{
-				times: + (++jscTimes),
-				module: modulePath
-			});
-			callback && callback();
-			this.dequeue();
-		});
-	}else{
-		callback && callback();
-	}
+    if ((fs.existsSync || path.existsSync)(modulePath + '/src')) {
+        q.queue(function () {
+            this.clear();
+            createALL(seajsRoot, modulePath, cfgkey);
+            logger.info('finish! ${times} : ${module}', {
+                times: +(++jscTimes),
+                module: modulePath
+            });
+            callback && callback();
+            this.dequeue();
+        });
+    } else {
+        callback && callback();
+    }
 
-	listen &&
-	watcher.watch(modulePath,function(event,file){
+    listen &&
+    watcher.watch(modulePath, function (event, file) {
 
-		var module = '';
+        var module = '';
 
-		if(!/\/src\/.+/gmi.test(file)){
-			//发现有文件改变
-			cdnPath.modify(file);
-			return;
-		}
+        if (!/\/src\/.+/gmi.test(file)) {
+            //发现有文件改变
+            cdnPath.modify(file);
+            return;
+        }
 
-		logger.info('${e} : ${f}',{
-			e: event,
-			f: file
-		});
+        logger.info('${e} : ${f}', {
+            e: event,
+            f: file
+        });
 
-		module = file.replace(/\/src\/.+/gmi,'');
+        module = file.replace(/\/src\/.+/gmi, '');
 
-		q.queue(function(){
+        q.queue(function () {
 
-			createALL(seajsRoot,module, cfgkey);
-			//parseHTML(seajsRoot,modulePath);
-			logger.info('finish! ${times} : ${module}',{
-				times: + (++jscTimes),
-				module: module
-			});
-			this.dequeue();
-		});
+            createALL(seajsRoot, module, cfgkey);
+            logger.info('finish! ${times} : ${module}', {
+                times: +(++jscTimes),
+                module: module
+            });
+            this.dequeue();
+        });
 
-	});
+    });
 
 }
 
@@ -108,20 +105,20 @@ function jsc(opt){
  * @param {String} modulePath 要合并的模块目录
  * @param {String} cfgkey 要合并的配置key
  */
-function createALL(seajsRoot,modulePath, cfgkey){
+function createALL(seajsRoot, modulePath, cfgkey) {
 
-	var packConfigs = [];
+    var packConfigs = [];
 
 
-	//分析配置文件
-	if((fs.existsSync || path.existsSync)(modulePath + '/src/_config.js')){
+    //分析配置文件
+    if ((fs.existsSync || path.existsSync)(modulePath + '/src/_config.js')) {
 
-		//清除配置文件缓存
-		delete require.cache[(modulePath + '/src/_config.js').replace(/\\/gmi,'/')];
-		delete require.cache[(modulePath + '/src/_config.js').replace(/\//gmi,'\\')];
+        //清除配置文件缓存
+        delete require.cache[(modulePath + '/src/_config.js').replace(/\\/gmi, '/')];
+        delete require.cache[(modulePath + '/src/_config.js').replace(/\//gmi, '\\')];
 
-		packConfigs = require(modulePath + '/src/_config.js');
-	}
+        packConfigs = require(modulePath + '/src/_config.js');
+    }
 
     if (packConfigs && !(packConfigs instanceof Array)) {
         packConfigs = [packConfigs];
@@ -133,68 +130,68 @@ function createALL(seajsRoot,modulePath, cfgkey){
             return;
         }
 
-        var js 			= [],
-            res 		= [],
-            resJS 		= [],
-            resHTML 	= [],
-            moduleStr 	= config.defaultModule,
-            outputALL	= config.outputALL,
-            createOut	= true,
-            uglify		= false,
-            outputHTML	= config.outputHTML,
+        var js = [],
+            res = [],
+            resJS = [],
+            resHTML = [],
+            moduleStr = config.defaultModule,
+            outputALL = config.outputALL,
+            createOut = true,
+            uglify = false,
+            outputHTML = config.outputHTML,
             packDependent,
             outputDir,
             out,
-            tmp,i,str,mname;
+            tmp, i, str, mname;
 
         uglify = !!packConfig.uglify;
 
-        if(packConfig.tmpl){
+        if (packConfig.tmpl) {
             outputHTML = packConfig.tmpl.name || config.outputHTML;
             createOut = !!packConfig.tmpl.create;
         }
 
-        if(packConfig.all){
+        if (packConfig.all) {
             outputALL = packConfig.all.name || config.outputALL;
-            createOut = packConfig.all.create === false ? false : true ;
+            createOut = packConfig.all.create === false ? false : true;
         }
 
-        outputDir	= packConfig.dir || config.outputDir,
-        out = modulePath + '/' + outputDir + outputALL;
+        outputDir = packConfig.dir || config.outputDir,
+            out = modulePath + '/' + outputDir + outputALL;
 
-        out = path.normalize(out).replace(/\\/gi,'/');
+        out = path.normalize(out).replace(/\\/gi, '/');
 
-        if(packConfig.all) {
-            resJS = createJS(seajsRoot,modulePath,packConfig);
+        if (packConfig.all) {
+            resJS = createJS(seajsRoot, modulePath, packConfig);
         }
-        if(packConfig.all || packConfig.tmpl) {
-            resHTML = createTMPL(seajsRoot,modulePath,packConfig);
+        if (packConfig.all || packConfig.tmpl) {
+            resHTML = createTMPL(seajsRoot, modulePath, packConfig);
         }
 
-        logger.info('${o}:',{
+        logger.info('${o}:', {
             o: out
         });
 
-        if(outputALL && (fs.existsSync || path.existsSync)(modulePath + '/src/' + outputALL)){
+        if (outputALL && (fs.existsSync || path.existsSync)(modulePath + '/src/' + outputALL)) {
             //moduleStr = '';
 
-            logger.warn('module redefine: ${file}',{
+            logger.warn('module redefine: ${file}', {
                 file: modulePath + '/src/' + outputALL
             });
 
         }
-        if(packConfig.all) {
-            [].push.apply(js,resJS.fileList);
-            [].push.apply(js,resHTML.fileList);
+        if (packConfig.all) {
+            [].push.apply(js, resJS.fileList);
+            [].push.apply(js, resHTML.fileList);
         }
 
         res.push('\r\n//all file list:\r\n')
-        js.forEach(function(n,i){
+        js.forEach(function (n, i) {
 
             var str = modulePath + '/src/' + n;
 
-            str = path.normalize(str).replace(/\\/gi,'/');
-            str = str.replace(/.*\/+([^\/]+\/src\/.+)$/,'$1');
+            str = path.normalize(str).replace(/\\/gi, '/');
+            str = str.replace(/.*\/+([^\/]+\/src\/.+)$/, '$1');
 
             res.push('//' + str + '\r\n');
         });
@@ -202,7 +199,7 @@ function createALL(seajsRoot,modulePath, cfgkey){
         //打印all file文件列表之后的空行，先注释掉
         //res.push('\r\n\r\n');
 
-        if(packConfig.all) {
+        if (packConfig.all) {
             [].push.apply(res, resJS.res);
             [].push.apply(res, resHTML.res);
         }
@@ -210,27 +207,27 @@ function createALL(seajsRoot,modulePath, cfgkey){
         packDependent = resJS.packDependent || [];
         tmp = [];
 
-        packDependent.forEach(function(v,i){
+        packDependent.forEach(function (v, i) {
 
-            var id = v.split('?')[0].replace(/^\.\//,'').replace(/(?:\.js)?$/,'.js');
+            var id = v.split('?')[0].replace(/^\.\//, '').replace(/(?:\.js)?$/, '.js');
 
-            if(id !== outputHTML){
+            if (id !== outputHTML) {
                 tmp.push(v);
             }
         });
 
-        moduleStr = moduleStr.replace('define\x28function','define\x28' + JSON.stringify(tmp) + ',function');
+        moduleStr = moduleStr.replace('define\x28function', 'define\x28' + JSON.stringify(tmp) + ',function');
         var finalCode = moduleStr + res.join('');
 
-        if(beforeCode){//前置代码加到最前面
+        if (beforeCode) {//前置代码加到最前面
             finalCode = beforeCode + finalCode;
         }
 
-        if(res.length && packConfig.all){
-            if(createOut){
-                finalCode = finalCode.replace(/\r\n|\r|\n/gmi,"\r\n");
+        if (res.length && packConfig.all) {
+            if (createOut) {
+                finalCode = finalCode.replace(/\r\n|\r|\n/gmi, "\r\n");
                 // UglifyJS
-                if(uglify) {
+                if (uglify) {
                     finalCode = uglifyJS(finalCode);
                 }
 
@@ -239,110 +236,10 @@ function createALL(seajsRoot,modulePath, cfgkey){
                 //补id补依赖
                 cdnPath.modify(out);
             }
-        }else{
-            logger.info('${o} is empty!!!',{o : out});
+        } else {
+            logger.info('${o} is empty!!!', {o: out});
         }
     });
-}
-
-/*
-function versionControll(out,packConfig) {
-    if (packConfig&& packConfig.versionControllKey) {
-        var filename = out.substr(out.lastIndexOf('/') + 1);
-        var outfiledir = path.dirname(out);
-        //清理老的版本文件
-        var dirfilelist = fs.readdirSync(outfiledir);
-       	dirfilelist.forEach(function(n,i){
-            if(new RegExp(filename.replace(/\.js/,"")+"\.md5[0-9a-z]{32}").test(n)){
-                console.log('true')
-                fs.unlinkSync(outfiledir+'/'+n);
-            }
-
-		});
-
-        //版本信息处理
-        var md5 = crypto.createHash('md5');
-        var s = fs.ReadStream(out);
-        s.on('data', function (d) {
-            md5.update(d);
-        });
-
-        s.on('end', function () {
-            var d = md5.digest('hex');
-            var vout = out.replace(/.js$/, '.md5' + d + '.js');
-            logger.info('copy output ${out}', {out: vout});
-            fs.writeFileSync(vout, fs.readFileSync(out, ''), '');
-
-            //更新文件引用
-            packConfig.versionControll&&packConfig.versionControll.forEach(function (idxfile, i) {
-                idxfile = path.normalize(outfiledir + idxfile);
-                var indexfile = fs.readFileSync(idxfile, 'utf-8');
-                var reg = new RegExp("('" + packConfig.versionControllKey + '\'\\s*:\\s*\')[^\']*(\')');
-                var handle = "$1" + filename.replace(/\.js$/, '.md5' + d + '.js') + "$2";
-                indexfile = indexfile.replace(reg, handle);
-                fs.writeFileSync(idxfile, indexfile);
-            });
-        });
-    }
-}
-*/
-/**
- *
- * 编译模板文件
- * @param {String} seajsRoot seajs根目录
- * @param {String} modulePath 要合并的模块目录
- */
-function parseHTML(seajsRoot,modulePath,packConfig){
-
-	var js			= [],
-		res			= [],
-		idmap		= {},
-		packConfig	= packConfig || {},
-		tmp,i,str,mname;
-
-	tmp = fs.readdirSync(modulePath + '/src');
-
-	tmp.forEach(function(n,i){
-		if(
-			/\.page.html?$/i.test(n) &&
-			fs.statSync(modulePath + '/src/' + n).isFile()
-		){
-			js.push(n);
-		}
-
-	});
-
-	//按文件名排序
-	js.sort(function(a,b){
-		return a >= b ? 1 : -1;
-	});
-
-	logger.info('parse ${o}:',{
-		o: modulePath.slice(seajsRoot.length + 1) + '/'
-	});
-
-	js.forEach(function(n,i){
-
-		var res;
-
-		mname = n.replace(/\.page(\.html?)$/,'$1');
-
-		logger.info('parse:     ${m}  <--  ${n}',{ n: n, m: mname});
-
-		res = parse({
-			file: modulePath + '/src/' + n,
-			path: modulePath + '/src',
-			seajsRoot: seajsRoot
-		});
-
-		if(res){
-			fs.writeFileSync(modulePath + '/' + mname,res.result,'UTF-8');
-
-			//补id补依赖
-			cdnPath.modify(modulePath + '/' + mname);
-		}
-	});
-
 }
 
 /**
@@ -350,384 +247,377 @@ function parseHTML(seajsRoot,modulePath,packConfig){
  * 合并模板文件
  * @param {String} seajsRoot seajs根目录
  * @param {String} modulePath 要合并的模块目录
+ * @param {Object} packConfig 打包配置
  */
-function createTMPL(seajsRoot,modulePath,packConfig){
+function createTMPL(seajsRoot, modulePath, packConfig) {
+    packConfig = packConfig || {};
 
-	var js		= [],
-		res		= [],
-		idmap	= {},
-		packConfig = packConfig || {},
-		outputHTML	= config.outputHTML,
-		outputDir	= packConfig.dir || config.outputDir,
-		createOut	= false,
-		uglify		= !!packConfig.uglify,
-		out,
-		tmp,i,str,mname;
+    var res = [],
+        idmap = {},
+        outputHTML = config.outputHTML,
+        outputDir = packConfig.dir || config.outputDir,
+        createOut = false,
+        uglify = packConfig.uglify,
+        out, js, tmp, i, str, mname;
 
-	if(packConfig.tmpl){
-		outputHTML = packConfig.tmpl.name || config.outputHTML;
-		createOut = !!packConfig.tmpl.create;
-	}
+    if (packConfig.tmpl) {
+        outputHTML = packConfig.tmpl.name || config.outputHTML;
+        createOut = !!packConfig.tmpl.create;
+    }
 
-	out = modulePath + '/' + outputDir + outputHTML;
-	out = path.normalize(out).replace(/\\/gi,'/');
+    out = modulePath + '/' + outputDir + outputHTML;
+    out = path.normalize(out).replace(/\\/gi, '/');
 
-	js = util.getFileList(modulePath + '/src',/\.(?:tmpl|page).html?$/i);
+    js = util.getFileList(modulePath + '/src', /\.(?:tmpl|page)\.html?$/i);
 
-	//按文件名排序
-	js.sort(function(a,b){
-		return a >= b ? 1 : -1;
-	});
+    //按文件名排序
+    js.sort(function (a, b) {
+        return a >= b ? 1 : -1;
+    });
 
-	logger.info('${o}:',{
-		o: out
-	});
+    logger.info('${o}:', {
+        o: out
+    });
 
-	mname = './' + outputHTML.replace(/\.js$/i,'');
-	//兼容windows版本路径
-	mname = mname.replace(/\\/g,'/');
+    mname = './' + outputHTML.replace(/\.js$/i, '');
+    //兼容windows版本路径
+    mname = mname.replace(/\\/g, '/');
 
-	res.push('\r\n//tmpl file list:\r\n')
-	js.forEach(function(n,i){
+    res.push('\r\n//tmpl file list:\r\n');
+    js.forEach(function (n, i) {
 
-		var str = modulePath + '/src/' + n;
+        var str = modulePath + '/src/' + n;
 
-		str = path.normalize(str).replace(/\\/gi,'/');
-		str = str.replace(/.*\/([^\/]+\/src\/.+)$/,'$1');
+        str = path.normalize(str).replace(/\\/gi, '/');
+        str = str.replace(/.*\/([^\/]+\/src\/.+)$/, '$1');
 
-		res.push('//' + str + '\r\n');
-	});
-	//模板后面的2个空行，先去掉
-	//res.push('\r\n\r\n');
+        res.push('//' + str + '\r\n');
+    });
+    //模板后面的2个空行，先去掉
+    //res.push('\r\n\r\n');
 
-	res.push('define.pack("', mname ,'",[],function(require, exports, module){\nvar tmpl = { ','\n');
+    res.push('define.pack("', mname, '",[],function(require, exports, module){\nvar tmpl = { ', '\n');
 
-	js.forEach(function(n,i){
+    js.forEach(function (n, i) {
 
-		var reg = /<script([^<>]+?)type=["']text\/html["']([\w\W\r\n]*?)>(?:\r\n|\r|\n)?([\w\W\r\n]*?)(?:\r\n|\r|\n)?<\/script>/gmi,
-			regCode = /(?:(?:\r\n|\r|\n)\s*?)?<%(=?)([\w\W\r\n]*?)%>(?:\r\n|\r|\n)?/gmi,
-			isID = /id=["'](.+?)["']/i,
-			noWith = /nowith=["']yes["']/i,
-			exec,jscode,eq,
-			id,tmp,code,index,len;
+        var reg = /<script([^<>]+?)type=["']text\/html["']([\w\W\r\n]*?)>(?:\r\n|\r|\n)?([\w\W\r\n]*?)(?:\r\n|\r|\n)?<\/script>/gmi,
+            regCode = /(?:(?:\r\n|\r|\n)\s*?)?<%(=?)([\w\W\r\n]*?)%>(?:\r\n|\r|\n)?/gmi,
+            isID = /id=["'](.+?)["']/i,
+            noWith = /nowith=["']yes["']/i,
+            exec, jscode, eq, id, tmp, code, index, len;
 
-		logger.info('    ${m}  <--  ${n}',{ n: n, m: mname});
+        logger.info('    ${m}  <--  ${n}', {n: n, m: mname});
 
-		str = fs.readFileSync(modulePath + '/src/' + n,'UTF-8');
+        str = fs.readFileSync(modulePath + '/src/' + n, 'UTF-8');
 
-		//去除utf-8文件头的BOM标记
-		str = str.replace(/^[\ufeff\ufffe]/,'');
-		str = str.replace(/\r\n|\r|\n/gmi,"\r\n");
+        //去除utf-8文件头的BOM标记
+        str = str.replace(/^[\ufeff\ufffe]/, '');
+        str = str.replace(/\r\n|\r|\n/gmi, "\r\n");
 
-		//处理script嵌套问题
-		(function(){
+        // 处理script嵌套问题
+        // 核心思路就是内部的script标签都改为scr<%%>ipt这种，在执行时无区别，但是能分辨出是内部嵌套的标签
+        (function () {
 
-			var arr = [];
+            var arr = [];
 
-			str = str.replace(/(<script\b)|(\/script>)/gmi,function(curr,start,end){
+            str = str.replace(/(<script\b)|(\/script>)/gmi, function (curr, start, end) {
 
-				if(start){
-					if(arr.length){
-						arr.push(start);
-						return '<scr<%%>ipt';
-					}else{
-						arr.push(start);
-						return curr;
-					}
-				}else if(end){
+                if (start) {
+                    if (arr.length) {
+                        arr.push(start);
+                        return '<scr<%%>ipt';
+                    } else {
+                        arr.push(start);
+                        return curr;
+                    }
+                } else if (end) {
 
-					if(arr.length === 1){
-						arr.length = arr.length - 1;
-						return curr;
-					}else if(arr.length  > 1){
-						arr.length = arr.length - 1;
-						return '\/scr<%%>ipt>';
-					}else{
-						return curr;
-					}
-				}
+                    if (arr.length === 1) {
+                        arr.length = arr.length - 1;
+                        return curr;
+                    } else if (arr.length > 1) {
+                        arr.length = arr.length - 1;
+                        return '\/scr<%%>ipt>';
+                    } else {
+                        return curr;
+                    }
+                }
 
-				return curr;
-			});
+                return curr;
+            });
 
-		})();
+        })();
 
-		while(exec  =  reg.exec(str)){
+        while (exec = reg.exec(str)) {
+            tmp = exec[1] + exec[2];
 
-			tmp = exec[0] + exec[1];
+            if (!isID.test(tmp)) {
+                continue;
+            }
 
-			if(!isID.test(tmp)){
-				continue;
-			}
+            id = isID.exec(tmp)[1];
 
-			id = isID.exec(tmp)[1];
+            code = exec[3];
 
-			code = exec[3];
+            res.push('\'', id, '\': function(data){\n\nvar __p=[],_p=function(s){__p.push(s)};\r\n');
 
-			res.push('\'', id , '\': function(data){\n\nvar __p=[],_p=function(s){__p.push(s)};\r\n');
+            if (!noWith.test(tmp)) {
+                res.push('with(data||{}){\r\n');
+            } else {
+                logger.warn('`nowith` is deprecated! path : ${path}', {
+                    path: modulePath + '/src/' + n
+                });
+            }
 
-			if(!noWith.test(tmp)){
-				res.push('with(data||{}){\r\n');
-			}
+            //解析模板
+            index = 0;
 
-			//解析模板
-			index = 0;
+            while (exec = regCode.exec(code)) {
 
-			while(exec  =  regCode.exec(code)){
+                len = exec[0].length;
 
-				len = exec[0].length;
+                if (index !== exec.index) {
+                    res.push("__p.push('");
+                    res.push(
+                        code
+                            .slice(index, exec.index)
+                            .replace(/\\/gmi, "\\\\")
+                            .replace(/'/gmi, "\\'")
+                            .replace(/\r\n|\r|\n/gmi, "\\r\\n\\\r\n")
+                    );
+                    res.push("');\r\n");
+                }
 
-				if(index !== exec.index){
-					res.push("__p.push('")
-					res.push(
-						code
-							.slice(index,exec.index)
-								.replace(/\\/gmi,"\\\\")
-								.replace(/'/gmi,"\\'")
-								.replace(/\r\n|\r|\n/gmi,"\\r\\n\\\r\n")
-					);
-					res.push("');\r\n");
-				}
+                index = exec.index + len;
 
-				index = exec.index + len;
-
-				eq = exec[1];
-				jscode = exec[2];
+                eq = exec[1];
+                jscode = exec[2];
 
 
-				if(eq){
-					res.push('_p(');
-					res.push(jscode);
-					res.push(');\r\n');
-				}else{
-					res.push(jscode);
-				}
+                if (eq) {
+                    res.push('_p(');
+                    res.push(jscode);
+                    res.push(');\r\n');
+                } else {
+                    res.push(jscode);
+                }
 
-			}
+            }
 
-			res.push("__p.push('")
-			res.push(
-				code
-					.slice(index)
-						.replace(/\\/gmi,"\\\\")
-						.replace(/'/gmi,"\\'")
-						.replace(/\r\n|\r|\n/gmi,"\\r\\n\\\r\n")
-			);
-			res.push("');\r\n");
+            res.push("__p.push('");
+            res.push(
+                code
+                    .slice(index)
+                    .replace(/\\/gmi, "\\\\")
+                    .replace(/'/gmi, "\\'")
+                    .replace(/\r\n|\r|\n/gmi, "\\r\\n\\\r\n")
+            );
+            res.push("');\r\n");
 
-			if(!noWith.test(tmp)){
-				res.push('\r\n}');
-			}
+            if (!noWith.test(tmp)) {
+                res.push('\r\n}');
+            }
 
-			res.push('\r\nreturn __p.join("");\r\n}' , ',\r\n\r\n');
+            res.push('\r\nreturn __p.join("");\r\n}', ',\r\n\r\n');
 
-			if(idmap[id]){
-				logger.warn('        same id: ${id}',{id: id});
-			}
+            if (idmap[id]) {
+                logger.warn('        same id: ${id}', {id: id});
+            }
 
-			idmap[id] = id;
-		}
+            idmap[id] = id;
+        }
 
-	});
+    });
 
-	res.length --;
+    res.length--;
 
-	res.push('\r\n};\nreturn tmpl;\r\n});\r\n');
+    res.push('\r\n};\nreturn tmpl;\r\n});\r\n');
 
-	if(js.length){
-		if(createOut){
-			var code = res.join('').replace('.pack("./tmpl",[],' , '(').replace(/\r\n|\r|\n/gmi,"\r\n");
-			// UglifyJS
-			if(uglify) {
-				code = uglifyJS(code);
-			}
+    if (js.length) {
+        if (createOut) {
+            var code = res.join('').replace('.pack("./tmpl",[],', '(').replace(/\r\n|\r|\n/gmi, "\r\n");
+            // UglifyJS
+            if (uglify) {
+                code = uglifyJS(code);
+            }
 
             out = writeFile(out, code, packConfig.tmpl, modulePath, js);
 
-			//补id补依赖
-			cdnPath.modify(out);
-		}
-	}else{
-		res = [];
-		logger.info('${o} is empty!!!',{o : out});
-	}
+            //补id补依赖
+            cdnPath.modify(out);
+        }
+    } else {
+        res = [];
+        logger.info('${o} is empty!!!', {o: out});
+    }
 
-	return {
-		res: res,
-		fileList: js
-	};
+    return {
+        res: res,
+        fileList: js
+    };
 }
 
 
 /**
- *
  * 合并js文件
  * @param {String} seajsRoot seajs根目录
  * @param {String} modulePath 要合并的模块目录
+ * @param {Object} packConfig config
  */
-function createJS(seajsRoot,modulePath,packConfig){
+function createJS (seajsRoot, modulePath, packConfig) {
+    packConfig = packConfig || {};
 
-	var js			= [],
-		res			= [],
-		packConfig	= packConfig || {},
-		moduleStr	= config.defaultModule,
-		outputJS	= config.outputJS,
-		outputDir	= packConfig.dir || config.outputDir,
-		createOut	= false,
-		uglify		= !!packConfig.uglify,
-		packDependent		= [],
-		packDependentMap	= {},
-		sortRes,
-		out,
-		packConfig,
-		tmp,i,str;
+    var js = [],
+        res = [],
+        moduleStr = config.defaultModule,
+        outputJS = config.outputJS,
+        outputDir = packConfig.dir || config.outputDir,
+        createOut = false,
+        uglify = packConfig.uglify,
+        packDependent = [],
+        packDependentMap = {},
+        sortRes,
+        out, tmp, i, str;
 
-	if(packConfig.js){
-		outputJS = packConfig.js.name || config.outputJS;
-		createOut = !!packConfig.js.create;
-	}
+    if (packConfig.js) {
+        outputJS = packConfig.js.name || config.outputJS;
+        createOut = packConfig.js.create;
+    }
 
-	out = modulePath + '/' + outputDir + outputJS;
-	out = path.normalize(out).replace(/\\/gi,'/');
+    out = modulePath + '/' + outputDir + outputJS;
+    out = path.normalize(out).replace(/\\/gi, '/');
 
-	if(outputJS && (fs.existsSync || path.existsSync)(modulePath + '/src/' + outputJS)){
-		//moduleStr = '';
+    if (outputJS && (fs.existsSync || path.existsSync)(modulePath + '/src/' + outputJS)) {
+        logger.warn('.......module redefine: ${file}', {
+            file: modulePath + '/src/' + outputJS
+        });
+    }
 
-		logger.warn('.......module redefine: ${file}',{
-			file: modulePath + '/src/' + outputJS
-		});
-	}
-
-	js = util.getFileList(modulePath + '/src',/\.js$/i);
-
-	//按文件名排序
-	js.sort(function(a,b){
-		return a >= b ? 1 : -1;
-	});
-
-	//自定义排序
-	if(packConfig.js && packConfig.js.sort){
-		sortRes = packConfig.js.sort(js);
-		if(sortRes){
-			js = sortRes;
-		}
-	};
-
-	logger.info('${o}:',{
-		o: out
-	});
-
-	res.push('\r\n//js file list:\r\n')
-	js.forEach(function(n,i){
-
-		if(packConfig.before){//找到需要前置的js如seajs，移除
-			var name = packConfig.before.name;
-			if(n && name && n.indexOf(name)>-1){
-				beforeCode = fs.readFileSync(modulePath + '/src/' + n,'UTF-8').replace(/^[\ufeff\ufffe]/,'').replace(/\r\n|\r|\n/gmi,"\r\n");
-				js.splice(i,1);
-			}
-		}else{
-			var str = modulePath + '/src/' + n;
-
-			str = path.normalize(str).replace(/\\/gi,'/');
-			str = str.replace(/.*\/([^\/]+\/src\/.+)$/,'$1');
-
-			res.push('//' + str + '\r\n');
-		}
-
-	});
-
-	var beforeJS = config.beforeJS.replace(/^[\ufeff\ufffe]/,'').replace(/\r\n|\r|\n/gmi,"\r\n");
-	if(!!beforeJS){
-		res.push(config.beforeJS);
-	}
-
-	//enclude packing module
-	js.forEach(function(n,i){
-
-		var mname = './' + n.replace(/\.js$/i,'').replace(/[\/\\]/gmi,'.'),
-			dependent		= [],
-			dependentMap	= {},
-			i;
-
-		//兼容windows版本
-		mname = mname.replace(/\\/g,'/');
-
-		packDependentMap[mname]= true;
-		packDependentMap[mname + '.js']= true;
-	});
-
-	js.forEach(function(n,i){
-
-		var mname = './' + n.replace(/\.js$/i,'').replace(/[\/\\]/gmi,'.'),
-			dependent		= [],
-			dependentMap	= {},
-			i;
-
-		//兼容windows版本
-		mname = mname.replace(/\\/g,'/');
-		logger.info('    ${m}  <--  ${n}',{ n: n, m: mname});
-
-		str = fs.readFileSync(modulePath + '/src/' + n,'UTF-8');
-
-		//去除utf-8文件头的BOM标记
-		str = str.replace(/^[\ufeff\ufffe]/,'');
-		str = str.replace(/\r\n|\r|\n/gmi,"\r\n");
-
-		//扫描依赖关系
-		removeComments(str).replace(/[^.]\brequire\s*\(\s*['"]?([^'")]*)/g,function($0,id){
-
-			var key = id.split('?')[0];
-
-			if(!dependentMap[key]){
-				dependent.push(id);
-				dependentMap[key]= true;
-			}
-			if(!packDependentMap[key]){
-				packDependent.push(id);
-				packDependentMap[key]= true;
-			}
-		});
-
-		str = str.replace(/(define\()[\W]*?(function)/gm,'define.pack("' + mname + '",' + JSON.stringify(dependent) + ',$2');
-
-		res.push(str);
+    js = util.getFileList(modulePath + '/src', /\.js$/i);
 
 
-	});
+    if (packConfig.js && packConfig.js.sort && typeof packConfig.js.sort === 'function') {
+        //自定义排序
+        sortRes = packConfig.js.sort(js);
+        if (sortRes) {
+            js = sortRes;
+        }
+    } else {
+        //按文件名排序
+        js.sort(function (a, b) {
+            return a >= b ? 1 : -1;
+        });
+    }
 
-	var afterJS = config.afterJS.replace(/^[\ufeff\ufffe]/,'').replace(/\r\n|\r|\n/gmi,"\r\n");
-	if(!!afterJS){
-		res.push(config.afterJS);
-	}
+    logger.info('${o}:', {
+        o: out
+    });
 
-	moduleStr = moduleStr.replace('define\x28function','define\x28' + JSON.stringify(packDependent) + ',function');
+    res.push('\r\n//js file list:\r\n');
+    js.forEach(function (n, i) {
 
-	var finalCode = moduleStr + res.join('');
+        if (packConfig.before) {//找到需要前置的js如seajs，移除
+            var name = packConfig.before.name;
+            if (n && name && n.indexOf(name) > -1) {
+                beforeCode = fs.readFileSync(modulePath + '/src/' + n, 'UTF-8').replace(/^[\ufeff\ufffe]/, '').replace(/\r\n|\r|\n/gmi, "\r\n");
+                js.splice(i, 1);
+            }
+        } else {
+            var str = modulePath + '/src/' + n;
 
-	if(js.length){
-		if(createOut){
-			finalCode = finalCode.replace(/\r\n|\r|\n/gmi,"\r\n");
-			// UglifyJS
-			if(uglify) {
-				finalCode = uglifyJS(finalCode);
-			}
+            str = path.normalize(str).replace(/\\/gi, '/');
+            str = str.replace(/.*\/([^\/]+\/src\/.+)$/, '$1');
+
+            res.push('//' + str + '\r\n');
+        }
+
+    });
+
+    var beforeJS = config.beforeJS.replace(/^[\ufeff\ufffe]/, '').replace(/\r\n|\r|\n/gmi, "\r\n");
+    if (!!beforeJS) {
+        res.push(config.beforeJS);
+    }
+
+    //exclude packing module
+    js.forEach(function (n, i) {
+
+        var mname = './' + n.replace(/\.js$/i, '').replace(/[\/\\]/gmi, '.'),
+            dependent = [],
+            dependentMap = {};
+
+        //兼容windows版本
+        mname = mname.replace(/\\/g, '/');
+
+        packDependentMap[mname] = true;
+        packDependentMap[mname + '.js'] = true;
+    });
+
+    js.forEach(function (n, i) {
+
+        var mname = './' + n.replace(/\.js$/i, '').replace(/[\/\\]/gmi, '.'),
+            dependent = [],
+            dependentMap = {};
+
+        //兼容windows版本
+        mname = mname.replace(/\\/g, '/');
+        logger.info('    ${m}  <--  ${n}', {n: n, m: mname});
+
+        str = fs.readFileSync(modulePath + '/src/' + n, 'UTF-8');
+
+        //去除utf-8文件头的BOM标记
+        str = str.replace(/^[\ufeff\ufffe]/, '');
+        str = str.replace(/\r\n|\r|\n/gmi, "\r\n");
+
+        //扫描依赖关系
+        removeComments(str).replace(/[^.]\brequire\s*\(\s*['"]?([^'")]*)/g, function ($0, id) {
+            var key = id.split('?')[0];
+
+            if (!dependentMap[key]) {
+                dependent.push(id);
+                dependentMap[key] = true;
+            }
+            if (!packDependentMap[key]) {
+                packDependent.push(id);
+                packDependentMap[key] = true;
+            }
+        });
+
+        str = str.replace(/(define\()[\W]*?(function)/gm, 'define.pack("' + mname + '",' + JSON.stringify(dependent) + ',$2');
+
+        res.push(str);
+    });
+
+    var afterJS = config.afterJS.replace(/^[\ufeff\ufffe]/, '').replace(/\r\n|\r|\n/gmi, "\r\n");
+    if (!!afterJS) {
+        res.push(config.afterJS);
+    }
+
+    moduleStr = moduleStr.replace('define\x28function', 'define\x28' + JSON.stringify(packDependent) + ',function');
+
+    var finalCode = moduleStr + res.join('');
+
+    if (js.length) {
+        if (createOut) {
+            finalCode = finalCode.replace(/\r\n|\r|\n/gmi, "\r\n");
+            // UglifyJS
+            if (uglify) {
+                finalCode = uglifyJS(finalCode);
+            }
 
             out = writeFile(out, finalCode, packConfig.js, modulePath, js);
 
-			//补id补依赖
-			cdnPath.modify(out);
-		}
-	}else{
-		logger.info('${o} is empty!!!',{o : out});
-	}
+            //补id补依赖
+            cdnPath.modify(out);
+        }
+    } else {
+        logger.info('${o} is empty!!!', {o: out});
+    }
 
-	return {
-		res: res,
-		fileList: js,
-		packDependent: packDependent
-	};
-
+    return {
+        res: res,
+        fileList: js,
+        packDependent: packDependent
+    };
 }
 
 
@@ -744,37 +634,19 @@ function writeFile(out, code, config, modulePath, files) {
     // 使用打包时间作为版本号
     if (config && config.versionControll && config.versionControllKey) {
 
-        function padstr(str, char, len) {
-            var str = "" + str;
-            var padnum = 0;
-            if (str.length < len) {
-                padnum = len - str.length;
-                while (padnum) {
-                    str = char + str;
-                    padnum = padnum - char.length;
-                }
-            }
-            return str;
-        }
-
         var baseName = path.basename(out),
             outDir = path.dirname(out),
             verReg = /(\.r\w+)?(\.js)$/,
             isCustomVer = !!config.ver,
-        // 计算目录最近更新时间
-            // modifyTime = isCustomVer ? null : getLastModifyTime(modulePath, files),
-        // crc32方式计算哈希
-//            hash = crc.hex32(crc.crc32(code)),
-        // 文件md5
+            // 文件md5
             hash = crypto.createHash('md5').update(code).digest('hex'),
-        // 新文件名
+            // 新文件名
             newName = [  // index.r20130912000000.js
                 baseName.replace(verReg, ''),  //  index.js -> index
                 '.r',
                 isCustomVer ? config.ver : hash,
                 '.js'
             ].join('');
-
 
 
         // 清理旧文件 (index.r20130912000000.js or index.js)
@@ -793,11 +665,11 @@ function writeFile(out, code, config, modulePath, files) {
             config.versionControll.forEach(function (refFile, i) {
                 var indexfile, tempfile;
                 try {
-                	tempfile = path.normalize(outDir + path.sep + refFile);
-                	indexfile = fs.readFileSync(tempfile, 'utf-8');
-                } catch(e) {
-                	tempfile = path.normalize(outDir + path.sep + refFile.replace('\.\.\/', ''));
-                	indexfile = fs.readFileSync(tempfile, 'utf-8');
+                    tempfile = path.normalize(outDir + path.sep + refFile);
+                    indexfile = fs.readFileSync(tempfile, 'utf-8');
+                } catch (e) {
+                    tempfile = path.normalize(outDir + path.sep + refFile.replace('\.\.\/', ''));
+                    indexfile = fs.readFileSync(tempfile, 'utf-8');
                 }
                 refFile = tempfile;
                 var reg = new RegExp("('" + config.versionControllKey + '\'\\s*:\\s*\')[^\']*(\')');
@@ -811,20 +683,6 @@ function writeFile(out, code, config, modulePath, files) {
     fs.writeFileSync(out, code, 'UTF-8');
 
     return out;
-};
-
-function getLastModifyTime (modulePath, files) {
-    if (files.length) {
-        var lastModifyTime;
-        for (var i = 0, l = files.length; i < l; i++) {
-            var file_path = path.resolve(modulePath + '/src/' + files[i]),
-                modifyTime = fs.statSync(file_path).mtime;
-            if (!lastModifyTime || (modifyTime.getTime() > lastModifyTime.getTime())) {
-                lastModifyTime = modifyTime;
-            }
-        }
-        return lastModifyTime;
-    }
 }
 
 /**

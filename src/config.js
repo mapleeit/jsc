@@ -16,7 +16,7 @@ this.outputJS = 'js.js';
 this.outputHTML = 'tmpl.js';
 
 //排除掉的目录
-this.excludeForder = /(?:\.svn|_svn)$/i;
+this.excludeFolder = /(?:\.svn|_svn)$/i;
 
 //排除掉的文件
 this.excludeFile = /\.ignore\b/i;

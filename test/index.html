@@ -2,9 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>$Title$</title>
+    <title>test page</title>
+    <script src="./bower_components/seajs/dist/sea-debug.js"></script>
+    <script src="./seajs_config/config.js"></script>
 </head>
 <body>
-$END$
+    <div id="container">
+
+    </div>
+    <!-- /#container -->
 </body>
+<script type="text/javascript">
+    window.seajs && seajs.use(['jquery', './dist/index.js'], function ($, index) {
+        index.get('./entry').init();
+    })
+</script>
 </html>
